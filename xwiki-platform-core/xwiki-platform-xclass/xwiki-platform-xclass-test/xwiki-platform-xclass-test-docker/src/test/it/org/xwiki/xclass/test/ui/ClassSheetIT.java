@@ -19,10 +19,13 @@
  */
 package org.xwiki.xclass.test.ui;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.xwiki.rest.model.jaxb.Class;
+import org.xwiki.rest.model.jaxb.Page;
+import org.xwiki.rest.model.jaxb.Wiki;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
 import org.xwiki.test.ui.TestUtils;
@@ -31,6 +34,10 @@ import org.xwiki.test.ui.po.ViewPage;
 import org.xwiki.test.ui.po.editor.ClassEditPage;
 import org.xwiki.xclass.test.po.ClassSheetPage;
 import org.xwiki.xclass.test.po.DataTypesPage;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the default class sheet (XWiki.ClassSheet).
@@ -68,11 +75,11 @@ public class ClassSheetIT
             // Create the class document.
             DataTypesPage dataTypesPage = DataTypesPage.gotoPage().waitUntilPageIsLoaded();
             String dataTypesPageTitle = dataTypesPage.getDocumentTitle();
-            Assert.assertTrue(dataTypesPage.isClassListed("XWiki", "XWikiRights"));
-            Assert.assertFalse(dataTypesPage.isClassListed(spaceName, classDocName));
+            assertTrue(dataTypesPage.isClassListed("XWiki", "XWikiRights"));
+            assertFalse(dataTypesPage.isClassListed(spaceName, classDocName));
             ClassSheetPage classSheetPage = dataTypesPage.createClass(spaceName, className).waitUntilPageIsLoaded();
-            Assert.assertEquals(classTitle, classSheetPage.getDocumentTitle());
-            Assert.assertTrue(classSheetPage.hasBreadcrumbContent(dataTypesPageTitle, false));
+            assertEquals(classTitle, classSheetPage.getDocumentTitle());
+            assertTrue(classSheetPage.hasBreadcrumbContent(dataTypesPageTitle, false));
 
             // Add a property.
             ClassEditPage classEditor = classSheetPage.clickDefineClassLink();
@@ -90,14 +97,14 @@ public class ClassSheetIT
             classSheetPage.waitUntilPageIsLoaded();
 
             // Assert that the properties are listed.
-            Assert.assertTrue(classSheetPage.hasProperty("color", "Your favorite color", "String"));
-            Assert.assertTrue(classSheetPage.hasProperty("age", "Your current age", "Number"));
+            assertTrue(classSheetPage.hasProperty("color", "Your favorite color", "String"));
+            assertTrue(classSheetPage.hasProperty("age", "Your current age", "Number"));
 
             // Create and bind a sheet.
             classSheetPage = classSheetPage.clickCreateSheetButton().waitUntilPageIsLoaded()
                 .clickBindSheetLink().waitUntilPageIsLoaded();
             ViewPage sheetPage = classSheetPage.clickSheetLink();
-            Assert.assertEquals(className + " Sheet", sheetPage.getDocumentTitle());
+            assertEquals(className + " Sheet", sheetPage.getDocumentTitle());
             sheetPage.clickBreadcrumbLink(classTitle);
             classSheetPage.waitUntilPageIsLoaded();
 
@@ -105,7 +112,7 @@ public class ClassSheetIT
             classSheetPage = classSheetPage.clickCreateTemplateButton().waitUntilPageIsLoaded()
                 .clickAddObjectToTemplateLink().waitUntilPageIsLoaded();
             ViewPage templatePage = classSheetPage.clickTemplateLink();
-            Assert.assertEquals(className + " Template", templatePage.getDocumentTitle());
+            assertEquals(className + " Template", templatePage.getDocumentTitle());
             // The default edit button should take us to the In-line edit mode.
             templatePage.edit();
             InlinePage editPage = new InlinePage();
@@ -116,43 +123,56 @@ public class ClassSheetIT
             classSheetPage.waitUntilPageIsLoaded();
 
             // Create a document based on the class template.
-            Assert.assertEquals(spaceName, classSheetPage.getNewPagePicker().getParentInput().getAttribute("value"));
+            assertEquals(spaceName, classSheetPage.getNewPagePicker().getParentInput().getAttribute("value"));
             editPage = classSheetPage.createNewDocument(spaceName, pageName);
 
-            Assert.assertEquals(pageName, editPage.getDocumentTitle());
-            Assert.assertEquals("red", editPage.getValue("color"));
-            Assert.assertEquals("13", editPage.getValue("age"));
+            assertEquals(pageName, editPage.getDocumentTitle());
+            assertEquals("red", editPage.getValue("color"));
+            assertEquals("13", editPage.getValue("age"));
 
             editPage.setValue("color", "blue");
             editPage.setValue("age", "27");
             ViewPage viewPage = editPage.clickSaveAndView();
 
-            Assert.assertEquals(pageName, viewPage.getDocumentTitle());
-            Assert.assertEquals("YOUR FAVORITE COLOR\nblue\nYOUR CURRENT AGE\n27", viewPage.getContent());
+            assertEquals(pageName, viewPage.getDocumentTitle());
+            assertEquals("YOUR FAVORITE COLOR\nblue\nYOUR CURRENT AGE\n27", viewPage.getContent());
             viewPage.clickBreadcrumbLink(classTitle);
             classSheetPage.waitUntilPageIsLoaded();
 
             // Assert the created document is listed.
-            Assert.assertTrue(classSheetPage.hasDocument(pageName));
+            assertTrue(classSheetPage.hasDocument(pageName));
         } finally {
             setup.setHierarchyMode("reference");
         }
     }
-
-    /**
-     * Integration test fop <a href="https://jira.xwiki.org/browse/XWIKI-6936">XWIKI-6936</a>. The test is successful if
-     * the page save without error when a class with a field named "action" is defined in the class.
-     */
+    
     @Test
     @Order(2)
-    public void createClassWithFieldNamedAction(TestUtils setup, TestReference reference)
+    public void createClassWithFieldNamedAction(TestUtils setup, TestReference reference) throws Exception
     {
         setup.gotoPage(reference);
-        ClassSheetPage csp = new ClassSheetPage();
-        ClassEditPage ec = csp.editClass();
-        ec.addProperty("action", "String");
+        ClassSheetPage classSheetPage = new ClassSheetPage();
+        ClassEditPage ec = classSheetPage.editClass();
+        ec.waitUntilPageIsLoaded();
+        ec.addProperty("action", "String").setPrettyName("your action");
 
-        // the test succeed if this save action does not fail.
-        ec.clickSaveAndContinue(true);
+        ViewPage viewPage = ec.clickSaveAndView();
+
+        // TODO: replace the code below by a rest query to find if a field named action has actually been persisted
+        // TODO2: do not trust the current branch for this issue, it's a mess. Clone a new repository and apply a patch on it.
+
+        viewPage.waitUntilPageIsLoaded();
+
+//        ClassSheetPage classSheetPage1 = new ClassSheetPage();
+//        ClassEditPage ec2 = classSheetPage1.editClass();
+//        assertTrue(classSheetPage1.hasProperty("action", "your action", "String"));
+        TestUtils.RestTestUtils rest = setup.rest();
+        Class c = rest.get(reference);
+        System.out.println(c);
+//        Page o = rest.
+//        Wiki w = null;
+//        reference.getC
+//        Class clazz = o.getClazz();
+//        Assertions.assertNotNull(clazz);
     }
 }

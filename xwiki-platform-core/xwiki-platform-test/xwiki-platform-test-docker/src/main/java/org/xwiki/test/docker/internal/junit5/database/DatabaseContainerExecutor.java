@@ -125,8 +125,6 @@ public class DatabaseContainerExecutor extends AbstractContainerExecutor
         }
         // MySQL 8.x has changed the default authentication plugin value so we need to explicitly configure it to get
         // the native password mechanism.
-        // The reason we don't include when the tag is null is because with the TC version we use, MySQLContainer
-        // defaults to
         if (isMySQL8xPlus(testConfiguration)) {
             commands.setProperty("default-authentication-plugin", "mysql_native_password");
         }
@@ -140,23 +138,31 @@ public class DatabaseContainerExecutor extends AbstractContainerExecutor
 
     private void grantMySQLPrivileges(JdbcDatabaseContainer<?> databaseContainer) throws Exception
     {
-        // Retry 3 times, as we're getting some flickering from time to time with the message:
+        // Retry several times, as we're getting some flickering from time to time with the message:
         //   ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
         LOGGER.info("Setting MySQL permissions to create subwikis");
-        for (int i = 0; i < 3; i++) {
-            Container.ExecResult result = databaseContainer.execInContainer("mysql", "-u", "root", "-p" + DBPASSWORD,
-                "-e", String.format("grant all privileges on *.* to '%s'@'%%' identified by '%s'", DBUSERNAME, DBNAME));
+        int maxRetries = 3;
+        for (int i = 0; i < maxRetries + 1; i++) {
+            // In order to avoid "Warning: Using a password on the command line interface can be insecure.", we
+            // put the credentials in a file.
+            databaseContainer.execInContainer("sh", "-c",
+                String.format("echo '[client]\nuser = root\npassword = %s' > credentials.cnf", DBPASSWORD));
+            Container.ExecResult result = databaseContainer.execInContainer("mysql",
+                "--defaults-extra-file=credentials.cnf", "-e",
+                String.format("grant all privileges on *.* to '%s'@'%%'", DBUSERNAME));
             if (result.getExitCode() == 0) {
                 break;
             } else {
                 String errorMessage = result.getStderr().isEmpty() ? result.getStdout() : result.getStderr();
-                if (i == 2) {
+                if (i == maxRetries) {
                     throw new RuntimeException(String.format("Failed to grant all privileges to user [%s] on MySQL "
                         + "with return code [%d] and console logs [%s]", DBUSERNAME, result.getExitCode(),
                         errorMessage));
                 } else {
-                    LOGGER.info("Failed to set MySQL permissions, retrying ({}/2)... Error: [{}]", i + 1, errorMessage);
-                    Thread.sleep(1000L);
+                    LOGGER.info("Failed to set MySQL permissions, retrying ({}/{})... Error: [{}]", i + 1, maxRetries,
+                        errorMessage);
+                    // Wait longer at each retry to slightly increase the chance that the retry will work.
+                    Thread.sleep(5000L * (i + 1));
                 }
             }
         }
@@ -169,8 +175,14 @@ public class DatabaseContainerExecutor extends AbstractContainerExecutor
 
     private boolean isMySQL8xPlus(TestConfiguration testConfiguration)
     {
-        return (testConfiguration.getDatabaseTag() != null && extractMajor(testConfiguration.getDatabaseTag()) >= 8)
-            || (extractMajor(MySQLContainer.DEFAULT_TAG) >= 8 && testConfiguration.getDatabaseTag() == null);
+        boolean isMySQL8xPlus;
+        if (testConfiguration.getDatabaseTag() != null) {
+            isMySQL8xPlus = testConfiguration.getDatabaseTag().equals("latest")
+                || extractMajor(testConfiguration.getDatabaseTag()) >= 8;
+        } else {
+            isMySQL8xPlus = extractMajor(MySQLContainer.DEFAULT_TAG) >= 8;
+        }
+        return isMySQL8xPlus;
     }
 
     private int extractMajor(String version)

@@ -712,8 +712,12 @@ define('editInPlace', [
 
   var loadActionButtons = function(actionButtons) {
     $(document).on('xwiki:actions:view', function() {
-      // Hide the action buttons and disable the shortcut keys (by disabling the buttons).
-      actionButtons.hide().find(':input').prop('disabled', true);
+      // Blur the action buttons first to re-enable the "disabled in inputs" shortcut keys (e.g. the page edit
+      // shortcut), then disable the action buttons in order to disable their shortcut keys while we're not editing
+      // in-place (e.g. prevent the Save shortcut while the user is only viewing the page). Finally hide the action
+      // buttons to have them ready for the next editing session (the user can save or cancel and then edit again
+      // without reloading the page).
+      actionButtons.find(':input').blur().prop('disabled', true).end().hide();
       // Hide the translate button because it can be used only in edit mode for the moment.
       $('#tmTranslate').addClass('hidden');
     });
@@ -777,12 +781,20 @@ define('editInPlace', [
       var xwikiDocument = this._getActionButtons().data('xwikiDocument');
       var formData = {
         title: xwikiDocument.title,
-        content: xwikiDocument.renderedContent,
-        RequiresHTMLConversion: 'content',
-        content_syntax: xwikiDocument.syntax,
         language: xwikiDocument.getRealLocale(),
         isNew: xwikiDocument.isNew
       };
+      if (xwikiDocument.content != xwikiDocument.originalDocument.content) {
+        // Submit the raw (source) content. No syntax conversion is needed in this case.
+        formData.content = xwikiDocument.content;
+      } else {
+        // Submit the rendered content (HTML), but make sure it is converted to the document syntax on the server.
+        $.extend(formData, {
+          content: xwikiDocument.renderedContent,
+          RequiresHTMLConversion: 'content',
+          content_syntax: xwikiDocument.syntax
+        });
+      }
       // Check for merge conflicts only if the document is not new and we know the current version.
       if (!xwikiDocument.isNew &amp;&amp; xwikiDocument.version) {
         formData.previousVersion = xwikiDocument.version;
@@ -869,7 +881,11 @@ define('editInPlace', [
       editMode: 'wysiwyg',
       document: xwikiDocument,
       // The content editor is loaded on demand, asynchronously.
-      deferred: $.Deferred()
+      deferred: $.Deferred(),
+      // We have to explicitly enable the source mode for in-line edit because the latest version of the content editor
+      // could be installed on an older version of XWiki where the in-place editor didn't support the source mode (so
+      // the content editor cannot enable the source mode by default).
+      enableSourceMode: true
     };
     var editContentPromise = data.deferred.promise();
     editContentPromise.done(function() {
@@ -1133,6 +1149,11 @@ input#document-title-input:focus,
 }
 #xwikicontent {
   padding-top: @line-height-computed * 0.75;
+}
+
+.sticky-buttons-wrapper {
+  /* Leave some space for the bottom box shadow of the editing area. */
+  margin-top: 7px;
 }</code>
     </property>
     <property>

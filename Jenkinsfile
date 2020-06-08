@@ -140,7 +140,25 @@ if (!params.type || params.type == 'standard') {
     }
   }
 } else {
-  buildDocker(params.type)
+  // If the build is docker-latest, only build if the previous build was triggered by some source code changes.
+  // Also always build if triggered manually by a user.
+  if (params.type == 'docker-latest' && (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause'))) {
+		// We trigger the build under two conditions:
+		// - The previous build has a non empty changeset (ie. there was some commit)
+		// - This build was triggered by an upstream job (like rendering triggering platform)
+		if (!currentBuild.rawBuild.getPreviousBuild().getChangeSets().isEmpty()
+			|| currentBuild.rawBuild.getCauses()[0].toString().contains('UpstreamCause'))
+		{
+		  buildDocker(params.type)
+		} else {
+		  echoXWiki "No changeset found in previous build and build not triggered by an upstream job, thus not executing \
+		  	the docker latest tests."
+		  // Aborting so that the build isn't displayed as successful without doing anything.
+		  currentBuild.result = 'ABORTED'
+		}
+  } else {
+    buildDocker(params.type)
+  }
 }
 
 private void buildStandardSingle(build)
@@ -217,7 +235,7 @@ private void buildStandardAll(builds)
       // Run the quality checks
       builds['Quality'].call()
     }
-    /* TODO: 27/4/2020: Disable sonar build to check the hypptheis that it's causing kills on agents by using too
+    /* TODO: 27/4/2020: Disable sonar build to check the hypothesis that it's causing kills on agents by using too
        much memory.
     ,
     'sonar': {
@@ -339,11 +357,18 @@ private def getCustomJobProperties()
   // Note: it's the xwikiBuild() calls from the standard builds that will set the jobProperties and thus set up the
   // job parameter + the crons. It would be better to set the properties directly in this Jenkinsfile but we haven't
   // found a way to merge properties and calling the properties() step will override any pre-existing properties.
+  //
+  // Notes:
+  // - docker-latest: We start them at 10PM to have more time available for them so that we're sure they're finished on
+  //   the next morning when committers start pushing code. That's why we don't use @midnight.
+  // - docker-all: We don't use @weekly for docker-all since we want them to execute on weekends only so that they
+  //   don't execute at the same time as docker-latest during standard week days, as it'll mean that all agents will
+  //   be used and be available for standard builds during the working days.
   return [
     parameters([string(defaultValue: 'standard', description: 'Job type', name: 'type')]),
     pipelineTriggers([
-      parameterizedCron('''@midnight %type=docker-latest
-@weekly %type=docker-all
+      parameterizedCron('''H 22 * * * %type=docker-latest
+H 0 * * 6 %type=docker-all
 @monthly %type=docker-unsupported'''),
       cron("@monthly")
     ])

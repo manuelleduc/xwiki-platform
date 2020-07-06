@@ -19,7 +19,6 @@
  */
 package org.xwiki.test.ui;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.xwiki.test.ui.po.CommentForm;
@@ -54,18 +53,16 @@ public class CommentAsAdminTest extends AbstractTest
 
     private static final String COMMENT_REPLY = "Comment Reply";
 
-    @Before
-    public void setUp() throws Exception
-    {
-        getUtil().rest().deletePage(getTestClassName(), getTestMethodName());
-        ViewPage vp = getUtil().createPage(getTestClassName(), getTestMethodName(), CONTENT, TITLE);
-        this.commentsTab = vp.openCommentsDocExtraPane();
-        definePreferedEditor("Wysiwyg");
-    }
+    // @Before
+    // public void setUp() throws Exception
+    // {
+    //    
+    // }
 
     @Test
-    public void testPostCommentAsAdmin()
+    public void testPostCommentAsAdmin() throws Exception
     {
+        definePreferedEditor("Wysiwyg");
         assertTrue(this.commentsTab.isCommentFormShown());
         this.commentsTab.postComment(COMMENT_CONTENT, true);
         assertEquals(COMMENT_CONTENT,
@@ -75,8 +72,9 @@ public class CommentAsAdminTest extends AbstractTest
     }
 
     @Test
-    public void testReplyToCommentAsAdmin()
+    public void testReplyToCommentAsAdmin() throws Exception
     {
+        definePreferedEditor("Wysiwyg");
         this.commentsTab.postComment(COMMENT_CONTENT, true);
         this.commentsTab.replyToCommentByID(this.commentsTab.getCommentID(COMMENT_CONTENT), COMMENT_REPLY);
         assertEquals(COMMENT_REPLY,
@@ -85,8 +83,9 @@ public class CommentAsAdminTest extends AbstractTest
     }
 
     @Test
-    public void testDeleteCommentAsAdmin()
+    public void testDeleteCommentAsAdmin() throws Exception
     {
+        definePreferedEditor("Wysiwyg");
         assertTrue(this.commentsTab.isCommentFormShown());
         this.commentsTab.postComment(COMMENT_CONTENT, true);
         this.commentsTab.deleteCommentByID(this.commentsTab.getCommentID(COMMENT_CONTENT));
@@ -94,8 +93,9 @@ public class CommentAsAdminTest extends AbstractTest
     }
 
     @Test
-    public void testEditCommentAsAdmin()
+    public void testEditCommentAsAdmin() throws Exception
     {
+        definePreferedEditor("Wysiwyg");
         assertTrue(this.commentsTab.isCommentFormShown());
         this.commentsTab.postComment(COMMENT_CONTENT, true);
         this.commentsTab.editCommentByID(0, COMMENT_REPLACED_CONTENT);
@@ -103,16 +103,20 @@ public class CommentAsAdminTest extends AbstractTest
             this.commentsTab.getCommentContentByID(this.commentsTab.getCommentID(COMMENT_REPLACED_CONTENT)));
     }
 
-    private void definePreferedEditor(String text)
+    private void definePreferedEditor(String text) throws Exception
     {
         getUtil().updateObject("XWiki", "Admin", "XWiki.XWikiUsers", 0, "editor", text);
+        getUtil().rest().deletePage(getTestClassName(), getTestMethodName());
+        ViewPage vp = getUtil().createPage(getTestClassName(), getTestMethodName(), CONTENT, TITLE);
+        this.commentsTab = vp.openCommentsDocExtraPane();
+
     }
 
     /**
      * Preview a comment on a plain wiki page.
      */
     @Test
-    public void testPreviewComment()
+    public void testPreviewComment() throws Exception
     {
         definePreferedEditor("Text");
         CommentForm addCommentForm = this.commentsTab.getAddCommentForm();
@@ -130,7 +134,7 @@ public class CommentAsAdminTest extends AbstractTest
      * Preview a comment on a wiki page that has a sheet applied.
      */
     @Test
-    public void testPreviewCommentOnPageWithSheet()
+    public void testPreviewCommentOnPageWithSheet() throws Exception
     {
         definePreferedEditor("Text");
         // We know Blog.BlogIntroduction has a sheet applied.

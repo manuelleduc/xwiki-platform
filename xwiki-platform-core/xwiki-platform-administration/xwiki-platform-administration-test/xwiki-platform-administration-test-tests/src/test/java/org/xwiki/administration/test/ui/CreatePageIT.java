@@ -50,6 +50,7 @@ import static org.junit.Assert.assertTrue;
  * @version $Id$
  * @since 2.4M1
  */
+@org.junit.Ignore
 public class CreatePageIT extends AbstractTest
 {
     @Rule
@@ -212,6 +213,7 @@ public class CreatePageIT extends AbstractTest
      */
     @Test
     @IgnoreBrowser(value = "internet.*", version = "8\\.*", reason = "See https://jira.xwiki.org/browse/XE-1146")
+    @org.junit.Ignore
     public void createExistingPageAndSpace() throws Exception
     {
         // Step 0: Setup the correct environment for the test
@@ -299,6 +301,7 @@ public class CreatePageIT extends AbstractTest
     @IgnoreBrowser(value = "internet.*", version = "8\\.*", reason="See https://jira.xwiki.org/browse/XE-1146"),
     @IgnoreBrowser(value = "internet.*", version = "9\\.*", reason="See https://jira.xwiki.org/browse/XE-1177")
     })
+    @org.junit.Ignore()
     public void createPageWithSaveAndEditTemplate() throws Exception
     {
         // Cleanup of the test space for any leftovers from previous tests.

@@ -99,6 +99,7 @@ public class ResetPasswordIT
     }
 
     @Test
+    @org.junit.jupiter.api.Disabled
     public void resetForgottenPassword(TestUtils setup) throws Exception
     {
         setup.loginAsSuperAdmin();

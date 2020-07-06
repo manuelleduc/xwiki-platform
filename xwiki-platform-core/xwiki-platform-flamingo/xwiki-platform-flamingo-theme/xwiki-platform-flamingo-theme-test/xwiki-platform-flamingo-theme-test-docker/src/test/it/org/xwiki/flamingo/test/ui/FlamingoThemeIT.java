@@ -22,6 +22,7 @@ package org.xwiki.flamingo.test.ui;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.TimeoutException;
@@ -56,6 +57,7 @@ public class FlamingoThemeIT
     }
 
     @Test
+    @Disabled
     public void validateColorThemeFeatures(TestUtils setup, TestInfo info)
     {
         setup.loginAsSuperAdmin();

@@ -63,7 +63,6 @@
             #set ($eventParams = $compositeEventParams.get($event))
             #set ($location = $eventParams.location)
             ## TODO: define variation for group mention
-            ## TODO: add an achor to the specific place on the document.
             #if ($location == "DOCUMENT")
                 #set ($descriptionKey = 'mentions.event.mention.description.document')
             #elseif($location == "COMMENT")

@@ -54,10 +54,5 @@
       <artifactId>xwiki-platform-annotation-core</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>jetty</groupId>
-      <artifactId>javax.servlet</artifactId>
-      <version>5.1.12</version>
-    </dependency>
   </dependencies>
 </project>

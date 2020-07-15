@@ -50,6 +50,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -121,14 +122,10 @@ public class MentionsCreateJobTest
         this.job.initialize(new MentionsCreatedRequest(this.document));
         this.job.runInternal();
 
-        verify(this.notificationService)
-            .sendNotification(authorReference, documentReference, user1, DOCUMENT, "anchor1",
-                new XDOM(emptyList()));
-        verify(this.notificationService)
-            .sendNotification(authorReference, documentReference, user1, DOCUMENT, "anchor2",
-                new XDOM(emptyList()));
-        verify(this.notificationService, times(1)).sendNotification(authorReference, documentReference, authorReference,
-            DOCUMENT, "", new XDOM(emptyList()));
+        verify(this.notificationService).sendNotif(authorReference, documentReference, user1, DOCUMENT, "anchor1");
+        verify(this.notificationService).sendNotif(authorReference, documentReference, user1, DOCUMENT, "anchor2");
+        verify(this.notificationService, times(1)).sendNotif(authorReference, documentReference, authorReference,
+            DOCUMENT, "");
     }
 
     @Test
@@ -152,8 +149,7 @@ public class MentionsCreateJobTest
         this.job.initialize(new MentionsCreatedRequest(this.document));
         this.job.runInternal();
 
-        verify(this.notificationService, never())
-            .sendNotification(any(), any(), any(), any(), any(), new XDOM(emptyList()));
+        verify(this.notificationService, never()).sendNotif(any(), any(), any(), any(), any());
     }
 
     @Test
@@ -212,9 +208,7 @@ public class MentionsCreateJobTest
         verify(this.xdomService).listMentionMacros(xdom1);
         verify(this.xdomService).listMentionMacros(xdom2);
         verify(this.xdomService).countByIdentifier(mentionsBlocks);
-        verify(this.notificationService)
-            .sendNotification(authorReference, documentReference, user, AWM_FIELD, "anchor1",
-                new XDOM(emptyList()));
+        verify(this.notificationService).sendNotif(authorReference, documentReference, user, AWM_FIELD, "anchor1");
     }
 
     @Test

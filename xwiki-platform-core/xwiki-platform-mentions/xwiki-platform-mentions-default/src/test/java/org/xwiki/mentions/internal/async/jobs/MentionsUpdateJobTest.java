@@ -45,6 +45,7 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.objects.LargeStringProperty;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -119,11 +120,9 @@ public class MentionsUpdateJobTest
         this.job.initialize(new MentionsUpdatedRequest(this.newDocument, this.oldDocument, authorReference));
         this.job.runInternal();
 
-        verify(this.notificationService).sendNotification(authorReference, documentReference, u1, DOCUMENT, "", new XDOM(emptyList()));
-        verify(this.notificationService).sendNotification(authorReference, documentReference, u1, DOCUMENT, "anchor2",
-            new XDOM(emptyList()));
-        verify(this.notificationService).sendNotification(authorReference, documentReference, u2, DOCUMENT, "anchor2",
-            new XDOM(emptyList()));
+        verify(this.notificationService).sendNotif(authorReference, documentReference, u1, DOCUMENT, "");
+        verify(this.notificationService).sendNotif(authorReference, documentReference, u1, DOCUMENT, "anchor2");
+        verify(this.notificationService).sendNotif(authorReference, documentReference, u2, DOCUMENT, "anchor2");
     }
 
     @Test
@@ -165,8 +164,7 @@ public class MentionsUpdateJobTest
         this.job.initialize(new MentionsUpdatedRequest(this.newDocument, this.oldDocument, authorReference));
         this.job.runInternal();
 
-        verify(this.notificationService).sendNotification(authorReference, documentReference, U1, ANNOTATION, "anchor1",
-            new XDOM(emptyList()));
+        verify(this.notificationService).sendNotif(authorReference, documentReference, U1, ANNOTATION, "anchor1");
     }
 
     @Test
@@ -219,8 +217,7 @@ public class MentionsUpdateJobTest
         this.job.initialize(new MentionsUpdatedRequest(this.newDocument, this.oldDocument, authorReference));
         this.job.runInternal();
 
-        verify(this.notificationService).sendNotification(authorReference, documentReference, U1, COMMENT, "anchor1",
-            new XDOM(emptyList()));
+        verify(this.notificationService).sendNotif(authorReference, documentReference, U1, COMMENT, "anchor1");
     }
 
     @Test

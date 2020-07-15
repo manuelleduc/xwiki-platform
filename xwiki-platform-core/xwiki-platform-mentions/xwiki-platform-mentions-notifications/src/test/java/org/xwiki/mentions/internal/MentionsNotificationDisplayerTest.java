@@ -69,6 +69,10 @@ import static org.mockito.Mockito.when;
 @ComponentTest
 public class MentionsNotificationDisplayerTest
 {
+    /**
+     * TODO:
+     * - test default event avec mauvais json 
+     */
     @InjectMockComponents
     private MentionsNotificationDisplayer displayer;
 

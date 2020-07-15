@@ -66,7 +66,7 @@ public abstract class AbstractAsynchronousEventStore implements EventStore, Init
     /**
      * The type of task.
      * 
-     * @version $Id: b1b024346e87fe23c2125ba0eba9c9a32b5b46b3 $
+     * @version $Id$
      */
     protected enum EventStoreTaskType
     {
@@ -104,7 +104,7 @@ public abstract class AbstractAsynchronousEventStore implements EventStore, Init
      * 
      * @param <O> the return type of the task
      * @param <I> the input type of the task
-     * @version $Id: b1b024346e87fe23c2125ba0eba9c9a32b5b46b3 $
+     * @version $Id$
      */
     protected static class EventStoreTask<O, I>
     {

@@ -115,9 +115,11 @@ public class DefaultMentionsDataConsumer implements MentionsDataConsumer
         this.contextManager.initialize(context);
 
         XWikiContext xWikiContext = this.xcontextProvider.get();
-        xWikiContext.setUserReference(authorReference);
-        xWikiContext.setWikiReference(authorReference.getWikiReference());
-        xWikiContext.setWikiId(wikiId);
+        if (xWikiContext != null) {
+            xWikiContext.setUserReference(authorReference);
+            xWikiContext.setWikiReference(authorReference.getWikiReference());
+            xWikiContext.setWikiId(wikiId);
+        }
     }
 
     @Override

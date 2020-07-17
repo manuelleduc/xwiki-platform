@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.slf4j.Logger;
 import org.xwiki.bridge.event.ApplicationReadyEvent;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.mentions.internal.MentionsEventExecutor;
@@ -42,6 +43,9 @@ public class MentionsApplicationReadyEventListener extends AbstractEventListener
 {
     @Inject
     private MentionsEventExecutor eventExecutor;
+    
+    @Inject
+    private Logger logger;
 
     /**
      * Default constructor.
@@ -54,6 +58,7 @@ public class MentionsApplicationReadyEventListener extends AbstractEventListener
     @Override
     public void onEvent(Event event, Object source, Object data)
     {
+        logger.warn("MentionsApplicationReadyEventListener called");
         this.eventExecutor.startThreads();
     }
 }

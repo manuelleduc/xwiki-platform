@@ -32,7 +32,8 @@ import org.xwiki.test.docker.junit5.UITest;
 @UITest(
     properties = {
         // Required for filters preferences
-        "xwikiDbHbmCommonExtraMappings=notification-filter-preferences.hbm.xml"
+        "xwikiDbHbmCommonExtraMappings=notification-filter-preferences.hbm.xml",
+        "mentions.poolSize=4"
     },
     extraJARs = {
         // It's currently not possible to install a JAR contributing a Hibernate mapping file as an Extension. Thus

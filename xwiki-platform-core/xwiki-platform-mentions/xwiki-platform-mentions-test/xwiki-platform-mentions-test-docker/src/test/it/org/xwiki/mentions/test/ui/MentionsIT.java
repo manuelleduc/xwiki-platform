@@ -19,6 +19,8 @@
  */
 package org.xwiki.mentions.test.ui;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.xwiki.platform.notifications.test.po.NotificationsTrayPage;
@@ -26,6 +28,7 @@ import org.xwiki.platform.notifications.test.po.NotificationsUserProfilePage;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
 import org.xwiki.test.ui.TestUtils;
+import org.xwiki.test.ui.po.ViewPage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,10 +95,13 @@ public class MentionsIT
         });
 
         runAsUser(setup, U1_USERNAME, USERS_PWD, () -> {
+            setup.deletePage(reference);
             setup.createPage(reference,
                 "{{mention reference=\"xwiki:XWiki.U2\" style=\"LOGIN\" anchor=\"test-mention-1\" /}}",
                 pageName);
         });
+
+        runAsSuperAdmin(setup, () -> waitForEmptyQueue(setup));
 
         runAsUser(setup, U2_USERNAME, USERS_PWD, () -> {
             setup.gotoPage("Main", "WebHome");
@@ -108,6 +114,22 @@ public class MentionsIT
             String expected = "You have received one mention.";
             assertTrue(notificationContent.contains(expected),
                 String.format("Notification content should contain [%s] but is [%s].", expected, notificationContent));
+        });
+    }
+
+    /**
+     * TODO: to be moved to a pageobject
+     * @param setup
+     */
+    private void waitForEmptyQueue(TestUtils setup)
+    {
+        setup.deletePage("XWiki", "MentionsQueueTest");
+        ViewPage page = setup.createPage("XWiki", "MentionsQueueTest",
+            "{{velocity}}$services.mentions.getQueueSize(){{/velocity}}", "Queue count");
+        setup.getDriver().waitUntilCondition(input -> {
+            String content = page.getContent();
+            System.out.printf("CONTENT >>>> %s%n", content);
+            return Objects.equals(content, "0");
         });
     }
 

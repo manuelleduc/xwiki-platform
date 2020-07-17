@@ -75,7 +75,7 @@ public class MentionsUpdatedEventListenerTest
         this.listener.onEvent(event, this.document, null);
 
         Assert.assertEquals(1, this.logCapture.size());
-        Assert.assertEquals(Level.DEBUG, this.logCapture.getLogEvent(0).getLevel());
+        Assert.assertEquals(Level.WARN, this.logCapture.getLogEvent(0).getLevel());
         Assert.assertEquals(
             "Event [org.xwiki.bridge.event.DocumentUpdatedEvent] received from [document] with data [null].",
             this.logCapture.getMessage(0));

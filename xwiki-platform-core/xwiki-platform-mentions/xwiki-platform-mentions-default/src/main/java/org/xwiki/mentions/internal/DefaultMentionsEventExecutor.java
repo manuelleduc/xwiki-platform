@@ -140,7 +140,8 @@ public class DefaultMentionsEventExecutor implements MentionsEventExecutor, Init
             );
         } catch (InterruptedException e) {
             this.logger
-                .warn("Error while adding a task to the mentions analysis queue. Cause [{}]", getRootCauseMessage(e));
+                .warn("Error while adding a task to the mentions analysis queue. Cause [{}]",
+                    getRootCauseMessage(e));
         }
     }
 

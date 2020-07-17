@@ -74,7 +74,7 @@ public class MentionsCreatedEventListenerTest
         this.listener.onEvent(event, this.document, null);
 
         assertEquals(1, this.logCapture.size());
-        assertEquals(Level.DEBUG, this.logCapture.getLogEvent(0).getLevel());
+        assertEquals(Level.WARN, this.logCapture.getLogEvent(0).getLevel());
         assertEquals("Event [org.xwiki.bridge.event.DocumentCreatedEvent] received from [document] with data [null].",
             this.logCapture.getMessage(0));
 

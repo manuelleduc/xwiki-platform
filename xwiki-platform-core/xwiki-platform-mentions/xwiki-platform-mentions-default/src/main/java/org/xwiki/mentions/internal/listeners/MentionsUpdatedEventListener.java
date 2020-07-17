@@ -74,7 +74,7 @@ public class MentionsUpdatedEventListener extends AbstractEventListener
             return;
         }
 
-        this.logger.debug("Event [{}] received from [{}] with data [{}].",
+        this.logger.warn("Event [{}] received from [{}] with data [{}].",
             DocumentUpdatedEvent.class.getName(), source, data);
 
         XWikiDocument doc = (XWikiDocument) source;

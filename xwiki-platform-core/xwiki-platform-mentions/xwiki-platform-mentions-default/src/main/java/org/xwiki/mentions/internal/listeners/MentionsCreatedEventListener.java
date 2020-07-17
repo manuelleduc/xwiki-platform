@@ -73,7 +73,7 @@ public class MentionsCreatedEventListener extends AbstractEventListener
         if (!(event instanceof DocumentCreatedEvent) || this.remoteObservationManagerContext.isRemoteState()) {
             return;
         }
-        this.logger.debug("Event [{}] received from [{}] with data [{}].",
+        this.logger.warn("Event [{}] received from [{}] with data [{}].",
             DocumentCreatedEvent.class.getName(), source, data);
         XWikiDocument doc = (XWikiDocument) source;
         this.executor.execute(doc.getDocumentReference(), doc.getAuthorReference(), doc.getVersion());

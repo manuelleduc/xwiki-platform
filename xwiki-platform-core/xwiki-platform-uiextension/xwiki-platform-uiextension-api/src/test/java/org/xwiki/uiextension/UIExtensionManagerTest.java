@@ -19,41 +19,100 @@
  */
 package org.xwiki.uiextension;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.xwiki.component.internal.ContextComponentManagerProvider;
-import org.xwiki.test.annotation.ComponentList;
-import org.xwiki.test.mockito.MockitoComponentMockingRule;
+import javax.inject.Named;
+import javax.inject.Provider;
+
+import org.junit.jupiter.api.Test;
+import org.xwiki.component.manager.ComponentManager;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.DocumentReferenceResolver;
+import org.xwiki.query.Query;
+import org.xwiki.query.QueryManager;
+import org.xwiki.test.junit5.mockito.ComponentTest;
+import org.xwiki.test.junit5.mockito.InjectMockComponents;
+import org.xwiki.test.junit5.mockito.MockComponent;
 import org.xwiki.uiextension.internal.DefaultUIExtensionManager;
 
-@ComponentList(ContextComponentManagerProvider.class)
+import com.xpn.xwiki.XWiki;
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.objects.LargeStringProperty;
+
+import static com.xpn.xwiki.XWiki.SYSTEM_SPACE;
+import static java.util.Collections.singletonList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.xwiki.query.Query.XWQL;
+
+/**
+ * Test of {@link DefaultUIExtensionManager}.
+ *
+ * @version $Id$
+ * @since 12.7RC1
+ */
+@ComponentTest
 public class UIExtensionManagerTest
 {
-    @Rule
-    public MockitoComponentMockingRule<UIExtensionManager> mocker =
-        new MockitoComponentMockingRule<UIExtensionManager>(DefaultUIExtensionManager.class);
+    @InjectMockComponents
+    private DefaultUIExtensionManager uiExtensionManager;
+
+    @MockComponent
+    private QueryManager queryManager;
+
+    @MockComponent
+    private DocumentReferenceResolver<String> documentReferenceResolver;
+
+    @MockComponent
+    private Provider<XWikiContext> xcontextProvider;
+
+    @MockComponent
+    @Named("context")
+    private Provider<ComponentManager> contextComponentManagerProvider;
 
     @Test
-    public void testGet() throws Exception
+    void get() throws Exception
     {
-        assertEquals(Arrays.asList(), this.mocker.getComponentUnderTest().get("extensionpoint"));
+        Query query = mock(Query.class);
+        XWikiContext context = mock(XWikiContext.class);
+        XWiki xWiki = mock(XWiki.class);
+        XWikiDocument document = mock(XWikiDocument.class);
+        ComponentManager componentManager = mock(ComponentManager.class);
+        UIExtension uix1 = mock(UIExtension.class);
+        UIExtension uix2 = mock(UIExtension.class);
 
-        UIExtension uix1 = mocker.registerMockComponent(UIExtension.class, "uix1");
+        when(this.queryManager.createQuery(
+            "from doc.object(XWiki.UIExtensionPointDescriptorClass) as uixp "
+                + "where uixp.mainId = :mainId", XWQL))
+            .thenReturn(query);
+        when(query.execute()).thenReturn(singletonList("xwiki:XWiki.Doc"));
+        when(this.xcontextProvider.get()).thenReturn(context);
+        when(context.getWiki()).thenReturn(xWiki);
+        when(context.getWikiId()).thenReturn("xwiki");
+
+        DocumentReference documentReference = new DocumentReference("xwiki", "XWiki", "Doc");
+        when(this.documentReferenceResolver.resolve("xwiki:XWiki.Doc"))
+            .thenReturn(documentReference);
+        when(xWiki.getDocument(documentReference, context)).thenReturn(document);
+        BaseObject baseObject = new BaseObject();
+        LargeStringProperty element = new LargeStringProperty();
+        element.setValue("alias.b.c");
+        baseObject.addField("aliasIds", element);
+        when(document.getXObjects(new DocumentReference("xwiki", SYSTEM_SPACE, "UIExtensionPointDescriptorClass")))
+            .thenReturn(singletonList(baseObject));
+
+        when(this.contextComponentManagerProvider.get()).thenReturn(componentManager);
+        when(componentManager.getInstanceList(UIExtension.class)).thenReturn(Arrays.asList(uix1, uix2));
         when(uix1.getExtensionPointId()).thenReturn("extensionpoint");
+        when(uix2.getExtensionPointId()).thenReturn("alias.b.c");
+        
+        List<UIExtension> actual = this.uiExtensionManager.get("extensionpoint");
 
-        UIExtension uix2 = mocker.registerMockComponent(UIExtension.class, "uix2");
-        when(uix2.getExtensionPointId()).thenReturn("extensionpoint");
-
-        UIExtension notuix = mocker.registerMockComponent(UIExtension.class, "notuix");
-        when(notuix.getExtensionPointId()).thenReturn("notuix");
-
-        assertEquals(new HashSet<UIExtension>(Arrays.asList(uix1, uix2)), new HashSet<UIExtension>(this.mocker
-            .getComponentUnderTest().get("extensionpoint")));
+        List<UIExtension> expected = Arrays.asList(uix1, uix2);
+        assertEquals(expected, actual);
     }
 }

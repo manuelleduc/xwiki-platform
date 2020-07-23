@@ -19,6 +19,8 @@
  */
 package com.xpn.xwiki.internal.skin;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -328,5 +330,16 @@ public class InternalSkinManager implements Initializable
         }
 
         return skin;
+    }
+
+    /**
+     * Returns a list of aliases of the request uixp identifier.
+     * 
+     * @param uixpId the user interface extension point identifier
+     * @return a set of aliases of the requested uixp 
+     */
+    public Set<String> getAliases(String uixpId)
+    {
+        return this.getCurrentSkin(false).getAliases(uixpId);
     }
 }

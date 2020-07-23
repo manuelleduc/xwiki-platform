@@ -156,4 +156,10 @@ public class EnvironmentSkin extends AbstractSkin
     {
         return getProperties().getString("outputSyntax");
     }
+
+    @Override
+    public String getAliasesString(String uixpId)
+    {
+        return getProperties().getString(String.format("%s.%s", uixpId, ALIASES_KEY));
+    }
 }

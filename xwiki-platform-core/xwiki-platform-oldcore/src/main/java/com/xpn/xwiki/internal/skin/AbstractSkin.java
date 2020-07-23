@@ -19,8 +19,10 @@
  */
 package com.xpn.xwiki.internal.skin;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,6 +38,8 @@ import org.xwiki.skin.Skin;
  */
 public abstract class AbstractSkin implements Skin
 {
+    protected static final String ALIASES_KEY = "aliases";
+
     protected Skin VOID = new Skin()
     {
         @Override
@@ -67,6 +71,12 @@ public abstract class AbstractSkin implements Skin
         {
             return null;
         }
+
+        @Override
+        public Set<String> getAliases(String uixpId)
+        {
+            return new HashSet<>();
+        }
     };
 
     protected InternalSkinManager skinManager;
@@ -77,7 +87,7 @@ public abstract class AbstractSkin implements Skin
 
     protected Skin parent;
 
-    private Logger logger;
+    private final Logger logger;
 
     public AbstractSkin(String id, InternalSkinManager skinManager, InternalSkinConfiguration configuration,
         Logger logger)
@@ -117,10 +127,10 @@ public abstract class AbstractSkin implements Skin
             // Make sure to not try several times the same skin
             Set<String> skins = new HashSet<String>();
             skins.add(getId());
-            for (ResourceRepository parent = getParent(); parent != null && resource == null
-                && !skins.contains(parent.getId()); parent = parent.getParent()) {
-                resource = parent.getLocalResource(resourceName);
-                skins.add(parent.getId());
+            for (ResourceRepository parentRepo = getParent(); parentRepo != null && resource == null
+                && !skins.contains(parentRepo.getId()); parentRepo = parentRepo.getParent()) {
+                resource = parentRepo.getLocalResource(resourceName);
+                skins.add(parentRepo.getId());
             }
         }
 
@@ -141,13 +151,35 @@ public abstract class AbstractSkin implements Skin
             }
         }
 
-        Skin parent = getParent();
-        if (parent != null) {
-            targetSyntax = parent.getOutputSyntax();
+        Skin parentSkin = getParent();
+        if (parentSkin != null) {
+            targetSyntax = parentSkin.getOutputSyntax();
         }
 
         // Fallback to the XHTML 1.0 syntax for backward compatibility
         return targetSyntax != null ? targetSyntax : Syntax.XHTML_1_0;
+    }
+
+    @Override
+    public Set<String> getAliases(String uixpId)
+    {
+        Skin parentSkin = getParent();
+        Set<String> ret;
+        if (parentSkin != null) {
+            ret = parentSkin.getAliases(uixpId);
+        } else {
+            ret = new HashSet<>();
+        }
+
+        String aliasesString = getAliasesString(uixpId);
+        if (aliasesString != null) {
+            ret.addAll(Arrays.stream(aliasesString.split(","))
+                           .map(String::trim)
+                           .filter(it -> !StringUtils.isBlank(it))
+                           .collect(Collectors.toSet()));
+        }
+
+        return ret;
     }
 
     /**
@@ -155,12 +187,20 @@ public abstract class AbstractSkin implements Skin
      */
     protected abstract String getOutputSyntaxString();
 
+    /**
+     * The list of aliases of the uixp in raw form, each value separated by a comma.
+     *  
+     * @param uixpId the user interface extension point identifier
+     * @return the aliases of the uixp, in raw form, each value separated by a comma.
+     */
+    protected abstract String getAliasesString(String uixpId);
+
     private Syntax parseSyntax(Skin skin, String syntax)
     {
         try {
             return Syntax.valueOf(syntax);
         } catch (ParseException e) {
-            logger.warn("Failed to parse the syntax [{}] configured by the skin [{}].", syntax, skin.getId());
+            this.logger.warn("Failed to parse the syntax [{}] configured by the skin [{}].", syntax, skin.getId());
         }
 
         // let getOutputSyntax() do the proper fallback

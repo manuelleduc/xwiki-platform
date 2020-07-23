@@ -56,6 +56,12 @@ public class WikiSkin extends AbstractSkin
     @Override
     public String getOutputSyntaxString()
     {
-        return utils.getSkinProperty(id, "outputSyntax");
+        return this.utils.getSkinProperty(this.id, "outputSyntax");
+    }
+
+    @Override
+    public String getAliasesString(String uixpId)
+    {
+        return this.utils.getSkinProperty(this.id, String.format("%s." + ALIASES_KEY, uixpId));
     }
 }

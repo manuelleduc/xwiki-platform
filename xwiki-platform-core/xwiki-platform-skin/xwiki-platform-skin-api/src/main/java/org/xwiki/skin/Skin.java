@@ -19,6 +19,8 @@
  */
 package org.xwiki.skin;
 
+import java.util.Set;
+
 import org.xwiki.rendering.syntax.Syntax;
 
 /**
@@ -36,4 +38,12 @@ public interface Skin extends ResourceRepository
      * @return the syntax used by the skin
      */
     Syntax getOutputSyntax();
+
+    /**
+     * Returns a set of aliases of a xuip identifier.
+     * 
+     * @param uixpId the user interface extension point identifier
+     * @return the set of aliases of the uixp
+     */
+    Set<String> getAliases(String uixpId);
 }

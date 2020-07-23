@@ -82,6 +82,4 @@ public class MentionsUpdatedEventListenerTest
 
         verify(this.executor).execute(documentReference, authorReference, "2.1");
     }
-
-   
 }

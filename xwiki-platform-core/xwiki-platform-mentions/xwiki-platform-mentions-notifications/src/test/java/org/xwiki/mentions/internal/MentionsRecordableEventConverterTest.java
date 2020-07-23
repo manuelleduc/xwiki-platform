@@ -21,6 +21,7 @@ package org.xwiki.mentions.internal;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,7 @@ public class MentionsRecordableEventConverterTest
         verify(event).setUser(userDocument);
         verify(event).setDocument(document);
         verify(event).setType(MentionEvent.EVENT_TYPE);
-        HashMap<String, String> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put(MentionsRecordableEventConverter.MENTIONS_PARAMETER_KEY,
             "{\"userReference\":\"xwiki:XWiki.U1\",\"documentReference\":\"xwiki:XWiki.Doc\"}");
         verify(event).setParameters(parameters);

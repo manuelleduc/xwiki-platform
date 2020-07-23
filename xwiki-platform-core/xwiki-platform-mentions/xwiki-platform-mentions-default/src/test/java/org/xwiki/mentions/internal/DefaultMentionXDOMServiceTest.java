@@ -133,7 +133,7 @@ public class DefaultMentionXDOMServiceTest
         Map<DocumentReference, List<String>> actual = this.xdomService.countByIdentifier(singletonList(
             initMentionMacro("A", "A1")
         ));
-        HashMap<DocumentReference, List<String>> expected = new HashMap<>();
+        Map<DocumentReference, List<String>> expected = new HashMap<>();
         expected.put(this.documentReferenceA, Collections.singletonList("A1"));
         assertEquals(expected, actual);
     }
@@ -145,7 +145,7 @@ public class DefaultMentionXDOMServiceTest
             initMentionMacro("A", "A1"),
             initMentionMacro("A", "A2")
         ));
-        HashMap<DocumentReference, List<String>> expected = new HashMap<>();
+        Map<DocumentReference, List<String>> expected = new HashMap<>();
         expected.put(this.documentReferenceA, Arrays.asList("A1", "A2"));
         assertEquals(expected, actual);
     }
@@ -158,7 +158,7 @@ public class DefaultMentionXDOMServiceTest
             initMentionMacro("B", "B1"),
             initMentionMacro("A", "A2")
         ));
-        HashMap<DocumentReference, List<String>> expected = new HashMap<>();
+        Map<DocumentReference, List<String>> expected = new HashMap<>();
         expected.put(this.documentReferenceB, Collections.singletonList("B1"));
         expected.put(this.documentReferenceA, Arrays.asList("A1", "A2"));
         assertEquals(expected, actual);
@@ -175,7 +175,7 @@ public class DefaultMentionXDOMServiceTest
             initMentionMacro("A", "A2"),
             initMentionMacro("C", "")
         ));
-        HashMap<DocumentReference, List<String>> expected = new HashMap<>();
+        Map<DocumentReference, List<String>> expected = new HashMap<>();
         expected.put(this.documentReferenceB, Collections.singletonList("B1"));
         expected.put(this.documentReferenceA, Arrays.asList(null, "A1", "", "A2"));
         expected.put(this.documentReferenceC, Collections.singletonList(""));
@@ -217,7 +217,7 @@ public class DefaultMentionXDOMServiceTest
 
     private MacroBlock initMentionMacro(String reference, String anchor)
     {
-        HashMap<String, String> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("reference", reference);
         parameters.put("anchor", anchor);
         return new MacroBlock("mention", parameters, false);

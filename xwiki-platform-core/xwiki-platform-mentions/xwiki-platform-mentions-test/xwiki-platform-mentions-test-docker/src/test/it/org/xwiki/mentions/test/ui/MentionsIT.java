@@ -38,11 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class MentionsIT
 {
-    public static final String U1_USERNAME = "U1";
+    private static final String U1_USERNAME = "U1";
 
-    public static final String USERS_PWD = "password";
+    private static final String USERS_PWD = "password";
 
-    public static final String U2_USERNAME = "U2";
+    private static final String U2_USERNAME = "U2";
 
     /**
      * A duplicate of {@link Runnable} which allows to throw checked {@link Exception}.
@@ -83,12 +83,16 @@ public class MentionsIT
             setup.createPage(reference,
                 "{{mention reference=\"xwiki:XWiki.U2\" style=\"LOGIN\" anchor=\"test-mention-1\" /}}",
                 pageName);
+            Thread.sleep(1000);
         });
 
         runAsUser(setup, U2_USERNAME, USERS_PWD, () -> {
+            Thread.sleep(1000);
             setup.gotoPage("Main", "WebHome");
+            Thread.sleep(1000);
             // check that a notif is well received
             NotificationsTrayPage tray = new NotificationsTrayPage();
+            Thread.sleep(1000);
             tray.showNotificationTray();
             assertEquals(1, tray.getNotificationsCount());
             assertEquals(1, tray.getUnreadNotificationsCount());
@@ -127,4 +131,17 @@ public class MentionsIT
         setup.loginAsSuperAdmin();
         actions.run();
     }
+
+    // // TODO: move function below to page object
+    // private void waitForEmptyQueue(TestUtils setup)
+    // {
+    //     setup.deletePage("XWiki", "MentionsQueueTest");
+    //     ViewPage page = setup.createPage("XWiki", "MentionsQueueTest",
+    //         "{{velocity}}$services.mentions.getQueueSize(){{/velocity}}", "Queue count");
+    //     setup.getDriver().waitUntilCondition(input -> {
+    //         String content = page.getContent();
+    //         System.out.printf("CONTENT >>>> %s%n", content);
+    //         return Objects.equals(content, "0");
+    //     });
+    // }
 }

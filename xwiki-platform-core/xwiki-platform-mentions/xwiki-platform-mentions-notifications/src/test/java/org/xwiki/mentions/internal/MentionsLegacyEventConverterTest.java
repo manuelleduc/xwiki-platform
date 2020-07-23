@@ -117,7 +117,8 @@ public class MentionsLegacyEventConverterTest
         LegacyEvent e = new LegacyEvent();
         e.setParam3("randomValue2");
         Event actual = this.activityPubLegacyEventConverter.convertLegacyActivityToEvent(e);
-        assertEquals("randomValue2", actual.getParameters().get(MentionsRecordableEventConverter.MENTIONS_PARAMETER_KEY));
+        assertEquals("randomValue2", actual.getParameters()
+                                         .get(MentionsRecordableEventConverter.MENTIONS_PARAMETER_KEY));
     }
 
     /**

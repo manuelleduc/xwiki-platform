@@ -123,7 +123,7 @@ public class MentionsNotificationDisplayerTest
             .thenReturn(new URL("http://wiki/page/1#myAnchor"));
 
         DefaultEvent mentionEvent = new DefaultEvent();
-        HashMap<String, String> eventParameters = new HashMap<>();
+        Map<String, String> eventParameters = new HashMap<>();
         String mpValue = "{ \"userReference\": \"xwiki:XWiki.U1\", "
                              + "\"documentReference\": \"xwiki:XWiki.Doc\", "
                              + "\"anchor\":\"" + anchor + "\" }";

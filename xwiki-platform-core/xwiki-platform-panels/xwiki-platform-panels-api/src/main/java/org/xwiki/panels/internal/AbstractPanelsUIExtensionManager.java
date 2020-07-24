@@ -40,6 +40,9 @@ import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.rendering.async.AsyncContext;
 import org.xwiki.uiextension.UIExtension;
 import org.xwiki.uiextension.UIExtensionManager;
+import org.xwiki.uiextension.script.UIXPDescriptor;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Abstract panels UI extension manager. Implementations must provide a list of panel IDs to be displayed, this class
@@ -90,6 +93,7 @@ public abstract class AbstractPanelsUIExtensionManager implements UIExtensionMan
     @Override
     public List<UIExtension> get(String extensionPointId)
     {
+        // TODO: adapt to aliases.
         List<UIExtension> panels = new ArrayList<>();
 
         String panelConfigurationString = getConfiguration();
@@ -145,5 +149,20 @@ public abstract class AbstractPanelsUIExtensionManager implements UIExtensionMan
         }
 
         return panels;
+    }
+
+    @Override
+    public List<UIXPDescriptor> getUIXPDescriptors(Long offset, Long limit, String idFilter,
+        String filter, String mainIdFilter,
+        String aliasesFilter)
+    {
+        // TODO: log that it should not be called?
+        return emptyList();
+    }
+
+    @Override
+    public long getUIXPDescriptorsTotal(String mainIdFilter, String aliasesFilter)
+    {
+        return 0;
     }
 }

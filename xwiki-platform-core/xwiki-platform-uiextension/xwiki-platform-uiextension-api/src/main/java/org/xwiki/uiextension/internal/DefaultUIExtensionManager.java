@@ -21,11 +21,12 @@ package org.xwiki.uiextension.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,25 +38,17 @@ import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.manager.ComponentLookupException;
 import org.xwiki.component.manager.ComponentManager;
-import org.xwiki.model.reference.DocumentReference;
-import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.query.Query;
 import org.xwiki.query.QueryException;
 import org.xwiki.query.QueryManager;
 import org.xwiki.rendering.async.AsyncContext;
 import org.xwiki.uiextension.UIExtension;
 import org.xwiki.uiextension.UIExtensionManager;
+import org.xwiki.uiextension.script.UIXPDescriptor;
 
-import com.xpn.xwiki.XWiki;
-import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
-import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.internal.skin.InternalSkinManager;
-import com.xpn.xwiki.objects.BaseObject;
-import com.xpn.xwiki.objects.LargeStringProperty;
 
-import static com.xpn.xwiki.XWiki.SYSTEM_SPACE;
-import static org.xwiki.query.Query.XWQL;
+import static org.xwiki.query.Query.HQL;
 
 /**
  * Default UIExtensionManager, retrieves all the extensions for a given extension point.
@@ -67,9 +60,9 @@ import static org.xwiki.query.Query.XWQL;
 @Singleton
 public class DefaultUIExtensionManager implements UIExtensionManager
 {
-    private static final String UIXP_DESCRIPTOR_ALIASID_FIELD = "aliasIds";
+    private static final String MAIN_ID_BINDING = "mainIdFilter";
 
-    private static final String UIXP_CLASS_NAME = "UIExtensionPointDescriptorClass";
+    private static final String ALIASES_FILTER_BINDING = "aliasesFilter";
 
     /**
      * The logger to log.
@@ -79,12 +72,6 @@ public class DefaultUIExtensionManager implements UIExtensionManager
 
     @Inject
     private QueryManager queryManager;
-
-    @Inject
-    private DocumentReferenceResolver<String> documentReferenceResolver;
-
-    @Inject
-    private Provider<XWikiContext> xcontextProvider;
 
     /**
      * We use the Context Component Manager to lookup UI Extensions registered as components. The Context Component
@@ -113,6 +100,7 @@ public class DefaultUIExtensionManager implements UIExtensionManager
         Set<String> aliases = lookupAlias(uixpId);
 
         // look for aliases in properties if not found in UIExtensionPointDescriptorClass objects
+        // TODO: should we merge the aliases of just ignire them when also defined in a UIExtensionPointDescriptorClass?
         if (aliases == null || aliases.isEmpty()) {
             aliases = this.internalSkinManager.getAliases(uixpId);
         }
@@ -151,62 +139,137 @@ public class DefaultUIExtensionManager implements UIExtensionManager
         return extensions;
     }
 
-    private Set<String> lookupAlias(String uixpId)
+    @Override
+    public List<UIXPDescriptor> getUIXPDescriptors(Long offset, Long limit, String mainIdFilter,
+        String aliasesFilter, String sort,
+        String dir)
+    {
+        return getUIXPDescriptors(mainIdFilter, aliasesFilter, false, sort, dir, offset, limit);
+    }
+
+    private List<UIXPDescriptor> getUIXPDescriptors(String mainIdFilter, String aliasesFilter, boolean exactMatch,
+        String sort, String dir, Long offset, Long limit)
     {
         String queryString =
-            String.format("from doc.object(%s.%s) as uixp where uixp.mainId = :mainId", SYSTEM_SPACE, UIXP_CLASS_NAME);
-        Set<String> ret = null;
-        try {
-            Query query = this.queryManager.createQuery(queryString, XWQL);
-            query.bindValue("mainId", uixpId);
-            List<String> documentReferences = query.execute();
-            if (documentReferences.size() > 1) {
-                String ls = System.lineSeparator();
-                this.logger.warn(String.format(
-                    "More than one document is holding a [%s.%s] with mainId = [%s]. Found documents: [%s%s%s]",
-                    SYSTEM_SPACE, UIXP_CLASS_NAME, uixpId, ls,
-                    documentReferences.stream().map(it -> "- " + it).collect(Collectors.joining(ls)), ls));
+            "SELECT string.value, largestring.value "
+                + "FROM BaseObject xobject "
+                + "INNER JOIN LargeStringProperty largestring ON largestring.id = xobject.id "
+                + "INNER JOIN StringProperty string ON string.id = xobject.id ";
+        List<String> wheres = new ArrayList<>();
+        Map<String, Object> bindings = new HashMap<>();
+        wheres.add("xobject.className = 'XWiki.UIExtensionPointDescriptorClass'");
+        if (StringUtils.isNotEmpty(mainIdFilter)) {
+            if (exactMatch) {
+
+                wheres.add(String.format("string.value = :%s", MAIN_ID_BINDING));
+                bindings.put(MAIN_ID_BINDING, mainIdFilter);
+            } else {
+                wheres.add(String.format("string.value LIKE :%s", MAIN_ID_BINDING));
+                bindings.put(MAIN_ID_BINDING, '%' + mainIdFilter + '%');
             }
+        }
+        if (StringUtils.isNotEmpty(aliasesFilter)) {
+            wheres.add(String.format("largestring.value LIKE :%s", ALIASES_FILTER_BINDING));
+            bindings.put(ALIASES_FILTER_BINDING, '%' + aliasesFilter + '%');
+        }
 
-            if (documentReferences.size() > 0) {
+        if (!wheres.isEmpty()) {
+            queryString += "WHERE " + StringUtils.join(wheres, " AND ");
+        }
 
-                XWikiContext context = this.xcontextProvider.get();
-                XWiki xWiki = context.getWiki();
+        if (sort.equals("mainId")) {
+            queryString += " ORDER BY ";
+            queryString += "string.value";
+            if (!dir.equals("asc")) {
+                queryString += " DESC";
+            }
+        }
 
-                String docName = documentReferences.get(0);
-                DocumentReference documentReference = this.documentReferenceResolver.resolve(docName);
-                try {
-                    XWikiDocument document = xWiki.getDocument(documentReference, context);
-                    List<BaseObject> xObjects =
-                        document.getXObjects(new DocumentReference(context.getWikiId(), SYSTEM_SPACE, UIXP_CLASS_NAME));
-                    if (xObjects.size() > 1) {
-                        String ls = System.lineSeparator();
-                        this.logger.warn(String.format(
-                            "More than one XObject of type [%s.%s] with mainId = [%s] found in Document [%s]. "
-                                + "Found XObjects: [%s%s%s]",
-                            SYSTEM_SPACE, UIXP_CLASS_NAME, uixpId, documentReference, ls,
-                            xObjects.stream().map(it -> "-" + it).collect(Collectors.joining(ls)), ls));
-                    }
+        List<UIXPDescriptor> ret = new ArrayList<>();
 
-                    BaseObject descriptor = xObjects.get(0);
-                    Stream<String> stream =
-                        Arrays.stream(((LargeStringProperty) descriptor.get(UIXP_DESCRIPTOR_ALIASID_FIELD))
-                                          .getValue()
-                                          .split("\\r?\\n"));
-                    ret = stream.map(String::trim)
-                              .filter(it -> !StringUtils.isBlank(it))
-                              .collect(Collectors.toSet());
-                } catch (XWikiException e) {
-                    this.logger.warn(String.format("Error while retrieving [%s]. Cause [{}].", documentReference), e);
-                    ret = new HashSet<>();
-                }
+        try {
+            Query query = this.queryManager.createQuery(queryString, HQL);
+            if (limit != null && offset != null) {
+                // todo: change parameter type to int.
+                query.setLimit(Math.toIntExact(limit))
+                    .setOffset(Math.toIntExact(offset - 1));
+            }
+            query.bindValues(bindings);
+            List<Object[]> execute = query.execute();
+            for (Object[] o : execute) {
+                ret.add(new UIXPDescriptor()
+                            .setMainId((String) o[0])
+                            .setAliases(parseAliases((String) o[1])));
             }
         } catch (QueryException e) {
-            this.logger.warn(String
-                                 .format("Failed to query for XOjbects of type [%s.%s] with mainId = [%s]. Cause [{}].",
-                                     SYSTEM_SPACE, UIXP_CLASS_NAME, uixpId), e);
-            ret = null;
+            // TODO: log
+            e.printStackTrace();
         }
+        return ret;
+    }
+
+    @Override
+    public long getUIXPDescriptorsTotal(String mainIdFilter, String aliasesFilter)
+    {
+        //language=HQL
+        String queryString =
+            "SELECT count(xobject.id) "
+                + "FROM BaseObject xobject "
+                + "INNER JOIN LargeStringProperty largestring ON largestring.id = xobject.id "
+                + "INNER JOIN StringProperty string ON string.id = xobject.id ";
+        List<String> wheres = new ArrayList<>();
+        Map<String, Object> bindings = new HashMap<>();
+        wheres.add("xobject.className = 'XWiki.UIExtensionPointDescriptorClass'");
+        if (StringUtils.isNotEmpty(mainIdFilter)) {
+            wheres.add(String.format("string.value LIKE :%s", MAIN_ID_BINDING));
+            bindings.put(MAIN_ID_BINDING, '%' + mainIdFilter + '%');
+        }
+        if (StringUtils.isNotEmpty(aliasesFilter)) {
+            wheres.add(String.format("largestring.value LIKE :%s", ALIASES_FILTER_BINDING));
+            bindings.put(ALIASES_FILTER_BINDING, '%' + aliasesFilter + '%');
+        }
+
+        if (!wheres.isEmpty()) {
+            queryString += "WHERE " + StringUtils.join(wheres, " AND ");
+        }
+
+        try {
+            Query query = this.queryManager.createQuery(queryString, HQL);
+            query.bindValues(bindings);
+            return query.<Long>execute().get(0);
+        } catch (QueryException e) {
+            // TODO: log
+            e.printStackTrace();
+        }
+        return 0L;
+    }
+
+    private Set<String> lookupAlias(String uixpId)
+    {
+        List<UIXPDescriptor> uixpDescriptors = this.getUIXPDescriptors(uixpId, null, true, "mainId", "asc", null, null);
+
+        if (uixpDescriptors.size() > 1) {
+            // TODO: log error, too many declarations
+        }
+        Set<String> ret = new HashSet<>();
+
+        if (!uixpDescriptors.isEmpty()) {
+            UIXPDescriptor uixpDescriptor = uixpDescriptors.get(0);
+            ret.add(uixpDescriptor.getMainId());
+            ret.addAll(uixpDescriptor.getAliases());
+        }
+        return ret;
+    }
+
+    private Set<String> parseAliases(String value)
+    {
+        Set<String> ret;
+        String[] aliases = value
+                               .split("\\r?\\n");
+        ret = Arrays.stream(aliases)
+                  .map(String::trim)
+                  .filter(it -> !StringUtils.isBlank(it))
+                  .collect(Collectors.toSet());
         return ret;
     }
 }

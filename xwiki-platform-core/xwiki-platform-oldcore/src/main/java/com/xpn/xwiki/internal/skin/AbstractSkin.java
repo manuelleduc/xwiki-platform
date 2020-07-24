@@ -179,6 +179,8 @@ public abstract class AbstractSkin implements Skin
                            .collect(Collectors.toSet()));
         }
 
+        // TODO: can a cache be defined here? what's the lifecycle of the skins?
+
         return ret;
     }
 

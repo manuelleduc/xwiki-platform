@@ -67,7 +67,7 @@ public class UIExtensionScriptService implements ScriptService
      */
     @Inject
     private UIExtensionManager uiExtensionManager;
-    
+
     /**
      * Utility method to split a list of extension names, for example {code}"Panels.Apps,Panels.QuickLinks"{code} to get
      * a List containing those names.
@@ -90,7 +90,7 @@ public class UIExtensionScriptService implements ScriptService
     {
         UIExtensionManager manager = this.uiExtensionManager;
 
-        ComponentManager componentManager = contextComponentManagerProvider.get();
+        ComponentManager componentManager = this.contextComponentManagerProvider.get();
         if (componentManager.hasComponent(UIExtensionManager.class, extensionPointId)) {
             try {
                 // Look for a specific UI extension manager for the given extension point
@@ -135,14 +135,38 @@ public class UIExtensionScriptService implements ScriptService
 
             try {
                 UIExtensionFilter filter =
-                    contextComponentManagerProvider.get().getInstance(UIExtensionFilter.class, filterHint);
+                    this.contextComponentManagerProvider.get().getInstance(UIExtensionFilter.class, filterHint);
                 extensions = filter.filter(extensions, this.parseFilterParameters(entry.getValue()));
             } catch (ComponentLookupException e) {
-                logger.warn("Unable to find a UIExtensionFilter for hint [{}] "
-                    + "while getting UIExtensions for extension point [{}]", filterHint, extensionPointId);
+                this.logger.warn("Unable to find a UIExtensionFilter for hint [{}] "
+                                     + "while getting UIExtensions for extension point [{}]", filterHint,
+                    extensionPointId);
             }
         }
 
         return extensions;
+    }
+
+    /**
+     *
+     * @return a list of UIXP Descriptors
+     * @param offset page offset
+     * @param limit result numbers limit
+     * @param sort sorting column
+     * @param dir sorting direction
+     * @param mainIdFilter mainId filter
+     * @param aliasesFilter aliases filter
+     */
+    public UIXPLivetable getUIXPDescriptors(Long offset, Long limit,
+        String sort, String dir, String mainIdFilter, String aliasesFilter)
+    {
+        long total = this.uiExtensionManager.getUIXPDescriptorsTotal(mainIdFilter, aliasesFilter);
+        List<UIXPDescriptor> uixpDescriptors =
+            this.uiExtensionManager.getUIXPDescriptors(offset, limit, mainIdFilter, aliasesFilter, sort, dir);
+        return new UIXPLivetable()
+                   .setTotalrows(total)
+                   .setReturnedrows(uixpDescriptors.size())
+                   .setOffset(offset)
+                   .setRows(uixpDescriptors);
     }
 }

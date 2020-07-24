@@ -22,6 +22,7 @@ package org.xwiki.uiextension;
 import java.util.List;
 
 import org.xwiki.component.annotation.Role;
+import org.xwiki.uiextension.script.UIXPDescriptor;
 
 /**
  * A UIExtensionManager retrieves extensions for a given extension point.
@@ -39,4 +40,25 @@ public interface UIExtensionManager
      * @return the list of {@link UIExtension} for the given Extension Point
      */
     List<UIExtension> get(String extensionPointId);
+
+    /**
+     *
+     * @return a list of UIXP descriptors.
+     * @param offset
+     * @param limit
+     * @param idFilter
+     * @param filter
+     * @param sort
+     * @param dir
+     */
+    List<UIXPDescriptor> getUIXPDescriptors(Long offset, Long limit, String idFilter, String filter,
+        String sort, String dir);
+
+    /**
+     *
+     * @return the total numver of UIXP descriptors.
+     * @param mainIdFilter
+     * @param aliasesFilter
+     */
+    long getUIXPDescriptorsTotal(String mainIdFilter, String aliasesFilter);
 }

@@ -198,8 +198,15 @@
     </dependency>
     <dependency>
       <groupId>org.xwiki.contrib.editortool</groupId>
+      <artifactId>editor-tool-autocomplete-ui</artifactId>
+      <version>4.5-SNAPSHOT</version>
+      <type>xar</type>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.contrib.editortool</groupId>
       <artifactId>editor-tool-highlighting-ui</artifactId>
-      <version>4.4</version>
+      <version>4.5-SNAPSHOT</version>
       <type>xar</type>
       <optional>true</optional>
       <exclusions>

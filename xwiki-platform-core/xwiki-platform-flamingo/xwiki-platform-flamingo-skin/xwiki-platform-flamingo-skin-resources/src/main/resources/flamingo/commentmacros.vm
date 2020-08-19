@@ -1,0 +1,121 @@
+#set ($xCommentClass = 'XWiki.XWikiComments')
+#set ($name = $escapetool.xml($request.name))
+## the number of the comment, if no number is provided we generate a field for a new comment.
+#set ($number = $numbertool.toNumber($request.number).intValue())
+#set ($isEdit = $number && $number > -1)
+##
+##
+##
+#macro (displayCommentField $commentClass)
+  ## the 'comment' field from the XWikiComments class is used as a template for the field to display
+  ## the number of the comment, if no number is provided we generate a field for a new comment.
+  #if ($isEdit)
+    #set ($commentObj = $doc.getObject($xCommentClass, $number))
+    #set ($value = $commentObj.getValue('comment'))
+  #else
+    #set ($commentObj = $doc.newObject($xCommentClass))
+    #set ($value = '')
+  #end
+
+  ## We can't simply call $doc.display() on this object because we would get comment as the
+  ## field name. Instead we want the field name to be XWiki.XWikiComments_comment for new comments
+  ## and XWiki.XWikiComments_N_comment for edited comments.
+  ## To achieve this we add a new property to the comment class by copying the comment property and changing the name.
+  #set ($commentObjClass = $commentObj.getxWikiClass())
+  #set ($commentObjBaseClass = $commentObjClass.getXWikiClass())
+  #set ($discard = $commentObjBaseClass.put($name, $commentClass.getXWikiClass().get('comment')))
+  #set ($discard = $commentObjBaseClass.get($name).setName($name))
+  ## attribution of the value to the new field in the object.
+  #set ($discard = $commentObj.set($name, $value))
+  #set ($fieldToDisplay = $commentObjClass.get($name))
+  ## We need to know the type of editor used for comments in order to hide/display the preview button.
+  #set ($defaultEditorId = $services.edit.syntaxContent.defaultEditorId)
+  <input type='hidden' name='defaultEditorId' value="$escapetool.xml($defaultEditorId)" />
+
+  <label for="$name">$services.localization.render('core.viewers.comments.add.comment.label')</label>
+  #initRequiredSkinExtensions()
+  ## display of the comment field
+  $doc.displayEdit($fieldToDisplay, '', $commentObj)
+  ## ensure to load the appropriate JSX for the editor.
+  #getRequiredSkinExtensions($requiredSkinExtensions)
+  #set ($discard = $response.setHeader('X-XWIKI-HTML-HEAD', $requiredSkinExtensions))
+  ## reset the temporary added field.
+  #set ($discard = $commentObjBaseClass.removeField($name))
+#end
+##
+##
+##
+#macro(displayCommentForm)
+  #if($xwiki.hasAccessLevel('comment'))
+  <form action="$doc.getURL('commentadd', "xpage=view&amp;viewer=comments#commentform")" method="post" id="AddComment" class="comment-form">
+    <fieldset id="commentform">
+      <legend class="sr-only">$services.localization.render('core.viewers.comments.add.title')</legend>
+      <div class="commentavatar">#largeUserAvatar($xcontext.user)</div>
+      #if($xcontext.user != 'XWiki.XWikiGuest')
+        <label>$xwiki.getUserName($xcontext.user) $services.localization.render('core.viewers.comments.add.says')</label>
+        <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
+      #else
+        <label for="${xCommentClass}_author"><input type="text" id="${xCommentClass}_author" name="${xCommentClass}_author" value="$author" maxlength="255" /> says:</label>
+        <strong><a href='$xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.relativeRequestURL)")'>$services.localization.render('login')</a></strong>
+      #end
+      ## CSRF prevention
+      <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
+      <input type="hidden" name="${xCommentClass}_date" value=""/>
+      <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
+      <div class="commentcontainer">
+        <div class="commenteditor">
+            #set ($commentClass = $xwiki.getDocument($xCommentClass).getxWikiClass())
+        #displayCommentField($commentClass)
+        </div>
+      </div>
+      #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
+        #displayCaptcha()
+      #end
+      <div>
+        <input type="submit" value="$services.localization.render('core.viewers.comments.add.submit')" class="btn btn-primary"/>
+        <a class="cancel btn btn-default" href="$doc.getURL()">$services.localization.render('core.viewers.comments.add.cancel')</a>
+      </div>
+    </fieldset>
+  </form>
+  #end
+#end
+##
+##
+##
+#macro(displayEditCommentForm $comment)
+  #set ($commentAuthor = $comment.getValue('author'))
+  #if($services.model.resolveDocument($commentAuthor, 'current') == $xcontext.userReference || $hasAdmin)
+  <form action="$doc.getURL('commentsave')" method="post" class="edit-xcomment reply comment-form">
+    <div id="xwikicomment_${comment.number}" class="xwikicomment#if($commentAuthor == $doc.creator) commentByCreator#end">
+      <div class="commentavatar">#if("$!comment.replyto" == '')#largeUserAvatar($commentAuthor)#{else}#mediumUserAvatar($commentAuthor)#end</div>
+      <div class="commentheader">
+        <div>
+          <span class="commentauthor">$!xwiki.getUserName($commentAuthor)</span>##
+          ## Don't indent, otherwise the comma will be misplaced
+          #set($date = $comment.getProperty('date').value)##
+          #if($date), <span class="commentdate">$!xwiki.formatDate($date)</span>#end
+        </div>
+      </div>## commentheader
+      <div class="commentcontent commenteditor-${comment.number}">
+        #set ($commentClass = $comment.getxWikiClass())
+        #displayCommentField($commentClass)
+      </div>
+      <div class="hidden">
+        ## CSRF prevention
+        <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
+        <input type="hidden" name="comment" value="$services.localization.render('core.viewers.comments.edit.versionComment', [${comment.number}])"/>
+        <input type="hidden" name="minorEdit" value="true"/>
+        <input type="hidden" name="xredirect" value="$xredirect">
+      </div>
+      <div>
+        <input type="submit" name="action_commentsave" class="button" value="$services.localization.render('core.viewers.comments.edit.save')"/>
+        <a class="cancel secondary button" href="$doc.getURL('view', 'viewer=comments')">$services.localization.render('core.viewers.comments.edit.cancel')</a>
+      </div>
+     </div>## xwikicomment
+  </form>
+  #else
+    $response.setStatus(403) ## forbidden
+    #error($services.localization.render('core.viewers.comments.edit.notAllowed'))
+  #end
+#end
+

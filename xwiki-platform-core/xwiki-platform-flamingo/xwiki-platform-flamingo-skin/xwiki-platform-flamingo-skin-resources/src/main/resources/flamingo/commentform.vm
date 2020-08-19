@@ -1,0 +1,12 @@
+#template('display_macros.vm')
+#template('commentmacros.vm')
+#set ($xCommentClass = 'XWiki.XWikiComments')
+## the number of the comment, if no number is provided we generate a field for a new comment.
+#set ($number = $numbertool.toNumber($request.number).intValue())
+
+#if($isEdit)
+    #set($comment = $doc.getObject($xCommentClass, $number))
+    #displayEditCommentForm($comment)
+#else
+    #displayCommentForm()
+#end

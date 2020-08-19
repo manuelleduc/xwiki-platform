@@ -48,6 +48,9 @@
 ## bin/view/Space/Page?xpage=xpart&vm=commentsinline.vm
 $xwiki.jsfx.use('uicomponents/viewers/comments.js', {'forceSkinAction': true, 'language': ${xcontext.locale}})
 $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
+
+#template('commentmacros.vm')
+
 ##
 ##---------------------------------------------------------------------
 ## Set some 'global' variables
@@ -210,38 +213,10 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 ##
 ##
 ##
-#macro(displayCommentForm)
-  #if($xwiki.hasAccessLevel('comment'))
-    <form action="$doc.getURL('commentadd', "xpage=view&amp;viewer=comments#commentform")" method="post" id="AddComment">
-      <fieldset id="commentform">
-        <legend class="sr-only">$services.localization.render('core.viewers.comments.add.title')</legend>
-        <div class="commentavatar">#largeUserAvatar($xcontext.user)</div>
-        #if($xcontext.user != 'XWiki.XWikiGuest')
-          <label>$xwiki.getUserName($xcontext.user) $services.localization.render('core.viewers.comments.add.says')</label>
-          <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
-        #else
-          <label for="${xCommentClass}_author"><input type="text" id="${xCommentClass}_author" name="${xCommentClass}_author" value="$author" maxlength="255" /> says:</label>
-          <strong><a href='$xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.relativeRequestURL)")'>$services.localization.render('login')</a></strong>
-        #end
-        ## CSRF prevention
-        <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
-        <input type="hidden" name="${xCommentClass}_date" value=""/>
-        <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
-        <div class="commentcontainer">
-          <div class="commenteditor">
-              <!-- loaded by javascript (see comments.js) -->
-          </div>
-        </div>
-        #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
-          #displayCaptcha()
-        #end
-        <div>
-          <input type="submit" value="$services.localization.render('core.viewers.comments.add.submit')" class="btn btn-primary"/>
-          <a class="cancel btn btn-default" href="$doc.getURL()">$services.localization.render('core.viewers.comments.add.cancel')</a>
-        </div>
-      </fieldset>
-    </form>
-  #end
+#macro(displayCommentButton)
+  ## TODO: add translation key
+  <button type="button" id="OpenCommentForm" class="btn btn-default">$services.icon.renderHTML('comment') Comment</button>
+  <div id="CommentFormPlaceholder"></div>
 #end
 ##
 ##
@@ -266,45 +241,6 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
     #end
     <div class="wikimodel-emptyline"></div>
   </div>
-#end
-##
-##
-##
-#macro(displayEditCommentForm $comment)
-  #set ($commentAuthor = $comment.getValue('author'))
-  #if($services.model.resolveDocument($commentAuthor, 'current') == $xcontext.userReference || $hasAdmin)
-  <form action="$doc.getURL('commentsave')" method="post" class="edit-xcomment reply">
-    <div id="xwikicomment_${comment.number}" class="xwikicomment#if($commentAuthor == $doc.creator) commentByCreator#end">
-    <div class="commentavatar">#if("$!comment.replyto" == '')#largeUserAvatar($commentAuthor)#{else}#mediumUserAvatar($commentAuthor)#end</div>
-    <div class="commentheader">
-      <div>
-      <span class="commentauthor">$!xwiki.getUserName($commentAuthor)</span>##
-## Don't indent, otherwise the comma will be misplaced
-#set($date = $comment.getProperty('date').value)##
-#if($date), <span class="commentdate">$!xwiki.formatDate($date)</span>#end
-      </div>
-    </div>## commentheader
-    <div class="commentcontent commenteditor-${comment.number}">
-      <!-- loaded by javascript (see comments.js) -->
-    </div>
-    <div class="hidden">
-      ## CSRF prevention
-      <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
-      <input type="hidden" name="comment" value="$services.localization.render('core.viewers.comments.edit.versionComment', [${comment.number}])"/>
-      <input type="hidden" name="minorEdit" value="true"/>
-      <input type="hidden" name="xredirect" value="$xredirect">
-    </div>
-    <div>
-      <input type="submit" name="action_commentsave" class="button" value="$services.localization.render('core.viewers.comments.edit.save')"/>
-      <a class="cancel secondary button" href="$doc.getURL('view', 'viewer=comments')">$services.localization.render('core.viewers.comments.edit.cancel')</a>
-    </div>
-
-    </div>## xwikicomment
-  </form>
-  #else
-    $response.setStatus(403) ## forbidden
-    #error($services.localization.render('core.viewers.comments.edit.notAllowed'))
-  #end
 #end
 ##
 ##
@@ -413,7 +349,7 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 ##
 ##
 #if(!$replied)
-  #displayCommentForm()
+  #displayCommentButton()
 #end
   </div> ## comments
   #showPermalinkModal

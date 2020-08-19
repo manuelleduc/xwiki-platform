@@ -32,16 +32,23 @@ viewers.Comments = Class.create({
    * @param comment the comment
    * @returns the comment object number
    */
-  extractCommentNumber : function (comment) {
+  extractCommentNumber: function (comment) {
     return comment.id.match(this.commentNumberRegex)[1];
   },
-
+  form: function () {
+    const commentform = $("commentform");
+    var form = undefined;
+    if (commentform) {
+      form = commentform.up("form");
+    }
+    return form;
+  },
   /**
    * Check if the comment block has an object number.
    * @param comment the comment block
    * @returns {boolean} true if the comment block has an object number
    */
-  hasCommentNumber : function (comment) {
+  hasCommentNumber: function (comment) {
     return comment.id.match(this.commentNumberRegex).size() > 1;
   },
 
@@ -63,119 +70,129 @@ viewers.Comments = Class.create({
   },
   /** Enhance the Comments UI with JS behaviors. */
   startup : function () {
-    if ($("commentform")) {
-      this.form = $("commentform").up("form");
-    } else {
-      this.form = undefined;
-    }
     this.loadIDs();
     this.addReplyListener();
-    this.addSubmitListener(this.form);
-    this.addCancelListener();
     this.addEditListener();
-    this.reloadEditor({
-      callback: function () {
-        this.addPreview(this.form);
-      }.bind(this)
-    });
+    this.addOpenCommentListener();
   },
   /**
    * Parse the IDs of the comments to obtain the xobject number.
    */
-  loadIDs : function() {
-    $$(this.xcommentSelector).each(function(item) {
+  loadIDs: function () {
+    $$(this.xcommentSelector).each(function (item) {
       var elementId = item.id;
       item._x_number = elementId.substring(elementId.lastIndexOf("_") + 1) - 0;
     });
+  },
+  addOpenCommentListener: function () {
+    require(['jquery'], function ($) {
+      var button = $('#OpenCommentForm');
+      button.click(function () {
+        var name = 'XWiki.XWikiComments_comment';
+        this.loadCommentForm(name, -1, function (data) {
+          $("#CommentFormPlaceholder").html(data);
+          $("#OpenCommentForm").hide();
+        }, function() {
+          $("#OpenCommentForm").show();
+          this.destroyEditor("[name='" + name + "']", name);
+          $("form.comment-form").remove();
+        }.bind(this));
+      }.bind(this));
+    }.bind(this));
+  },
+  loadCommentForm: function (name, number, placeholder, resetAction, callback) {
+    require(['jquery'], function ($) {
+      this.destroyEditor("[name='" + name + "']", name);
+      var commentForm = $("form#AddComment");
+      if (commentForm) {
+        commentForm.remove();
+      }
+
+      function loadRequiredSkinExtensions(requiredSkinExtensions)
+      {
+        var existingSkinExtensions;
+        var getExistingSkinExtensions = function () {
+          return $('link, script').map(function () {
+            return $(this).attr('href') || $(this).attr('src');
+          }).get();
+        };
+        $('<div/>').html(requiredSkinExtensions).find('link, script').filter(function () {
+          if (!existingSkinExtensions) {
+            existingSkinExtensions = getExistingSkinExtensions();
+          }
+          var url = $(this).attr('href') || $(this).attr('src');
+          return existingSkinExtensions.indexOf(url) < 0;
+        }).appendTo('head');
+      }
+
+      var url = window.location.href;
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+          'xpage': 'xpart',
+          'vm': 'commentform.vm',
+          'name': name,
+          'number': number
+        },
+        success: function (data, textStatus, request) {
+          placeholder(data);
+          loadRequiredSkinExtensions(request.getResponseHeader('X-XWIKI-HTML-HEAD'));
+          this.addSubmitListener(this.form());
+          // this.addCancelListener(resetAction);
+          $("form.comment-form a.cancel").click(function(event) {
+            event.preventDefault();
+            resetAction()
+          });
+          this.loadEditor({
+            callback: function () {
+              this.addPreview(this.form());
+              if (callback) {
+                callback();
+              }
+            }.bind(this)
+          });
+        }.bind(this),
+        error: function (data, textStatus, request) {
+          // TODO
+          console.log('fail', xhr, status, error);
+        }.bind(this)
+      });
+    }.bind(this));
   },
   /**
    * Ajax comment editing.
    * For all edit buttons, listen to "click", and make ajax request to retrieve the form and save the comment.
    */
-  addEditListener : function() {
-    $$(this.xcommentSelector).each(function(item) {
+  addEditListener: function () {
+    $$(this.xcommentSelector).each(function (item) {
       // Prototype bug in Opera: $$(".comment a.delete") returns only the first result.
       // Quick fix until Prototype 1.6.1 is integrated.
       item = item.down('a.edit');
       if (!item) {
         return;
       }
-      item.observe('click', function(event) {
+      item.observe('click', function (event) {
         item.blur();
         event.stop();
-        if (item.disabled) {
-          // Do nothing if the button was already clicked and it's waiting for a response from the server.
-          return;
-        } else if (item._x_editForm) {
-          // If the form was already fetched, but hidden after cancel, just show it again
-          // without making a new request
-          var comment = item.up(this.xcommentSelector);
-          comment.hide();
-          const commentNbr = this.extractCommentNumber(comment);
-          this.reloadEditor({
-            commentNbr: commentNbr,
-          });
-          item._x_editForm.show();
-        } else {
-          new Ajax.Request(
-            /* Ajax request URL */
-            item.readAttribute('href').replace('viewer=comments', 'xpage=xpart&vm=commentsinline.vm'),
-            /* Ajax request parameters */
-            {
-              onCreate : function() {
-                // Disable the button, to avoid a cascade of clicks from impatient users
-                item.disabled = true;
-                item._x_notification = new XWiki.widgets.Notification(
-                    "$services.localization.render('core.viewers.comments.editForm.fetch.inProgress')",
-                    "inprogress");
-              },
-              onSuccess : function(response) {
-                // Hide other comment editing forms (allow only one comment to be edited at a time)
-                if (this.editing) {
-                  this.cancelEdit(false, this.editing);
-                }
-                // Replace the comment text with a form for editing it
-                var comment = item.up(this.xcommentSelector);
-                comment.insert({before: response.responseText});
-                item._x_editForm = comment.previous();
-                this.addSubmitListener(item._x_editForm);
+        var comment = item.up(this.xcommentSelector);
+        const commentNbr = this.extractCommentNumber(comment);
+        var name = 'XWiki.XWikiComments_' + commentNbr + '_comment';
+        this.loadCommentForm(name, commentNbr, function (data) {
+          if (!item.disabled) {
+            item.up('.xwikicomment').replace(data);
+          }
+        }, function () {
+          console.log('TODO')
+        }, function () {
 
-                // extract the comment number in the number parameter.
-                const commentNbr = item.readAttribute('href').match(/number=(\d+)/)[1];
+          item._x_editForm = $(name).up('form');
+          // item._x_notification = new XWiki.widgets.Notification(
+          //     "$services.localization.render('core.viewers.comments.editForm.fetch.inProgress')",
+          //     "inprogress");
 
-                this.reloadEditor({
-                  commentNbr: commentNbr,
-                  callback: function () {
-                    this.addPreview(item._x_editForm);
-                    item._x_editForm.down('a.cancel').observe('click',
-                        this.cancelEdit.bindAsEventListener(this, item));
-                    comment.hide();
-                    item._x_notification.hide();
-                    // Currently editing: this comment
-                    this.editing = item;
-                  }.bind(this)
-                });
-              }.bind(this),
-              onFailure : function (response) {
-                var failureReason = response.statusText;
-                if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
-                  failureReason = 'Server not responding';
-                }
-                item._x_notification.replace(new XWiki.widgets.Notification(
-                    "$services.localization.render('core.viewers.comments.editForm.fetch.failed')" + failureReason,
-                    "error"));
-              }.bind(this),
-              on0 : function (response) {
-                response.request.options.onFailure(response);
-              },
-              onComplete : function() {
-                // In the end: re-enable the button
-                item.disabled = false;
-              }
-            }
-          );
-        }
-      }.bindAsEventListener(this));
+        }.bindAsEventListener(this));
+      }.bind(this));
     }.bind(this));
   },
   /**
@@ -198,13 +215,13 @@ viewers.Comments = Class.create({
    * Inline reply: Move the form under the replied comment and update the hidden "replyto" field.
    */
   addReplyListener : function() {
-    if (this.form) {
-      $$(this.xcommentSelector).each(function(item) {
+    if ($('OpenCommentForm')) {
+      $$(this.xcommentSelector).each(function (item) {
         this.addReplyListenerToComment(item);
       }.bind(this));
     } else {
       // If, for some reason, the form is missing, hide the reply functionality from the user
-      $$(this.xcommentSelector + ' a.commentreply').each(function(item) {
+      $$(this.xcommentSelector + ' a.commentreply').each(function (item) {
         item.hide();
       });
     }
@@ -219,23 +236,25 @@ viewers.Comments = Class.create({
     item.observe('click', function(event) {
       item.blur();
       event.stop();
-      // If the form was already displayed as a reply, re-enable the Reply button for the old location
-      if (this.form.up('.commentthread')) {
-        this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
-      }
-      // Insert the form on top of that comment's discussion
-      item.up(this.xcommentSelector).next('.commentthread').insert({'top': this.form});
 
-      this.addPreview(this.form);
-      this.reloadEditor();
+      this.loadCommentForm('XWiki.XWikiComments_comment', -1, function (data) {
+        item.up('.xwikicomment').next('.commentthread').insert(data);
+      }, function () {
+        console.log('TODO');
+      }, function () {
+        // If the form was already displayed as a reply, re-enable the Reply button for the old location
+        var form = this.form();
+        // this.addPreview(form);
+        // this.loadEditor();
 
-      // Set the replyto field to the replied comment's number
-      this.form["XWiki.XWikiComments_replyto"].value = item.up(this.xcommentSelector)._x_number;
-      // Clear the contents and focus the textarea
-      this.form["XWiki.XWikiComments_comment"].value = "";
-      this.form["XWiki.XWikiComments_comment"].focus();
-      // Hide the reply button
-      item.hide();
+        // Set the replyto field to the replied comment's number
+        form["XWiki.XWikiComments_replyto"].value = item.up(this.xcommentSelector)._x_number;
+        // Clear the contents and focus the textarea
+        form["XWiki.XWikiComments_comment"].value = "";
+        form["XWiki.XWikiComments_comment"].focus();
+        // Hide the reply button
+        item.hide();
+      }.bind(this));
     }.bindAsEventListener(this));
   },
   /**
@@ -325,12 +344,12 @@ viewers.Comments = Class.create({
   /**
    * When pressing Cancel, reset the form.
    */
-  addCancelListener : function() {
-    if (this.form) {
-      this.initialLocation = new Element("span", {className : "hidden"});
+  addCancelListener : function(resetAction) {
+    if (this.form()) {
+      this.initialLocation = new Element("span", {className: "hidden"});
       $('_comments').insert(this.initialLocation);
       // If the form is inside a thread, as a reply form, move it back to the bottom.
-      this.form.down('a.cancel').observe('click', this.resetForm.bindAsEventListener(this));
+      this.form().down('a.cancel').observe('click', this.resetForm.bindAsEventListener(this));
     }
   },
   /**
@@ -460,15 +479,15 @@ viewers.Comments = Class.create({
     if (event) {
       event.stop();
     }
-    if (this.form.up('.commentthread')) {
+    if (this.form().up('.commentthread')) {
       // Show the comment's reply button
-      this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+      this.form().up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
       // Put the form back to its initial location and clear the contents
-      this.initialLocation.insert({after: this.form});
+      this.initialLocation.insert({after: this.form()});
     }
-    this.form["XWiki.XWikiComments_replyto"].value = "";
-    this.reloadEditor();
-    this.cancelPreview(this.form);
+    this.form()["XWiki.XWikiComments_replyto"].value = "";
+    // this.loadEditor();
+    this.cancelPreview(this.form());
   },
   /**
    * Registers a listener that watches for the insertion of the Comments tab and triggers the enhancements.
@@ -491,7 +510,7 @@ viewers.Comments = Class.create({
       }
     });
   },
-  reloadEditor: function (options) {
+  loadEditor: function (options) {
     var wfClass = '.commenteditor';
     options = options || {};
     const commentNbr = options.commentNbr;
@@ -502,49 +521,17 @@ viewers.Comments = Class.create({
       wfClass = wfClass + '-' + commentNbr;
     }
 
-    this.destroyEditor("[name='" + name + "']", name);
-
     require(['jquery', 'xwiki-events-bridge'], function ($) {
       if ($(".commenteditor").size() > 0) {
-        $.post(new XWiki.Document().getURL("get") + '?' + $.param({
-          xpage: 'xpart',
-          vm: 'commentfield.vm',
-          number: commentNbr,
-          name: name,
-        }), function (data, status, jqXHR) {
-          function loadRequiredSkinExtensions(requiredSkinExtensions)
-          {
-            var existingSkinExtensions;
-            var getExistingSkinExtensions = function () {
-              return $('link, script').map(function () {
-                return $(this).attr('href') || $(this).attr('src');
-              }).get();
-            };
-            $('<div/>').html(requiredSkinExtensions).find('link, script').filter(function () {
-              if (!existingSkinExtensions) {
-                existingSkinExtensions = getExistingSkinExtensions();
-              }
-              var url = $(this).attr('href') || $(this).attr('src');
-              return existingSkinExtensions.indexOf(url) < 0;
-            }).appendTo('head');
-          }
 
-          const wf = $(wfClass);
-          wf.empty();
-          wf.append(data);
-          wf.show();
-          $(document).trigger('xwiki:dom:updated', {'elements': wf.toArray()});
-          loadRequiredSkinExtensions(jqXHR.getResponseHeader('X-XWIKI-HTML-HEAD'));
-          if ($("#commentCaptcha").size() > 0) {
-            // FIXME: this solution is not good right now since it implies to always display the CAPTCHA
-            // however since the idea is now to have a button "Add a comment", I won't got further: we should
-            // display the captcha when the user decide to add a comment.
-            $("#commentCaptcha").first().css('display', 'block');
-          }
-          if (callback) {
-            callback();
-          }
-        });
+        const wf = $(wfClass);
+        $(document).trigger('xwiki:dom:updated', {'elements': wf.toArray()});
+        if ($("#commentCaptcha").size() > 0) {
+          $("#commentCaptcha").first().css('display', 'block');
+        }
+      }
+      if (callback) {
+        callback();
       }
     });
   }

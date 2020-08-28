@@ -22,10 +22,10 @@ package org.xwiki.uiextension.script;
 import java.util.Set;
 
 /**
- * Please document me.
+ * Hold the data of a rows of the UIXP livetable.
  *
  * @version $Id$
- * @since 12.7RC1
+ * @since 12.8RC1
  */
 public class UIXPDescriptor
 {
@@ -33,23 +33,41 @@ public class UIXPDescriptor
 
     private Set<String> aliases;
 
+    /**
+     *
+     * @param mainId The main UIXP id
+     * @return The current object
+     */
     public UIXPDescriptor setMainId(String mainId)
     {
         this.mainId = mainId;
         return this;
     }
 
+    /**
+     *
+     * @return The main UIXP id
+     */
     public String getMainId()
     {
         return this.mainId;
     }
 
+    /**
+     *
+     * @param aliases The UIXP aliases
+     * @return The current object
+     */
     public UIXPDescriptor setAliases(Set<String> aliases)
     {
         this.aliases = aliases;
         return this;
     }
 
+    /**
+     *
+     * @return The UIXP aliases
+     */
     public Set<String> getAliases()
     {
         return this.aliases;

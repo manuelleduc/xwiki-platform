@@ -297,6 +297,11 @@
                 <newValue>"async"</newValue>
                 <justification>Not a breackage from REST point of view.</justification>
               </item>
+              <item>
+                <code>java.method.addedToInterface</code>
+                <new>method java.util.Set&lt;java.lang.String&gt; org.xwiki.skin.Skin::getAliases(java.lang.String)</new>
+                <justification>Integration of the notion of User Interface Extension Point aliases.</justification>
+              </item>
             </revapi.ignore>
           </analysisConfiguration>
         </configuration>

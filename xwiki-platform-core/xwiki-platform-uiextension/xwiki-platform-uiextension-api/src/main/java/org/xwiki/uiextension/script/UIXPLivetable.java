@@ -22,10 +22,10 @@ package org.xwiki.uiextension.script;
 import java.util.List;
 
 /**
- * Please document me.
+ * Holds the data of the livetable holding the UIXP list.
  *
  * @version $Id$
- * @since X.Y.Z
+ * @since 12.8RC1
  */
 public class UIXPLivetable
 {
@@ -37,45 +37,81 @@ public class UIXPLivetable
 
     private List<UIXPDescriptor> rows;
 
+    /**
+     *
+     * @param totalrows The total of rows of the table
+     * @return The current object
+     */
     public UIXPLivetable setTotalrows(long totalrows)
     {
         this.totalrows = totalrows;
         return this;
     }
 
+    /**
+     *
+     * @return The total of rows of the table
+     */
     public long getTotalrows()
     {
         return this.totalrows;
     }
 
+    /**
+     *
+     * @param returnedrows The number of rows in the current table page
+     * @return The current object
+     */
     public UIXPLivetable setReturnedrows(long returnedrows)
     {
         this.returnedrows = returnedrows;
         return this;
     }
 
+    /**
+     *
+     * @return The number of rows in the current table page
+     */
     public long getReturnedrows()
     {
         return this.returnedrows;
     }
 
+    /**
+     *
+     * @param offset The table offset
+     * @return The current object
+     */
     public UIXPLivetable setOffset(long offset)
     {
         this.offset = offset;
         return this;
     }
 
+    /**
+     *
+     * @return The table offset
+     */
     public long getOffset()
     {
         return this.offset;
     }
 
+    /**
+     *
+     * @param rows The table rows
+     * @return the current object
+     */
     public UIXPLivetable setRows(List<UIXPDescriptor> rows)
     {
         this.rows = rows;
         return this;
     }
 
+    /**
+     *
+     * @return The table rows
+     */
     public List<UIXPDescriptor> getRows()
     {
         return this.rows;

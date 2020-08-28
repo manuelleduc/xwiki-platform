@@ -100,7 +100,7 @@ public class DefaultUIExtensionManager implements UIExtensionManager
         Set<String> aliases = lookupAlias(uixpId);
 
         // look for aliases in properties if not found in UIExtensionPointDescriptorClass objects
-        // TODO: should we merge the aliases of just ignire them when also defined in a UIExtensionPointDescriptorClass?
+        // TODO: should we merge the aliases of just ignore them when also defined in a UIExtensionPointDescriptorClass?
         if (aliases == null || aliases.isEmpty()) {
             aliases = this.internalSkinManager.getAliases(uixpId);
         }
@@ -202,8 +202,7 @@ public class DefaultUIExtensionManager implements UIExtensionManager
                             .setAliases(parseAliases((String) o[1])));
             }
         } catch (QueryException e) {
-            // TODO: log
-            e.printStackTrace();
+            this.logger.warn("Failed to query the UIXP descriptors", e);
         }
         return ret;
     }
@@ -238,8 +237,7 @@ public class DefaultUIExtensionManager implements UIExtensionManager
             query.bindValues(bindings);
             return query.<Long>execute().get(0);
         } catch (QueryException e) {
-            // TODO: log
-            e.printStackTrace();
+            this.logger.warn("Failed to query the total number of UIXP descriptors", e);
         }
         return 0L;
     }
@@ -249,7 +247,7 @@ public class DefaultUIExtensionManager implements UIExtensionManager
         List<UIXPDescriptor> uixpDescriptors = this.getUIXPDescriptors(uixpId, null, true, "mainId", "asc", null, null);
 
         if (uixpDescriptors.size() > 1) {
-            // TODO: log error, too many declarations
+            this.logger.warn("Failed to query UIXP descriptors");
         }
         Set<String> ret = new HashSet<>();
 
@@ -263,13 +261,10 @@ public class DefaultUIExtensionManager implements UIExtensionManager
 
     private Set<String> parseAliases(String value)
     {
-        Set<String> ret;
-        String[] aliases = value
-                               .split("\\r?\\n");
-        ret = Arrays.stream(aliases)
-                  .map(String::trim)
-                  .filter(it -> !StringUtils.isBlank(it))
-                  .collect(Collectors.toSet());
-        return ret;
+        String[] aliases = value.split("\\r?\\n");
+        return Arrays.stream(aliases)
+                   .map(String::trim)
+                   .filter(it -> !StringUtils.isBlank(it))
+                   .collect(Collectors.toSet());
     }
 }

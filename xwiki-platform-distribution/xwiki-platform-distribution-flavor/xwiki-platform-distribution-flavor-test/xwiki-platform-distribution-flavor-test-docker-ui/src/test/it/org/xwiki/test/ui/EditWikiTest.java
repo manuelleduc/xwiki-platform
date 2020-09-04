@@ -45,9 +45,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class EditWikiTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * Page used for testing.
      */

@@ -38,9 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class ViewTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * See also <a href="https://jira.xwiki.org/browse/XWIKI-8725">XWIKI-8725</a>.
      */

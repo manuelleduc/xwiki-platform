@@ -17,12 +17,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.test.ui;
+package org.xwiki.flamingo.test.docker;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.ui.TestUtils;
 import org.xwiki.test.ui.po.CommentForm;
 import org.xwiki.test.ui.po.CommentsTab;
 import org.xwiki.test.ui.po.ViewPage;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 12.8RC1
  */
 @UITest
-public class CommentAsAdminTest
+public class CommentAsAdminIT
 {
     private static final String COMMENT_CONTENT = "Some content";
 

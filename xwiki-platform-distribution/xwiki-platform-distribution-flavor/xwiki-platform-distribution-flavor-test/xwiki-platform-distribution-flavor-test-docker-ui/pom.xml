@@ -77,8 +77,20 @@
     <!-- Importing all the flavor dependencies (for now) -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-distribution</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-distribution-flavor-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.xwiki.contrib</groupId>-->
+<!--      <artifactId>application-ckeditor-ui</artifactId>-->
+<!--      <type>xar</type>-->
+<!--    </dependency>-->
+
+
   </dependencies>
 </project>

@@ -45,9 +45,6 @@ import static org.junit.Assert.fail;
 @UITest
 public class SkinxTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     private static final String SCRIPT = "window.document.title = 'script active';";
 
     @BeforeEach

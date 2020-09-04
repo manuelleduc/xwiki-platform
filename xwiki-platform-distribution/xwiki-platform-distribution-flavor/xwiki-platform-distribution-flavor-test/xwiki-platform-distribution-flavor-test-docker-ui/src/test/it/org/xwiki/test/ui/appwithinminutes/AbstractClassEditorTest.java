@@ -32,9 +32,6 @@ import org.xwiki.test.ui.TestUtils;
  */
 public abstract class AbstractClassEditorTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * The page being tested.
      */

@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class AddEntryTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * The page being tested.
      */

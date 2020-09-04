@@ -45,9 +45,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @UITest
 public class PreviewTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * @see "XWIKI-2490: Preview doesn't work when the document content has script requiring programming rights"
      */

@@ -43,9 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class LiveTableGeneratorTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * The second step of the AppWithinMinutes wizard.
      */

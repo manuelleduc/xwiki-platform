@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @UITest
 public class ApplicationsPanelEntryTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * The page being tested.
      */

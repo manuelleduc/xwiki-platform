@@ -44,9 +44,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class AddRemoveTagsTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * The test page.
      */

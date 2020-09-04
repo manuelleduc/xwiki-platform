@@ -61,9 +61,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class CompareVersionsTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * The test page.
      */

@@ -41,9 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class EditInlineTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     // Note: We're not testing basic inline editing since this is already covered by the User Profile tests
 
     @Test

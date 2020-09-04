@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class CopyPageTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     private static final String PAGE_CONTENT = "This page is used for copying purposes";
 
     private static final String OVERWRITTEN_PAGE_CONTENT = "This page is used for overwritten copy purposes";

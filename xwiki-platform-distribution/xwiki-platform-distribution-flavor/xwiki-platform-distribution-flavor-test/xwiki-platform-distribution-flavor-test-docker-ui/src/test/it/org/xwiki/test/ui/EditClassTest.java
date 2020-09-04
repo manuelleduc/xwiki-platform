@@ -42,11 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @UITest
 public class EditClassTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
-    
-    
     @Test
     @Order(1)
     @IgnoreBrowser(value = "internet.*", version = "8\\.*", reason="See https://jira.xwiki.org/browse/XE-1146")

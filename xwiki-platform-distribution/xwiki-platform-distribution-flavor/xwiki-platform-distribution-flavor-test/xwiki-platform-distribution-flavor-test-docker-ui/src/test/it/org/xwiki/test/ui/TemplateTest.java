@@ -40,9 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class TemplateTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     /**
      * Test that velocity is rendered
      */

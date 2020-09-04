@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @UITest
 public class ApplicationNameTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * The error message displayed when we try to create an application with an empty name.
      */

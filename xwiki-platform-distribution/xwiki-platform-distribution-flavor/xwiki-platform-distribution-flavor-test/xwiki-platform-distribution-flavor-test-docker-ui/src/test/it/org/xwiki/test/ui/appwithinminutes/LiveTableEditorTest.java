@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class LiveTableEditorTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * The page being tested.
      */

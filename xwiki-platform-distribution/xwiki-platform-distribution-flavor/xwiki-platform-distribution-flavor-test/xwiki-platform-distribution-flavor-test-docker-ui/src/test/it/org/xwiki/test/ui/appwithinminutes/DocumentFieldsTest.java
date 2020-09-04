@@ -50,9 +50,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class DocumentFieldsTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     @Test
     @Order(1)
     void titleAndContent(TestUtils testUtils)

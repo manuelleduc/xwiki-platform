@@ -47,9 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @UITest
 public class LanguageTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(true, testUtils);
-
     /**
      * Make sure we set back the language to monolingual and english for other tests that come thereafter
      */

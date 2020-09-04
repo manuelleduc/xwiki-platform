@@ -37,9 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @UITest
 public class BacklinksTest
 {
-    // @Rule
-    // public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(testUtils);
-
     @Test
     @Order(1)
     void testBacklinksCreationSyntax20(TestUtils testUtils) throws Exception

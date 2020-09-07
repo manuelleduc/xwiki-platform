@@ -151,6 +151,9 @@ administration.section.analytics.status.hint=Determine if the tracking in Google
 admin.social=Social
 admin.social.description=Configuration for social features.
 
+# Groups category
+administration.section.groups.groupsIgnored=Members successfully added but some groups have been ignored (__groupsList__)
+
 ## Used to indicate where deprecated keys end
 #@deprecatedstart
 

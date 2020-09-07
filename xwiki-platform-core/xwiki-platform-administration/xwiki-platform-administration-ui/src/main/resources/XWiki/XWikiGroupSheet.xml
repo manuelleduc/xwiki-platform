@@ -195,6 +195,9 @@
   $(document).on('xwiki:livetable:displayComplete', function (event) {
     xm.refreshVersion();
   });
+  // Warning message template, the __groupsList__ parameter is replaced with the list of
+  // ignore messaged before display.
+  var groupsIgnoredTemplate = "$services.localization.render('administration.section.groups.groupsIgnored')";
   $(document).on('click', '#addMembers', function(event) {
     event.preventDefault();
     var addMembersButton = $(event.target);
@@ -223,7 +226,8 @@
       editgrouptable.refresh();
       // Show notification message.
       if(response.hasIgnored) {
-        new XWiki.widgets.Notification(response.ignoredMessage, 'warning', {timeout: 5});
+        var groupsIgnoredMessage = groupsIgnoredTemplate.replace('__groupsList__', response.ignored.join(', '));
+        new XWiki.widgets.Notification(groupsIgnoredMessage, 'warning', {timeout: 5});
       } else {
         new XWiki.widgets.Notification("$services.localization.render('xe.admin.groups.addSuccess')", 'done', {timeout: 5});
       }

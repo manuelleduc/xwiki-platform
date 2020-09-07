@@ -50,12 +50,7 @@
     $response.sendRedirect($doc.getURL())
   #else
     #set ($hasIgnored = !$ignoredGroups.isEmpty())
-    #set ($jsonObject = { 'hasIgnored': $hasIgnored})
-    #if ($hasIgnored)
-      #set ($ignoredGroupsStr = "$stringtool.join($ignoredGroups, ', ')")
-      #set ($discard = $jsonObject.put('ignoredMessage',
-        "$services.localization.render('web.groups.administration.groupsIgnored', [$ignoredGroupsStr])"))
-    #end
+    #set ($jsonObject = { 'hasIgnored': $hasIgnored, 'ignored': $ignoredGroups })
     #jsonResponse($jsonObject)
   #end
 #elseif ($isAjaxRequest)

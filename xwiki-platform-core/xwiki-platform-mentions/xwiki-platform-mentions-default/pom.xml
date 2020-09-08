@@ -60,7 +60,7 @@
       <!-- Persistent queue implementations. Used to persist on disk the queue of documents to analyze for mentions.  -->
       <groupId>ch.rasc</groupId>
       <artifactId>xodus-queue</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </dependency>
   </dependencies>
 </project>

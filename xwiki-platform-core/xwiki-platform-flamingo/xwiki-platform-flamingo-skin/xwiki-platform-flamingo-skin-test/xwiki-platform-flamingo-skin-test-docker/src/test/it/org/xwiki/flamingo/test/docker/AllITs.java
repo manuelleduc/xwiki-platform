@@ -31,7 +31,7 @@ import org.xwiki.test.docker.junit5.UITest;
  * @since 11.2RC1
  */
 @UITest
-public class AllITs
+class AllITs
 {
     @Nested
     @DisplayName("Save Edit Comments Tests")
@@ -96,6 +96,18 @@ public class AllITs
     @Nested
     @DisplayName("Section editing tests")
     class NestedSectionEditIT extends SectionEditIT
+    {
+    }
+
+    @Nested
+    @DisplayName("Comment as admin tests")
+    class NestedCommentAsAdminIT extends CommentAsAdminIT
+    {
+    }
+
+    @Nested
+    @DisplayName("Comment as guest tests")
+    class NestedCommentAsGuestIT extends CommentAsGuestIT
     {
     }
 }

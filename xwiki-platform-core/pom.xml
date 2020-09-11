@@ -117,16 +117,29 @@
                  cannot be empty.
 
                  Note: you can use regexes by using the syntax: <regex>true</regex>
-                 Don't forget to '\'-escape dots and other special characters in this case ;)
+                 Don't forget to '\'-escape dots and other special characters in this case ;) -->
             <revapi.ignore>
               <item>
-                <code>java.class.removed</code>
-                <old>class org.xwiki.velocity.tools.CollectionsTool</old>
-                <justification>Not a Breakage. Moved to Legacy</justification>
+                <code>java.method.addedToInterface</code>
+                <new>method double org.xwiki.mentions.MentionsConfiguration::getMentionsOpacity()</new>
+                <justification>Young API</justification>
+              </item>
+              <item>
+                <code>java.method.addedToInterface</code>
+                <new>method double org.xwiki.mentions.MentionsConfiguration::getSelfMentionsOpacity()</new>
+                <justification>Young API</justification>
+              </item>
+              <item>
+                <code>java.method.addedToInterface</code>
+                <new>method java.lang.String org.xwiki.mentions.MentionsConfiguration::getMentionsTextColor()</new>
+                <justification>Young API</justification>
+              </item>
+              <item>
+                <code>java.method.addedToInterface</code>
+                <new>method java.lang.String org.xwiki.mentions.MentionsConfiguration::getSelfMentionsTextColor()</new>
+                <justification>Young API</justification>
               </item>
             </revapi.ignore>
-            -->
-            
           </analysisConfiguration>
         </configuration>
       </plugin>

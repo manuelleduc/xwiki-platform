@@ -370,12 +370,16 @@ require(['deferred!ckeditor', 'xwiki-suggestUsers', 'jquery', 'xwiki-meta'], fun
     <property>
       <code>.xwiki-mention {
   background-color: $services.mentions.mentionsColor;
+  color: $services.mentions.mentionsTextColor;
+  opacity: $services.mentions.mentionsOpacity;
   border-radius: 8px;
   padding: 2px 5px 2px 5px;
 }
 
 .xwiki-mention.user.self {
   background-color: $services.mentions.selfMentionsColor;
+  color: $services.mentions.selfMentionsTextColor;
+  opacity: $services.mentions.selfMentionsOpacity;
 }
 
 .xwiki-mention.removed {

@@ -38,6 +38,8 @@ import org.xwiki.mentions.MentionsConfiguration;
 @Singleton
 public class DefaultMentionsConfiguration implements MentionsConfiguration
 {
+    private static final String RGB_BLACK_COLOR = "#000000";
+
     @Inject
     @Named("mentions")
     private ConfigurationSource configuration;
@@ -45,15 +47,37 @@ public class DefaultMentionsConfiguration implements MentionsConfiguration
     @Override
     public String getMentionsColor()
     {
-        // default color is rgba, not hexa to allow setting opacity and keep working on IE11
-        return this.configuration.getProperty("mentionsColor", "rgba(194, 194, 194, 0.8)");
+        return this.configuration.getProperty("mentionsColor", "#c2c2c2");
+    }
+
+    @Override
+    public double getMentionsOpacity()
+    {
+        return this.configuration.getProperty("mentionsOpacity", 0.8);
     }
 
     @Override
     public String getSelfMentionsColor()
     {
-        // default color is rgba, not hexa to allow setting opacity and keep working on IE11
-        return this.configuration.getProperty("selfMentionsColor", "rgba(255, 0, 1, 0.5)");
+        return this.configuration.getProperty("selfMentionsColor", "#ff0000");
+    }
+
+    @Override
+    public String getMentionsTextColor()
+    {
+        return this.configuration.getProperty("mentionsTextColor", RGB_BLACK_COLOR);
+    }
+
+    @Override
+    public String getSelfMentionsTextColor()
+    {
+        return this.configuration.getProperty("selfMentionsTextColor", RGB_BLACK_COLOR);
+    }
+
+    @Override
+    public double getSelfMentionsOpacity()
+    {
+        return this.configuration.getProperty("selfMentionsOpacity", 0.8);
     }
 
     @Override

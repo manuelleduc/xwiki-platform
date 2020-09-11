@@ -48,7 +48,12 @@
     <nameField/>
     <validationScript/>
     <mentionsColor>
-      <customDisplay/>
+      <customDisplay>{{velocity}}
+{{html clean="false"}}
+ #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
+ #colorPicker($colorPickerParams)
+{{/html}}
+{{/velocity}}</customDisplay>
       <disabled>0</disabled>
       <hint/>
       <name>mentionsColor</name>
@@ -61,6 +66,39 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
     </mentionsColor>
+    <mentionsOpacity>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <hint/>
+      <name>mentionsOpacity</name>
+      <number>2</number>
+      <numberType>double</numberType>
+      <prettyName>mentionsOpacity</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+    </mentionsOpacity>
+    <mentionsTextColor>
+      <customDisplay>{{velocity}}
+{{html clean="false"}}
+ #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
+ #colorPicker($colorPickerParams)
+{{/html}}
+{{/velocity}}</customDisplay>
+      <disabled>0</disabled>
+      <hint/>
+      <name>mentionsTextColor</name>
+      <number>3</number>
+      <picker>0</picker>
+      <prettyName>mentionsTextColor</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </mentionsTextColor>
     <quoteActivated>
       <customDisplay/>
       <defaultValue>1</defaultValue>
@@ -69,7 +107,7 @@
       <displayType/>
       <hint/>
       <name>quoteActivated</name>
-      <number>3</number>
+      <number>7</number>
       <prettyName>Quote Activated</prettyName>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
@@ -77,11 +115,16 @@
       <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
     </quoteActivated>
     <selfMentionsColor>
-      <customDisplay/>
+      <customDisplay>{{velocity}}
+{{html clean="false"}}
+ #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
+ #colorPicker($colorPickerParams)
+{{/html}}
+{{/velocity}}</customDisplay>
       <disabled>0</disabled>
       <hint/>
       <name>selfMentionsColor</name>
-      <number>2</number>
+      <number>4</number>
       <picker>0</picker>
       <prettyName>selfMentionsColor</prettyName>
       <size>30</size>
@@ -90,5 +133,38 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
     </selfMentionsColor>
+    <selfMentionsOpacity>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <hint/>
+      <name>selfMentionsOpacity</name>
+      <number>5</number>
+      <numberType>double</numberType>
+      <prettyName>selfMentionsOpacity</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+    </selfMentionsOpacity>
+    <selfMentionsTextColor>
+      <customDisplay>{{velocity}}
+{{html clean="false"}}
+ #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
+ #colorPicker($colorPickerParams)
+{{/html}}
+{{/velocity}}</customDisplay>
+      <disabled>0</disabled>
+      <hint/>
+      <name>selfMentionsTextColor</name>
+      <number>6</number>
+      <picker>0</picker>
+      <prettyName>selfMentionsTextColor</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </selfMentionsTextColor>
   </class>
 </xwikidoc>

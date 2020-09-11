@@ -64,12 +64,52 @@ public class MentionsScriptService implements ScriptService
 
     /**
      *
+     * @see MentionsConfiguration#getMentionsTextColor()
+     * @return the mentions text color configuration value.
+     */
+    public String getMentionsTextColor()
+    {
+        return this.configuration.getMentionsTextColor();
+    }
+
+    /**
+     *
+     * @see MentionsConfiguration#getMentionsOpacity()
+     * @return the mentions background opacity configuration value.
+     */
+    public double getMentionsOpacity()
+    {
+        return this.configuration.getMentionsOpacity();
+    }
+
+    /**
+     *
      * @see MentionsConfiguration#getSelfMentionsColor()
      * @return the mentions colors configuration value for the current user.
      */
     public String getSelfMentionsColor()
     {
         return this.configuration.getSelfMentionsColor();
+    }
+
+    /**
+     *
+     * @see MentionsConfiguration#getSelfMentionsTextColor()
+     * @return the mentions text color configuration value for the current user.
+     */
+    public String getSelfMentionsTextColor()
+    {
+        return this.configuration.getSelfMentionsTextColor();
+    }
+
+    /**
+     *
+     * @see MentionsConfiguration#getSelfMentionsOpacity()
+     * @return the mentions background opacity configuration value for the current user.
+     */
+    public double getSelfMentionsOpacity()
+    {
+        return this.configuration.getSelfMentionsOpacity();
     }
 
     /**

@@ -33,7 +33,7 @@ import org.xwiki.stability.Unstable;
 public interface MentionsConfiguration
 {
     /**
-     * 
+     *
      * @return the color for the mentions.
      */
     String getMentionsColor();
@@ -44,7 +44,31 @@ public interface MentionsConfiguration
     String getSelfMentionsColor();
 
     /**
-     * 
+     *
+     * @return the color for the text of mentions.
+     */
+    String getMentionsTextColor();
+
+    /**
+     * @return the color for the text of the mentions to the current user.
+     */
+    String getSelfMentionsTextColor();
+
+    /**
+     *
+     * @return the background opacity for the mentions.
+     * @since 12.8RC1
+     */
+    double getMentionsOpacity();
+
+    /**
+     * @return the background opacity for the mentions to the current user.
+     * @since 12.8RC1
+     */
+    double getSelfMentionsOpacity();
+
+    /**
+     *
      * @return {@code true} if the mentions quote feature is activated.
      */
     boolean isQuoteActivated();

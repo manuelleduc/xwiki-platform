@@ -47,7 +47,7 @@
     <defaultWeb/>
     <nameField/>
     <validationScript/>
-    <mentionsColor>
+    <mentionsBackgroundColor>
       <customDisplay>{{velocity}}
 {{html clean="false"}}
  #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
@@ -56,16 +56,16 @@
 {{/velocity}}</customDisplay>
       <disabled>0</disabled>
       <hint/>
-      <name>mentionsColor</name>
+      <name>mentionsBackgroundColor</name>
       <number>1</number>
       <picker>0</picker>
-      <prettyName>mentionsColor</prettyName>
+      <prettyName>mentionsBackgroundColor</prettyName>
       <size>30</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-    </mentionsColor>
+    </mentionsBackgroundColor>
     <mentionsOpacity>
       <customDisplay/>
       <disabled>0</disabled>
@@ -114,7 +114,7 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
     </quoteActivated>
-    <selfMentionsColor>
+    <selfMentionsBackgroundColor>
       <customDisplay>{{velocity}}
 {{html clean="false"}}
  #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
@@ -123,16 +123,16 @@
 {{/velocity}}</customDisplay>
       <disabled>0</disabled>
       <hint/>
-      <name>selfMentionsColor</name>
+      <name>selfMentionsBackgroundColor</name>
       <number>4</number>
       <picker>0</picker>
-      <prettyName>selfMentionsColor</prettyName>
+      <prettyName>selfMentionsBackgroundColor</prettyName>
       <size>30</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-    </selfMentionsColor>
+    </selfMentionsBackgroundColor>
     <selfMentionsOpacity>
       <customDisplay/>
       <disabled>0</disabled>

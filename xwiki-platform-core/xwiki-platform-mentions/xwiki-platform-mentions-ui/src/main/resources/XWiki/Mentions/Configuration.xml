@@ -282,7 +282,7 @@
       <defaultWeb/>
       <nameField/>
       <validationScript/>
-      <mentionsColor>
+      <mentionsBackgroundColor>
         <customDisplay>{{velocity}}
 {{html clean="false"}}
  #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
@@ -291,16 +291,16 @@
 {{/velocity}}</customDisplay>
         <disabled>0</disabled>
         <hint/>
-        <name>mentionsColor</name>
+        <name>mentionsBackgroundColor</name>
         <number>1</number>
         <picker>0</picker>
-        <prettyName>mentionsColor</prettyName>
+        <prettyName>mentionsBackgroundColor</prettyName>
         <size>30</size>
         <unmodifiable>0</unmodifiable>
         <validationMessage/>
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </mentionsColor>
+      </mentionsBackgroundColor>
       <mentionsOpacity>
         <customDisplay/>
         <disabled>0</disabled>
@@ -349,7 +349,7 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
       </quoteActivated>
-      <selfMentionsColor>
+      <selfMentionsBackgroundColor>
         <customDisplay>{{velocity}}
 {{html clean="false"}}
  #set ($colorPickerParams = { 'name': "${prefix}$name", 'value': "$value" })
@@ -358,16 +358,16 @@
 {{/velocity}}</customDisplay>
         <disabled>0</disabled>
         <hint/>
-        <name>selfMentionsColor</name>
+        <name>selfMentionsBackgroundColor</name>
         <number>4</number>
         <picker>0</picker>
-        <prettyName>selfMentionsColor</prettyName>
+        <prettyName>selfMentionsBackgroundColor</prettyName>
         <size>30</size>
         <unmodifiable>0</unmodifiable>
         <validationMessage/>
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-      </selfMentionsColor>
+      </selfMentionsBackgroundColor>
       <selfMentionsOpacity>
         <customDisplay/>
         <disabled>0</disabled>
@@ -403,25 +403,25 @@
       </selfMentionsTextColor>
     </class>
     <property>
-      <mentionsColor>#c2c2c2</mentionsColor>
+      <mentionsBackgroundColor/>
     </property>
     <property>
-      <mentionsOpacity>0.8</mentionsOpacity>
+      <mentionsOpacity/>
     </property>
     <property>
-      <mentionsTextColor>#ff0000</mentionsTextColor>
+      <mentionsTextColor/>
     </property>
     <property>
       <quoteActivated>1</quoteActivated>
     </property>
     <property>
-      <selfMentionsColor>#4f1a1a</selfMentionsColor>
+      <selfMentionsBackgroundColor/>
     </property>
     <property>
-      <selfMentionsOpacity>0.5</selfMentionsOpacity>
+      <selfMentionsOpacity/>
     </property>
     <property>
-      <selfMentionsTextColor>#000000</selfMentionsTextColor>
+      <selfMentionsTextColor/>
     </property>
   </object>
 </xwikidoc>

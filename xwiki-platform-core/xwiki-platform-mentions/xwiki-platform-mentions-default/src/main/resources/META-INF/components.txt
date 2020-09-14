@@ -10,6 +10,7 @@ org.xwiki.mentions.internal.DefaultQuoteService
 org.xwiki.mentions.internal.listeners.MentionsApplicationReadyEventListener
 org.xwiki.mentions.internal.listeners.MentionsCreatedEventListener
 org.xwiki.mentions.internal.listeners.MentionsUpdatedEventListener
+org.xwiki.mentions.internal.listeners.MentionsUpgrade128
 org.xwiki.mentions.internal.MentionsConfigurationSource
 org.xwiki.mentions.internal.rendering.PlainTextMentionsBlockRenderer
 org.xwiki.mentions.internal.rendering.PlainTextMentionsRenderer

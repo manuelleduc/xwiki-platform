@@ -48,19 +48,19 @@ public abstract class AbstractConfiguredStringUserReferenceResolver implements U
 
     /**
      * Finds a {@code UserReferenceResolver<String>} according to the provided role hint.
-     * @param roleHint the role hint
      * @return the resolved {@code UserReferenceResolver<String>} component
      */
-    protected UserReference resolve(String roleHint, String userName, Object... parameters)
+    @Override
+    public UserReference resolve(String userName, Object... parameters)
     {
-        return resolveUserReferenceResolver(roleHint).resolve(userName, parameters);
+        return resolveUserReferenceResolver().resolve(userName, parameters);
     }
 
-    private UserReferenceResolver<String> resolveUserReferenceResolver(String roleHint)
+    private UserReferenceResolver<String> resolveUserReferenceResolver()
     {
         Type type = new DefaultParameterizedType(null, UserReferenceResolver.class, String.class);
         try {
-            return this.componentManager.getInstance(type, roleHint);
+            return this.componentManager.getInstance(type, getUserReferenceResolverHint());
         } catch (ComponentLookupException e) {
             // If the configured user store hint is invalid (i.e. there's no resolver for it, then the XWiki instance
             // cannot work and thus we need to fail hard and fast. Hence the runtime exception.
@@ -69,4 +69,6 @@ public abstract class AbstractConfiguredStringUserReferenceResolver implements U
                 this.userConfiguration.getStoreHint()), e);
         }
     }
+
+    protected abstract String getUserReferenceResolverHint();
 }

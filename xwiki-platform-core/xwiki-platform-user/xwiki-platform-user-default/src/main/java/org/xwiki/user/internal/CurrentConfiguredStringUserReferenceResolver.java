@@ -23,7 +23,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.user.UserReference;
 
 /**
  * Finds the Current User Reference Resolver based on the configured User store hint.
@@ -37,10 +36,8 @@ import org.xwiki.user.UserReference;
 public class CurrentConfiguredStringUserReferenceResolver extends AbstractConfiguredStringUserReferenceResolver
 {
     @Override
-    public UserReference resolve(String userName, Object... parameters)
+    protected String getUserReferenceResolverHint()
     {
-        // By convention, each store must provide a Current User Reference Resolver suffixed by the kind of store.
-        // For instance, the current store of the document store is "current/document".
-        return resolve(String.format("current/%s", this.userConfiguration.getStoreHint()), userName, parameters);
+        return String.format("current/%s", this.userConfiguration.getStoreHint());
     }
 }

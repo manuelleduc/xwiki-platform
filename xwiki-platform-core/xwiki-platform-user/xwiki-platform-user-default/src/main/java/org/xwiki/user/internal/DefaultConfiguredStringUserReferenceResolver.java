@@ -22,7 +22,6 @@ package org.xwiki.user.internal;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.user.UserReference;
 
 /**
  * Finds the default User Reference Resolver based on the configured User store hint.
@@ -35,8 +34,8 @@ import org.xwiki.user.UserReference;
 public class DefaultConfiguredStringUserReferenceResolver extends AbstractConfiguredStringUserReferenceResolver
 {
     @Override
-    public UserReference resolve(String userName, Object... parameters)
+    protected String getUserReferenceResolverHint()
     {
-        return resolve(this.userConfiguration.getStoreHint(), userName, parameters);
+        return this.userConfiguration.getStoreHint();
     }
 }

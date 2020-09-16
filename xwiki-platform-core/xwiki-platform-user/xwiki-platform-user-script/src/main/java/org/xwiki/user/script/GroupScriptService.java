@@ -147,12 +147,12 @@ public class GroupScriptService implements ScriptService
     }
 
     /**
-     * Checks if a group (candidate) can be added to the members of another group (target).<br />
+     * Checks if a group (candidate) can be added to the members of another group (target).
      * A group (candidate) can be added to the members of another group (target) if the target is not, transitively,
-     * already part of the members of candidate.<br />
-     * A group cannot be added to its own members.<br />
+     * already part of the members of candidate.
+     * A group cannot be added to its own members.
      * A group (candidate) cannot be added to the members of a group (target) if candidate is already one of the direct
-     * members of target.<br />
+     * members of target.
      *
      * @param candidate The group to be added
      * @param target The targeted group

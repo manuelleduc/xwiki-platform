@@ -64,6 +64,8 @@ public class MentionsIT
 
     public static final String U2_USERNAME = "U2";
 
+    private static final int NOTIFICATIONS_COUNT_TIMEOUT = 15;
+
     /**
      * A duplicate of {@link Runnable} which allows to throw checked {@link Exception}.
      * @see  Runnable
@@ -107,7 +109,7 @@ public class MentionsIT
 
         runAsUser(setup, U2_USERNAME, USERS_PWD, () -> {
             setup.gotoPage("Main", "WebHome");
-            waitOnNotificationCount("xwiki:XWiki.U2", "xwiki", 1);
+            waitOnNotificationCount("xwiki:XWiki.U2", "xwiki", 1, NOTIFICATIONS_COUNT_TIMEOUT);
             reload(setup);
             // check that a notif is well received
             NotificationsTrayPage tray = new NotificationsTrayPage();
@@ -169,7 +171,7 @@ public class MentionsIT
 
         runAsUser(setup, U2_USERNAME, USERS_PWD, () -> {
             setup.gotoPage("Main", "WebHome");
-            waitOnNotificationCount("xwiki:XWiki.U2", "xwiki", 1);
+            waitOnNotificationCount("xwiki:XWiki.U2", "xwiki", 1, NOTIFICATIONS_COUNT_TIMEOUT);
             reload(setup);
             // check that a notif is well received
             NotificationsTrayPage tray = new NotificationsTrayPage();

@@ -30,6 +30,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.xwiki.test.ui.po.BootstrapSwitch;
 import org.xwiki.test.ui.po.ViewPage;
 
@@ -86,12 +87,29 @@ public class NotificationsTrayPage extends ViewPage
      */
     public static void waitOnNotificationCount(String userId, String wiki, int expectedUnread)
     {
+        waitOnNotificationCount(userId, wiki, expectedUnread, null);
+    }
+
+    /**
+     * Wait until the given number of unread notification is received.
+     * This method uses an AJAX request to the REST notification endpoint to compute how many unread notification
+     * the given user has on the given wiki, using user preferences.
+     *
+     * @param userId the serialized user reference for which to get notifications.
+     * @param wiki the wiki on which to get notifications
+     * @param expectedUnread the number of expected unread notifications to wait for
+     * @param timeout the time delay in seconds before stopping the notifications count
+     * @since 12.8RC1
+     */
+    public static void waitOnNotificationCount(String userId, String wiki, int expectedUnread, Integer timeout)
+    {
         String notificationCountAjaxURL = String.format("/xwiki/rest/notifications/count?media=json&userId=%s"
-            + "&useUserPreferences=true&currentWiki=%s&async=true", userId, wiki);
+                                                            + "&useUserPreferences=true&currentWiki=%s&async=true",
+            userId, wiki);
 
         final List<Object> responses = new ArrayList<>();
         try {
-            getUtil().getDriver().waitUntilCondition(driver -> {
+            ExpectedCondition<Boolean> unreadNotifiationsCondition = driver -> {
                 // Execute AJAX request to wait until the number of unread notification match the expectation.
                 Object response = ((JavascriptExecutor) driver).executeAsyncScript(
                     "var callback = arguments[arguments.length - 1];"
@@ -104,9 +122,13 @@ public class NotificationsTrayPage extends ViewPage
                         + "});");
                 responses.add(response);
                 return response != null && Integer.valueOf(response.toString()).equals(expectedUnread);
-            });
-        } catch (TimeoutException e)
-        {
+            };
+            if (timeout != null) {
+                getUtil().getDriver().waitUntilCondition(unreadNotifiationsCondition, timeout);
+            } else {
+                getUtil().getDriver().waitUntilCondition(unreadNotifiationsCondition);
+            }
+        } catch (TimeoutException e) {
             String latestResponse = null;
             if (!responses.isEmpty()) {
                 Object response = responses.get(responses.size() - 1);

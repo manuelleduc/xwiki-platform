@@ -76,22 +76,20 @@ public class CommentAsAdminTest extends AbstractTest
     {
         this.commentsTab.openCommentForm();
         assertTrue(this.commentsTab.isCommentFormShown());
-        this.commentsTab.postComment(COMMENT_CONTENT, true);
-        assertEquals(COMMENT_CONTENT,
-            this.commentsTab.getCommentContentByID(this.commentsTab.getCommentID(COMMENT_CONTENT)));
-        assertEquals(ADMIN,
-            this.commentsTab.getCommentAuthorByID(this.commentsTab.getCommentID(COMMENT_CONTENT)));
+        int commentId = this.commentsTab.postComment(COMMENT_CONTENT, true);
+        assertEquals(COMMENT_CONTENT, this.commentsTab.getCommentContentByID(commentId));
+        assertEquals(ADMIN, this.commentsTab.getCommentAuthorByID(commentId));
     }
 
     @Test
     public void testReplyToCommentAsAdmin()
     {
         this.commentsTab.openCommentForm();
-        this.commentsTab.postComment(COMMENT_CONTENT, true);
-        this.commentsTab.replyToCommentByID(this.commentsTab.getCommentID(COMMENT_CONTENT), COMMENT_REPLY);
-        assertEquals(COMMENT_REPLY,
-            this.commentsTab.getCommentContentByID(this.commentsTab.getCommentID(COMMENT_REPLY)));
-        assertEquals(ADMIN, this.commentsTab.getCommentAuthorByID(this.commentsTab.getCommentID(COMMENT_REPLY)));
+        int commentId = this.commentsTab.postComment(COMMENT_CONTENT, true);
+        this.commentsTab.replyToCommentByID(commentId, COMMENT_REPLY);
+        commentId = this.commentsTab.getCommentID(COMMENT_REPLY);
+        assertEquals(COMMENT_REPLY, this.commentsTab.getCommentContentByID(commentId));
+        assertEquals(ADMIN, this.commentsTab.getCommentAuthorByID(commentId));
     }
 
     @Test
@@ -99,8 +97,8 @@ public class CommentAsAdminTest extends AbstractTest
     {
         this.commentsTab.openCommentForm();
         assertTrue(this.commentsTab.isCommentFormShown());
-        this.commentsTab.postComment(COMMENT_CONTENT, true);
-        this.commentsTab.deleteCommentByID(this.commentsTab.getCommentID(COMMENT_CONTENT));
+        int commentId = this.commentsTab.postComment(COMMENT_CONTENT, true);
+        this.commentsTab.deleteCommentByID(commentId);
         assertEquals(-1, this.commentsTab.getCommentID(COMMENT_CONTENT));
     }
 

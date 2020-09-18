@@ -86,7 +86,7 @@ public class CommentsTab extends BaseElement
 
     public int getCommentID(String content)
     {
-        this.commentsList = getDriver().findElementsWithoutWaiting(By.className("xwikicomment"));
+        this.commentsList = getDriver().findElements(By.className("xwikicomment"));
 
         for (int i = 0; i < this.commentsList.size(); i++) {
             if (this.commentsList.get(i).findElement(By.className("commentcontent")).getText().equals(content)) {
@@ -117,7 +117,7 @@ public class CommentsTab extends BaseElement
     public int postCommentAsGuest(String content, String author, boolean wait)
     {
         CommentForm addCommentForm = getAddCommentForm();
-        addCommentForm.getContentField().sendKeys(content);
+        addCommentForm.addToContentField(content);
         this.setAnonymousCommentAuthor(author);
         addCommentForm.clickSubmit(wait);
         return this.getCommentID(content);

@@ -19,10 +19,8 @@
  */
 package org.xwiki.test.ui;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.xwiki.administration.test.po.GlobalRightsAdministrationSectionPage;
@@ -33,15 +31,15 @@ import org.xwiki.test.ui.po.EditRightsPane.Right;
 import org.xwiki.test.ui.po.EditRightsPane.State;
 import org.xwiki.test.ui.po.ViewPage;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 /**
  * @version $Id$
  * @since 3.1M2
  */
 public class CommentAsGuestTest extends AbstractTest
 {
-    @ClassRule
-    public static AdminAuthenticationRule adminAuthenticationClassRule = new AdminAuthenticationRule(getUtil());
-
     @Rule
     public AdminAuthenticationRule adminAuthenticationRule = new AdminAuthenticationRule(getUtil());
 
@@ -58,15 +56,17 @@ public class CommentAsGuestTest extends AbstractTest
     private ViewPage vp;
 
     @BeforeClass
-    public static void initializeCommentRights()
+    public static void setup()
     {
         // Ensure that guest user has comment permission
+        getUtil().loginAsSuperAdmin();
         setRightsOnGuest(Right.COMMENT, State.ALLOW);
     }
 
     @Before
     public void setUp() throws Exception
     {
+        getUtil().loginAsSuperAdmin();
         getUtil().rest().deletePage(getTestClassName(), getTestMethodName());
         this.vp = getUtil().createPage(getTestClassName(), getTestMethodName(), CONTENT, TITLE);
 
@@ -98,27 +98,8 @@ public class CommentAsGuestTest extends AbstractTest
         CommentsTab commentsTab = this.vp.openCommentsDocExtraPane();
 
         commentsTab.postCommentAsGuest(COMMENT_CONTENT, COMMENT_AUTHOR, true);
-        Assert.assertEquals(COMMENT_CONTENT, commentsTab.getCommentContentByID(0));
-        Assert.assertEquals(COMMENT_AUTHOR, commentsTab.getCommentAuthorByID(0));
-    }
-
-    @Test
-    @IgnoreBrowsers({
-    @IgnoreBrowser(value = "internet.*", version = "8\\.*", reason="See https://jira.xwiki.org/browse/XE-1146"),
-    @IgnoreBrowser(value = "internet.*", version = "9\\.*", reason="See https://jira.xwiki.org/browse/XE-1177")
-    })
-    public void testPostCommentAsGuestNoJs()
-    {
-        getUtil().gotoPage(getTestClassName(), getTestMethodName(), "view", "xpage=xpart&vm=commentsinline.vm");
-        CommentsTab commentsTab = new CommentsTab();
-
-        commentsTab.postComment(COMMENT_CONTENT, false);
-        // This opens with ?viewer=comments, don't explicitly load the comments tab
-        new ViewPage().waitUntilPageIsLoaded();
-        Assert.assertEquals(COMMENT_CONTENT,
-            commentsTab.getCommentContentByID(commentsTab.getCommentID(COMMENT_CONTENT)));
-        Assert.assertEquals(COMMENT_AUTHOR,
-            commentsTab.getCommentAuthorByID(commentsTab.getCommentID(COMMENT_CONTENT)));
+        assertEquals(COMMENT_CONTENT, commentsTab.getCommentContentByID(0));
+        assertEquals(COMMENT_AUTHOR, commentsTab.getCommentAuthorByID(0));
     }
 
     @Test
@@ -130,12 +111,10 @@ public class CommentAsGuestTest extends AbstractTest
     {
         CommentsTab commentsTab = this.vp.openCommentsDocExtraPane();
 
-        commentsTab.postCommentAsGuest(COMMENT_CONTENT, COMMENT_AUTHOR, true);
-        commentsTab.replyToCommentByID(commentsTab.getCommentID(COMMENT_CONTENT), COMMENT_REPLY);
-        Assert.assertEquals(COMMENT_REPLY,
-            commentsTab.getCommentContentByID(commentsTab.getCommentID(COMMENT_REPLY)));
-        Assert.assertEquals(COMMENT_AUTHOR,
-            commentsTab.getCommentAuthorByID(commentsTab.getCommentID(COMMENT_REPLY)));
+        int commentId = commentsTab.postCommentAsGuest(COMMENT_CONTENT, COMMENT_AUTHOR, true);
+        commentsTab.replyToCommentByID(commentId, COMMENT_REPLY);
+        assertEquals(COMMENT_REPLY, commentsTab.getCommentContentByID(commentId));
+        assertEquals(COMMENT_AUTHOR, commentsTab.getCommentAuthorByID(commentId));
     }
 
     @Test
@@ -146,7 +125,7 @@ public class CommentAsGuestTest extends AbstractTest
     public void testCannotEditCommentAsAnonymous()
     {
         CommentsTab commentsTab = this.vp.openCommentsDocExtraPane();
-        commentsTab.postCommentAsGuest(COMMENT_CONTENT, COMMENT_AUTHOR, true);
-        Assert.assertFalse(commentsTab.hasEditButtonForCommentByID(commentsTab.getCommentID(COMMENT_CONTENT)));
+        int commentId = commentsTab.postCommentAsGuest(COMMENT_CONTENT, COMMENT_AUTHOR, true);
+        assertFalse(commentsTab.hasEditButtonForCommentByID(commentId));
     }
 }

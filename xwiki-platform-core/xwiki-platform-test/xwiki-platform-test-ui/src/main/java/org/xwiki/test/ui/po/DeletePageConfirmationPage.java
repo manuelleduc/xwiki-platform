@@ -39,6 +39,9 @@ public class DeletePageConfirmationPage extends ConfirmationPage
     @FindBy(css = "input[name='shouldSkipRecycleBin'][value='true']")
     private WebElement optionSkipRecycleBin;
 
+    @FindBy(id = "shouldSkipRecycleBinField")
+    private WebElement shouldSkipRecycleBinField;
+
     /**
      * Click on the option to put the document in the recycle bin.
      */
@@ -58,10 +61,10 @@ public class DeletePageConfirmationPage extends ConfirmationPage
     /**
      * @return {@code true} if the form proposing to skip the recycle bin is displayed, {@code false} otherwise
      */
-    public boolean isRecycleBinOptionsDisplayed()
+    public boolean isShouldSkipRecycleBinFieldDisplayed()
     {
         try {
-            return this.optionSkipRecycleBin.isDisplayed() && this.optionSkipRecycleBin.isDisplayed();
+            return this.shouldSkipRecycleBinField.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }

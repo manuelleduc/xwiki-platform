@@ -240,7 +240,7 @@
   #if($xwiki.hasRecycleBin())
     #if($services.refactoring.isRecycleBinSkippingAllowed())
       <div class="xform">
-        <dl>
+        <dl id="shouldSkipRecycleBinField">
           <dt>
             $escapetool.xml($services.localization.render('core.recycleBin.shouldSkip.label'))
           </dt>

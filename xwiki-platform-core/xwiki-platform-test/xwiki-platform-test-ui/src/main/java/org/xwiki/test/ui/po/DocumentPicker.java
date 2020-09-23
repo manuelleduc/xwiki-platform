@@ -92,11 +92,31 @@ public class DocumentPicker extends BaseElement
         return new BreadcrumbElement(this.container.findElement(By.className("breadcrumb")));
     }
 
+    /**
+     * Toggle the location advanced editor by clicking on the edit action.
+     * @return the current object
+     */
     public DocumentPicker toggleLocationAdvancedEdit()
     {
         this.container.findElement(By.className("location-action-edit")).click();
         return this;
     }
+
+    /**
+     * Shows the location advanced editor by clicking on the editor action if the editor is not already visible.
+     * @return the current object
+     */
+    public DocumentPicker showLocationAdvancedEdit()
+    {
+        WebElement locationEditor =
+            getDriver().findElementWithoutWaiting(this.container, By.className("location-edit"));
+        if (!locationEditor.isDisplayed()) {
+            this.toggleLocationAdvancedEdit();
+        }
+        getDriver().waitUntilCondition(input -> locationEditor.isDisplayed());
+        return this;
+    }
+
 
     public String getParent()
     {
@@ -111,6 +131,7 @@ public class DocumentPicker extends BaseElement
     public WebElement getParentInput()
     {
         return this.container.findElement(By.className("location-parent-field"));
+        // return this.container.findElement(By.cssSelector(".location-parent-field"));
     }
 
     public String getName()

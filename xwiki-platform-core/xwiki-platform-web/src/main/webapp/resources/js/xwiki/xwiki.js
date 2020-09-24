@@ -260,6 +260,7 @@ Object.extend(XWiki, {
                       container.childElements().forEach(function(e) {
                         pane.insert(e);
                       });
+                      // document.getElementById(extraID + "pane").innerHTML = container.innerHTML;
 
                       // Notify the others that the DOM has been updated.
                       document.fire('xwiki:dom:updated', {elements: [$(extraID + 'pane')]});

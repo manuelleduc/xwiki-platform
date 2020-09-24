@@ -67,11 +67,13 @@ public class TemplatesAdministrationSectionPage extends AdministrationSectionPag
     public DocumentPicker getDocumentPicker()
     {
         return new DocumentPicker(this.documentPickerElement);
+        // return new DocumentPicker();
     }
 
     public TemplateProviderInlinePage createTemplateProvider(String space, String page)
     {
         DocumentPicker documentPicker = getDocumentPicker();
+        // documentPicker.showLocationAdvancedEdit();
         documentPicker.toggleLocationAdvancedEdit();
         documentPicker.setParent(space);
         documentPicker.setName(page);

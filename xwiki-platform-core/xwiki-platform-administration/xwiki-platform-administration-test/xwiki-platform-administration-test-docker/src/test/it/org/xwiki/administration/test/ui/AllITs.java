@@ -32,39 +32,45 @@ import org.xwiki.test.docker.junit5.UITest;
 @UITest
 public class AllITs
 {
-    @Nested
-    @DisplayName("Overall Administration UI")
-    class NestedAdministrationIT extends AdministrationIT
-    {
-    }
+    // @Nested
+    // @DisplayName("Overall Administration UI")
+    // class NestedAdministrationIT extends AdministrationIT
+    // {
+    // }
+    //
+    // @Nested
+    // @DisplayName("Reset Password")
+    // class NestedResetPasswordIT extends ResetPasswordIT
+    // {
+    // }
+    //
+    // @Nested
+    // @DisplayName("ConfigurableClass")
+    // class NestedConfigurableClassIT extends ConfigurableClassIT
+    // {
+    // }
+    //
+    // @Nested
+    // @DisplayName("UsersGroupsRightsManagement")
+    // class NestedUsersGroupsRightsManagementsIT extends UsersGroupsRightsManagementIT
+    // {
+    // }
+    //
+    // @Nested
+    // @DisplayName("Forgot Username")
+    // class NestedForgotUsernameIT extends ForgotUsernameIT
+    // {
+    // }
+    //
+    // @Nested
+    // @DisplayName("XAR Import")
+    // class NestedXARImportIT extends XARImportIT
+    // {
+    // }
 
     @Nested
-    @DisplayName("Reset Password")
-    class NestedResetPasswordIT extends ResetPasswordIT
-    {
-    }
-
-    @Nested
-    @DisplayName("ConfigurableClass")
-    class NestedConfigurableClassIT extends ConfigurableClassIT
-    {
-    }
-
-    @Nested
-    @DisplayName("UsersGroupsRightsManagement")
-    class NestedUsersGroupsRightsManagementsIT extends UsersGroupsRightsManagementIT
-    {
-    }
-
-    @Nested
-    @DisplayName("Forgot Username")
-    class NestedForgotUsernameIT extends ForgotUsernameIT
-    {
-    }
-
-    @Nested
-    @DisplayName("XAR Import")
-    class NestedXARImportIT extends XARImportIT
+    @DisplayName("Create Page")
+    class NestedCreatePageIT extends CreatePageIT
     {
     }
 }

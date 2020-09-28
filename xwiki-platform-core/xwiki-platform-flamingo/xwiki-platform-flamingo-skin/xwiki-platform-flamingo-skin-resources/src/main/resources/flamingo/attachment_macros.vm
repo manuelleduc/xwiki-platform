@@ -152,7 +152,27 @@
           <div class="modal-title">$services.localization.render('core.viewers.attachments.delete')</div>
         </div>
         <div class="modal-body">
-          <div>$services.localization.render('core.viewers.attachments.delete.confirm')</div>
+          #if($xwiki.hasRecycleBin() && $services.refactoring.isRecycleBinSkippingAllowed())
+            <div class="xform">
+              <dl>
+                <dt>
+                  $escapetool.xml($services.localization.render('core.recycleBin.attachments.shouldSkip.label'))
+                </dt>
+                <dd>
+                  <label class="xwiki-form-listclass">
+                    <input name="shouldSkipRecycleBin" type="radio" value="false" checked/>
+                    $escapetool.xml($services.localization.render('core.recycleBin.attachments.shouldSkip.no'))
+                  </label>
+                  <label class="xwiki-form-listclass">
+                    <input name="shouldSkipRecycleBin" type="radio" value="true"/>
+                    $escapetool.xml($services.localization.render('core.recycleBin.attachments.shouldSkip.yes'))
+                  </label>
+                </dd>
+              </dl>
+            </div>
+          #else
+            <div>$services.localization.render('core.viewers.attachments.delete.confirm')</div>
+          #end
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-danger"  data-dismiss="modal"

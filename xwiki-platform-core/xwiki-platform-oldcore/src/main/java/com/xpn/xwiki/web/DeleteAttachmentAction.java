@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.xwiki.bridge.DocumentAccessBridge;
 import org.xwiki.model.EntityType;
+import org.xwiki.refactoring.RefactoringConfiguration;
 import org.xwiki.resource.ResourceReference;
 import org.xwiki.resource.ResourceReferenceManager;
 import org.xwiki.resource.entity.EntityResourceReference;
@@ -43,6 +45,8 @@ import com.xpn.xwiki.doc.XWikiDocument;
  */
 public class DeleteAttachmentAction extends XWikiAction
 {
+    private static final String SHOULD_SKIP_RECYCLE_BIN_PARAM = "shouldSkipRecycleBin";
+
     @Override
     public boolean action(XWikiContext context) throws XWikiException
     {
@@ -132,7 +136,11 @@ public class DeleteAttachmentAction extends XWikiAction
         }
 
         try {
-            newdoc.removeAttachment(attachment);
+            boolean shouldSkipRecycleBin = Boolean.parseBoolean(request.getParameter(SHOULD_SKIP_RECYCLE_BIN_PARAM))
+                                               && Utils.getComponent(DocumentAccessBridge.class).isAdvancedUser()
+                                               && Utils.getComponent(RefactoringConfiguration.class)
+                                                      .isRecycleBinSkippingActivated();
+            newdoc.removeAttachment(attachment, !shouldSkipRecycleBin);
 
             // Make sure the user is allowed to make this modification
             context.getWiki().checkSavingDocument(context.getUserReference(), doc, comment, context);

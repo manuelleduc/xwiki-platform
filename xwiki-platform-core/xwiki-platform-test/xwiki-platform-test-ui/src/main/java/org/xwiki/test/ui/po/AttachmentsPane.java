@@ -28,19 +28,25 @@ import org.openqa.selenium.support.FindBy;
 
 /**
  * Represents the actions possible on the Attachment Pane at the bottom of a page.
- * 
+ *
  * @version $Id$
  * @since 3.2M3
  */
 public class AttachmentsPane extends BaseElement
 {
+    private static final String DELETE_MODAL_ID = "deleteAttachment";
+
     @FindBy(id = "Attachmentspane")
     private WebElement pane;
 
     @FindBy(xpath = "//input[@value='Add another file']")
     private WebElement addAnotherFile;
 
-    private ConfirmationModal confirmDelete;
+    @FindBy(css = "#Attachmentspane input[name='shouldSkipRecycleBin'][value='false']")
+    private WebElement optionToRecycleBin;
+
+    @FindBy(css = "#Attachmentspane input[name='shouldSkipRecycleBin'][value='true']")
+    private WebElement optionSkipRecycleBin;
 
     public boolean isOpened()
     {
@@ -49,7 +55,7 @@ public class AttachmentsPane extends BaseElement
 
     /**
      * Fills the URL with the specified file path.
-     * 
+     *
      * @param filePath the path to the file to upload in URL form (the file *must* exist in the target directory).
      */
     public void setFileToUpload(final String filePath)
@@ -91,24 +97,54 @@ public class AttachmentsPane extends BaseElement
     {
         return getDriver().findElement(
             By.xpath("//div[@id='_attachments']//a[@title = 'Download this attachment' and contains(@href, '"
-                + attachmentName + "')]"));
+                         + attachmentName + "')]"));
     }
 
     /**
      * Deletes the corresponding file name.
-     * 
+     *
      * @param attachmentName the name of the attachment to be deleted
      */
     public void deleteAttachmentByFileByName(String attachmentName)
     {
+        deleteAttachmentByFileByName(attachmentName, null);
+    }
+
+    /**
+     * Deletes the corresponding file name.
+     *
+     * @param attachmentName the name of the attachment to be deleted
+     * @param shouldSkipTheRecycleBin if {@code null} the parameter is ignored, if {@code false} the option to send the
+     *                                attachment to the recycle bin is selected, if {code true} the option to skip the
+     *                                recycle bin is selected.
+     */
+    public void deleteAttachmentByFileByName(String attachmentName, Boolean shouldSkipTheRecycleBin)
+    {
         // We initialize before so we can remove the animation before the modal is shown
-        this.confirmDelete = new ConfirmationModal(By.id("deleteAttachment"));
-        getDriver().findElement(By.xpath("//div[@id='attachmentscontent']//a[text()='" + attachmentName
-            + "']/../../div[contains(@class, 'xwikibuttonlinks')]/a[contains(@class,'deletelink')]")).click();
-        this.confirmDelete.clickOk();
+        ConfirmationModal confirmDelete = new ConfirmationModal(By.id("deleteAttachment"));
+        openDeleteAttachmentModal(attachmentName);
+        if (shouldSkipTheRecycleBin != null) {
+            if (shouldSkipTheRecycleBin) {
+                this.optionSkipRecycleBin.click();
+            } else {
+                this.optionToRecycleBin.click();
+            }
+        }
+        confirmDelete.clickOk();
         getDriver().waitUntilElementDisappears(
             By.xpath("//div[@id='attachmentscontent']//a[text()='" + attachmentName + "']"));
         getDriver().waitUntilElementIsVisible(By.xpath("//div[@id='Attachmentspane']"));
+    }
+
+    /**
+     * Opens the delete attachment modal screen.
+     * @param attachmentName the name of the attachment to be deleted
+     */
+    public void openDeleteAttachmentModal(String attachmentName)
+    {
+        String xpathExpression = "//div[@id='attachmentscontent']//a[text()='" + attachmentName
+                                     + "']/../../div[contains(@class, 'xwikibuttonlinks')]/a[contains(@class,'deletelink')]";
+        getDriver().findElement(By.xpath(xpathExpression)).click();
     }
 
     /**
@@ -117,8 +153,9 @@ public class AttachmentsPane extends BaseElement
     public void deleteFirstAttachment()
     {
         String tmp = getDriver()
-            .findElement(By.xpath("//div[@id='_attachments']/*[1]/div[@class='information']/span[@class='name']"))
-            .getText();
+                         .findElement(
+                             By.xpath("//div[@id='_attachments']/*[1]/div[@class='information']/span[@class='name']"))
+                         .getText();
         getDriver()
             .findElement(By
                 .xpath("//div[@id='attachmentscontent']//a[text()='" + tmp + "']/../../span[2]/a[@class='deletelink']"))
@@ -186,5 +223,22 @@ public class AttachmentsPane extends BaseElement
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return {@code true} if the form proposing to skip the recycle bin is displayed, {@code false} otherwise
+     */
+    public boolean isRecycleBinOptionsDisplayed()
+    {
+        try {
+            return this.optionSkipRecycleBin.isDisplayed() && this.optionSkipRecycleBin.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public void closeDeleteAttachmentModal()
+    {
+        new ConfirmationModal(By.id(DELETE_MODAL_ID)).clickCancel();
     }
 }

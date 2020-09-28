@@ -181,6 +181,8 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
    */
   $(document).on('show.bs.modal', '#deleteAttachment', function(event) {
     $(this).data('relatedTarget', $(event.relatedTarget));
+    // Sets shouldSkipRecycleBin to false by default when opening the delete confirmation form.
+    $("#deleteAttachment input[name='shouldSkipRecycleBin'][value='false']").prop("checked", true);
   });
   /**
    * Event on deleteAttachment button.
@@ -189,6 +191,15 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
     var modal = $('#deleteAttachment');
     var button = modal.data('relatedTarget');
     var notification;
+    // Selects the shouldSkipRecycleBin value. False if the option is not proposed to the user.
+    var shouldSkipRecycleBinOption = $("#deleteAttachment input[name='shouldSkipRecycleBin']:checked");
+    var shouldSkipRecycleBin;
+    if(shouldSkipRecycleBinOption) {
+      shouldSkipRecycleBin = shouldSkipRecycleBinOption.val();
+    } else {
+      shouldSkipRecycleBin = 'false';
+    }
+
     /**
      * Ajax request made for deleting an attachment. Delete the HTML element on succes. Disable the delete button
      * before the request is send, so the user cannot resend it in case it takes longer.
@@ -196,6 +207,7 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
      */
     $.ajax({
       url : button.prop('href'),
+      data: { 'shouldSkipRecycleBin': shouldSkipRecycleBin },
       beforeSend : function() {
         button.prop('disabled', true);
         notification = new XWiki.widgets.Notification(

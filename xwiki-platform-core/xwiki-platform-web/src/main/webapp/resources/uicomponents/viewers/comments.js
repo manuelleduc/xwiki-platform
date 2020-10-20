@@ -366,7 +366,10 @@ viewers.Comments = Class.create({
                 // For instance, the captcha was not accepted.
                 var submittedCommentContainer =  $("submittedcomment");
                 var submittedComment = '';
+
+                var commentFormValidated = true;
                 if(submittedCommentContainer) {
+                  commentFormValidated = false;
                   submittedComment = submittedCommentContainer.value;
                   // Removed since it is not useful anymore.
                   submittedCommentContainer.remove();
@@ -394,11 +397,17 @@ viewers.Comments = Class.create({
                 // Notify any displayed CAPTCHA that it was reloaded and it might need to reinitialize its JS.
                 this.container.fire('xwiki:captcha:reloaded');
 
-                // We send success notification only when everything is done: our integration tests relies on it
-                // for waiting a comment added.
-                form._x_notification.replace(
-                  new XWiki.widgets.Notification("$services.localization.render('core.viewers.comments.add.done')",
-                    "done"));
+                // We send success/failuer notifications only when everything is done: our integration tests relies on
+                // it for waiting a comment added.
+                if(commentFormValidated) {
+                  form._x_notification.replace(
+                    new XWiki.widgets.Notification("$services.localization.render('core.viewers.comments.add.done')",
+                      "done"));
+                } else {
+                  form._x_notification.replace(
+                    new XWiki.widgets.Notification("$services.localization.render('core.viewers.comments.add.failed')",
+                      "error"));
+                }
               }
             }.bind(this)
           });

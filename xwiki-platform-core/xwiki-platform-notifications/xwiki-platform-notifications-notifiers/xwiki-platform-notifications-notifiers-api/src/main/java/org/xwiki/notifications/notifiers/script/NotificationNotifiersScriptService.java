@@ -30,10 +30,12 @@ import org.xwiki.bridge.DocumentAccessBridge;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.manager.ComponentLookupException;
 import org.xwiki.component.manager.ComponentManager;
+import org.xwiki.eventstream.Event;
 import org.xwiki.job.JobException;
 import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.notifications.CompositeEvent;
 import org.xwiki.notifications.NotificationException;
+import org.xwiki.notifications.notifiers.NotificationQuickActionRenderer;
 import org.xwiki.notifications.notifiers.NotificationRenderer;
 import org.xwiki.notifications.notifiers.internal.DefaultAsyncNotificationRenderer;
 import org.xwiki.notifications.notifiers.internal.NotificationAsyncRendererConfiguration;
@@ -65,6 +67,9 @@ public class NotificationNotifiersScriptService implements ScriptService
     private NotificationRenderer notificationRenderer;
 
     @Inject
+    private NotificationQuickActionRenderer notificationQuickActionRenderer;
+
+    @Inject
     private NotificationRSSManager notificationRSSManager;
 
     @Inject
@@ -93,6 +98,18 @@ public class NotificationNotifiersScriptService implements ScriptService
     public Block render(CompositeEvent event) throws NotificationException
     {
         return notificationRenderer.render(event);
+    }
+
+    /**
+     * Generate a {@link Block} for the quick actions of a given event.
+     *
+     * @param event the event for which the quick actions are rendered
+     * @return the block displaying the quick actions
+     * @throws NotificationException if an error happens
+     */
+    public Block renderQuickActions(Event event) throws NotificationException
+    {
+        return this.notificationQuickActionRenderer.render(event);
     }
 
     /**

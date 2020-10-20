@@ -1,3 +1,4 @@
+## master
 ## ---------------------------------------------------------------------------
 ## See the NOTICE file distributed with this work for additional
 ## information regarding copyright ownership.
@@ -21,6 +22,9 @@
  * Default displayer for a notification
  *
  *#
+
+#set ($notifStyleDefined = '')
+
 #macro(displayNotificationEvent $compositeEvent)
   ###
   ### Icons
@@ -110,10 +114,21 @@
       #end
     </div>
     <div class="col-xs-9 notification-content">
+      #if ($stringtool.isBlank($details))
+##        <button class="btn btn-xs" type="submit" style="border: 1px solid #ddd; background-color: #fff; position: absolute; right: 10px; top: 25px; width: 2em;">
+##          <span class="fa fa-ellipsis-v"></span>
+##        </button>
+        #set($ce = $compositeEvent.events.get(0))
+        #define($menuContent)
+          #displayQuickActions($ce)
+        #end
+        #displayMenuQA("mentiActionsSingle-${ce.id}-$ce.type", 'more-vertical', $menuContent, 'core.menu.actions.label')
+      #end
       $content
       #if ($stringtool.isNotBlank($details))
       <button class="btn btn-xs toggle-notification-event-details" type="submit">
         <span class="fa fa-ellipsis-h"></span>
+##        <span class="fa fa-bars"></span>
       </button>
       #end
     </div>
@@ -145,6 +160,20 @@
           <td>#displayNotificationEventUser($event.user)</td>
           <td class="description">$services.icon.renderHTML($eventDescriptor.eventTypeIcon) $escapetool.xml($description)</td>
           <td class="text-right text-muted">#if($diffUrl!='')<a href="$escapetool.xml($diffUrl)">#end$escapetool.xml($xwiki.formatDate($event.date))#if($diffUrl!='')</a>#end</td>
+
+##            <button class="btn btn-xs" type="submit" style="border: 1px solid #ddd; background-color: #fff; position: relative; right: -2px;">
+##              <span class="fa fa-ellipsis-v"></span>
+##            </button>
+              #define($menuContent)
+                #displayQuickActions($event)
+              #end
+              #displayMenuQA("mentiActions-$event.id", 'more-vertical', $menuContent, 'core.menu.actions.label')
+          </td>
+        </tr>
+        <tr>
+##           <td colspan="3">
+##             #displayQuickActions($event)
+##           </td>
         </tr>
       #end
     #end
@@ -224,6 +253,7 @@ $xwiki.getPlainUserName($user)##
  *#
 #macro(displayGroupMessageNotification $compositeEvent $translationKey $icon)
   #define($content)
+  GMN
     #set ($messageEvent = $event.events[0])
     #set ($translationParameters = [
       "#displayNotificationEventUser($messageEvent.user, false)",
@@ -236,4 +266,109 @@ $xwiki.getPlainUserName($user)##
     <div><small class="text-muted">$escapetool.xml($services.date.displayTimeAgo($compositeEvent.dates.get(0)))</small></div>
   #end
   #displayNotificationEventSkeleton($icon, 'comment', $content, '')
+#end
+#**
+ * Display the quick actions
+ *#
+#macro (displayQuickActions $event)
+  $services.rendering.render($services.notification.notifiers.renderQuickActions($event), 'xhtml/1.0')
+#end
+
+#macro(displayMenuQA $id $icon $menuContent $titleKey $titleAsLabel $actionUrl $extraAttribute)
+
+#set ($isComposite = $stringtool.startsWith($id, 'mentiActionsSingle'))
+
+#if ($notifStyleDefined == '')
+  #set ($notifStyleDefined = 'yes')
+  <style>
+  button.quick-action-button {
+      border: 1px solid #ddd;
+      font-size: 10px;
+      background-color: #fff;
+      width: 2em;
+      padding: 3px;
+      position: relative;
+      right: -2px;
+  }
+
+  /*button.quick-action-button-single {*/
+  /*position: absolute;*/
+  /*right: 10px;*/
+  /*top: 25px;*/
+  /*width: 2em;*/
+  /*}*/
+  div.composite-quick-action {
+      position: absolute;
+      right: 10px;
+      top: 25px;
+      width: 2em;
+  }
+
+  ul.quick-actions-dropdown {
+      position: absolute;
+      padding: 0 5px;
+      margin-left: -93px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      z-index: 10;
+      font-size: 12px;
+      text-align: left;
+  }
+
+  ul.quick-actions-dropdown li {
+      margin-bottom: 3px;
+  }
+
+  ul.quick-actions-dropdown li {
+      list-style: none;
+  }
+  </style>
+#end
+
+    #if ($isComposite)
+        <div class="composite-quick-action">
+        #else
+<td style="text-align: right;">
+    #end
+    <button id="${id}-dd"  class="btn btn-default#if ("$!actionUrl" == '') dropdown-toggle#end quick-action-button #if ($isComposite)quick-action-button-single#end" title="$services.localization.render($titleKey)"##
+      #if ("$!actionUrl" != '')
+       href="$actionUrl"
+      #else
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+      #end
+       role="button"#if ("$!extraAttribute" != '') ${extraAttribute}#end>
+      $services.icon.renderHTML('menu')
+      #if ($titleAsLabel)
+          <span class="btn-label">$services.localization.render($titleKey)</span>
+      #end
+    </button>
+  #if ($stringtool.isNotBlank("$!menuContent"))
+    #if ("$!actionUrl" != '')
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="caret"></span>
+            <span class="sr-only">$services.localization.render('core.menu.toggleDropdown')</span>
+        </button>
+    #end
+      <ul class="hidden quick-actions-dropdown" id="${id}-ddd" aria-expanded="true">
+        $menuContent
+      </ul>
+  #end
+    <script type="text/javascript">
+        require(['jquery'], function($) {
+            var toggled = false;
+          $("#${id}-dd").click(function() {
+              if(!toggled) {
+                  $("#${id}-ddd").attr('class', 'quick-actions-dropdown');
+              } else {
+                  $("#${id}-ddd").attr('class', 'hidden quick-actions-dropdown');
+              }
+              toggled = !toggled;
+          });
+        });
+    </script>
+  #if ($isComposite)
+  </div>
+  #else
+  </td>
+  #end
 #end

@@ -40,16 +40,39 @@
     </td>
     <td class="description">$summary</td>
     #insertEventDate($event)
+    <td style="text-align: right;">
+##        <button class="btn btn-xs dropdown-toggle" type="submit" style="border: 1px solid #ddd; background-color: #fff; position: relative; right: -2px;" data-toggle="dropdown" role="button">
+##            <span class="fa fa-ellipsis-v"></span>
+####            #displayQuickActions($event)
+##        </button>
+##        <a class="btn btn-default dropdown-toggle" title="More Actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button" style="border: 1px solid #ddd; background-color: #fff; position: relative; right: -2px;">
+##            <span class="fa fa-ellipsis-v"></span>
+##        </a>
+##        <ul class="dropdown-menu dropdown-menu-right">
+##            <li>AGAGAG</li>
+##        </ul>
+
+##      #set ($menuContent = 'YOLO')
+      #define($menuContent)
+        #displayQuickActions($event)
+      #end
+      #displayMenuQA("mentiActions-$event.id", 'more-vertical', $menuContent, 'core.menu.actions.label')
+    </td>
 </tr>
 #if($services.mentions.isQuoteActivated() && $eventParams.getQuote())
   <tr>
     <td colspan="3">
-      <blockquote class="mention-quote">
+      <blockquote class="mention-quote" style="margin-bottom: 0;">
         $eventParams.getQuote()
       </blockquote>
     </td>
   </tr>
 #end
+##<tr>
+##<td colspan="3" style="margin-top: 0; margin-bottom: 0;">
+##  #displayQuickActions($event)
+##</td>
+##</tr>
 #end
 
 #define ($content)
@@ -89,5 +112,6 @@
     #end
     #displayNotificationEventDetailsSkeletons($events.size(), $rows)
 #end
+
 
 #displayNotificationEventSkeleton($mainIcon $smallIcon $content $details)

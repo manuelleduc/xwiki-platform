@@ -405,7 +405,7 @@ public class RefactoringScriptService implements ScriptService
         }
 
         try {
-            return this.jobExecutor.execute(type, request);
+            return this.jobExecutor.execute(type + "haha", request);
         } catch (JobException e) {
             setError(e);
             return null;

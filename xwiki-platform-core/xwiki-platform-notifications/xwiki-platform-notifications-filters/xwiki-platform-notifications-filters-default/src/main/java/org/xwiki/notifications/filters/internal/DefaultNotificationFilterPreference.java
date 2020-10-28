@@ -35,7 +35,7 @@ import org.xwiki.text.StringUtils;
  *
  * @since 10.8RC1
  * @since 9.11.8
- * @version $Id $
+ * @version $Id$
  */
 public class DefaultNotificationFilterPreference implements NotificationFilterPreference
 {

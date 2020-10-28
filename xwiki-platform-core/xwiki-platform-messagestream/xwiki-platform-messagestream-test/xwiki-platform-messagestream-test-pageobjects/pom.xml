@@ -24,29 +24,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-messagestream</artifactId>
+    <artifactId>xwiki-platform-messagestream-test</artifactId>
     <version>12.10-SNAPSHOT</version>
   </parent>
-  <artifactId>xwiki-platform-messagestream-test</artifactId>
-  <name>XWiki Platform - Message Stream - Tests - Parent POM</name>
-  <packaging>pom</packaging>
-  <description>Functional tests for the Message Stream feature</description>
-  <properties>
-    <!-- Don't run backward-compatibility checks in test modules since we don't consider them as public APIs -->
-    <xwiki.revapi.skip>true</xwiki.revapi.skip>
-    <!-- Don't run Checkstyle in test modules -->
-    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
-  </properties>
-  <modules>
-    <module>xwiki-platform-messagestream-test-tests</module>
-    <module>xwiki-platform-messagestream-test-pageobjects</module>
-  </modules>
-  <profiles>
-    <profile>
-      <id>docker</id>
-      <modules>
-        <module>xwiki-platform-messagestream-test-docker</module>
-      </modules>
-    </profile>
-  </profiles>
+  <artifactId>xwiki-platform-messagestream-test-pageobjects</artifactId>
+  <name>XWiki Platform - Message Streal - Tests - Page Objects</name>
+  <packaging>jar</packaging>
+  <description>XWiki Platform - Message Stream - Tests - Page Objects</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-test-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

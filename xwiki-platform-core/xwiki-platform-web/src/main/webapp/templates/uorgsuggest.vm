@@ -24,30 +24,21 @@
     ## Resolve the input as a user/group reference and use only the document name for matching.
     #set ($input = $services.model.resolveDocument($input).name)
   #end
-  #if ($request.uorg == 'user')
-    #set ($statement = "from doc.object(XWiki.XWikiUsers) as user " +
-      "where lower(doc.name) like :input or " +
-        "concat(concat(lower(user.first_name), ' '), lower(user.last_name)) like :input " +
-      "order by lower(user.first_name), user.first_name, lower(user.last_name), user.last_name")
-  #else
-    #set ($statement = 'from doc.object(XWiki.XWikiGroups) as groups ' +
-      'where lower(doc.name) like :input and doc.fullName <> ''XWiki.XWikiGroupTemplate'' ' +
-      'order by lower(doc.name), doc.name')
+  #set ($media = $request.media)
+  #if (!$media)
+    #set($media = 'xml')
   #end
   #if ($request.wiki == 'global')
     #set ($wikiReference = $services.model.createWikiReference($xcontext.mainWikiName))
   #else
     #set ($wikiReference = $doc.documentReference.wikiReference)
   #end
-  #set ($query = $services.query.xwql($statement).setWiki($wikiReference.name).addFilter('unique'))
-  ## TODO: Use the advanced query parameter API:
-  ## query.bindValue('input').anyChars().literal($input).anyChars().query()
-  ## as soon as we fix XWIKI-15362 (An XWQL query that selects from an object property fails when using the advanced
-  ## query parameter API)
-  #set ($query = $query.setLimit(10).bindValue('input', "%$input%"))
-  #set ($rawResults = $query.execute())
-  #displayResults($rawResults $wikiReference)
+  $services.user.search($request.uorg, $wikiReference, $input, 10, $media)
 #end
+
+#suggestUsersOrGroups()
+##
+## TODO: everything below is deprecated except for the icons that needs to be dealt with
 ##
 #macro (displayResults $rawResults $wikiReference)
   #set ($results = [])

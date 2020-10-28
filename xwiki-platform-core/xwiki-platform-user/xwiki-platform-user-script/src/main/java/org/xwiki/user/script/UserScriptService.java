@@ -19,14 +19,22 @@
  */
 package org.xwiki.user.script;
 
+import java.io.IOException;
+import java.util.Objects;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.xml.namespace.QName;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.model.reference.WikiReference;
 import org.xwiki.script.service.ScriptService;
 import org.xwiki.script.service.ScriptServiceManager;
 import org.xwiki.stability.Unstable;
+import org.xwiki.user.ActorSearchResult;
+import org.xwiki.user.ActorSearchResults;
+import org.xwiki.user.ActorsSearchService;
 import org.xwiki.user.CurrentUserReference;
 import org.xwiki.user.GuestUserReference;
 import org.xwiki.user.SuperAdminUserReference;
@@ -36,9 +44,18 @@ import org.xwiki.user.UserPropertiesResolver;
 import org.xwiki.user.UserReference;
 import org.xwiki.user.UserReferenceResolver;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+
 /**
  * Users related script API.
- * 
+ *
  * @version $Id$
  * @since 10.8RC1
  */
@@ -68,6 +85,9 @@ public class UserScriptService implements ScriptService
 
     @Inject
     private UserReferenceResolver<String> userReferenceResolver;
+
+    @Inject
+    private ActorsSearchService actorsSearchService;
 
     /**
      * @param <S> the type of the {@link ScriptService}
@@ -204,5 +224,64 @@ public class UserScriptService implements ScriptService
     public boolean exists(UserReference userReference)
     {
         return this.userManager.exists(userReference);
+    }
+
+    /**
+     * @param uorgs TODO
+     * @param wiki TODO
+     * @param input TODO
+     * @param limit TODO
+     * @param format the expected format of the result, can be {@code json} or {@code xml}
+     * @return
+     * @since 12.10RC1
+     */
+    @Unstable
+    public String search(String uorgs, WikiReference wiki, String input, long limit, String format)
+    {
+        ActorSearchResults search = this.actorsSearchService.search(uorgs, wiki, input, limit);
+        if (Objects.equals(format, "json")) {
+            try {
+                // TODO: make object mapper a constant?
+                // TODO: or extract a search result serializer component?
+                ObjectMapper objectMapper = new ObjectMapper();
+                return objectMapper.writeValueAsString(search.getResults());
+            } catch (IOException e) {
+                // TODO handle error
+
+            }
+        } else if (Objects.equals(format, "xml")) {
+            JacksonXmlModule module = new JacksonXmlModule();
+            module.setDefaultUseWrapper(false);
+            module.addSerializer(ActorSearchResults.class, new JsonSerializer<ActorSearchResults>()
+            {
+                @Override public void serialize(ActorSearchResults actorSearchResult, JsonGenerator jsonGenerator,
+                    SerializerProvider serializerProvider) throws IOException
+                {
+                    ToXmlGenerator toXmlGenerate = (ToXmlGenerator) jsonGenerator;
+                    toXmlGenerate.setNextName(QName.valueOf("results"));
+                    toXmlGenerate.writeStartObject();
+                    for (ActorSearchResult result : actorSearchResult.getResults()) {
+                        toXmlGenerate.writeFieldName("rs");
+                        toXmlGenerate.writeStartObject();
+                        toXmlGenerate.setNextIsAttribute(true);
+                        toXmlGenerate.writeStringField("id", result.getUrl());
+//                        toXmlGenerate.setNextIsAttribute(true);
+                        toXmlGenerate.writeStringField("info", result.getLabel());
+                        toXmlGenerate.writeStringField("type", result.getType());
+                        toXmlGenerate.setNextIsAttribute(false);
+                        toXmlGenerate.setNextIsUnwrapped(true);
+                        toXmlGenerate.writeStringField("", result.getValue());
+                    }
+                    jsonGenerator.writeEndObject();
+                }
+            });
+            XmlMapper xmlMapper = new XmlMapper(module);
+            try {
+                return xmlMapper.writeValueAsString(search);
+            } catch (JsonProcessingException e) {
+                // TODO handle error
+            }
+        }
+        return null;
     }
 }

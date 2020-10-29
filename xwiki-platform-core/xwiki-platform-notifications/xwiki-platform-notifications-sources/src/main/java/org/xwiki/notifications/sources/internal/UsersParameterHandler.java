@@ -114,6 +114,7 @@ public class UsersParameterHandler
                         DefaultNotificationFilterPreference personalPref
                             = new DefaultNotificationFilterPreference(filterPref);
                         parameters.filterPreferences.add(personalPref);
+//                        break;
                     }
                 }
             } catch (NotificationException e) {

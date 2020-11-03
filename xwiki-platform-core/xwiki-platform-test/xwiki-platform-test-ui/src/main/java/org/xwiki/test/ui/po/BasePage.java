@@ -414,6 +414,10 @@ public class BasePage extends BaseElement
     }
 
     /**
+     * Generic delete operation.
+     *
+     * @return a generic confirmation page object, with only an accept and a cancel button
+     * @see #deletePage()
      * @since 4.5M1
      */
     public ConfirmationPage delete()
@@ -425,7 +429,7 @@ public class BasePage extends BaseElement
     /**
      * Specific delete action when the delete action is performed on a page.
      *
-     * @return a specialized confirmation page for page deletion
+     * @return a specialized confirmation page object for page deletion, offering
      *
      * @since 12.8RC1
      */

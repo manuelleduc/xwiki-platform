@@ -33,6 +33,9 @@ import org.xwiki.appwithinminutes.test.po.ClassFieldEditPane;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.docker.junit5.browser.Browser;
+import org.xwiki.test.docker.junit5.database.Database;
+import org.xwiki.test.docker.junit5.servletengine.ServletEngine;
 import org.xwiki.test.integration.junit.LogCaptureConfiguration;
 import org.xwiki.test.ui.TestUtils;
 import org.xwiki.test.ui.po.editor.ObjectEditPage;
@@ -47,13 +50,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version $Id$
  * @since 11.10
  */
-@UITest
+@UITest(
+    database = Database.MARIADB,
+    databaseTag = "10.5",
+    servletEngine = ServletEngine.JETTY,
+    servletEngineTag = "9",
+    browser = Browser.FIREFOX,
+    debug = true,
+    verbose = true
+)
 public class AppsLiveTableIT
 {
     private static final String USERNAME = AppsLiveTableIT.class.getSimpleName();
+
     private static final String PASSWORD = "simplepassword";
 
     private AppWithinMinutesHomePage appWithinMinutesHomePage;
+
     private String appName;
 
     @BeforeAll

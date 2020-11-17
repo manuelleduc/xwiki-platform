@@ -1,0 +1,176 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------< org.xwiki.platform:xwiki-platform-annotation-test-docker >------
+[INFO] Building XWiki Platform - Annotation - Test - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-annotation-test-docker ---
+[INFO] Deleting /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-annotation-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-annotation-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-annotation-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-annotation-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-annotation-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/src/test/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-annotation-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-annotation-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-annotation-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-annotation-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.annotation.test.ui.AllIT
+10:16:45.820 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+10:16:45.828 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+10:16:45.855 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+10:17:11.552 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+10:17:12.047 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+10:17:12.062 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+10:17:16.802 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+10:17:16.802 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+10:17:17.035 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+10:17:17.036 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+10:17:28.749 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+10:17:36.521 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+10:17:37.907 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+10:17:37.913 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+10:17:37.966 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+10:17:38.193 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+10:17:38.204 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+10:17:57.904 [tc-okhttp-stream-1307861467] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+10:17:57.905 [tc-okhttp-stream-1307861467] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+10:17:57.905 [tc-okhttp-stream-1307861467] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+10:17:57.906 [tc-okhttp-stream-1307861467] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+10:17:57.906 [tc-okhttp-stream-1307861467] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+10:18:26.467 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+10:18:26.648 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:18:26.649 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:18:26.649 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:18:26.649 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:18:26.649 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-annotation-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:18:47.532 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+10:18:47.538 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+10:18:56.491 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33491]
+10:18:56.515 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+10:19:07.775 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+10:19:07.899 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+10:19:10.974 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [addAnnotationTranslation]
+10:19:32.076 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [addAnnotationTranslation]
+10:19:32.537 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [addAnnotationTranslation] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.annotation.test.ui.AllIT$NestedAnnotationsIT-addAnnotationTranslation.png].
+10:19:33.215 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.annotation.test.ui.AllIT$NestedAnnotationsIT-addAnnotationTranslation.flv]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 172.389 s - in org.xwiki.annotation.test.ui.AllIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-annotation-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-annotation-test-docker ---
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (functional-tests) @ xwiki-platform-annotation-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ xwiki-platform-annotation-test-docker ---
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-annotation-test-docker-11.10.12-SNAPSHOT.jar to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-annotation-test-docker/11.10.12-SNAPSHOT/xwiki-platform-annotation-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-annotation/xwiki-platform-annotation-test/xwiki-platform-annotation-test-docker/pom.xml to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-annotation-test-docker/11.10.12-SNAPSHOT/xwiki-platform-annotation-test-docker-11.10.12-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:04 min
+[INFO] Finished at: 2020-11-13T10:19:54+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "snapshotModules" could not be activated because it does not exist.

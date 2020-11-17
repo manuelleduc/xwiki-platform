@@ -1,0 +1,178 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------< org.xwiki.platform:xwiki-platform-wiki-test-docker >---------
+[INFO] Building XWiki Platform - Wiki - Tests - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-wiki-test-docker ---
+[INFO] Deleting /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/target/mysql-8.0-pom-tomcat-9-chrome
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-wiki-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-wiki-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-wiki-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-wiki-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-wiki-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/src/test/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-wiki-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-wiki-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-wiki-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-wiki-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.wiki.test.ui.AllIT
+09:16:53.268 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+09:16:53.270 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+09:16:53.283 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+09:17:13.204 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+09:17:13.494 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+09:17:13.500 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+09:17:16.966 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: [{id=org.xwiki.platform:xwiki-platform-web, properties=xwiki.extension.distribution.wikiui=org.xwiki.platform:xwiki-platform-wiki-ui-wiki}]
+09:17:16.966 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+09:17:17.143 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+09:17:17.143 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+09:17:17.143 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-notifications-filters-default:jar:11.10.12-SNAPSHOT]
+09:17:17.143 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-template-default:jar:11.10.12-SNAPSHOT]
+09:17:17.143 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-script:jar:11.10.12-SNAPSHOT]
+09:17:17.143 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-user-default:jar:11.10.12-SNAPSHOT]
+09:17:17.143 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-user-script:jar:11.10.12-SNAPSHOT]
+09:17:24.456 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+09:17:29.604 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+09:17:30.451 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+09:17:30.455 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+09:17:30.513 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+09:17:30.640 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+09:17:30.647 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+09:17:46.270 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+09:17:46.271 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+09:17:46.271 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+09:17:46.271 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+09:17:46.271 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+09:18:11.723 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+09:18:11.798 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-notifications-filters-default:jar:11.10.12-SNAPSHOT]
+09:18:11.798 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-template-default:jar:11.10.12-SNAPSHOT]
+09:18:11.798 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-script:jar:11.10.12-SNAPSHOT]
+09:18:11.798 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-user-default:jar:11.10.12-SNAPSHOT]
+09:18:11.798 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-wiki-user-script:jar:11.10.12-SNAPSHOT]
+09:18:11.803 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:18:11.804 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:18:11.804 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:18:11.804 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:18:11.804 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-wiki-rest-default/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:18:11.804 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-wiki-ui-mainwiki/11.10.12-SNAPSHOT] to the list of extensions to provision...
+09:19:17.980 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+09:19:17.985 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+09:19:25.896 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33420]
+09:19:25.923 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+09:19:34.901 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+09:19:35.013 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+09:19:37.922 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [createWikiFromTemplateTest]
+09:21:14.266 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDOUT: 2020-11-13 08:21:14,265 [http://xwikiweb:8080/xwiki/bin/view/WikiManager/DeleteWiki?wikiId=mynewwiki] WARN  o.x.c.i.DefaultCSRFToken       - CSRFToken: Secret token verification failed, token: "null", stored token: "MxwsMkyoQwUmq7tmqgEAuA" 
+09:22:08.747 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDOUT: 2020-11-13 08:22:08,747 [http://xwikiweb:8080/xwiki/bin/view/WikiManager/DeleteWiki?wikiId=mynewwiki] WARN  o.x.c.i.DefaultCSRFToken       - CSRFToken: Secret token verification failed, token: "null", stored token: "MxwsMkyoQwUmq7tmqgEAuA" 
+09:22:13.841 [tc-okhttp-stream-626393149] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDOUT: 2020-11-13 08:22:13,841 [http://xwikiweb:8080/xwiki/bin/view/WikiManager/DeleteWiki?wikiId=mynewtemplate] WARN  o.x.c.i.DefaultCSRFToken       - CSRFToken: Secret token verification failed, token: "null", stored token: "MxwsMkyoQwUmq7tmqgEAuA" 
+09:22:17.223 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [createWikiFromTemplateTest]
+09:22:17.529 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [createWikiFromTemplateTest] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-wiki/xwiki-platform-wiki-test/xwiki-platform-wiki-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.wiki.test.ui.AllIT$NestedWikiTemplateIT-createWikiFromTemplateTest.png].
+09:22:18.469 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.wiki.test.ui.AllIT$NestedWikiTemplateIT-createWikiFromTemplateTest.flv]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 344.155 s - in org.xwiki.wiki.test.ui.AllIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-wiki-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-wiki-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-wiki-test-docker ---
+[WARNING] Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)

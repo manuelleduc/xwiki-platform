@@ -1,0 +1,256 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---< org.xwiki.platform:xwiki-platform-appwithinminutes-test-docker >---
+[INFO] Building XWiki Platform - AppWithinMinutes - Tests - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-appwithinminutes/xwiki-platform-appwithinminutes-test/xwiki-platform-appwithinminutes-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-appwithinminutes/xwiki-platform-appwithinminutes-test/xwiki-platform-appwithinminutes-test-docker/src/test/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-appwithinminutes/xwiki-platform-appwithinminutes-test/xwiki-platform-appwithinminutes-test-docker/target/mariadb-10.5-pom-jetty-9-firefox/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-appwithinminutes/xwiki-platform-appwithinminutes-test/xwiki-platform-appwithinminutes-test-docker/target/mariadb-10.5-pom-jetty-9-firefox/xwiki-platform-appwithinminutes-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-appwithinminutes-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-appwithinminutes/xwiki-platform-appwithinminutes-test/xwiki-platform-appwithinminutes-test-docker/target/mariadb-10.5-pom-jetty-9-firefox/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.appwithinminutes.test.ui.AllIT
+10:21:00.576 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+10:21:00.581 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MARIADB]...
+10:21:00.602 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mariadb:10.5]
+10:21:13.920 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+10:21:14.241 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+10:21:14.250 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mariadb-10.5-pom-jetty-9-firefox/xwiki], (re)building it!
+10:21:19.238 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+10:21:19.238 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+10:21:19.479 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+10:21:19.479 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+10:21:27.237 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+10:21:34.222 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+10:21:35.812 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MARIADB]...
+10:21:35.815 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+10:21:35.884 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MARIADB]...
+10:21:36.191 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [JETTY]...
+10:21:36.205 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [jetty:9]
+10:21:45.244 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:21:45.239:WARN:oejx.XmlConfiguration:main: Deprecated method public void org.eclipse.jetty.webapp.WebAppContext.prependSystemClass(java.lang.String) in file:///var/lib/jetty/webapps/xwiki/WEB-INF/jetty-web.xml
+10:21:45.246 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:21:45.243:WARN:oejx.XmlConfiguration:main: Deprecated method public void org.eclipse.jetty.webapp.WebAppContext.prependServerClass(java.lang.String) in file:///var/lib/jetty/webapps/xwiki/WEB-INF/jetty-web.xml
+10:21:56.189 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+10:21:56.189 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/var/lib/jetty/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+10:21:56.189 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+10:21:56.190 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+10:21:56.190 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+10:22:13.206 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+10:22:13.309 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:22:13.313 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:22:13.313 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:22:13.313 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:22:13.314 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-appwithinminutes-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+10:23:11.541 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [FIREFOX]...
+10:23:11.546 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+10:23:22.769 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33506]
+10:23:22.806 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+10:23:27.677 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:27.670:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/
+10:23:30.238 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.236:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/webjars/wiki%3Axwiki/drawer/2.4.0/css/drawer.min.css
+10:23:30.255 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.241:WARN:oejs.HttpChannel:qtp591137559-66: /xwiki/webjars/wiki%3Axwiki/requirejs/2.2.0/require.min.js
+10:23:30.271 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.268:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/js/prototype/prototype.js
+10:23:30.307 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.302:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:30.309 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.305:WARN:oejs.HttpChannel:qtp591137559-15: /xwiki/resources/js/xwiki/compatibility.js
+10:23:30.333 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.331:WARN:oejs.HttpChannel:qtp591137559-15: /xwiki/resources/js/xwiki/markerScript.js
+10:23:30.432 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.428:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/icons/silk/user_go.png
+10:23:30.434 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.428:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/skins/flamingo/logo.svg
+10:23:30.435 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.430:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:30.448 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/xwiki-min.js?cache-version=1605194780000&defer=false&language=en, line 1: ReferenceError: Class is not defined
+10:23:30.449 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/xwiki/Register, line 50: ReferenceError: require is not defined
+10:23:30.453 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/xwiki/Register, line 281: TypeError: document.observe is not a function
+10:23:30.458 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.453:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:30.458 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/scriptaculous/effects.js?cache-version=1605194780000, line 1: ReferenceError: Prototype is not defined
+10:23:30.462 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/skins/flamingo/flamingo.min.js?cache-version=1605181750000&language=en, line 1: ReferenceError: require is not defined
+10:23:30.462 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.458:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/js/xwiki/compatibility.js
+10:23:30.474 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.472:WARN:oejs.HttpChannel:qtp591137559-38: /xwiki/resources/js/xwiki/markerScript.js
+10:23:30.483 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.476:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:30.484 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.476:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/skins/flamingo/logo.svg
+10:23:30.485 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.477:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/icons/silk/user_go.png
+10:23:30.525 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.523:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/icons/xwiki/favicon.svg
+10:23:30.527 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:30.523:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/icons/xwiki/favicon144.png
+10:23:31.613 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.612:WARN:oejs.HttpChannel:qtp591137559-66: /xwiki/webjars/wiki%3Axwiki/drawer/2.4.0/css/drawer.min.css
+10:23:31.617 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.616:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/js/xwiki/compatibility.js
+10:23:31.622 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.613:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/webjars/wiki%3Axwiki/requirejs/2.2.0/require.min.js
+10:23:31.623 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.616:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:31.628 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.619:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/resources/js/prototype/prototype.js
+10:23:31.630 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.623:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/js/xwiki/markerScript.js
+10:23:31.636 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.629:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/resources/icons/silk/user_go.png
+10:23:31.638 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.631:WARN:oejs.HttpChannel:qtp591137559-15: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:31.639 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.633:WARN:oejs.HttpChannel:qtp591137559-38: /xwiki/skins/flamingo/logo.svg
+10:23:31.647 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.646:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/js/prototype/prototype.js
+10:23:31.656 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/xwiki-min.js?cache-version=1605194780000&defer=false&language=en, line 1: ReferenceError: Class is not defined
+10:23:31.657 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/xwiki/Register, line 50: ReferenceError: require is not defined
+10:23:31.660 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/xwiki/Register, line 281: TypeError: document.observe is not a function
+10:23:31.663 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.661:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/resources/js/xwiki/markerScript.js
+10:23:31.663 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/scriptaculous/effects.js?cache-version=1605194780000, line 1: ReferenceError: Prototype is not defined
+10:23:31.666 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/skins/flamingo/flamingo.min.js?cache-version=1605181750000&language=en, line 1: ReferenceError: require is not defined
+10:23:31.667 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.663:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/js/xwiki/compatibility.js
+10:23:31.668 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.661:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:31.676 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.673:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:31.677 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.673:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/skins/flamingo/logo.svg
+10:23:31.679 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:31.677:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/icons/silk/user_go.png
+10:23:31.848 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+10:23:31.865 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+10:23:35.009 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deleteApplication]
+10:23:35.569 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.567:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/webjars/wiki%3Axwiki/drawer/2.4.0/css/drawer.min.css
+10:23:35.571 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.570:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/js/prototype/prototype.js
+10:23:35.574 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.573:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/webjars/wiki%3Axwiki/requirejs/2.2.0/require.min.js
+10:23:35.583 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.580:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:35.589 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.585:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/js/xwiki/markerScript.js
+10:23:35.591 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.585:WARN:oejs.HttpChannel:qtp591137559-15: /xwiki/resources/js/xwiki/compatibility.js
+10:23:35.593 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.591:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:35.598 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.595:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/skins/flamingo/logo.svg
+10:23:35.615 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.596:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/icons/silk/user_go.png
+10:23:35.631 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.629:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/js/prototype/prototype.js
+10:23:35.648 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/xwiki-min.js?cache-version=1605194780000&defer=false&language=en, line 1: ReferenceError: Class is not defined
+10:23:35.650 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/XWiki/Register, line 50: ReferenceError: require is not defined
+10:23:35.655 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/register/XWiki/Register, line 281: TypeError: document.observe is not a function
+10:23:35.655 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/scriptaculous/effects.js?cache-version=1605194780000, line 1: ReferenceError: Prototype is not defined
+10:23:35.658 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/skins/flamingo/flamingo.min.js?cache-version=1605181750000&language=en, line 1: ReferenceError: require is not defined
+10:23:35.659 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.658:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/uicomponents/widgets/validation/livevalidation_prototype.js
+10:23:35.669 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.666:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/js/xwiki/compatibility.js
+10:23:35.673 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.671:WARN:oejs.HttpChannel:qtp591137559-38: /xwiki/resources/icons/silk/user_go.png
+10:23:35.675 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.672:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:35.676 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.670:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/js/xwiki/markerScript.js
+10:23:35.680 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:35.679:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/skins/flamingo/logo.svg
+10:23:36.826 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.822:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/webjars/wiki%3Axwiki/drawer/2.4.0/css/drawer.min.css
+10:23:36.834 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.827:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/js/prototype/prototype.js
+10:23:36.835 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.829:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/webjars/wiki%3Axwiki/requirejs/2.2.0/require.min.js
+10:23:36.837 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.834:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/webjars/wiki%3Axwiki/bootstrap-daterangepicker/3.0.3/css/bootstrap-daterangepicker.css
+10:23:36.849 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.842:WARN:oejs.HttpChannel:qtp591137559-66: /xwiki/webjars/wiki%3Axwiki/xwiki-platform-tree-webjar/11.10.12-SNAPSHOT/tree.min.css
+10:23:36.851 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.842:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/js/xwiki/markerScript.js
+10:23:36.853 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.847:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/js/xwiki/compatibility.js
+10:23:36.999 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:36.996:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/js/prototype/prototype.js
+10:23:37.007 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.004:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/webjars/wiki%3Axwiki/font-awesome/4.7.0/css/font-awesome.min.css
+10:23:37.259 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.256:WARN:oejs.HttpChannel:qtp591137559-38: /xwiki/resources/icons/silk/user_go.png
+10:23:37.267 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.264:WARN:oejs.HttpChannel:qtp591137559-21: /xwiki/resources/icons/silk/bullet_arrow_down.png
+10:23:37.268 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.261:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/icons/silk/house.png
+10:23:37.269 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.266:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/skins/flamingo/logo.svg
+10:23:37.285 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.273:WARN:oejs.HttpChannel:qtp591137559-18: /xwiki/resources/icons/silk/page_copy.png
+10:23:37.285 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/xwiki-min.js?cache-version=1605194780000&defer=false&language=en, line 1: ReferenceError: Class is not defined
+10:23:37.286 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.275:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/icons/silk/pencil.png
+10:23:37.287 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/view/AppWithinMinutes/WebHome, line 59: ReferenceError: require is not defined
+10:23:37.288 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.280:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/icons/silk/add.png
+10:23:37.290 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.264:WARN:oejs.HttpChannel:qtp591137559-66: /xwiki/resources/icons/silk/text_align_justify.png
+10:23:37.299 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.295:WARN:oejs.HttpChannel:qtp591137559-19: /xwiki/resources/icons/silk/folder.png
+10:23:37.301 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.296:WARN:oejs.HttpChannel:qtp591137559-17: /xwiki/resources/icons/silk/application_put.png
+10:23:37.303 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.296:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/resources/icons/silk/printer.png
+10:23:37.305 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.297:WARN:oejs.HttpChannel:qtp591137559-38: /xwiki/resources/icons/silk/magnifier.png
+10:23:37.305 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.302:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/icons/silk/comment.png
+10:23:37.306 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/view/AppWithinMinutes/WebHome, line 382: ReferenceError: shortcut is not defined
+10:23:37.306 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/view/AppWithinMinutes/WebHome, line 789: TypeError: document.observe is not a function
+10:23:37.307 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.302:WARN:oejs.HttpChannel:qtp591137559-66: /xwiki/resources/icons/silk/time.png
+10:23:37.310 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.304:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/resources/icons/silk/attach.png
+10:23:37.315 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/scriptaculous/effects.js?cache-version=1605194780000, line 1: ReferenceError: Prototype is not defined
+10:23:37.315 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/skins/flamingo/flamingo.min.js?cache-version=1605181750000&language=en, line 1: ReferenceError: require is not defined
+10:23:37.315 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/uicomponents/async/async.js?cache-version=1605194778000, line 1: ReferenceError: require is not defined
+10:23:37.315 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/uicomponents/hierarchy/hierarchy.js?cache-version=1605194778000, line 1: ReferenceError: require is not defined
+10:23:37.315 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/uicomponents/widgets/tree.min.js?cache-version=1605181754000, line 1: ReferenceError: require is not defined
+10:23:37.318 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/table/livetable.js?cache-version=1605194780000, line 1: ReferenceError: Class is not defined
+10:23:37.318 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/js/xwiki/table/livetabledate.js?cache-version=1605194780000, line 1: ReferenceError: require is not defined
+10:23:37.318 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/uicomponents/exporter/exporter.js?cache-version=1605194778000, line 1: ReferenceError: define is not defined
+10:23:37.325 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.318:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/icons/silk/page_white_code.png
+10:23:37.328 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.319:WARN:oejs.HttpChannel:qtp591137559-37: /xwiki/resources/js/xwiki/compatibility.js
+10:23:37.329 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/skin/resources/uicomponents/viewers/tags.js?cache-version=1605194778000, line 1: ReferenceError: Class is not defined
+10:23:37.329 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.322:WARN:oejs.HttpChannel:qtp591137559-19: /xwiki/resources/icons/silk/page_white.png
+10:23:37.337 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.324:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/js/xwiki/markerScript.js
+10:23:37.338 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.325:WARN:oejs.HttpChannel:qtp591137559-36: /xwiki/resources/icons/silk/page_white_text.png
+10:23:37.346 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.335:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/icons/xwiki/ajax-loader-large.gif
+10:23:37.347 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.336:WARN:oejs.HttpChannel:qtp591137559-23: /xwiki/resources/icons/silk/information.png
+10:23:37.367 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.362:WARN:oejs.HttpChannel:qtp591137559-16: /xwiki/resources/icons/xwiki/pagination-controls.png
+10:23:37.368 [tc-okhttp-stream-1294947444] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: 2020-11-13 09:23:37.362:WARN:oejs.HttpChannel:qtp591137559-14: /xwiki/resources/icons/silk/bullet_arrow_up.png
+10:23:37.370 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/jsx/IconThemes/FontAwesome?language=en&docVersion=1.1, line 1: ReferenceError: require is not defined
+10:23:37.370 [tc-okhttp-stream-1099305828] INFO  o.x.t.d.i.j.XWikiDockerExtension - STDOUT: JavaScript error: http://xwikiweb:8080/xwiki/bin/jsx/AppWithinMinutes/WebHome?language=en&docVersion=1.1, line 1: TypeError: document.observe is not a function

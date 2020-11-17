@@ -1,0 +1,177 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----< org.xwiki.platform:xwiki-platform-user-directory-test-docker >----
+[INFO] Building XWiki Platform - User - Directory - Tests - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-user-directory-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/src/test/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-user-directory-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.user.directory.test.ui.UserDirectoryIT
+02:50:31.275 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+02:50:31.278 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+02:50:31.289 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+02:50:51.192 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+02:50:51.442 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+02:50:51.446 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+02:50:54.438 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+02:50:54.438 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+02:50:54.570 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+02:50:54.570 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+02:50:54.570 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-notifications-filters-default:jar:11.10.12-SNAPSHOT]
+02:51:00.531 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+02:51:04.887 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+02:51:05.637 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+02:51:05.640 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+02:51:05.672 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+02:51:05.789 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+02:51:05.794 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+02:51:20.465 [tc-okhttp-stream-768690182] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+02:51:20.466 [tc-okhttp-stream-768690182] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+02:51:20.466 [tc-okhttp-stream-768690182] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+02:51:20.466 [tc-okhttp-stream-768690182] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+02:51:20.466 [tc-okhttp-stream-768690182] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+02:51:43.507 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+02:51:43.570 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-notifications-filters-default:jar:11.10.12-SNAPSHOT]
+02:51:43.572 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:51:43.572 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:51:43.572 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:51:43.572 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:51:43.572 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-user-directory-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:52:42.042 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+02:52:42.046 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+02:52:48.276 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33357]
+02:52:48.298 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+02:52:53.401 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:52:53.519 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+02:52:56.306 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [verifyUserIsListed]
+02:53:03.225 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [verifyUserIsListed]
+02:53:03.465 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [verifyUserIsListed] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.directory.test.ui.UserDirectoryIT-verifyUserIsListed.png].
+02:53:03.610 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.directory.test.ui.UserDirectoryIT-verifyUserIsListed.flv]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 155.022 s - in org.xwiki.user.directory.test.ui.UserDirectoryIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-user-directory-test-docker ---
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (functional-tests) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ xwiki-platform-user-directory-test-docker ---
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-user-directory-test-docker-11.10.12-SNAPSHOT.jar to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-user-directory-test-docker/11.10.12-SNAPSHOT/xwiki-platform-user-directory-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-directory/xwiki-platform-user-directory-test/xwiki-platform-user-directory-test-docker/pom.xml to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-user-directory-test-docker/11.10.12-SNAPSHOT/xwiki-platform-user-directory-test-docker-11.10.12-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:45 min
+[INFO] Finished at: 2020-11-13T02:53:09+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "snapshotModules" could not be activated because it does not exist.

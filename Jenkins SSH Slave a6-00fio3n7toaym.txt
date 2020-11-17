@@ -1,0 +1,212 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------< org.xwiki.platform:xwiki-platform-office-test-docker >--------
+[INFO] Building xwiki-platform-office-test-docker 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-office-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-office-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-office-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-office-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-office-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 9 resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-office-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-office-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-office-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-office-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.officeimporter.test.ui.OfficeImporterIT
+22:46:34.340 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+22:46:34.344 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+22:46:34.353 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+22:46:54.283 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+22:46:54.558 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+22:46:54.562 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+22:46:57.077 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+22:46:57.077 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+22:46:57.193 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+22:46:57.193 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+22:47:07.564 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+22:47:11.579 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+22:47:12.428 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+22:47:12.430 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+22:47:12.466 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+22:47:12.573 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+22:47:12.636 [main] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - (*) Build a dedicated image embedding LibreOffice...
+22:50:10.170 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+22:50:10.171 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+22:50:10.171 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+22:50:10.171 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+22:50:10.171 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+22:50:33.447 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+22:50:33.551 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:33.552 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:33.552 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:33.552 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:33.552 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-office-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:33.552 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-administration-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+22:50:53.928 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+22:50:53.930 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+22:51:00.372 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33315]
+22:51:00.390 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+22:51:05.674 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+22:51:05.789 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+22:51:08.374 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [verifyImport]
+22:51:13.915 [tc-okhttp-stream-1000631767] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDOUT: 2020-11-12 21:51:13,914 [OfficeProcessThread-0] WARN  o.j.o.ConnectRetryable         - Office process died with exit code 81; restarting it 
+22:52:02.746 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [verifyImport]
+22:52:03.031 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [verifyImport] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.officeimporter.test.ui.OfficeImporterIT-verifyImport.png].
+22:52:04.063 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.officeimporter.test.ui.OfficeImporterIT-verifyImport.flv]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 333.142 s - in org.xwiki.officeimporter.test.ui.OfficeImporterIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-office-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-office-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-office-test-docker ---
+[WARNING] Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.resources/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.expressions/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.text/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.commands/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (functional-tests) @ xwiki-platform-office-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ xwiki-platform-office-test-docker ---
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-office-test-docker-11.10.12-SNAPSHOT.jar to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-office-test-docker/11.10.12-SNAPSHOT/xwiki-platform-office-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-office/xwiki-platform-office-test/xwiki-platform-office-test-docker/pom.xml to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-office-test-docker/11.10.12-SNAPSHOT/xwiki-platform-office-test-docker-11.10.12-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:55 h
+[INFO] Finished at: 2020-11-13T02:40:52+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "snapshotModules" could not be activated because it does not exist.

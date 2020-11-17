@@ -1,0 +1,177 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------< org.xwiki.platform:xwiki-platform-panels-test-docker >--------
+[INFO] Building XWiki Platform - Panels - Tests - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-panels-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-panels-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-panels-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-panels-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-panels-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/src/test/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-panels-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-panels-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-panels-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-panels-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.panels.test.ui.AllIT
+02:42:41.171 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+02:42:41.174 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+02:42:41.188 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+02:43:01.372 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+02:43:01.584 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+02:43:01.589 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+02:43:04.563 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+02:43:04.563 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+02:43:04.675 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+02:43:04.676 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+02:43:14.986 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+02:43:19.176 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+02:43:19.994 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+02:43:19.997 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+02:43:20.031 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+02:43:20.149 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+02:43:20.154 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+02:43:33.699 [tc-okhttp-stream-410088883] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+02:43:33.699 [tc-okhttp-stream-410088883] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+02:43:33.699 [tc-okhttp-stream-410088883] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+02:43:33.699 [tc-okhttp-stream-410088883] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+02:43:33.699 [tc-okhttp-stream-410088883] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+02:43:54.370 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+02:43:54.425 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.425 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.425 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.425 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.426 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-panels-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.426 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-administration-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:43:54.426 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-appwithinminutes-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:44:40.465 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+02:44:40.469 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+02:44:47.439 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33327]
+02:44:47.465 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+02:45:02.652 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:45:02.770 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+02:45:05.741 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [verifyPanelCaching]
+02:45:34.296 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [verifyPanelCaching]
+02:45:34.589 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [verifyPanelCaching] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.panels.test.ui.AllIT$NestedNavigationPanelIT-verifyPanelCaching.png].
+02:45:34.889 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.panels.test.ui.AllIT$NestedNavigationPanelIT-verifyPanelCaching.flv]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 204.617 s - in org.xwiki.panels.test.ui.AllIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-panels-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-panels-test-docker ---
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (functional-tests) @ xwiki-platform-panels-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ xwiki-platform-panels-test-docker ---
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-panels-test-docker-11.10.12-SNAPSHOT.jar to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-panels-test-docker/11.10.12-SNAPSHOT/xwiki-platform-panels-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-panels/xwiki-platform-panels-test/xwiki-platform-panels-test-docker/pom.xml to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-panels-test-docker/11.10.12-SNAPSHOT/xwiki-platform-panels-test-docker-11.10.12-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  05:15 min
+[INFO] Finished at: 2020-11-13T02:46:08+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "snapshotModules" could not be activated because it does not exist.

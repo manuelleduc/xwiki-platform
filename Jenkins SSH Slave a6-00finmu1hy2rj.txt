@@ -1,0 +1,202 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----< org.xwiki.platform:xwiki-platform-flamingo-skin-test-docker >-----
+[INFO] Building XWiki Platform - Flamingo - Skin - Test - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Deleting /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 8 resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 9 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-flamingo-skin-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.flamingo.test.ui.AllIT
+18:24:40.525 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+18:24:40.527 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+18:24:40.539 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+18:25:03.070 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+18:25:03.384 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+18:25:03.389 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+18:25:06.811 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+18:25:06.811 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+18:25:06.979 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+18:25:06.979 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+18:25:15.447 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+18:25:21.031 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+18:25:21.883 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+18:25:21.887 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+18:25:21.932 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+18:25:22.105 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+18:25:22.114 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+18:25:40.179 [tc-okhttp-stream-1413030734] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+18:25:40.179 [tc-okhttp-stream-1413030734] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+18:25:40.179 [tc-okhttp-stream-1413030734] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+18:25:40.179 [tc-okhttp-stream-1413030734] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+18:25:40.179 [tc-okhttp-stream-1413030734] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+18:26:04.334 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+18:26:04.408 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.409 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.409 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.409 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.409 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-panels-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.409 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.commons:xwiki-commons-diff-script/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.410 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-rendering-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.410 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-security-authentication-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.410 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-captcha-jcaptcha-api/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:04.410 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-captcha-jcaptcha-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+18:26:42.327 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+18:26:42.332 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+18:26:50.517 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33226]
+18:26:50.536 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+18:26:57.914 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:26:58.028 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+18:27:00.659 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deleteOkWhenConfirming]
+18:27:06.649 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deleteOkWhenConfirming]
+18:27:06.965 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deleteOkWhenConfirming] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteOkWhenConfirming.png].
+18:27:07.096 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteOkWhenConfirming.flv]
+18:27:07.641 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:08.355 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deletePageCanSkipConfirmationAndDoARedirect]
+18:27:09.795 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deletePageCanSkipConfirmationAndDoARedirect]
+18:27:09.987 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deletePageCanSkipConfirmationAndDoARedirect] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageCanSkipConfirmationAndDoARedirect.png].
+18:27:10.138 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageCanSkipConfirmationAndDoARedirect.flv]
+18:27:10.771 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:11.731 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deletePageCanDoRedirect]
+18:27:15.002 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deletePageCanDoRedirect]
+18:27:15.212 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deletePageCanDoRedirect] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageCanDoRedirect.png].
+18:27:15.336 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageCanDoRedirect.flv]
+18:27:15.863 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:16.771 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deletePageGoesToOriginalPageWhenCancelled]
+18:27:19.162 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deletePageGoesToOriginalPageWhenCancelled]
+18:27:19.408 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deletePageGoesToOriginalPageWhenCancelled] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageGoesToOriginalPageWhenCancelled.png].
+18:27:19.596 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageGoesToOriginalPageWhenCancelled.flv]
+18:27:20.165 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:21.090 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deletePageIsImpossibleWhenNoDeleteRights]
+18:27:23.717 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deletePageIsImpossibleWhenNoDeleteRights]
+18:27:23.955 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deletePageIsImpossibleWhenNoDeleteRights] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageIsImpossibleWhenNoDeleteRights.png].
+18:27:24.110 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageIsImpossibleWhenNoDeleteRights.flv]
+18:27:24.733 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:25.571 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deleteTerminalAndNonTerminalPages]
+18:27:34.083 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deleteTerminalAndNonTerminalPages]
+18:27:34.292 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deleteTerminalAndNonTerminalPages] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteTerminalAndNonTerminalPages.png].
+18:27:34.507 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteTerminalAndNonTerminalPages.flv]
+18:27:35.086 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:35.791 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deleteChildren]
+18:27:48.368 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deleteChildren]
+18:27:48.553 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deleteChildren] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteChildren.png].
+18:27:48.812 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deleteChildren.flv]
+18:27:49.429 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+18:27:50.304 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [deletePageWithUsedClass]
+18:28:00.515 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [deletePageWithUsedClass]
+18:28:00.687 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [deletePageWithUsedClass] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-flamingo/xwiki-platform-flamingo-skin/xwiki-platform-flamingo-skin-test/xwiki-platform-flamingo-skin-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageWithUsedClass.png].
+18:28:00.919 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.flamingo.test.ui.AllIT$NestedDeletePageIT-deletePageWithUsedClass.flv]
+[INFO] Tests run: 36, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 507.27 s - in org.xwiki.flamingo.test.ui.AllIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 36, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-flamingo-skin-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-flamingo-skin-test-docker ---

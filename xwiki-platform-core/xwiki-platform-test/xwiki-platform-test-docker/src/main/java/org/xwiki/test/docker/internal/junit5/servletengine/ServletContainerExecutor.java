@@ -167,6 +167,12 @@ public class ServletContainerExecutor extends AbstractContainerExecutor
             commandPartList.add(ORACLE_TZ_WORKAROUND);
             this.servletContainer.setCommandParts(commandPartList.toArray(new String[0]));
         }
+
+        if (this.testConfiguration.isDebug()) {
+            this.servletContainer.setCommandParts(new String[] {
+                "-Xdebug", "-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n"
+            });
+        }
     }
 
     private void configureTomcat(File sourceWARDirectory) throws Exception

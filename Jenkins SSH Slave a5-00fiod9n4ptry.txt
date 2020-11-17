@@ -1,0 +1,239 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----< org.xwiki.platform:xwiki-platform-user-profile-test-docker >-----
+[INFO] Building XWiki Platform - User - Profile - Tests - Functional Docker Tests 11.10.12-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-plugins) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jcl-log4j-isolation) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.xml.bind-api) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glasshfish-jaxb) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-open-json) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-glassfish-el) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-lang3) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-commons-configuration2) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation-api) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.activation) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail-api) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jakarta.mail) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-bouncycastle-ids) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-javase-dependencies) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jsr305) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jta) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-jboss-marshalling-osgi) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-upper-bounds) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-no-legacy-dependencies) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-valid-poms) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (check-dependency-version) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- xwiki-commons-tool-remote-resource-plugin:11.10.12-SNAPSHOT:process (xwiki-license-resources) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Preparing remote bundle org.xwiki.commons:xwiki-commons-tool-license-resources:11.10.12-SNAPSHOT
+[INFO] Copying 2 resources from 1 bundle.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/src/main/resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ xwiki-platform-user-profile-test-docker ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.2.1:manifest (bundle-manifest) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Building jar: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-user-profile-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (functional-tests) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.xwiki.user.test.ui.AllIT
+02:54:23.939 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - XWiki is not started, starting all...
+02:54:23.941 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting database [MYSQL]...
+02:54:23.953 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [mysql:8.0]
+02:54:43.653 [main] INFO  o.x.t.d.i.j.d.DatabaseContainerExecutor - Setting MySQL permissions to create subwikis
+02:54:43.915 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Building custom XWiki WAR...
+02:54:43.920 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - XWiki WAR is not fully built in [target/mysql-8.0-pom-tomcat-9-chrome/xwiki], (re)building it!
+02:54:47.164 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Using the following extension overrides: []
+02:54:47.164 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Finding version ...
+02:54:47.347 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Found version = [11.10.12-SNAPSHOT]
+02:54:47.347 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Resolving distribution dependencies ...
+02:54:47.348 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-eventstream-store:jar:11.10.12-SNAPSHOT]
+02:54:53.063 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JAR dependencies ...
+02:54:57.244 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Expanding WAR dependencies ...
+02:54:57.997 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying JDBC driver for database [MYSQL]...
+02:54:58.000 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Copying Skin resources ...
+02:54:58.037 [main] INFO  o.x.t.d.internal.junit5.WARBuilder - Generating configuration files for database [MYSQL]...
+02:54:58.159 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting Servlet container [TOMCAT]...
+02:54:58.164 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [tomcat:9]
+02:55:12.778 [tc-okhttp-stream-262287569] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: An illegal reflective access operation has occurred
+02:55:12.779 [tc-okhttp-stream-262287569] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Illegal reflective access by com.thoughtworks.xstream.core.util.Fields (file:/usr/local/tomcat/webapps/xwiki/WEB-INF/lib/xstream-1.4.11.1.jar) to field java.util.TreeMap.comparator
+02:55:12.779 [tc-okhttp-stream-262287569] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.core.util.Fields
+02:55:12.779 [tc-okhttp-stream-262287569] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+02:55:12.779 [tc-okhttp-stream-262287569] INFO  o.x.t.d.i.j.s.ServletContainerExecutor - STDERR: WARNING: All illegal access operations will be denied in a future release
+02:55:36.576 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Provision extensions for test...
+02:55:36.646 [main] INFO  o.x.t.i.maven.MavenResolver - Adding extra JAR to WEB-INF/lib: [org.xwiki.platform:xwiki-platform-eventstream-store:jar:11.10.12-SNAPSHOT]
+02:55:36.654 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-index-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.654 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-tree-macro/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.655 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-fontawesome/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.655 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-icon-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.656 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-user-profile-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.656 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-dashboard-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:55:36.656 [main] INFO  o.x.t.d.i.junit5.ExtensionInstaller - ...Adding extension [org.xwiki.platform:xwiki-platform-administration-ui/11.10.12-SNAPSHOT] to the list of extensions to provision...
+02:56:48.938 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - (*) Starting browser [CHROME]...
+02:56:48.942 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [alpine:3.5]
+02:56:55.641 [main] INFO  o.x.t.d.i.j.b.BrowserContainerExecutor - VNC server address: [vnc://vnc:secret@localhost:33369]
+02:56:55.664 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Initialize Test Context...
+02:57:03.380 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:57:03.492 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Pulling image [testcontainersofficial/vnc-recorder:1.1.0]
+02:57:05.665 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePassword]
+02:57:57.337 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePassword]
+02:57:57.537 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePassword] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePassword.png].
+02:57:57.766 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePassword.flv]
+02:57:58.244 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:57:58.807 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePasswordWithTwoDifferentPasswords]
+02:58:23.506 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePasswordWithTwoDifferentPasswords]
+02:58:23.626 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePasswordWithTwoDifferentPasswords] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithTwoDifferentPasswords.png].
+02:58:23.765 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithTwoDifferentPasswords.flv]
+02:58:24.268 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:58:24.828 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePasswordWithoutEnteringPasswords]
+02:58:48.824 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePasswordWithoutEnteringPasswords]
+02:58:48.952 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePasswordWithoutEnteringPasswords] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithoutEnteringPasswords.png].
+02:58:49.095 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithoutEnteringPasswords.flv]
+02:58:49.630 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:58:50.171 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePasswordOfAnotherUserWithTwoDifferentPasswords]
+02:59:14.687 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePasswordOfAnotherUserWithTwoDifferentPasswords]
+02:59:14.831 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePasswordOfAnotherUserWithTwoDifferentPasswords] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordOfAnotherUserWithTwoDifferentPasswords.png].
+02:59:15.026 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordOfAnotherUserWithTwoDifferentPasswords.flv]
+02:59:15.525 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:59:16.118 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePasswordWithWrongOriginalPassword]
+02:59:40.178 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePasswordWithWrongOriginalPassword]
+02:59:40.335 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePasswordWithWrongOriginalPassword] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithWrongOriginalPassword.png].
+02:59:40.522 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWithWrongOriginalPassword.flv]
+02:59:41.329 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Start VNC container...
+02:59:41.892 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Starting test [changePasswordWhenPolicyIsLength8AndNumberMandatory]
+03:00:48.661 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) Stopping test [changePasswordWhenPolicyIsLength8AndNumberMandatory]
+03:00:48.819 [main] INFO  o.x.t.d.i.junit5.DockerTestUtils - Screenshot for test [changePasswordWhenPolicyIsLength8AndNumberMandatory] saved at [/home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWhenPolicyIsLength8AndNumberMandatory.png].
+03:00:49.048 [main] INFO  o.x.t.d.i.j.XWikiDockerExtension - (*) VNC recording of test has been saved to [target/mysql-8.0-pom-tomcat-9-chrome/screenshots/mysql-8.0-default-tomcat-9-chrome-org.xwiki.user.test.ui.AllIT$NestedUserChangePasswordIT-changePasswordWhenPolicyIsLength8AndNumberMandatory.flv]
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 440.371 s - in org.xwiki.user.test.ui.AllIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (default) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.1.0:check (blocker) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- license-maven-plugin:3.0:check (default) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Checking licenses...
+[INFO] 
+[INFO] --- revapi-maven-plugin:0.11.2:check (revapi-check) @ xwiki-platform-user-profile-test-docker ---
+[INFO] 
+[INFO] --- spoon-maven-plugin:3.2:check (default) @ xwiki-platform-user-profile-test-docker ---
+[WARNING] Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.xwiki.commons:xwiki-commons-tool-spoon:11.10.12-SNAPSHOT/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.resources/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.expressions/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.jobs/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.preferences/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.contenttype/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.app/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.registry/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of sonatype-nexus-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.osgi/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.filesystem/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.text/maven-metadata.xml from/to sonatype-nexus-snapshots (https://oss.sonatype.org/content/repositories/snapshots): Connection timed out (Read failed)
+[WARNING] Could not transfer metadata org.eclipse.platform:org.eclipse.core.commands/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.equinox.common/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[WARNING] Failure to transfer org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.platform:org.eclipse.core.runtime/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): Connection timed out (Read failed)
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (functional-tests) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Failsafe report directory: /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/failsafe-reports
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ xwiki-platform-user-profile-test-docker ---
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/target/mysql-8.0-pom-tomcat-9-chrome/xwiki-platform-user-profile-test-docker-11.10.12-SNAPSHOT.jar to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-user-profile-test-docker/11.10.12-SNAPSHOT/xwiki-platform-user-profile-test-docker-11.10.12-SNAPSHOT.jar
+[INFO] Installing /home/mleduc/xwiki/xwiki-platform/xwiki-platform-core/xwiki-platform-user/xwiki-platform-user-profile/xwiki-platform-user-profile-test/xwiki-platform-user-profile-test-docker/pom.xml to /home/mleduc/.m2/repository/org/xwiki/platform/xwiki-platform-user-profile-test-docker/11.10.12-SNAPSHOT/xwiki-platform-user-profile-test-docker-11.10.12-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:56 h
+[INFO] Finished at: 2020-11-13T06:49:58+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "snapshotModules" could not be activated because it does not exist.

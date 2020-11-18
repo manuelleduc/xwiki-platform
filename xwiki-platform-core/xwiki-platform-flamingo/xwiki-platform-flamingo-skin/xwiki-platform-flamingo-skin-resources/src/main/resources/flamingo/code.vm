@@ -114,7 +114,7 @@ $xwiki.ssfx.use('uicomponents/viewers/code.css', true)##
       <td class="version">#if ($startNewGroup)<a href="$doc.getURL('view', $changesQueryString)" title="$xwiki.formatDate($sourceDate)">$sourceVersion</a>#end</td>
       <td class="line-number unselectable"><a href="$doc.getURL('view', "$!{optionalRevisionInfo}viewer=code&showLastAuthors=true#${lineNumber}")">$lineNumber</a></td>
       ##<td class="date">#if ($startNewGroup)$sourceRev.date#end</td>
-      <td class="content">$escapetool.xml($el.element)</td>
+      <td class="content"><pre>$escapetool.xml($el.element)</pre></td>
     </tr>
   #end
 #else
@@ -127,7 +127,7 @@ $xwiki.ssfx.use('uicomponents/viewers/code.css', true)##
         <td class="author avatar_16 hidden"></td>
         <td class="version hidden"></td>
         <td class="line-number unselectable"><a href="$doc.getURL('view', "viewer=code#${lineNumber}")">$lineNumber</a></td>
-        <td class="content">$escapetool.xml($line)</td>
+        <td class="content"><pre>$escapetool.xml($line)</pre></td>
       </tr>
     #end
   #end

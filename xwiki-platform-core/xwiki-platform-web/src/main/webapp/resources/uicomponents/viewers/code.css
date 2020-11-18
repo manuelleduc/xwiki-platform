@@ -70,3 +70,8 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+.wiki-code td.content pre {
+  margin: 0;
+  white-space: pre-wrap;
+}

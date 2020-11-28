@@ -30,7 +30,7 @@
   <artifactId>xwiki-platform-image-api</artifactId>
   <name>XWiki Platform - Image - API</name>
   <properties>
-    <thumbnailator.version>0.4.8</thumbnailator.version>
+    <thumbnailator.version>0.4.13</thumbnailator.version>
   </properties>
   <dependencies>
     <dependency>

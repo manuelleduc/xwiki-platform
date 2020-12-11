@@ -24,23 +24,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-core</artifactId>
+    <artifactId>xwiki-platform-livetable-test</artifactId>
     <version>13.0-SNAPSHOT</version>
   </parent>
-  <artifactId>xwiki-platform-livetable</artifactId>
-  <name>XWiki Platform - Livetable</name>
-  <packaging>pom</packaging>
-  <description>A UI component useful to display dynamic lists of data.</description>
-  <modules>
-    <module>xwiki-platform-livetable-ui</module>
-  </modules>
-
-  <profiles>
-    <profile>
-      <id>integration-tests</id>
-      <modules>
-        <module>xwiki-platform-livetable-test</module>
-      </modules>
-    </profile>
-  </profiles>
+  <artifactId>xwiki-platform-livetable-test-pageobjects</artifactId>
+  <name>XWiki Platform - Livetable - Tests - Page Objects</name>
+  <packaging>jar</packaging>
+  <description>XWiki Platform - Livetable - Tests - Page Objects</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-test-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

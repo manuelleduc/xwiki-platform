@@ -334,7 +334,9 @@ XWiki.widgets.LiveTable = Class.create({
    * Default handler for displaying live table rows.
    */
   handler: function(row, i, table) {
-    if (!row['doc_viewable']) {
+    const is_doc_viewable = row['doc_viewable'] + '' !== 'false'; 
+  
+    if (!is_doc_viewable) {
       $(table.domNodeName + '-inaccessible-docs').removeClassName('hidden');
     }
     var showFilterNote = false;
@@ -412,7 +414,7 @@ XWiki.widgets.LiveTable = Class.create({
           'data-title': displayName
         });
         var container = td;
-        if (descriptor.link && row['doc_viewable']) {
+        if (descriptor.link && is_doc_viewable) {
           var link = new Element(descriptor.link === 'editor' ? 'span' : 'a');
           // Automatic: the link URL is in JSON results, with the '_url' sufix.
           if (descriptor.link === 'auto') {
@@ -444,7 +446,7 @@ XWiki.widgets.LiveTable = Class.create({
           container.innerHTML = row[fieldName] || '';
         } else if (row[fieldName] !== undefined && row[fieldName] !== null) {
           var text = row[fieldName] + '';
-          if (fieldName === 'doc_name' && !row['doc_viewable']) {
+          if (fieldName === 'doc_name' && !is_doc_viewable) {
             text += '*';
           }
           if (showFilterNote && fieldName === 'doc_title' && row['doc_title_raw'] !== undefined) {

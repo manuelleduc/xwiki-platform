@@ -49,11 +49,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Dedicated scenario to perform various tests that needs a subwiki.
- * For testing specifically creation and management of wikis, check the other scenario.
+ * Dedicated scenario to perform various tests that needs a subwiki. For testing specifically creation and management of
+ * wikis, check the other scenario.
  *
- * @since 12.5RC1
  * @version $Id$
+ * @since 12.5RC1
  */
 @UITest(
     properties = {
@@ -91,15 +91,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         )
     }
 )
-public class SubWikiIT
+class SubWikiIT
 {
     private static final String SUBWIKI_NAME = "subwiki";
 
-    private WikiHomePage wikiHomePage;
-
     // We create the subwiki as first global action before running tests.
     @BeforeAll
-    public void createSubWiki(TestUtils setup)
+    void createSubWiki(TestUtils setup)
     {
         setup.loginAsSuperAdmin();
         WikiIndexPage wikiIndexPage = WikiIndexPage.gotoPage();
@@ -122,13 +120,13 @@ public class SubWikiIT
         assertFalse(wikiCreationPage.hasLogError());
 
         // Finalization
-       this.wikiHomePage = wikiCreationPage.finalizeCreation();
-       setup.forceGuestUser();
+        wikiCreationPage.finalizeCreation();
+        setup.forceGuestUser();
     }
 
     // We delete the subwiki once all tests are finished.
     @AfterAll
-    public void deleteSubWiki(TestUtils setup) throws Exception
+    void deleteSubWiki(TestUtils setup) throws Exception
     {
         setup.loginAsSuperAdmin();
         // Go to the template wiki
@@ -146,7 +144,7 @@ public class SubWikiIT
     }
 
     @Test
-    public void movePageToSubwiki(TestUtils setup, TestReference testReference) throws Exception
+    void movePageToSubwiki(TestUtils setup, TestReference testReference) throws Exception
     {
         setup.loginAsSuperAdmin();
         DocumentReference mainWikiLinkPage = new DocumentReference("xwiki", "Test", "Link");
@@ -175,8 +173,9 @@ public class SubWikiIT
         DocumentReference movedPageReference = testReference.setWikiReference(new WikiReference(SUBWIKI_NAME));
         assertTrue(setup.rest().exists(movedPageReference));
         viewPage = renameStatusPage.gotoNewPage();
-        assertEquals(String.format("/%s/%s/%s", SUBWIKI_NAME, testReference.getLastSpaceReference().extractFirstReference(
-            EntityType.SPACE).getName(), "My Page"), viewPage.getBreadcrumbContent());
+        assertEquals(
+            String.format("/%s/%s/%s", SUBWIKI_NAME, testReference.getLastSpaceReference().extractFirstReference(
+                EntityType.SPACE).getName(), "My Page"), viewPage.getBreadcrumbContent());
         assertEquals("Some content", viewPage.getContent());
 
         // Check the link is updated

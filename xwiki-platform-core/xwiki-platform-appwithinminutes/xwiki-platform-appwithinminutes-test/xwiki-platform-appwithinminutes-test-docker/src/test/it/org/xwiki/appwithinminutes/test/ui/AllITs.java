@@ -43,4 +43,9 @@ public class AllITs
     class NestedWizardIT extends WizardIT
     {
     }
+    @Nested
+    @DisplayName("User class field test")
+    class NestedUserClassFieldIT extends UserClassFieldIT
+    {
+    }
 }

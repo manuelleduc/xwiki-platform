@@ -62,6 +62,19 @@
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-xclass-test-pageobjects</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Required for the autocompletion of the autocompleted AWM fields (eg users, or groups). -->
+<!--    <dependency>-->
+<!--      <groupId>org.xwiki.platform</groupId>-->
+<!--      <artifactId>xwiki-platform-rest-server</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <scope>runtime</scope>-->
+<!--    </dependency>-->
   </dependencies>
   <build>
     <testSourceDirectory>src/test/it</testSourceDirectory>

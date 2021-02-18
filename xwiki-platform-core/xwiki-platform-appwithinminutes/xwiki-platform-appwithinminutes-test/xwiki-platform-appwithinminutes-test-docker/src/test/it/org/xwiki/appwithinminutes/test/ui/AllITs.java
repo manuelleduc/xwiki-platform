@@ -43,4 +43,10 @@ public class AllITs
     class NestedWizardIT extends WizardIT
     {
     }
+
+    @Nested
+    @DisplayName("Add entry test")
+    class NestedAddEntryIT extends AddEntryIT
+    {
+    }
 }

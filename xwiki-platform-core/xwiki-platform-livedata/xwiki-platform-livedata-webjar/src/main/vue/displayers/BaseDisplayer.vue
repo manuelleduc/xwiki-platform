@@ -34,20 +34,21 @@
       :tabindex="isEditable ? 0 : ''"
   >
     <!--
-      The base displayer contains two slots: `viewer` and `editor`.
-      It displays the one according to its current state: `this.isView`.
+      The base displayer contains three slots: `viewer`, `editor`, and `loading`.
+      It displays `viewer` or `loading` according to its current state: `this.isView` when `this.isLoading` is false,
+      and `loading` otherwise.
     -->
 
     <!-- The slot containing the displayer Viewer widget -->
     <slot
         name="viewer"
-        v-if="isView"
+        v-if="isView && !isLoading"
     >
       <!--
         Default Viewer widget
         Normally this should rarely be used, as the default displayer
         should provide a default viewer if no displayer is specified
-        However, this is usefull if a custom displayer only implement
+        However, this is useful if a custom displayer only implement
         its Editor widget, as a default Viewer widget would still be provided
       -->
       <div>{{ value }}</div>
@@ -56,13 +57,13 @@
     <!-- The slot containing the displayer Editor widget -->
     <slot
         name="editor"
-        v-if="!isView"
+        v-if="!isView && !isLoading"
     >
       <!--
         Default Editor widget
         Normally this should rarely be used, as the default displayer
         should provide a default editor if no displayer is specified
-        However, this is usefull if a custom displayer only implement
+        However, this is useful if a custom displayer only implement
         its Viewer widget, as a default Editor widget would still be provided
       -->
       <input
@@ -77,12 +78,17 @@
       />
     </slot>
 
+    <slot name="loading" v-if="isLoading">
+      <XWikiLoader></XWikiLoader>
+    </slot>
+
   </div>
 </template>
 
 
 <script>
 import displayerMixin from "./displayerMixin.js";
+import XWikiLoader from "../utilities/XWikiLoader.vue";
 
 export default {
 
@@ -91,6 +97,9 @@ export default {
   // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component
   mixins: [displayerMixin],
 
+  components: {
+    XWikiLoader,
+  },
 
   props: {
     viewOnly: {
@@ -119,11 +128,11 @@ export default {
     toggleEdit() {
       this.$emit('update:isView', false);
     },
-    
+
     toggleView() {
       this.$emit('update:isView', true);
     },
-    
+
     // Trigger View mode (switch from Editor widget to Viewer widget)
     // This should rarely be used directly as it does not validate modified data
     // Used the `applyEdit` method instead (found in the displayerMixin)
@@ -137,7 +146,7 @@ export default {
 
     // This method should be used to apply edit and go back to view mode
     // It validate the entered value, ensuring that is is valid for the server
-    applyEdit (newValue) {
+    applyEdit(newValue) {
       this.logic.setValue({
         entry: this.entry,
         propertyId: this.propertyId,
@@ -146,21 +155,18 @@ export default {
       // Go back to view mode
       this.toggleView();
     },
-
     // This method should be used to cancel edit and go back to view mode
     // This is like applyEdit but it does not save the entered value
-    cancelEdit () {
+    cancelEdit() {
       // Go back to view mode
       this.toggleView();
-    },
+    }
   },
-
   watch: {
     isView: function(newIsView) {
-      if(newIsView) this.view();
+      if (newIsView) this.view();
     }
   }
-
 };
 
 </script>

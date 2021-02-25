@@ -17,3 +17,36 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.xwiki.livedata;
+
+/**
+ * TODO: document me.
+ *
+ * @version $Id$
+ * @since X.Y.X
+ */
+public class LiveDataEntryStoreEditDescriptor
+{
+    private String body;
+    private String dependencies;
+
+    public String getBody()
+    {
+        return this.body;
+    }
+
+    public void setBody(String body)
+    {
+        this.body = body;
+    }
+
+    public String getDependencies()
+    {
+        return this.dependencies;
+    }
+
+    public void setDependencies(String dependencies)
+    {
+        this.dependencies = dependencies;
+    }
+}

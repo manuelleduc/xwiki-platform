@@ -108,7 +108,7 @@ export default {
     },
 
     // Load the displayer component corresponding to the given displayerId
-    // On success, set `this.displayerComponent` to the retreived component,
+    // On success, set `this.displayerComponent` to the retrieved component,
     // which automatically insert the component in the html
     loadDisplayer (displayerId) {
       return new Promise ((resolve, reject) => {

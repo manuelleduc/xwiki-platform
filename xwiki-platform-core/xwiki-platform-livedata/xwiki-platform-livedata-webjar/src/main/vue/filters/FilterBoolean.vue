@@ -1,4 +1,4 @@
-/*
+<!--
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
@@ -16,4 +16,45 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- */
+-->
+
+
+<!--
+  BooleanFilter is a custom filter that allow to filter boolean values.
+-->
+<template>
+  <div>
+    <label>
+      True
+      <input type="checkbox" v-model="includeTrue" />
+    </label>
+    <label>
+      False
+      <input type="checkbox" v-model="includeFalse" />
+    </label>
+  </div>
+</template>
+
+
+<script>
+import filterMixin from "./filterMixin.js";
+
+export default {
+  name: "filter-boolean",
+
+  // Add the filterMixin to get access to all the filters methods and computed properties inside this component
+  mixins: [filterMixin],
+  
+  data() {
+    return {
+      includeTrue: true,
+      includeFalse: true,
+    }
+  }
+
+}
+</script>
+
+<style scoped>
+
+</style>

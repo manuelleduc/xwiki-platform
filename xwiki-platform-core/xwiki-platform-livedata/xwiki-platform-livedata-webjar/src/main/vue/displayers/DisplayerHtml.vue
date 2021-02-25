@@ -40,14 +40,20 @@
     <!-- Provide the Html Viewer widget to the `viewer` slot -->
     <template #viewer>
       <div
-          class="html-wrapper"
-          v-html="value"
+        class="html-wrapper"
+        v-html="value"
       ></div>
     </template>
 
     <!-- Provide the Html Editor widget to the `editor` slot -->
-    <!-- TODO: implemtent the edit widget fetch from the server -->
-    <template #editor></template>
+    <!-- TODO: implement the edit widget fetch from the server -->
+    <template #editor>
+      <div v-html="editField"
+           v-autofocus
+           @focusout="applyEdit($event.target.value)"
+           @keypress.enter="applyEdit($event.target.value)"
+           @keydown.esc="cancelEdit"></div>
+    </template>
 
   </BaseDisplayer>
 </template>
@@ -57,10 +63,13 @@
 
 import displayerMixin from "./displayerMixin.js";
 import BaseDisplayer from "./BaseDisplayer.vue";
+import $ from "jquery";
 
 export default {
 
   name: "displayer-html",
+
+  inject: ["logic"],
 
   components: {
     BaseDisplayer,
@@ -68,7 +77,41 @@ export default {
 
   data() {
     return {
+      editField: "<span>loading...</span>",
       isView: true
+    }
+  },
+
+  methods: {
+    // This method should be used to apply edit and go back to view mode.
+    // It validates the entered value, ensuring that is is valid for the server
+    applyEdit(newValue) {
+      // TODO: apply the new value
+      this.isView = true;
+    },
+
+    // This method should be used to cancel edit and go back to view mode
+    // This is like applyEdit but it does not save the entered value
+    cancelEdit() {
+      // Go back to view mode
+      // (there might be a cleaner way to do this)
+      this.isView = true;
+    },
+
+  },
+
+  watch: {
+    isView: function (isView) {
+      if (isView) {
+        this.editField = "<span>loading...</span>"
+      } else {
+        const source = this.data.query.source;
+        const entryId = this.logic.getEntryId(this.entry);
+        this.logic.getEditEntryProperty(source, entryId, this.propertyId).then(res => {
+          $("head").append(res.dependencies);
+          this.editField = res.body;
+        })
+      }
     }
   },
 

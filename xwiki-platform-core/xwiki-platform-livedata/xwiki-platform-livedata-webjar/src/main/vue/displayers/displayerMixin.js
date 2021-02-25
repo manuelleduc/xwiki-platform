@@ -40,11 +40,17 @@ export default {
       }
     },
     // This directive autofocus the element that has it
-    // This can be usefull in order to autofocus the input in the Editor widget
+    // This can be useful in order to autofocus the input in the Editor widget
     // right after the user switched from the Viewer widget
     autofocus: {
       inserted (el) { el.focus(); }
     },
+  },
+
+  data() {
+    return {
+      isLoading: false,
+    }
   },
 
   props: {
@@ -55,23 +61,27 @@ export default {
   // The computed values provide common data needed by displayers
   computed: {
     // The value to be displayed
-    value () {
-      return this.entry[this.propertyId];
+    value() {
+      return this.computeValue();
     },
-    // The property descriptor of `this.propetyId`
-    propertyDescriptor () {
+    // The property descriptor of `this.propertyId`
+    propertyDescriptor() {
       return this.logic.getPropertyDescriptor(this.propertyId);
     },
     // The configuration (aka displayerDescriptor) of the displayer
-    config () {
+    config() {
       return this.logic.getDisplayerDescriptor(this.propertyId);
     },
     // The whole Livedata data object
-    data () {
+    data() {
       return this.logic.data;
     },
   },
 
-  methods: {},
+  methods: {
+    computeValue() {
+      return this.entry[this.propertyId];
+    }
+  },
 
 };

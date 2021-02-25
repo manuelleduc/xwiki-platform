@@ -25,6 +25,7 @@ import java.util.Optional;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -38,7 +39,7 @@ import org.xwiki.livedata.rest.model.jaxb.Entry;
 
 /**
  * Default implementation of {@link LiveDataEntryResource}.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -72,14 +73,14 @@ public class DefaultLiveDataEntryResource extends AbstractLiveDataResource imple
             String idProperty = config.getMeta().getEntryDescriptor().getIdProperty();
             entry.getValues().put(idProperty, entryId);
             LiveDataEntryStore entryStore = source.get().getEntries();
-            Optional<Object> updatedEntryId = entryStore.save(entry.getValues());
-            if (updatedEntryId.isPresent()) {
-                Optional<Map<String, Object>> values = entryStore.get(updatedEntryId.get());
-                if (values.isPresent()) {
-                    Entry updatedEntry =
-                        createEntry(values.get(), updatedEntryId.get(), config.getQuery().getSource(), namespace);
-                    return Response.status(Status.ACCEPTED).entity(updatedEntry).build();
-                }
+            entryStore.updateAll(entryId, entry.getValues());
+
+            Optional<Map<String, Object>> stringObjectMap = entryStore.get(entryId);
+            if (stringObjectMap.isPresent()) {
+                return Response.ok(stringObjectMap.get()).type(MediaType.APPLICATION_JSON_TYPE).build();
+            } else {
+                // TODO: set a real error code and message
+                return Response.status(Status.BAD_REQUEST).build();
             }
         }
 

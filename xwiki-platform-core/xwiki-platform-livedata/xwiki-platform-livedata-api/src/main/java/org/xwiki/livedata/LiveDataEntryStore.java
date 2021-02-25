@@ -27,7 +27,7 @@ import org.xwiki.stability.Unstable;
 
 /**
  * The interface used to store and retrieve live data entries.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -63,7 +63,7 @@ public interface LiveDataEntryStore
 
     /**
      * Executes a query on the live data.
-     * 
+     *
      * @param query the query used to filter and sort the live data entries
      * @return the live data entries that match the given query
      * @throws LiveDataException if the live data query execution fails
@@ -72,7 +72,7 @@ public interface LiveDataEntryStore
 
     /**
      * Creates a new entry or updates an existing one.
-     * 
+     *
      * @param entry the entry to save
      * @return the identifier of the saved entry
      * @throws LiveDataException if saving the given entry fails
@@ -86,7 +86,7 @@ public interface LiveDataEntryStore
 
     /**
      * Updates a property of a live data entry.
-     * 
+     *
      * @param entryId the entry to update
      * @param property the property to update
      * @param value the new property value
@@ -108,12 +108,29 @@ public interface LiveDataEntryStore
 
     /**
      * Removes an existing entry.
-     * 
+     *
      * @param entryId identifies the entry to remove
      * @return {@code true} if the entry was removed, {@code false} otherwise
      * @throws LiveDataException if removing the specified entry fails
      */
     default Optional<Map<String, Object>> remove(Object entryId) throws LiveDataException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the edit form of the requested property.
+     *
+     * @param entryId the entry id
+     * @param propertyId the property id // TODO: classname has nothing to do at the livedata level
+     * @return the html content of the cell in edit mode, of {@link Optional#empty()} in case of error
+     */
+    default Optional<LiveDataEntryStoreEditDescriptor> getEdit(String entryId, String propertyId)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    default void updateAll(String entryId, Map<String, Object> values)
     {
         throw new UnsupportedOperationException();
     }

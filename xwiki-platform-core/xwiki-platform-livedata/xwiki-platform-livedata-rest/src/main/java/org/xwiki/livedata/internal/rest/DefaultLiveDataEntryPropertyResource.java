@@ -28,13 +28,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.livedata.LiveDataEntryStoreEditDescriptor;
 import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.livedata.LiveDataSource;
 import org.xwiki.livedata.rest.LiveDataEntryPropertyResource;
 
 /**
  * Default implementation of {@link LiveDataEntryPropertyResource}.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -57,6 +58,29 @@ public class DefaultLiveDataEntryPropertyResource extends AbstractLiveDataResour
         }
 
         throw new WebApplicationException(Response.Status.NOT_FOUND);
+    }
+
+    @Override
+    public Response getEdit(String sourceId, String entryId, String propertyId, String namespace,
+        String className)
+        throws Exception
+    {
+        try {
+            Optional<LiveDataEntryStoreEditDescriptor> o = this.liveDataSourceManager.get(sourceId, namespace)
+                .flatMap(source -> source.getEntries().getEdit(entryId, propertyId));
+            if (o.isPresent()) {
+                // Wrap the result in a div to avoid returning an xml content with multiple roots.
+                LiveDataEntryStoreEditDescriptor descriptor = o.get();
+                return Response.ok(descriptor.getBody())
+                    .header("X-XWIKI-HTML-HEAD", descriptor.getDependencies())
+                    .build();
+            } else {
+                // TODO: needs to be improved
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+        } catch (RuntimeException e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @Override

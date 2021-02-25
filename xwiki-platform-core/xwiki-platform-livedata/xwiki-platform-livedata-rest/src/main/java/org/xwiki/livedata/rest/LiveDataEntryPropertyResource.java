@@ -60,6 +60,29 @@ public interface LiveDataEntryPropertyResource
     ) throws Exception;
 
     /**
+     * Returns the editable field for the current entry property.
+     *
+     * @param sourceId indicates the {@link LiveDataSource} component implementation
+     * @param entryId identifies the live data entry
+     * @param propertyId  identifies the property whose value to return
+     * @param namespace the component manager name-space where to look for {@link LiveDataSource} implementations;
+     *     if not specified then the context / current name-space is used
+     * @param className
+     * @return
+     * @throws Exception
+     */
+    @GET
+    @Path("/edit")
+    Response getEdit(
+        @PathParam("sourceId") String sourceId,
+        @PathParam("entryId") String entryId,
+        @PathParam("propertyId") String propertyId,
+        @QueryParam("namespace") @DefaultValue("") String namespace,
+        @QueryParam("sourceParams.className") @DefaultValue("") String className
+    ) throws Exception;
+    
+
+    /**
      * Sets the value of a property from a live data entry.
      * 
      * @param sourceId indicates the {@link LiveDataSource} component implementation whose entry needs to be updated

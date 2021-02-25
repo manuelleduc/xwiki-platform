@@ -18,10 +18,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-jest.mock("daterangepicker", function () {
-  console.log(arguments)
-});
-
+jest.mock("daterangepicker", function () {});
 jest.mock("moment", function () {
   return function () {
     return {
@@ -32,9 +29,7 @@ jest.mock("moment", function () {
   }
 });
 
-jest.mock("jquery", function () {
-  console.log(arguments)
-});
+jest.mock("jquery", function () {});
 
 import {mount} from '@vue/test-utils'
 import DisplayerDate from "../../../displayers/DisplayerDate";

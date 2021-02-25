@@ -19,6 +19,7 @@
  */
 package org.xwiki.livedata.internal.livetable;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.xwiki.component.annotation.InstantiationStrategy;
 import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
 import org.xwiki.livedata.LiveData;
 import org.xwiki.livedata.LiveDataEntryStore;
+import org.xwiki.livedata.LiveDataEntryStoreEditDescriptor;
 import org.xwiki.livedata.LiveDataException;
 import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.livedata.LiveDataQuery.Source;
@@ -42,6 +44,7 @@ import org.xwiki.livedata.WithParameters;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.rendering.syntax.Syntax;
+import org.xwiki.security.authorization.AccessDeniedException;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 import org.xwiki.template.TemplateManager;
@@ -53,10 +56,14 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.plugin.skinx.SkinExtensionPluginApi;
 
 /**
  * {@link LiveDataEntryStore} implementation that reuses existing live table data.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -69,6 +76,8 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
      * The hint of this component implementation.
      */
     public static final String ROLE_HINT = "liveTable";
+
+    private static final String CLASS_NAME_PARAMETER = "className";
 
     @Inject
     private Provider<XWikiContext> xcontextProvider;
@@ -189,5 +198,113 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
             }
         }
         return entries;
+    }
+
+    @Override
+    public void updateAll(String entryId, Map<String, Object> newProperties)
+    {
+        String className = (String) this.getParameters().get(CLASS_NAME_PARAMETER);
+        DocumentReference documentReference = this.currentDocumentReferenceResolver.resolve(entryId);
+        DocumentReference classReference = this.currentDocumentReferenceResolver.resolve(className);
+
+        try {
+            this.authorization.checkAccess(Right.EDIT, documentReference);
+            XWikiContext xcontext = this.xcontextProvider.get();
+            XWikiDocument document = xcontext.getWiki().getDocument(documentReference, xcontext);
+            BaseObject firstObject = document.getXObject(classReference);
+            Set<String> properties = firstObject.getPropertyList();
+            boolean hasChanged = false;
+            for (Map.Entry<String, Object> newProperty : newProperties.entrySet()) {
+                String propertyKey = newProperty.getKey();
+                // Update only if the entry exists in the object
+                if (properties.contains(propertyKey)) {
+                    try {
+                        firstObject.set(propertyKey, newProperty.getValue(), xcontext);
+                        hasChanged = true;
+                    } catch (java.lang.ClassCastException e) {
+                        // TODO: handle the case where wrong values are set for some properties.
+
+                    }
+                }
+            }
+            if (hasChanged) {
+                xcontext.getWiki().saveDocument(document, xcontext);
+            }
+        } catch (AccessDeniedException | XWikiException e) {
+            // TODO log
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Optional<LiveDataEntryStoreEditDescriptor> getEdit(String entryId, String propertyId)
+    {
+        // TODO: find how to load this in the right way.
+//        String className = (String) this.getParameters().get(CLASS_NAME_PARAMETER);
+        String className = "Help.Applications.Movies.Code.MoviesClass";
+        DocumentReference documentReference = this.currentDocumentReferenceResolver.resolve(entryId);
+        DocumentReference classReference = this.currentDocumentReferenceResolver.resolve(className);
+        try {
+            this.authorization.checkAccess(Right.VIEW, documentReference);
+            XWikiContext xcontext = this.xcontextProvider.get();
+            XWikiDocument document = xcontext.getWiki().getDocument(documentReference, xcontext);
+            BaseObject object = document.getXObject(classReference);
+
+            XWikiDocument oldDoc = xcontext.getDoc();
+            try {
+                xcontext.setDoc(document);
+                String body = object.displayEdit(propertyId, xcontext);
+
+                // TODO: probably not the simplest solution
+                String dependencies = loadDependencies(xcontext);
+
+                LiveDataEntryStoreEditDescriptor liveDataEntryStoreEditDescriptor = new LiveDataEntryStoreEditDescriptor();
+                liveDataEntryStoreEditDescriptor.setBody(body);
+                liveDataEntryStoreEditDescriptor.setDependencies(dependencies);
+                return Optional.of(liveDataEntryStoreEditDescriptor);
+            } finally {
+                xcontext.setDoc(oldDoc);
+            }
+        } catch (AccessDeniedException | XWikiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String loadDependencies(XWikiContext xcontext)
+    {
+        String importString = "";
+        for (String s : Arrays.asList("ssrx", "ssfx", "ssx", "linkx", "jsrx", "jsfx", "jsx")) {
+
+            importString +=
+                ((SkinExtensionPluginApi) xcontext.getWiki().getPluginApi(s, xcontext)).getImportString();
+        }
+        return importString;
+    }
+
+    @Override
+    public Optional<Object> update(Object entryId, String property, Object value) throws LiveDataException
+    {
+        String className = (String) this.getParameters().get(CLASS_NAME_PARAMETER);
+        DocumentReference documentReference = this.currentDocumentReferenceResolver.resolve((String) entryId);
+        DocumentReference classReference = this.currentDocumentReferenceResolver.resolve(className);
+        try {
+            this.authorization.checkAccess(Right.VIEW, documentReference);
+            XWikiContext xcontext = this.xcontextProvider.get();
+            XWikiDocument document = xcontext.getWiki().getDocument(documentReference, xcontext);
+            BaseObject firstObject = document.getXObject(classReference);
+            firstObject.set(property, value, xcontext);
+            xcontext.getWiki().saveDocument(document, xcontext);
+
+            return this.get(entryId).map(it -> it);
+        } catch (AccessDeniedException | XWikiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Object> save(Map<String, Object> entry) throws LiveDataException
+    {
+        // TODO: where do we save the new document?
+        return Optional.empty();
     }
 }

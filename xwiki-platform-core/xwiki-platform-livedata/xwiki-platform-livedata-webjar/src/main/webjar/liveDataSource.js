@@ -58,6 +58,35 @@ define('xwiki-livedata-source', ['module', 'jquery'], function(module, $) {
     return entriesURL + '?' + $.param(parameters, true);
   };
 
+  const getEntryPropertiesURL = function(source, entryId) {
+    const encodedSourceId = encodeURIComponent(source.id);
+    const encodedEntryId = encodeURIComponent(entryId);
+
+    const parameters = {
+      // Make sure the response is not retrieved from cache (IE11 doesn't obey the caching HTTP headers).
+      timestamp: new Date().getTime()
+    };
+    addSourceParameters(parameters, source);
+    const params = $.param(parameters, true);
+
+    return `${baseURL}${encodedSourceId}/entries/${encodedEntryId}?${params}`;
+  }
+
+  const getEditEntryPropertyURL = function(source, entryId, propertyId) {
+    const encodedSourceId = encodeURIComponent(source.id);
+    const encodedEntryId = encodeURIComponent(entryId);
+    const encodedPropertyId = encodeURIComponent(propertyId);
+
+    const parameters = {
+      // Make sure the response is not retrieved from cache (IE11 doesn't obey the caching HTTP headers).
+      timestamp: new Date().getTime()
+    };
+    addSourceParameters(parameters, source);
+    const params = $.param(parameters, true);
+
+    return `${baseURL}${encodedSourceId}/entries/${encodedEntryId}/properties/${encodedPropertyId}/edit?${params}`;
+  }
+
   var addSourceParameters = function(parameters, source) {
     $.each(source, (key, value) => {
       if (key !== 'id') {
@@ -77,8 +106,33 @@ define('xwiki-livedata-source', ['module', 'jquery'], function(module, $) {
     return Promise.resolve($.post(getEntriesURL(source), entry).then(entry => entry.values));
   };
 
+  const updateEntry = function(source, entryId, entry) {
+    return Promise.resolve($.post({
+      url: getEntryPropertiesURL(source, entryId),
+      contentType: 'application/json',
+      data: JSON.stringify({
+        values: entry
+      })
+    }));
+  }
+
+  const getEditEntryProperty = function(source, entryId, propertyId) {
+    const get = $.get({
+      url: getEditEntryPropertyURL(source, entryId, propertyId),
+      dataType: 'text'
+    });
+    return Promise.resolve(get).then(res => {
+      return {
+        body: res,
+        dependencies: get.getResponseHeader('X-XWIKI-HTML-HEAD'),
+      }
+    });
+  }
+
   return {
     getEntries: getEntries,
-    addEntry: addEntry
+    addEntry: addEntry,
+    updateEntry: updateEntry,
+    getEditEntryProperty: getEditEntryProperty,
   };
 });

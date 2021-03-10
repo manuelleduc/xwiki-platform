@@ -61,6 +61,7 @@ export default {
 
   props: {
     logic: Object,
+    xClassPropertyHelper: Object,
   },
 
   computed: {
@@ -77,6 +78,7 @@ export default {
   provide () {
     return {
       logic: this.logic,
+      xClassPropertyHelper: this.xClassPropertyHelper,
     };
   },
 

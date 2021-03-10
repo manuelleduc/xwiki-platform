@@ -32,11 +32,13 @@
     class="displayer-date"
     :property-id="propertyId"
     :entry="entry"
+    :is-view.sync="isView"
+    @saveEdit="saveDate"
   >
 
     <!-- Provide the Date Viewer widget to the `viewer` slot -->
     <template #viewer>
-        <div>{{ valueFormatted }}</div>
+      <div>{{ valueFormatted }}</div>
     </template>
 
     <!-- Provide the Date Editor widget to the `editor` slot -->
@@ -61,6 +63,7 @@
 <script>
 
 import displayerMixin from "./displayerMixin.js";
+import displayerStatesMixin from "./displayerStatesMixin";
 import BaseDisplayer from "./BaseDisplayer.vue";
 import "daterangepicker";
 import moment from "moment";
@@ -74,20 +77,23 @@ export default {
     BaseDisplayer,
   },
 
-  // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component
-  mixins: [displayerMixin],
+  props: {
+    format: {
+      type: String,
+      default: "YYYY/MM/DD HH:mm"
+    }
+  },
 
+  // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component
+  mixins: [displayerMixin, displayerStatesMixin],
 
   computed: {
-    format () {
-      return "YYYY/MM/DD HH:mm";
-    },
     // Date formatted to be human-readable
     valueFormatted () {
       return moment(+this.value).format(this.format);
     },
 
-    editorConfig () {
+    editorConfig() {
       return {
         drops: 'down',
         opens: 'right',
@@ -106,6 +112,14 @@ export default {
   },
 
   methods: {
+    saveDate() {
+      // TODO: check that `this.editedValue` is the right element to submit (or sould it be a timestamp?) 
+      this.logic.setValue({
+        entry: this.entry,
+        propertyId: this.propertyId,
+        value: this.editedValue
+      });
+    },
     async upgradeDatePicker () {
       // Create the date picker in edit mode
       if (this.$refs.baseDisplayer.isView) { return; }

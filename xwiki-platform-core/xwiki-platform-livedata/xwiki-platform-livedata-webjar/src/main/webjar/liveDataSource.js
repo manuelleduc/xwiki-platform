@@ -50,13 +50,25 @@ define('xwiki-livedata-source', ['module', 'jquery'], function(module, $) {
 
   var getEntriesURL = function(source) {
     var entriesURL = baseURL + encodeURIComponent(source.id) + '/entries';
+    return addSourcePathParameters(source, entriesURL);
+  };
+
+  function addSourcePathParameters(source, url) {
     var parameters = {
       // Make sure the response is not retrieved from cache (IE11 doesn't obey the caching HTTP headers).
       timestamp: new Date().getTime()
     };
     addSourceParameters(parameters, source);
-    return entriesURL + '?' + $.param(parameters, true);
-  };
+    return `${url}?${$.param(parameters, true)}`;
+  }
+
+  function getEntryPropertyURL(source, entryId, propertyId) {
+    const encodedSourceId = encodeURIComponent(source.id);
+    const encodedEntryId = encodeURIComponent(entryId);
+    const encodedPropertyId = encodeURIComponent(propertyId);
+    const url = `${baseURL}${encodedSourceId}/entries/${encodedEntryId}/properties/${encodedPropertyId}`
+    return addSourcePathParameters(source, url);
+  }
 
   var addSourceParameters = function(parameters, source) {
     $.each(source, (key, value) => {
@@ -74,11 +86,17 @@ define('xwiki-livedata-source', ['module', 'jquery'], function(module, $) {
   };
 
   var addEntry = function(source, entry) {
-    return Promise.resolve($.post(getEntriesURL(source), entry).then(entry => entry.values));
+    return Promise.resolve($.post(getEntriesURL(source), entry).then(e => e.values));
   };
 
-  return {
-    getEntries: getEntries,
-    addEntry: addEntry
-  };
+  function updateEntryProperty(source, entryId, propertyId, propertyValue) {
+    return Promise.resolve($.ajax({
+      type: 'PUT',
+      url: getEntryPropertyURL(source, entryId, propertyId),
+      contentType: 'text/plain',
+      data: `${propertyValue}`
+    }))
+  }
+
+  return {getEntries, addEntry, updateEntryProperty};
 });

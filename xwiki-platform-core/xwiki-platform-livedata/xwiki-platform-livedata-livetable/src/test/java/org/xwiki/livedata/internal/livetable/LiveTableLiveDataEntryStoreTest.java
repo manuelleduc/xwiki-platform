@@ -51,16 +51,18 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.doc.XWikiDocument;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link LiveTableLiveDataEntryStore}.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -86,13 +88,16 @@ class LiveTableLiveDataEntryStoreTest
     @MockComponent
     private LiveTableRequestHandler liveTableRequestHandler;
 
+    @MockComponent
+    private XClassPropertyService xClassPropertyService;
+
     @Mock
     private XWikiContext xcontext;
 
     @Mock
     private XWiki xwiki;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("unchecked")
     @BeforeEach
@@ -213,5 +218,48 @@ class LiveTableLiveDataEntryStoreTest
         } catch (LiveDataException e) {
             assertEquals("Failed to execute the live data query.", e.getMessage());
         }
+    }
+
+    @Test
+    void updateUndefinedClassName() throws Exception
+    {
+        String entryId = "testEntry";
+        String property = "propName";
+        Object value = "theValue";
+        LiveDataException liveDataException =
+            assertThrows(LiveDataException.class, () -> this.entryStore.update(entryId, property, value));
+        assertEquals("Can't update a live table with an undefined class name", liveDataException.getMessage());
+    }
+
+    @Test
+    void updateXClassField() throws Exception
+    {
+        String entryId = "testEntry";
+        String property = "propName";
+        Object value = "theValue";
+        String docName = "MyApp.MyClass";
+        DocumentReference documentEntityReference = new DocumentReference("xwiki", "MyApp", "testEntry");
+        DocumentReference documentClassReference = new DocumentReference("xwiki", "MyApp", "MyClass");
+
+        this.entryStore.getParameters().put("className", docName);
+        when(this.currentDocumentReferenceResolver.resolve(entryId)).thenReturn(documentEntityReference);
+        when(this.currentDocumentReferenceResolver.resolve(docName)).thenReturn(documentClassReference);
+
+        this.entryStore.update(entryId, property, value);
+        verify(this.xClassPropertyService).update(property, value, documentEntityReference, documentClassReference);
+    }
+
+    @Test
+    void updateDocField() throws Exception
+    {
+        String entryId = "testEntry";
+        String property = "doc.propName";
+        Object value = "theValue";
+        DocumentReference documentEntityReference = new DocumentReference("xwiki", "MyApp", "testEntry");
+
+        when(this.currentDocumentReferenceResolver.resolve(entryId)).thenReturn(documentEntityReference);
+
+        this.entryStore.update(entryId, property, value);
+        verify(this.xClassPropertyService).update(property, value, documentEntityReference, null);
     }
 }

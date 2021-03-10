@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.commons.lang3.StringUtils;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.annotation.InstantiationStrategy;
 import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
@@ -42,6 +43,7 @@ import org.xwiki.livedata.WithParameters;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.rendering.syntax.Syntax;
+import org.xwiki.security.authorization.AccessDeniedException;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 import org.xwiki.template.TemplateManager;
@@ -53,10 +55,11 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 
 /**
  * {@link LiveDataEntryStore} implementation that reuses existing live table data.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -69,6 +72,10 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
      * The hint of this component implementation.
      */
     public static final String ROLE_HINT = "liveTable";
+
+    private static final String CLASS_NAME_PARAMETER = "className";
+
+    private static final String DOC_PREFIX = "doc.";
 
     @Inject
     private Provider<XWikiContext> xcontextProvider;
@@ -86,10 +93,13 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
     @Inject
     private LiveTableRequestHandler liveTableRequestHandler;
 
+    @Inject
+    private XClassPropertyService xClassPropertyService;
+
     @Override
     public Optional<Map<String, Object>> get(Object entryId)
     {
-        throw new UnsupportedOperationException();
+        return Optional.empty();
     }
 
     @Override
@@ -183,11 +193,35 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
                 Set<String> keysToRename =
                     entry.keySet().stream().filter(key -> key.startsWith("doc_")).collect(Collectors.toSet());
                 keysToRename.forEach(key -> {
-                    entry.put("doc." + key.substring(4), entry.remove(key));
+                    entry.put(DOC_PREFIX + key.substring(4), entry.remove(key));
                 });
                 entries.add(entry);
             }
         }
         return entries;
+    }
+
+    @Override
+    public Optional<Object> update(Object entryId, String property, Object value) throws LiveDataException
+    {
+        String className = (String) this.getParameters().get(CLASS_NAME_PARAMETER);
+
+        // We can't update a class field if the class is undefined.
+        if (className == null && !StringUtils.defaultIfEmpty(property, "").startsWith(DOC_PREFIX)) {
+            throw new LiveDataException("Can't update a live table with an undefined class name");
+        }
+
+        DocumentReference documentReference = this.currentDocumentReferenceResolver.resolve((String) entryId);
+        DocumentReference classReference;
+        if (className != null) {
+            classReference = this.currentDocumentReferenceResolver.resolve(className);
+        } else {
+            classReference = null;
+        }
+        try {
+            return this.xClassPropertyService.update(property, value, documentReference, classReference);
+        } catch (AccessDeniedException | XWikiException | LiveDataException e) {
+            throw new LiveDataException(e);
+        }
     }
 }

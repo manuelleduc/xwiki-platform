@@ -24,12 +24,14 @@ define('xwiki-livedata', [
   "xwiki-livedata-vue",
   "xwiki-livedata-source",
   "xwiki-json-merge",
+  "xwiki-livedata-xClassPropertyHelper",
   "xwiki-livedata-polyfills"
 ], function (
   Vue,
   XWikiLivedata,
   liveDataSource,
-  jsonMerge
+  jsonMerge,
+  xClassPropertyHelper
 ) {
 
   /**
@@ -64,7 +66,7 @@ define('xwiki-livedata', [
    * Can be used in the layouts to display the data, and call its API
    * @param {HTMLElement} element The HTML Element corresponding to the Livedata
    */
-  const Logic = function (element) {
+  const Logic = function(element) {
     this.element = element;
     this.data = JSON.parse(element.getAttribute("data-config") || "{}");
     this.currentLayoutId = "";
@@ -83,9 +85,10 @@ define('xwiki-livedata', [
       components: {
         "XWikiLivedata": XWikiLivedata,
       },
-      template: "<XWikiLivedata :logic='logic'></XWikiLivedata>",
+      template: "<XWikiLivedata :logic='logic' :xClassPropertyHelper='xClassPropertyHelper'></XWikiLivedata>",
       data: {
         logic: this,
+        xClassPropertyHelper: xClassPropertyHelper,
       },
     });
 
@@ -367,7 +370,11 @@ define('xwiki-livedata', [
      */
 
 
-    fetchEntries () {
+    /**
+     * Fetch the entries of the current page according to the query configuration.
+     * @returns the fetched entries
+     */
+    fetchEntries() {
       return liveDataSource.getEntries(this.data.query);
     },
 
@@ -393,7 +400,7 @@ define('xwiki-livedata', [
       // TODO: Ensure property is valid (need other current PR)
 
       // Check if the edit entry action is available.
-      if (!this.data.meta.actions.find(action => action.id === "editEntry")) {
+      if (!this.data.meta.actions.find(action => action.id === "edit")) {
         return false;
       }
 
@@ -412,8 +419,8 @@ define('xwiki-livedata', [
      * @param {Object} entry
      * @returns {Boolean}
      */
-    isEntryEditable (entry) {
-      return this.isActionAllowed('editEntry', entry);
+    isEntryEditable(entry) {
+      return this.isActionAllowed('edit', entry);
     },
 
     /**
@@ -441,7 +448,12 @@ define('xwiki-livedata', [
       // TODO: Ensure property is valid (need other current PR)
       if (!this.isEditable({ entry, propertyId })) { return; }
       entry[propertyId] = value;
-      // TODO: push value to server
+      const source = this.data.query.source;
+      const entryId = this.getEntryId(entry);
+      // Once the entry updatede reload the whole livedata because changing a single entry can have an impact on other 
+      // properties of the entry, but also possibly on other entriers, or in the way they are sorted.
+      liveDataSource.updateEntryProperty(source, entryId, propertyId, entry[propertyId])
+        .then(() => this.updateEntries());
     },
 
 
@@ -453,8 +465,10 @@ define('xwiki-livedata', [
       return this.data.meta.actions.find(action => action.id === "addEntry");
     },
 
-    addEntry () {
-      if (!this.canAddEntry()) { return; }
+    addEntry() {
+      if (!this.canAddEntry()) {
+        return;
+      }
       const mockNewUrl = () => this.getEntryId(this.data.data.entries.slice(-1)[0]) + "0";
       // TODO: CALL FUNCTION TO CREATE NEW DATA HERE
       Promise.resolve({ /* MOCK DATA */
@@ -470,10 +484,10 @@ define('xwiki-livedata', [
         "country": undefined,
         "other": undefined,
       })
-      .then(newEntry => {
-        this.data.data.entries.push(newEntry);
-        this.data.data.count++; // TODO: remove when merging with backend
-      });
+        .then(newEntry => {
+          this.data.data.entries.push(newEntry);
+          this.data.data.count++; // TODO: remove when merging with backend
+        });
     },
 
 

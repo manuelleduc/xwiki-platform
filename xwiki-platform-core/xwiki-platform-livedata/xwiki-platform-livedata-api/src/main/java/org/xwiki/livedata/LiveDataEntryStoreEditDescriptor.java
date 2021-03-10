@@ -19,50 +19,49 @@
  */
 package org.xwiki.livedata;
 
-import org.xwiki.stability.Unstable;
-
 /**
- * Exception related to live data processing.
+ * Hold the response to a request to get the edit form of a property. It contains the {@link #body} of the cell in the
+ * form of an html content, and the {@link #dependencies} in the form of a set of tag (css or javascript) to add to the
+ * header to make the code of the {@link #body} work.
  *
  * @version $Id$
- * @since 12.10
+ * @since 13.2RC1
  */
-@Unstable
-public class LiveDataException extends Exception
+public class LiveDataEntryStoreEditDescriptor
 {
-    /**
-     * Serialization identifier.
-     */
-    private static final long serialVersionUID = 1L;
+    private String body;
+
+    private String dependencies;
 
     /**
-     * Creates a new instance that wraps the specified source throwable.
-     *
-     * @param source source of the error
+     * @return the body of the entry in edit mode
      */
-    public LiveDataException(Throwable source)
+    public String getBody()
     {
-        super(source);
+        return this.body;
     }
 
     /**
-     * Constructs a new live data exception with the specified detail message.
-     *
-     * @param message the detail message
+     * @param body the body of the entry in edit mode
      */
-    public LiveDataException(String message)
+    public void setBody(String body)
     {
-        super(message);
+        this.body = body;
     }
 
     /**
-     * Creates a new instance with the specified message and source.
-     *
-     * @param message message to store in the exception
-     * @param source source of the error
+     * @return the dependencies of the body
      */
-    public LiveDataException(String message, Throwable source)
+    public String getDependencies()
     {
-        super(message, source);
+        return this.dependencies;
+    }
+
+    /**
+     * @param dependencies the dependencies of the body
+     */
+    public void setDependencies(String dependencies)
+    {
+        this.dependencies = dependencies;
     }
 }

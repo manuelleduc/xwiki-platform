@@ -122,6 +122,7 @@ public class XClassPropertyService
             if (!validate) {
                 throw new LiveDataException("Document not validated.");
             }
+            document.setAuthorReference(xcontext.getUserReference());
             xcontext.getWiki().saveDocument(document, xcontext);
         }
         return Optional.ofNullable(changedValue);

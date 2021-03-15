@@ -29,13 +29,14 @@ import javax.ws.rs.core.Response.Status;
 
 import org.xwiki.component.annotation.Component;
 import org.xwiki.livedata.LiveDataException;
+import org.xwiki.livedata.LiveDataPropertyDescriptor;
 import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.livedata.LiveDataSource;
 import org.xwiki.livedata.rest.LiveDataEntryPropertyResource;
 
 /**
  * Default implementation of {@link LiveDataEntryPropertyResource}.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -67,6 +68,14 @@ public class DefaultLiveDataEntryPropertyResource extends AbstractLiveDataResour
         Optional<LiveDataSource> source = this.liveDataSourceManager.get(querySource, namespace);
         if (source.isPresent()) {
             try {
+
+                if (!(boolean) source.get().getProperties().get(propertyId).map(LiveDataPropertyDescriptor::isEditable)
+                    .orElse(true))
+                {
+                    // Do not update a field that cannot be edited.
+                    return Response.status(Status.BAD_REQUEST).build();
+                }
+
                 source.get().getEntries().update(entryId, propertyId, value);
                 Optional<Object> newValue = source.get().getEntries().get(entryId, propertyId);
                 return Response.status(Status.ACCEPTED).entity(newValue).build();

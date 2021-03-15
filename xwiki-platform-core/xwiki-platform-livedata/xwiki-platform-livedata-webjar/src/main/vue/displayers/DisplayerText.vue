@@ -34,7 +34,7 @@
     :property-id="propertyId"
     :entry="entry"
     :is-view.sync="isView"
-    @saveEdit="saveLink"
+    @saveEdit="saveText"
   >
 
     <!-- Keep the default Viewer widget -->
@@ -65,12 +65,17 @@ export default {
   mixins: [displayerMixin, displayerStatesMixin],
 
   methods: {
-    saveLink(value) {
-      this.logic.setValue({
-        entry: this.entry,
+    saveText(value) {
+      // this.logic.setValue({
+      //   entry: this.entry,
+      //   propertyId: this.propertyId,
+      //   value: value
+      // })
+      this.editBus.$emit('save-editing-entry', {
+        entryId: this.logic.getEntryId(this.entry),
         propertyId: this.propertyId,
-        value: value
-      })
+        content: [{[this.propertyId]: this.editedValue}]
+      });
     }
   }
 };

@@ -27,7 +27,7 @@
  */
 export default {
 
-  inject: ["logic"],
+  inject: ["logic", "editBus"],
 
   directives: {
     // Only used by the date displayer.

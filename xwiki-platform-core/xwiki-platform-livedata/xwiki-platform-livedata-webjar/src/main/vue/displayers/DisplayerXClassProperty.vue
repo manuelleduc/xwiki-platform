@@ -40,9 +40,12 @@
 
     <!-- Provide the Html Editor widget to the `editor` slot -->
     <template #editor>
-      <div v-html="editField"></div>
+      <!-- TODO: we must keep the div alive to avoid re-render with the initial content of `editField` each time, and 
+           consequently loose all the edits done previously. This is particularly useful in the case where the user 
+           goes back the edit again an xclass field before the entry has been saved.
+       -->
+      <div v-html="editField" ref="xClassPropertyEdit"></div>
     </template>
-
   </BaseDisplayer>
 </template>
 
@@ -61,7 +64,7 @@ export default {
 
   inject: ["logic", "xClassPropertyHelper"],
 
-  // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component
+  // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component.
   mixins: [displayerMixin, displayerStatesMixin],
 
   props: ['timestamp'],
@@ -76,37 +79,60 @@ export default {
   },
 
   methods: {
-    // This method should be used to apply edit and go back to view mode.
-    // It validates the entered value, ensuring that is is valid for the server
-    applyEdit() {
-      this.isLoading = true;
-      this.saveProperty()
-          .then(() => {
-            this.isLoading = false;
-            this.isView = true;
-          });
-      // TODO: handle save error/validation error
-    },
 
-    saveProperty() {
+    applyEdit() {
       const documentName = this.entry["doc.fullName"];
       if (!documentName) {
-        // TODO: raise an error when the document full name is missing.
         // TODO: translations
         new XWiki.widgets.Notification("Can't save an XClass property with a missing document name.", 'error');
       } else {
-        const editBlock = $(this.$el).find('div').first();
         document.fire('xwiki:actions:beforeSave');
-        const data = editBlock.find(':input').serializeArray();
-        return this.xClassPropertyHelper.save(documentName, this.propertyId, data)
-            .then(() => this.logic.updateEntries())
-            .catch(() => {
-              // TODO
-            })
-            .then(() => {
-              // Regardless of the succes of the save operation, we stop the loading at the end.
-              this.isLoading = false;
-            });
+        const content = $(this.$refs.xClassPropertyEdit).find(':input').serializeArray();
+        // return this.xClassPropertyHelper.save(documentName, this.propertyId, data)
+        //     .then(() => this.logic.updateEntries())
+        //     .catch(() => {
+        //       // TODO
+        //     })
+        //     .then(() => {
+        //       // Regardless of the succes of the save operation, we stop the loading at the end.
+        //       this.isLoading = false;
+        //     });
+
+        const className = this.data.query.source.className;
+
+        const newContents = [];
+        for (const key in content) {
+          if (content.hasOwnProperty(key)) {
+            const value = content[key];
+            if (value['name']) {
+              var newName = value['name'];
+
+              if (newName.startsWith(className)) {
+                newName = newName.replace(className, '');
+              }
+
+              newName = newName.replace(/_\d+_/, '');
+
+              // If the key does not exists, we create the entry with the cleaned up name and the value.
+              // If the key already exists, we replace it with an array and append the new value with the existing one.
+              // if (!newContent[newName]) {
+              //   newContent[newName] = value['value'];
+              // } else {
+              //   if (!Array.isArray(newContent[newName])) {
+              //     newContent[newName] = [newContent[newName]];
+              //   }
+              //   newContent[newName].push(value['value']);
+              // }
+              newContents.push({[newName]: value['value']})
+            }
+          }
+        }
+
+        this.editBus.$emit('save-editing-entry', {
+          entryId: this.logic.getEntryId(this.entry),
+          propertyId: this.propertyId,
+          content: newContents
+        });
       }
     },
 
@@ -144,25 +170,28 @@ export default {
     /**
      * Update the content of the editor slot.
      */
-    updateEdit() {
-      this.update(this.xClassPropertyHelper.edit)
-          .then((html) => {
-            this.isLoading = false;
+    updateEdit(forced) {
+      // Reload only if the edit field has not been already initialized, unless the update if forced.
+      if (this.editField === undefined || forced) {
+        this.update(this.xClassPropertyHelper.edit)
+            .then((html) => {
+              this.isLoading = false;
 
-            this.editField = html;
-            // Allow others to enhance the viewer.
-            $(document).trigger('xwiki:dom:updated', {'elements': [this.$el]});
-          })
-          .catch(() => {
-            // Stop the loader and switch to view mode. 
-            this.isLoading = false;
-            this.isView = true;
-          })
+              this.editField = html;
+              // Allow others to enhance the viewer.
+              $(document).trigger('xwiki:dom:updated', {'elements': [this.$el]});
+            })
+            .catch(() => {
+              // Stop the loader and switch to view mode. 
+              this.isLoading = false;
+              this.isView = true;
+            })
+      }
     },
-    refreshXClassProperty(isView) {
+    refreshXClassProperty({isView, forced}) {
       if (!isView) {
         // Updates the edit form when passing edit mode.
-        this.updateEdit();
+        this.updateEdit(forced);
       } else {
         // Updates the view form when passing in view mode.
         this.updateView();
@@ -172,10 +201,10 @@ export default {
 
   watch: {
     isView: function(isView) {
-      this.refreshXClassProperty(isView)
+      this.refreshXClassProperty({isView, forced: false})
     },
     timestamp: function(timestamp) {
-      this.refreshXClassProperty(this.isView);
+      this.refreshXClassProperty({isView: this.isView, forced: true});
     }
   },
   mounted() {

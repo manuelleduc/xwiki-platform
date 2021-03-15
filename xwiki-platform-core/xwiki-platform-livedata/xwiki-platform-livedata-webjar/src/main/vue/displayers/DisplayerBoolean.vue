@@ -24,12 +24,12 @@
 <template>
   <!-- Uses the BaseDisplayer as root element, as it handles for us all the displayer default behavior. -->
   <BaseDisplayer
-    ref="baseDisplayer"
-    class="displayer-boolean"
-    :property-id="propertyId"
-    :entry="entry"
-    :is-view.sync="isView"
-    @saveEdit="saveBoolean">
+      ref="baseDisplayer"
+      class="displayer-boolean"
+      :property-id="propertyId"
+      :entry="entry"
+      :is-view.sync="isView"
+      @saveEdit="saveBoolean">
 
     <template #viewer>
       <!-- Should be configurable and/or based on translations. -->
@@ -73,11 +73,17 @@ export default {
 
   methods: {
     saveBoolean() {
-      this.logic.setValue({
-        entry: this.entry,
+      // this.logic.setValue({
+      //   entry: this.entry,
+      //   propertyId: this.propertyId,
+      //   value: this.editedValue
+      // });
+      this.editBus.$emit('save-editing-entry', {
+        entryId: this.logic.getEntryId(this.entry),
         propertyId: this.propertyId,
-        value: this.editedValue
+        content: [{[this.propertyId]: this.editedValue}]
       });
+
     }
   },
 

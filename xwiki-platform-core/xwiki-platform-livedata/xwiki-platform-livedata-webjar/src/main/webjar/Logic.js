@@ -25,13 +25,15 @@ define('xwiki-livedata', [
   "xwiki-livedata-source",
   "xwiki-json-merge",
   "xwiki-livedata-xClassPropertyHelper",
+  "edit-bus",
   "xwiki-livedata-polyfills"
-], function (
+], function(
   Vue,
   XWikiLivedata,
   liveDataSource,
   jsonMerge,
-  xClassPropertyHelper
+  xClassPropertyHelper,
+  editBus
 ) {
 
   /**
@@ -41,14 +43,13 @@ define('xwiki-livedata', [
   const instancesMap = new WeakMap();
 
 
-
   /**
    * The init function of the logic script
    * For each livedata element on the page, returns its corresponding data / API
    * If the data does not exists yet, create it from the element
    * @param {HTMLElement} element The HTML Element corresponding to the Livedata component
    */
-  const init = function (element) {
+  const init = function(element) {
 
     if (!instancesMap.has(element)) {
       // create a new logic object associated to the element
@@ -85,10 +86,13 @@ define('xwiki-livedata', [
       components: {
         "XWikiLivedata": XWikiLivedata,
       },
-      template: "<XWikiLivedata :logic='logic' :xClassPropertyHelper='xClassPropertyHelper'></XWikiLivedata>",
+      template: "<XWikiLivedata :logic='logic' " +
+        ":xClassPropertyHelper='xClassPropertyHelper' " +
+        ":editBus='editBus' />",
       data: {
         logic: this,
-        xClassPropertyHelper: xClassPropertyHelper,
+        xClassPropertyHelper,
+        editBus
       },
     });
 
@@ -97,8 +101,6 @@ define('xwiki-livedata', [
       this.updateEntries();
     }
   };
-
-
 
 
   /**
@@ -119,7 +121,7 @@ define('xwiki-livedata', [
      * @param {Object} eventData The data associated with the event.
      *  The livedata object reference is automatically added
      */
-    triggerEvent (eventName, eventData) {
+    triggerEvent(eventName, eventData) {
       // configure event
       const defaultData = {
         livedata: this,
@@ -139,9 +141,9 @@ define('xwiki-livedata', [
      * @param {String} eventName The name of the event, without the prefix "xwiki:livedata"
      * @param {Function} callback Function to call we the event is triggered: e => { ... }
      */
-    onEvent (eventName, callback) {
+    onEvent(eventName, callback) {
       eventName = "xwiki:livedata:" + eventName;
-      this.element.addEventListener(eventName, function (e) {
+      this.element.addEventListener(eventName, function(e) {
         callback(e);
       });
     },
@@ -155,9 +157,9 @@ define('xwiki-livedata', [
      *  if Function, the function must return true. e.detail is passed as argument
      * @param {Function} callback Function to call we the event is triggered: e => { ... }
      */
-    onEventWhere (eventName, condition, callback) {
+    onEventWhere(eventName, condition, callback) {
       eventName = "xwiki:livedata:" + eventName;
-      this.element.addEventListener(eventName, function (e) {
+      this.element.addEventListener(eventName, function(e) {
         // Object check
         if (typeof condition === "object") {
           const isDetailMatching = (data, detail) => Object.keys(data).every(key => {
@@ -165,18 +167,20 @@ define('xwiki-livedata', [
               ? isDetailMatching(data[key], detail?.[key])
               : Object.is(data[key], detail?.[key]);
           });
-          if (!isDetailMatching(condition, e.detail)) { return; }
+          if (!isDetailMatching(condition, e.detail)) {
+            return;
+          }
         }
         // Function check
         if (typeof condition === "function") {
-          if (!condition(e.detail)) { return; }
+          if (!condition(e.detail)) {
+            return;
+          }
         }
         // call callback
         callback(e);
       });
     },
-
-
 
 
     /**
@@ -189,7 +193,7 @@ define('xwiki-livedata', [
      * Return the list of layout ids
      * @returns {Array}
      */
-    getLayoutIds () {
+    getLayoutIds() {
       return this.data.meta.layouts.map(layoutDescriptor => layoutDescriptor.id);
     },
 
@@ -199,13 +203,22 @@ define('xwiki-livedata', [
      * @param {Object} entry
      * @returns {String}
      */
-    getEntryId (entry) {
+    getEntryId(entry) {
       const idProperty = this.data.meta.entryDescriptor.idProperty || "id";
       if (entry[idProperty] === undefined) {
         console.warn("Entry has no id (at property [" + idProperty + "]", entry);
         return;
       }
       return entry[idProperty];
+    },
+
+    /**
+     * Return the object number of the given entry
+     * @param {Object} entry the entry
+     * @returns {String} the object number of the entry, if the value is not found, 0 is returned
+     */
+    getEntryObjectNumber(entry) {
+      return entry['_objectNumber'] || 0;
     },
 
 
@@ -220,7 +233,7 @@ define('xwiki-livedata', [
      * @param {Array} uniqueArray An array of unique items
      * @param {Any} item
      */
-    uniqueArrayHas (uniqueArray, item) {
+    uniqueArrayHas(uniqueArray, item) {
       return uniqueArray.includes(item);
     },
 
@@ -230,8 +243,10 @@ define('xwiki-livedata', [
      * @param {Array} uniqueArray An array of unique items
      * @param {Any} item
      */
-    uniqueArrayAdd (uniqueArray, item) {
-      if (this.uniqueArrayHas(uniqueArray, item)) { return; }
+    uniqueArrayAdd(uniqueArray, item) {
+      if (this.uniqueArrayHas(uniqueArray, item)) {
+        return;
+      }
       uniqueArray.push(item);
     },
 
@@ -241,9 +256,11 @@ define('xwiki-livedata', [
      * @param {Array} uniqueArray An array of unique items
      * @param {Any} item
      */
-    uniqueArrayRemove (uniqueArray, item) {
+    uniqueArrayRemove(uniqueArray, item) {
       const index = uniqueArray.indexOf(item);
-      if (index === -1) { return; }
+      if (index === -1) {
+        return;
+      }
       uniqueArray.splice(index, 1);
     },
 
@@ -254,7 +271,7 @@ define('xwiki-livedata', [
      * @param {Any} item
      * @param {Boolean} force Optional: true force add / false force remove
      */
-    uniqueArrayToggle (uniqueArray, item, force) {
+    uniqueArrayToggle(uniqueArray, item, force) {
       if (force === undefined) {
         force = !this.uniqueArrayHas(uniqueArray, item);
       }
@@ -264,8 +281,6 @@ define('xwiki-livedata', [
         this.uniqueArrayRemove(uniqueArray, item);
       }
     },
-
-
 
 
     /**
@@ -278,7 +293,7 @@ define('xwiki-livedata', [
      * Returns the property descriptors of displayable properties
      * @returns {Array}
      */
-    getPropertyDescriptors () {
+    getPropertyDescriptors() {
       return this.data.query.properties.map(propertyId => this.getPropertyDescriptor(propertyId));
     },
 
@@ -288,7 +303,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getPropertyDescriptor (propertyId) {
+    getPropertyDescriptor(propertyId) {
       const propertyDescriptor = this.data.meta.propertyDescriptors
         .find(propertyDescriptor => propertyDescriptor.id === propertyId);
       if (!propertyDescriptor) {
@@ -303,9 +318,11 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getPropertyTypeDescriptor (propertyId) {
+    getPropertyTypeDescriptor(propertyId) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
-      if (!propertyDescriptor) { return; }
+      if (!propertyDescriptor) {
+        return;
+      }
       return this.data.meta.propertyTypes
         .find(typeDescriptor => typeDescriptor.id === propertyDescriptor.type);
     },
@@ -316,7 +333,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getLayoutDescriptor (layoutId) {
+    getLayoutDescriptor(layoutId) {
       return this.data.meta.layouts
         .find(layoutDescriptor => layoutDescriptor.id === layoutId);
     },
@@ -327,7 +344,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getDisplayerDescriptor (propertyId) {
+    getDisplayerDescriptor(propertyId) {
       // Property descriptor config
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       // Property type descriptor config
@@ -347,7 +364,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getFilterDescriptor (propertyId) {
+    getFilterDescriptor(propertyId) {
       // Property descriptor config
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       // Property type descriptor config
@@ -360,8 +377,6 @@ define('xwiki-livedata', [
       // Merge filter descriptors.
       return jsonMerge({}, defaultFilterDescriptor, customFilterDescriptor);
     },
-
-
 
 
     /**
@@ -379,7 +394,7 @@ define('xwiki-livedata', [
     },
 
 
-    updateEntries () {
+    updateEntries() {
       return this.fetchEntries()
         .then(data => this.data.data = data)
         .catch(err => console.error(err));
@@ -395,7 +410,7 @@ define('xwiki-livedata', [
      * @param {Object} [parameters.entry] The entry object
      * @param {Number} [parameters.propertyId] The property id of the entry
      */
-    isEditable ({ entry, propertyId } = {}) {
+    isEditable({entry, propertyId} = {}) {
       // TODO: Ensure entry is valid (need other current PR)
       // TODO: Ensure property is valid (need other current PR)
 
@@ -429,7 +444,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Boolean}
      */
-    isPropertyEditable (propertyId) {
+    isPropertyEditable(propertyId) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       const propertyTypeDescriptor = this.getPropertyTypeDescriptor(propertyId);
       return propertyDescriptor && (propertyDescriptor.editable !== undefined ? propertyDescriptor.editable :
@@ -443,24 +458,38 @@ define('xwiki-livedata', [
      * @param {number} parameters.propertyId The property id we want to modify in the entry
      * @param {string} parameters.value The new value of entry property
      */
-    setValue ({ entry, propertyId, value }) {
+    setValue({entry, propertyId, value}) {
       // TODO: Ensure entry is valid (need other current PR)
       // TODO: Ensure property is valid (need other current PR)
-      if (!this.isEditable({ entry, propertyId })) { return; }
+      if (!this.isEditable({entry, propertyId})) {
+        return;
+      }
       entry[propertyId] = value;
       const source = this.data.query.source;
       const entryId = this.getEntryId(entry);
-      // Once the entry updatede reload the whole livedata because changing a single entry can have an impact on other 
+      // Once the entry updated, reload the whole livedata because changing a single entry can have an impact on other 
       // properties of the entry, but also possibly on other entriers, or in the way they are sorted.
       liveDataSource.updateEntryProperty(source, entryId, propertyId, entry[propertyId])
         .then(() => this.updateEntries());
+    },
+
+    /**
+     * Update the entry with the values object passed in parameter and s
+     * @param {Object} entry the current entry
+     * @param {Object} values the entry's values to update
+     */
+    setValues({entryId, values}) {
+      const source = this.data.query.source;
+      liveDataSource.updateEntry(source, entryId, values)
+        .then(() => this.updateEntries());
+
     },
 
 
     /**
      * Return whether adding new entries is enabled.
      */
-    canAddEntry () {
+    canAddEntry() {
       // Check if the add entry action is available.
       return this.data.meta.actions.find(action => action.id === "addEntry");
     },
@@ -491,8 +520,6 @@ define('xwiki-livedata', [
     },
 
 
-
-
     /**
      * ---------------------------------------------------------------
      * LAYOUT
@@ -504,7 +531,7 @@ define('xwiki-livedata', [
      * @param {String} layoutId The id of the layout to load with requireJS
      * @returns {Promise}
      */
-    changeLayout (layoutId) {
+    changeLayout(layoutId) {
       // bad layout
       if (!this.getLayoutDescriptor(layoutId)) {
         console.error("Layout of id `" + layoutId + "` does not have a descriptor");
@@ -521,8 +548,6 @@ define('xwiki-livedata', [
     },
 
 
-
-
     /**
      * ---------------------------------------------------------------
      * PAGINATION
@@ -533,7 +558,7 @@ define('xwiki-livedata', [
      * Get total number of pages
      * @returns {Number}
      */
-    getPageCount () {
+    getPageCount() {
       return Math.ceil(this.data.data.count / this.data.query.limit);
     },
 
@@ -543,7 +568,7 @@ define('xwiki-livedata', [
      * @param {Number} entryIndex The index of the entry. Uses current entry if undefined.
      * @returns {Number}
      */
-    getPageIndex (entryIndex) {
+    getPageIndex(entryIndex) {
       if (entryIndex === undefined) {
         entryIndex = this.data.query.offset;
       }
@@ -556,9 +581,11 @@ define('xwiki-livedata', [
      * @param {Number} pageIndex
      * @returns {Promise}
      */
-    setPageIndex (pageIndex) {
-      return new Promise ((resolve, reject) => {
-        if (pageIndex < 0 || pageIndex >= this.getPageCount()) { return void reject(); }
+    setPageIndex(pageIndex) {
+      return new Promise((resolve, reject) => {
+        if (pageIndex < 0 || pageIndex >= this.getPageCount()) {
+          return void reject();
+        }
         const previousPageIndex = this.getPageIndex();
         this.data.query.offset = this.getFirstIndexOfPage(pageIndex);
         this.triggerEvent("pageChange", {
@@ -575,7 +602,7 @@ define('xwiki-livedata', [
      * @param {Number} pageIndex The page index. Uses current page if undefined.
      * @returns {Number}
      */
-    getFirstIndexOfPage (pageIndex) {
+    getFirstIndexOfPage(pageIndex) {
       if (pageIndex === undefined) {
         pageIndex = this.getPageIndex();
       }
@@ -592,7 +619,7 @@ define('xwiki-livedata', [
      * @param {Number} pageIndex The page index. Uses current page if undefined.
      * @returns {Number}
      */
-    getLastIndexOfPage (pageIndex) {
+    getLastIndexOfPage(pageIndex) {
       if (pageIndex === undefined) {
         pageIndex = this.getPageIndex();
       }
@@ -609,11 +636,15 @@ define('xwiki-livedata', [
      * @param {Number} pageSize
      * @returns {Promise}
      */
-    setPageSize (pageSize) {
-      return new Promise ((resolve, reject) => {
-        if (pageSize < 0) { return void reject(); }
+    setPageSize(pageSize) {
+      return new Promise((resolve, reject) => {
+        if (pageSize < 0) {
+          return void reject();
+        }
         const previousPageSize = this.data.query.limit;
-        if (pageSize === previousPageSize) { return void resolve(); }
+        if (pageSize === previousPageSize) {
+          return void resolve();
+        }
         this.data.query.limit = pageSize;
         // Reset the offset whenever the page size changes.
         this.data.query.offset = 0;
@@ -624,8 +655,6 @@ define('xwiki-livedata', [
         this.updateEntries().then(resolve, reject);
       });
     },
-
-
 
 
     /**
@@ -639,7 +668,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Boolean}
      */
-    isPropertyVisible (propertyId) {
+    isPropertyVisible(propertyId) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       return propertyDescriptor.visible;
     },
@@ -650,7 +679,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @param {Boolean} visible
      */
-    setPropertyVisible (propertyId, visible) {
+    setPropertyVisible(propertyId, visible) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       propertyDescriptor.visible = visible;
     },
@@ -661,7 +690,7 @@ define('xwiki-livedata', [
      * @param {String|Number} from The id or index of the property to move
      * @param {Number} toIndex
      */
-    reorderProperty (from, toIndex) {
+    reorderProperty(from, toIndex) {
       let fromIndex;
       if (typeof from === "number") {
         fromIndex = from;
@@ -670,11 +699,11 @@ define('xwiki-livedata', [
       } else {
         return;
       }
-      if (fromIndex < 0 || toIndex < 0) { return; }
+      if (fromIndex < 0 || toIndex < 0) {
+        return;
+      }
       this.data.query.properties.splice(toIndex, 0, this.data.query.properties.splice(fromIndex, 1)[0]);
     },
-
-
 
 
     /**
@@ -689,7 +718,7 @@ define('xwiki-livedata', [
      * @param {Object} [parameters]
      * @param {Object} [parameters.entry]
      */
-    isSelectionEnabled ({ entry } = {}) {
+    isSelectionEnabled({entry} = {}) {
       // An entry is selectable if it has an id specified.
       return this.data.meta.selection.enabled && (!entry || this.getEntryId(entry));
     },
@@ -700,7 +729,7 @@ define('xwiki-livedata', [
      * @param {Object} entry
      * @returns {Boolean}
      */
-    isEntrySelected (entry) {
+    isEntrySelected(entry) {
       const entryId = this.getEntryId(entry);
       if (this.entrySelection.isGlobal) {
         return !this.uniqueArrayHas(this.entrySelection.deselected, entryId);
@@ -714,16 +743,19 @@ define('xwiki-livedata', [
      * Select the specified entries
      * @param {Object|Array} entries
      */
-    selectEntries (entries) {
-      if (!this.isSelectionEnabled()) { return; }
+    selectEntries(entries) {
+      if (!this.isSelectionEnabled()) {
+        return;
+      }
       const entryArray = (entries instanceof Array) ? entries : [entries];
       entryArray.forEach(entry => {
-        if (!this.isSelectionEnabled({ entry })) { return; }
+        if (!this.isSelectionEnabled({entry})) {
+          return;
+        }
         const entryId = this.getEntryId(entry);
         if (this.entrySelection.isGlobal) {
           this.uniqueArrayRemove(this.entrySelection.deselected, entryId);
-        }
-        else {
+        } else {
           this.uniqueArrayAdd(this.entrySelection.selected, entryId);
         }
         this.triggerEvent("select", {
@@ -737,16 +769,19 @@ define('xwiki-livedata', [
      * Deselect the specified entries
      * @param {Object|Array} entries
      */
-    deselectEntries (entries) {
-      if (!this.isSelectionEnabled()) { return; }
+    deselectEntries(entries) {
+      if (!this.isSelectionEnabled()) {
+        return;
+      }
       const entryArray = (entries instanceof Array) ? entries : [entries];
       entryArray.forEach(entry => {
-        if (!this.isSelectionEnabled({ entry })) { return; }
+        if (!this.isSelectionEnabled({entry})) {
+          return;
+        }
         const entryId = this.getEntryId(entry);
         if (this.entrySelection.isGlobal) {
           this.uniqueArrayAdd(this.entrySelection.deselected, entryId);
-        }
-        else {
+        } else {
           this.uniqueArrayRemove(this.entrySelection.selected, entryId);
         }
         this.triggerEvent("deselect", {
@@ -761,11 +796,15 @@ define('xwiki-livedata', [
      * @param {Object|Array} entries
      * @param {Boolean} select Whether to select or not the entries. Undefined toggle current state
      */
-    toggleSelectEntries (entries, select) {
-      if (!this.isSelectionEnabled()) { return; }
+    toggleSelectEntries(entries, select) {
+      if (!this.isSelectionEnabled()) {
+        return;
+      }
       const entryArray = (entries instanceof Array) ? entries : [entries];
       entryArray.forEach(entry => {
-        if (!this.isSelectionEnabled({ entry })) { return; }
+        if (!this.isSelectionEnabled({entry})) {
+          return;
+        }
         if (select === undefined) {
           select = !this.isEntrySelected(entry);
         }
@@ -782,10 +821,12 @@ define('xwiki-livedata', [
      * Get number of selectable entries in page
      * @returns {Number}
      */
-    selectableCountInPage () {
-      if (!this.isSelectionEnabled()) { return 0; }
+    selectableCountInPage() {
+      if (!this.isSelectionEnabled()) {
+        return 0;
+      }
       return this.data.data.entries
-        .filter(entry => this.isSelectionEnabled({ entry }))
+        .filter(entry => this.isSelectionEnabled({entry}))
         .length;
     },
 
@@ -794,8 +835,10 @@ define('xwiki-livedata', [
      * Set the entry selection globally accross pages
      * @param {Boolean} global
      */
-    setEntrySelectGlobal (global) {
-      if (!this.isSelectionEnabled()) { return; }
+    setEntrySelectGlobal(global) {
+      if (!this.isSelectionEnabled()) {
+        return;
+      }
       this.entrySelection.isGlobal = global;
       this.entrySelection.selected.splice(0);
       this.entrySelection.deselected.splice(0);
@@ -803,7 +846,6 @@ define('xwiki-livedata', [
         state: global,
       });
     },
-
 
 
     /**
@@ -845,7 +887,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Boolean}
      */
-    isPropertySortable (propertyId) {
+    isPropertySortable(propertyId) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       const propertyTypeDescriptor = this.getPropertyTypeDescriptor(propertyId);
       return propertyDescriptor && (propertyDescriptor.sortable !== undefined ? propertyDescriptor.sortable :
@@ -858,7 +900,7 @@ define('xwiki-livedata', [
      *
      * @returns {Array}
      */
-    getSortableProperties () {
+    getSortableProperties() {
       return this.data.query.properties.filter(property => this.isPropertySortable(property));
     },
 
@@ -868,7 +910,7 @@ define('xwiki-livedata', [
      *
      * @returns {Array}
      */
-    getUnsortedProperties () {
+    getUnsortedProperties() {
       return this.getSortableProperties().filter(property => !this.getQuerySort(property));
     },
 
@@ -877,7 +919,7 @@ define('xwiki-livedata', [
      * Get the sort query associated to a property id
      * @param {String} propertyId
      */
-    getQuerySort (propertyId) {
+    getQuerySort(propertyId) {
       return this.data.query.sort.find(sort => sort.property === propertyId);
     },
 
@@ -891,9 +933,9 @@ define('xwiki-livedata', [
      *   Undefined means toggle current direction
      * @returns {Promise}
      */
-    sort (property, level, descending) {
+    sort(property, level, descending) {
       const err = new Error("Property `" + property + "` is not sortable");
-      return new Promise ((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         // Allow the user to remove a sort entry (level < 0) even if the property is not sortable.
         if (!(level < 0 || this.isPropertySortable(property))) {
           return void reject(err);
@@ -942,10 +984,12 @@ define('xwiki-livedata', [
      *   Undefined means toggle current direction
      * @returns {Promise}
      */
-    addSort (property, descending) {
+    addSort(property, descending) {
       const err = new Error("Property `" + property + "` is already sorting");
       const propertyQuerySort = this.data.query.sort.find(sortObject => sortObject.property === property);
-      if (propertyQuerySort) { return Promise.reject(err); }
+      if (propertyQuerySort) {
+        return Promise.reject(err);
+      }
       return this.sort(property, this.data.query.sort.length, descending);
     },
 
@@ -955,7 +999,7 @@ define('xwiki-livedata', [
      * @param {String} property The property to remove to the sort
      * @returns {Promise}
      */
-    removeSort (property) {
+    removeSort(property) {
       return this.sort(property, -1);
     },
 
@@ -965,11 +1009,13 @@ define('xwiki-livedata', [
      * @param {String} property The property to reorder the sort
      * @param {Number} toIndex
      */
-    reorderSort (propertyId, toIndex) {
+    reorderSort(propertyId, toIndex) {
       const err = new Error("Property `" + propertyId + "` is not sortable");
-      return new Promise ((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const fromIndex = this.data.query.sort.findIndex(querySort => querySort.property === propertyId);
-        if (fromIndex < 0 || toIndex < 0) { return void reject(err); }
+        if (fromIndex < 0 || toIndex < 0) {
+          return void reject(err);
+        }
         this.data.query.sort.splice(toIndex, 0, this.data.query.sort.splice(fromIndex, 1)[0]);
 
         // dispatch events
@@ -984,8 +1030,6 @@ define('xwiki-livedata', [
     },
 
 
-
-
     /**
      * ---------------------------------------------------------------
      * FILTER
@@ -997,7 +1041,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Boolean}
      */
-    isPropertyFilterable (propertyId) {
+    isPropertyFilterable(propertyId) {
       const propertyDescriptor = this.getPropertyDescriptor(propertyId);
       const propertyTypeDescriptor = this.getPropertyTypeDescriptor(propertyId);
       return propertyDescriptor && (propertyDescriptor.filterable !== undefined ? propertyDescriptor.filterable :
@@ -1010,7 +1054,7 @@ define('xwiki-livedata', [
      *
      * @returns {Array}
      */
-    getFilterableProperties () {
+    getFilterableProperties() {
       return this.data.query.properties.filter(property => this.isPropertyFilterable(property));
     },
 
@@ -1020,7 +1064,7 @@ define('xwiki-livedata', [
      *
      * @returns {Array}
      */
-    getUnfilteredProperties () {
+    getUnfilteredProperties() {
       return this.getFilterableProperties().filter(property => {
         const filter = this.getQueryFilterGroup(property);
         return !filter || filter.constraints.length === 0;
@@ -1033,7 +1077,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Object}
      */
-    getQueryFilterGroup (propertyId) {
+    getQueryFilterGroup(propertyId) {
       return this.data.query.filters.find(filter => filter.property === propertyId);
     },
 
@@ -1043,7 +1087,7 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {Array} The constraints array of the filter group, or empty array if it does not exist
      */
-    getQueryFilters (propertyId) {
+    getQueryFilters(propertyId) {
       const queryFilterGroup = this.getQueryFilterGroup(propertyId);
       return queryFilterGroup && queryFilterGroup.constraints || [];
     },
@@ -1054,13 +1098,19 @@ define('xwiki-livedata', [
      * @param {String} propertyId
      * @returns {String}
      */
-    getFilterDefaultOperator (propertyId) {
+    getFilterDefaultOperator(propertyId) {
       // get valid operator descriptor
       const filterDescriptor = this.getFilterDescriptor(propertyId);
-      if (!filterDescriptor) { return; }
+      if (!filterDescriptor) {
+        return;
+      }
       const filterOperators = filterDescriptor.operators;
-      if (!(filterOperators instanceof Array)) { return; }
-      if (filterOperators.length === 0) { return; }
+      if (!(filterOperators instanceof Array)) {
+        return;
+      }
+      if (filterOperators.length === 0) {
+        return;
+      }
       // get default operator
       const defaultOperator = filterDescriptor.defaultOperator;
       const isDefaultOperatorValid = !!filterOperators.find(operator => operator.id === defaultOperator);
@@ -1083,12 +1133,18 @@ define('xwiki-livedata', [
      * @returns {Object} {oldEntry, newEntry}
      *  with oldEntry / newEntry being {property, index, operator, value}
      */
-    _computeFilterEntries (property, index, filterEntry) {
-      if (!this.isPropertyFilterable(property)) { return; }
+    _computeFilterEntries(property, index, filterEntry) {
+      if (!this.isPropertyFilterable(property)) {
+        return;
+      }
       // default indexes
       index = index || 0;
-      if (index < 0) { index = -1; }
-      if (filterEntry.index < 0) { filterEntry.index = -1; }
+      if (index < 0) {
+        index = -1;
+      }
+      if (filterEntry.index < 0) {
+        filterEntry.index = -1;
+      }
       // old entry
       let oldEntry = {
         property: property,
@@ -1127,7 +1183,7 @@ define('xwiki-livedata', [
      * @param {Oject} newEntry
      * @returns {String} "add" | "remove" | "move" | "modify"
      */
-    _getFilteringType (oldEntry, newEntry) {
+    _getFilteringType(oldEntry, newEntry) {
       const queryFilter = this.getQueryFilterGroup(oldEntry.property);
       if (queryFilter && oldEntry.index === -1) {
         return "add";
@@ -1156,11 +1212,13 @@ define('xwiki-livedata', [
      * @param {String} filterEntry.value Value for the new filter entry
      * @returns {Promise}
      */
-    filter (property, index, filterEntry) {
+    filter(property, index, filterEntry) {
       const err = new Error("Property `" + property + "` is not filterable");
-      return new Promise ((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const filterEntries = this._computeFilterEntries(property, index, filterEntry);
-        if (!filterEntries) { return void reject(err); }
+        if (!filterEntries) {
+          return void reject(err);
+        }
         const oldEntry = filterEntries.oldEntry;
         const newEntry = filterEntries.newEntry;
         const filteringType = this._getFilteringType(oldEntry, newEntry);
@@ -1212,7 +1270,7 @@ define('xwiki-livedata', [
      * @param {Number} index Index of new filter entry. Undefined means last
      * @returns {Promise}
      */
-    addFilter (property, operator, value, index) {
+    addFilter(property, operator, value, index) {
       if (index === undefined) {
         index = ((this.getQueryFilterGroup(property) || {}).constraints || []).length;
       }
@@ -1231,7 +1289,7 @@ define('xwiki-livedata', [
      * @param {String} index The index of the filter to remove. Undefined means last.
      * @returns {Promise}
      */
-    removeFilter (property, index) {
+    removeFilter(property, index) {
       return this.filter(property, index, {index: -1});
     },
 
@@ -1241,11 +1299,13 @@ define('xwiki-livedata', [
      * @param {String} property Property to remove the filters to
      * @returns {Promise}
      */
-    removeAllFilters (property) {
-      return new Promise ((resolve, reject) => {
+    removeAllFilters(property) {
+      return new Promise((resolve, reject) => {
         const filterIndex = this.data.query.filters
           .findIndex(filterGroup => filterGroup.property === property);
-        if (filterIndex < 0) { return void reject(); }
+        if (filterIndex < 0) {
+          return void reject();
+        }
         const removedFilterGroups = this.data.query.filters.splice(filterIndex, 1);
         // Reset the offset whenever the filters are updated.
         this.data.query.offset = 0;
@@ -1260,12 +1320,7 @@ define('xwiki-livedata', [
     },
 
 
-
-
   };
-
-
-
 
 
   // return the init function to be used in the layouts

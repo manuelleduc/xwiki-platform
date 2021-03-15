@@ -62,6 +62,7 @@ export default {
   props: {
     logic: Object,
     xClassPropertyHelper: Object,
+    editBus: Object
   },
 
   computed: {
@@ -79,6 +80,7 @@ export default {
     return {
       logic: this.logic,
       xClassPropertyHelper: this.xClassPropertyHelper,
+      editBus: this.editBus
     };
   },
 

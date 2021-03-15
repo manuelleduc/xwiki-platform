@@ -149,7 +149,11 @@ export default {
 
     setEdit() {
       if (this.isEditable) {
-        this.$emit('update:isView', false)
+        this.$emit('update:isView', false);
+        this.editBus.$emit('start-editing-entry', {
+          entryId: this.logic.getEntryId(this.entry), 
+          propertyId: this.propertyId
+        });
       }
     },
 
@@ -179,7 +183,11 @@ export default {
     // This is like applyEdit but it does not save the entered value
     cancelEdit() {
       // Go back to view mode
-      this.$emit('cancelEdit', this.editedValue);
+      // this.$emit('cancelEdit', this.editedValue);
+      this.editBus.$emit('cancel-editing-entry', {
+        entryId: this.logic.getEntryId(this.entry),
+        propertyId: this.propertyId
+      })
       this.setView();
     }
   },

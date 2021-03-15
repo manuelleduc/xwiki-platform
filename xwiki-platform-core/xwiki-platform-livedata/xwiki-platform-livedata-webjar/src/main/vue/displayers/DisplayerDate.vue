@@ -113,12 +113,20 @@ export default {
 
   methods: {
     saveDate() {
-      // TODO: check that `this.editedValue` is the right element to submit (or sould it be a timestamp?) 
-      this.logic.setValue({
-        entry: this.entry,
+      // // TODO: check that `this.editedValue` is the right element to submit (or sould it be a timestamp?) 
+      // this.logic.setValue({
+      //   entry: this.entry,
+      //   propertyId: this.propertyId,
+      //   value: this.editedValue
+      // });
+
+      this.editBus.$emit('save-editing-entry', {
+        entryId: this.logic.getEntryId(this.entry),
         propertyId: this.propertyId,
-        value: this.editedValue
+        content: [{[this.propertyId]: this.editedValue}]
       });
+      
+
     },
     async upgradeDatePicker () {
       // Create the date picker in edit mode

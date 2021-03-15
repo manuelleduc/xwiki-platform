@@ -224,4 +224,36 @@ public class LiveTableLiveDataEntryStore extends WithParameters implements LiveD
             throw new LiveDataException(e);
         }
     }
+
+    @Override
+    public Optional<Object> save(Map<String, Object> entries) throws LiveDataException
+    {
+        String className = (String) this.getParameters().get(CLASS_NAME_PARAMETER);
+
+        // We can't update a class field if the class is unknown and one of the entry to update is an XProperty.
+        boolean hasXClassPropertiesToUpdate = entries.keySet()
+            .stream()
+            .anyMatch(it -> !StringUtils.defaultIfEmpty(it, "").startsWith(DOC_PREFIX));
+        if (className == null && hasXClassPropertiesToUpdate) {
+            throw new LiveDataException("Can't update a live table with an undefined class name");
+        }
+
+        String entryId = "doc.fullName";
+        String fullName = (String) entries.get(entryId);
+        DocumentReference documentReference = this.currentDocumentReferenceResolver.resolve(fullName);
+        DocumentReference classReference;
+        if (className != null) {
+            classReference = this.currentDocumentReferenceResolver.resolve(className);
+        } else {
+            classReference = null;
+        }
+
+        try {
+            this.xClassPropertyService.updateAll(entries, documentReference, classReference);
+        } catch (AccessDeniedException | XWikiException e) {
+            throw new LiveDataException(e);
+        }
+
+        return Optional.of(fullName);
+    }
 }

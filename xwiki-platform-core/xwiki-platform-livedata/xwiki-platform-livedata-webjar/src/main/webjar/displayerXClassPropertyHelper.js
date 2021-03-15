@@ -70,25 +70,6 @@ define('xwiki-livedata-xClassPropertyHelper', ['jquery', 'xwiki-meta', 'entityRe
     });
   }
 
-  function save(documentName, propertyId, data) {
-    this.isLoading = true;
-    data.push({name: 'language', value: xcontext.locale});
-    data.push({name: 'comment', value: 'Update property ' + propertyId});
-    data.push({name: 'minorEdit', value: true});
-    data.push({name: 'form_token', value: xcontext.form_token});
-    data.push({name: 'ajax', value: true});
-    const targetUrl = computeTargetUrl(documentName, 'save');
-    return new Promise((resolve, reject) => {
-      $.post(targetUrl, data).done(function(response) {
-        resolve(response);
-      }).fail(function(response) {
-      }).always(function() {
-        reject();
-      });
-    })
-
-  }
-
   function edit(documentName, className, property) {
     return load('edit', documentName, property, className);
   }
@@ -97,5 +78,5 @@ define('xwiki-livedata-xClassPropertyHelper', ['jquery', 'xwiki-meta', 'entityRe
     return load('view', documentName, property, className);
   }
 
-  return {edit, view, save};
+  return {edit, view};
 });

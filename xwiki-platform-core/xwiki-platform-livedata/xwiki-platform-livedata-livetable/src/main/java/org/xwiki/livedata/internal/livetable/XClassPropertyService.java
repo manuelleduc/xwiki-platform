@@ -21,6 +21,7 @@ package org.xwiki.livedata.internal.livetable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -103,19 +104,64 @@ public class XClassPropertyService
         XWikiContext xcontext = this.xcontextProvider.get();
         XWikiDocument document = xcontext.getWiki().getDocument(documentReference, xcontext);
 
-        Object changedValue = null;
+        Object changedValue = updateProperty(property, value, classReference, objectNumber, document);
 
-        if (StringUtils.defaultIfEmpty(property, "").startsWith("doc")) {
-            changedValue = updateDocument(property.replaceFirst("doc\\.", ""), value, document);
-        } else {
-            BaseObject baseObject = document.getXObject(classReference, objectNumber);
-            List<Object> properties = Arrays.asList(baseObject.getProperties());
-            if (properties.contains(property)) {
-                changedValue = baseObject.get(property).toFormString();
-                baseObject.set(property, value, xcontext);
-            }
+        saveDocument(document);
+        return Optional.ofNullable(changedValue);
+    }
+
+    /**
+     * Update all the provided entries of the document. The entiers can either be from the document itself if prefixed
+     * with {@code doc.} or from an XObject instance of the classReference parameter. The first XObject found is used,
+     * to update another XObject, see {@link #updateAll(Map, DocumentReference, DocumentReference, int)}
+     *
+     * @param entries tge list of entries to update
+     * @param documentReference the document to update
+     * @param classReference the type of XObject to update
+     * @throws AccessDeniedException in case the current user is not allow to edit the document
+     * @throws XWikiException in case of error when loading or saving the updated document
+     * @throws LiveDataException in case of error when validating the document
+     * @see #updateAll(Map, DocumentReference, DocumentReference, int)
+     */
+    public void updateAll(Map<String, Object> entries, DocumentReference documentReference,
+        DocumentReference classReference) throws AccessDeniedException, XWikiException, LiveDataException
+    {
+        updateAll(entries, documentReference, classReference, 0);
+    }
+
+    /**
+     * Update all the provided entries of the document. The entiers can either be from the document itself if prefixed
+     * with {@code doc.} or from an XObject instance of the classReference parameter. The XObject at the provided index
+     * number is updated.
+     *
+     * @param entries tge list of entries to update
+     * @param documentReference the document to update
+     * @param classReference the type of XObject to update
+     * @param objectNumber the index of the XObject to update
+     * @throws AccessDeniedException in case the current user is not allow to edit the document
+     * @throws XWikiException in case of error when loading or saving the updated document
+     * @throws LiveDataException in case of error when validating the document
+     * @see #updateAll(Map, DocumentReference, DocumentReference)
+     */
+    public void updateAll(Map<String, Object> entries, DocumentReference documentReference,
+        DocumentReference classReference, int objectNumber)
+        throws AccessDeniedException, XWikiException, LiveDataException
+    {
+        this.authorization.checkAccess(Right.EDIT, documentReference);
+        XWikiContext xcontext = this.xcontextProvider.get();
+        XWikiDocument document = xcontext.getWiki().getDocument(documentReference, xcontext);
+
+        for (Map.Entry<String, Object> entry : entries.entrySet()) {
+            // TODO: object number
+            this.updateProperty(entry.getKey(), entry.getValue(), classReference, objectNumber, document);
         }
 
+        saveDocument(document);
+    }
+
+    private void saveDocument(XWikiDocument document) throws XWikiException, LiveDataException
+    {
+        XWikiContext xcontext = this.xcontextProvider.get();
         // Saves and validates only if the document has changed.
         if (document.isContentDirty() || document.isMetaDataDirty()) {
             boolean validate = document.validate(xcontext);
@@ -125,7 +171,24 @@ public class XClassPropertyService
             document.setAuthorReference(xcontext.getUserReference());
             xcontext.getWiki().saveDocument(document, xcontext);
         }
-        return Optional.ofNullable(changedValue);
+    }
+
+    private Object updateProperty(String property, Object value, DocumentReference classReference, int objectNumber,
+        XWikiDocument document) throws XWikiException
+    {
+        XWikiContext xcontext = this.xcontextProvider.get();
+        Object changedValue = null;
+        if (StringUtils.defaultIfEmpty(property, "").startsWith("doc")) {
+            changedValue = updateDocument(property.replaceFirst("doc\\.", ""), value, document);
+        } else {
+            BaseObject baseObject = document.getXObject(classReference, objectNumber);
+            List<Object> properties = Arrays.asList(baseObject.getPropertyNames());
+            if (properties.contains(property)) {
+                changedValue = baseObject.get(property).toFormString();
+                baseObject.set(property, value, xcontext);
+            }
+        }
+        return changedValue;
     }
 
     private Object updateDocument(String property, Object value, XWikiDocument document)
@@ -133,7 +196,7 @@ public class XClassPropertyService
         Object changedValue = null;
         if (Objects.equals(property, "hidden")) {
             changedValue = document.isHidden();
-            document.setHidden(Objects.equals(value, "true"));
+            document.setHidden(Objects.equals(String.valueOf(value), "true"));
         } else if (Objects.equals(property, "title")) {
             changedValue = document.getTitle();
             document.setTitle(String.valueOf(value));
@@ -141,9 +204,13 @@ public class XClassPropertyService
             changedValue = document.getContent();
             document.setContent((String) value);
         } else {
-            this.logger
-                .warn("Unknown property [{}]. Document [{}] will not be updated with value [{}].", property, document,
-                    value);
+            // Some property such as fullName as simply ignored and and are not editable.
+            if (!Objects.equals(property, "fullName")) {
+                this.logger
+                    .warn("Unknown property [{}]. Document [{}] will not be updated with value [{}].", property,
+                        document,
+                        value);
+            }
         }
         return changedValue;
     }

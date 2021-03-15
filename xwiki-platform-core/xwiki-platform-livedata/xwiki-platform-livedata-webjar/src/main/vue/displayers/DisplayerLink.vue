@@ -96,11 +96,16 @@ export default {
 
   methods: {
     saveLink(value) {
-      this.logic.setValue({
-        entry: this.entry,
+      // this.logic.setValue({
+      //   entry: this.entry,
+      //   propertyId: this.propertyId,
+      //   value: value
+      // })
+      this.editBus.$emit('save-editing-entry', {
+        entryId: this.logic.getEntryId(this.entry),
         propertyId: this.propertyId,
-        value: value
-      })
+        content: [{[this.propertyId]: value}] // this.editedValue
+      });
     }
   }
 };

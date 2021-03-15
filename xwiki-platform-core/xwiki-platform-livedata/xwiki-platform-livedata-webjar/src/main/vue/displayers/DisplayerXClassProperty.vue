@@ -31,6 +31,7 @@
       :entry="entry"
       :is-view.sync="isView"
       :is-loading="isLoading"
+      :is-editing="editField !== undefined"
       @saveEdit="applyEdit">
 
     <!-- Provide the Html Viewer widget to the `viewer` slot -->
@@ -88,16 +89,6 @@ export default {
       } else {
         document.fire('xwiki:actions:beforeSave');
         const content = $(this.$refs.xClassPropertyEdit).find(':input').serializeArray();
-        // return this.xClassPropertyHelper.save(documentName, this.propertyId, data)
-        //     .then(() => this.logic.updateEntries())
-        //     .catch(() => {
-        //       // TODO
-        //     })
-        //     .then(() => {
-        //       // Regardless of the succes of the save operation, we stop the loading at the end.
-        //       this.isLoading = false;
-        //     });
-
         const className = this.data.query.source.className;
 
         const newContents = [];
@@ -112,27 +103,12 @@ export default {
               }
 
               newName = newName.replace(/_\d+_/, '');
-
-              // If the key does not exists, we create the entry with the cleaned up name and the value.
-              // If the key already exists, we replace it with an array and append the new value with the existing one.
-              // if (!newContent[newName]) {
-              //   newContent[newName] = value['value'];
-              // } else {
-              //   if (!Array.isArray(newContent[newName])) {
-              //     newContent[newName] = [newContent[newName]];
-              //   }
-              //   newContent[newName].push(value['value']);
-              // }
               newContents.push({[newName]: value['value']})
             }
           }
         }
 
-        this.editBus.$emit('save-editing-entry', {
-          entryId: this.logic.getEntryId(this.entry),
-          propertyId: this.propertyId,
-          content: newContents
-        });
+        this.editBus.save(this.entry, this.propertyId, newContents)
       }
     },
 
@@ -204,6 +180,8 @@ export default {
       this.refreshXClassProperty({isView, forced: false})
     },
     timestamp: function(timestamp) {
+      // Reset the edit field and force the reload of the view field when the component is re-rendered.
+      this.editField = undefined
       this.refreshXClassProperty({isView: this.isView, forced: true});
     }
   },

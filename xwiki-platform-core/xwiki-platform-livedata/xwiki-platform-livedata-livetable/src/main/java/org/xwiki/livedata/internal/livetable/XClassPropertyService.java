@@ -20,10 +20,12 @@
 package org.xwiki.livedata.internal.livetable;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -42,6 +44,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.objects.classes.BaseClass;
 
 /**
  * Provides the operations to interact with a XClass properties of the rows of a liveTable live data.
@@ -182,10 +185,24 @@ public class XClassPropertyService
             changedValue = updateDocument(property.replaceFirst("doc\\.", ""), value, document);
         } else {
             BaseObject baseObject = document.getXObject(classReference, objectNumber);
+            BaseClass xClass = baseObject.getXClass(xcontext);
+
             List<Object> properties = Arrays.asList(baseObject.getPropertyNames());
             if (properties.contains(property)) {
                 changedValue = baseObject.get(property).toFormString();
-                baseObject.set(property, value, xcontext);
+
+                Object nvalue;
+                if (value instanceof List) {
+                    List list = (List) value;
+                    nvalue = IntStream.range(0, list.size())
+                        .mapToObj(i -> String.valueOf(list.get(i)))
+                        .toArray(String[]::new);
+                } else {
+                    nvalue = value;
+                }
+                Map<String, Object> valueMap = new HashMap<>();
+                valueMap.put(property, nvalue);
+                xClass.fromMap(valueMap, baseObject);
             }
         }
         return changedValue;

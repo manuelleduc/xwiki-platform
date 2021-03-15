@@ -28,12 +28,12 @@
     all the displayer default behavior
   -->
   <BaseDisplayer
-    ref="baseDisplayer"
-    class="displayer-date"
-    :property-id="propertyId"
-    :entry="entry"
-    :is-view.sync="isView"
-    @saveEdit="saveDate"
+      ref="baseDisplayer"
+      class="displayer-date"
+      :property-id="propertyId"
+      :entry="entry"
+      :is-view.sync="isView"
+      @saveEdit="saveDate"
   >
 
     <!-- Provide the Date Viewer widget to the `viewer` slot -->
@@ -46,13 +46,13 @@
     <template #editor>
       <!-- A simple text input that will be upgraded to have a date picker -->
       <input
-        class="editor-date"
-        ref="editorDate"
-        type="text"
-        size="1"
-        :value="valueFormatted"
-        v-on-inserted="upgradeDatePicker"
-        v-autofocus
+          class="editor-date"
+          ref="editorDate"
+          type="text"
+          size="1"
+          :value="valueFormatted"
+          v-on-inserted="upgradeDatePicker"
+          v-autofocus
       />
     </template>
 
@@ -89,7 +89,7 @@ export default {
 
   computed: {
     // Date formatted to be human-readable
-    valueFormatted () {
+    valueFormatted() {
       return moment(+this.value).format(this.format);
     },
 
@@ -113,29 +113,18 @@ export default {
 
   methods: {
     saveDate() {
-      // // TODO: check that `this.editedValue` is the right element to submit (or sould it be a timestamp?) 
-      // this.logic.setValue({
-      //   entry: this.entry,
-      //   propertyId: this.propertyId,
-      //   value: this.editedValue
-      // });
-
-      this.editBus.$emit('save-editing-entry', {
-        entryId: this.logic.getEntryId(this.entry),
-        propertyId: this.propertyId,
-        content: [{[this.propertyId]: this.editedValue}]
-      });
-      
-
+      this.editBus.save(this.entry, this.propertyId, [{[this.propertyId]: this.editedValue}])
     },
-    async upgradeDatePicker () {
+    async upgradeDatePicker() {
       // Create the date picker in edit mode
-      if (this.$refs.baseDisplayer.isView) { return; }
+      if (this.$refs.baseDisplayer.isView) {
+        return;
+      }
       await this.$nextTick();
       const editorDate = this.$refs.editorDate;
       // Create the date range picker associated to the single date input
       $(editorDate).daterangepicker(
-        this.editorConfig,
+          this.editorConfig,
       );
       $(editorDate).on('apply.daterangepicker', () => {
         this.applyDate();
@@ -152,7 +141,7 @@ export default {
         // This removes the 'hide' function only for the event target.
         editorDate.hide = undefined;
         // Restore the 'hide' function after the event is handled (i.e. after all the listeners have been called).
-        setTimeout(function () {
+        setTimeout(function() {
           // This deletes the local 'hide' key from the instance, making the 'hide' inherited from the prototype
           // visible again (the next calls to 'hide' won't find the key on the instance and thus it will go up
           // the prototype chain).
@@ -164,11 +153,11 @@ export default {
       $(editorDate).data("daterangepicker").show();
     },
 
-    getValue (daterangepicker) {
+    getValue(daterangepicker) {
       return daterangepicker.startDate.format(this.format);
     },
 
-    applyDate () {
+    applyDate() {
       const daterangepicker = $(this.$refs.editorDate).data("daterangepicker");
       const value = this.getValue(daterangepicker);
       const valueTimestamps = +moment(value, this.format);

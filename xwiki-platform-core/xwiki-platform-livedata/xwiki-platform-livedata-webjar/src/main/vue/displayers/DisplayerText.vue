@@ -66,16 +66,7 @@ export default {
 
   methods: {
     saveText(value) {
-      // this.logic.setValue({
-      //   entry: this.entry,
-      //   propertyId: this.propertyId,
-      //   value: value
-      // })
-      this.editBus.$emit('save-editing-entry', {
-        entryId: this.logic.getEntryId(this.entry),
-        propertyId: this.propertyId,
-        content: [{[this.propertyId]: this.editedValue}]
-      });
+      this.editBus.save(this.entry, this.propertyId, [{[this.propertyId]: this.editedValue}])
     }
   }
 };

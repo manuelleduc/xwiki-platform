@@ -27,7 +27,7 @@
   instead of reimplementing the whole displayer logic each time.
 -->
 <template>
-  <div :class="isView ? 'view' : 'edit'">
+  <div :class="{view: isView, edit: !isView, editing: isView && isEditing}" ref="displayerRoot">
     <!--
       The base displayer contains three slots: `viewer`, `editor`, and `loading`.
       It displays `viewer` or `loading` according to its current state: `this.isView` when `this.isLoading` is false,
@@ -35,10 +35,9 @@
     -->
 
     <!-- The slot containing the displayer Viewer widget -->
-    <div @dblclick="setEdit"
-         @keypress.self.enter="setEdit"
+    <div @keypress.self.enter="setEdit"
          tabindex="0"
-         v-if="isView && !isLoading">
+         v-if="isView && !isLoading && !isEditing">
       <slot name="viewer">
         <!--
           Default Viewer widget
@@ -52,13 +51,12 @@
     </div>
 
     <!-- The slot containing the displayer Editor widget -->
-    <div @focusout="saveEdit($event)"
-         @keypress.enter="saveEdit($event)"
+    <div @keypress.enter="applyEdit"
          @keydown.esc="cancelEdit"
-         v-if="!isView && !isLoading"
+         v-if="(!isView && !isLoading) || isEditing"
          tabindex="0"
          ref="editBlock"
-      >
+    >
       <slot name="editor">
         <!--
           Default Editor widget
@@ -68,11 +66,11 @@
           its Viewer widget, as a default Editor widget would still be provided
         -->
         <input
-          class="default-input"
-          type="text"
-          size="1"
-          v-autofocus
-          v-model="baseValue"
+            class="default-input"
+            type="text"
+            size="1"
+            v-autofocus
+            v-model="baseValue"
         />
       </slot>
     </div>
@@ -110,6 +108,10 @@ export default {
       default: true,
     },
     isLoading: {
+      type: Boolean,
+      default: false
+    },
+    isEditing: {
       type: Boolean,
       default: false
     }
@@ -150,10 +152,7 @@ export default {
     setEdit() {
       if (this.isEditable) {
         this.$emit('update:isView', false);
-        this.editBus.$emit('start-editing-entry', {
-          entryId: this.logic.getEntryId(this.entry), 
-          propertyId: this.propertyId
-        });
+        this.editBus.start(this.entry, this.propertyId)
       }
     },
 
@@ -161,42 +160,78 @@ export default {
     // This should rarely be used directly as it does not validate modified data
     // Used the `applyEdit` method instead (found in the displayerMixin)
     // which call this view function after validating data
-    view () {
-      if (this.isView) { return; }
+    view() {
+      if (this.isView) {
+        return;
+      }
       this.$el.focus();
     },
 
     // This method should be used to apply edit and go back to view mode.
-    // TODO: (not handled) It validates the entered value, ensuring that is is valid for the server
-    saveEdit(event) {
+    // The validation of the edited property is done once the whole entry is done editing.
+    applyEdit() {
       // Skip the event if the new focused element is contained by the edit block.
-      const editBlock = this.$refs.editBlock;
-      if (!editBlock.contains(event.relatedTarget)) {
-        // When edit slot is redefined by the parent component, the edited value is always undefined and 
-        // can is ignored by the parent, which has access the the value of its own edit slot.
-        this.$emit('saveEdit', this.editedValue);
-        // Go back to view mode
-        this.setView();
-      }
+
+      // When edit slot is redefined by the parent component, the edited value is always undefined and 
+      // can is ignored by the parent, which has access the the value of its own edit slot.
+      this.$emit('saveEdit', this.editedValue);
+      // Go back to view mode
+      this.setView();
+
     },
-    // This method should be used to cancel edit and go back to view mode
+    // This method should be used to cancel edit and go back to view mode.
     // This is like applyEdit but it does not save the entered value
     cancelEdit() {
-      // Go back to view mode
-      // this.$emit('cancelEdit', this.editedValue);
-      this.editBus.$emit('cancel-editing-entry', {
-        entryId: this.logic.getEntryId(this.entry),
-        propertyId: this.propertyId
-      })
+      // Notifies the edit bus that the entry is canceled.
+      this.editBus.cancel(this.entry, this.propertyId)
+
+      // Switches to view mode.
       this.setView();
     }
   },
   watch: {
-    // Explain what's going oone
+    /** Focus on a cell when it passes to edit mode. */
     isView: function(newIsView) {
       // Focuses in the current cell.
       if (newIsView) this.view();
     }
+  },
+  mounted() {
+    // Monitor the clicks on the document and switch the edit mode to view if the current mode is edit.
+    // This method is more reliable than using the focus, especially with displayer based on html content. 
+
+    var ct = undefined;
+    this.$refs.displayerRoot.addEventListener("click", (e) => {
+      // Prevents clicking on form elements when the form is not in edit mode and has already been edited.
+      if (this.isEditing && this.isView) {
+        setTimeout(ct);
+        ct = setTimeout(() => e.stopPropagation(), 100);
+      }
+    })
+
+    this.$refs.displayerRoot.addEventListener("dblclick", () => {
+      setTimeout(ct)
+      this.setEdit();
+    })
+
+    document.addEventListener("click", (evt) => {
+      if (!this.isView) {
+        const editBlock = this.$refs['editBlock'];
+        var targetElement = evt.target;
+
+        do {
+          if (targetElement === editBlock) {
+            return;
+          }
+
+          targetElement = targetElement.parentNode;
+        } while (targetElement);
+
+        // Wait a little before switch back to view mode, otherwise the change case cause a column width change 
+        // and make the user click on the wrong column, for instance when trying to edit the next column.
+        setTimeout(() => this.applyEdit(), 200);
+      }
+    })
   }
 };
 
@@ -234,6 +269,14 @@ export default {
 /* style for the default input */
 .livedata-displayer .default-input {
   width: 100%;
+}
+
+div.view.editing {
+  /*position: absolute;*/
+  /*height: 100%;*/
+  /*width: 100%;*/
+  background-color: #c2c2c2;
+  opacity: 0.3;
 }
 
 </style>

@@ -21,13 +21,11 @@
 
 <!-- BooleanFilter is a custom filter that allow to filter boolean values. -->
 <template>
-  <div>
-    <select :value="filterValue" class="xwiki-selectize" ref="input">
-      <option value=""></option>
-      <option value="true">True</option>
-      <option value="false">False</option>
-    </select>
-  </div>
+  <select :value="filterValue" class="xwiki-selectize livedata-selectize" ref="input">
+    <option value=""></option>
+    <option value="true">True</option>
+    <option value="false">False</option>
+  </select>
 </template>
 
 
@@ -55,7 +53,7 @@ export default {
       }
     },
   },
-  
+
   // Create the selectize widget.
   mounted() {
     $(this.$refs.input).xwikiSelectize({
@@ -73,6 +71,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.livedata-selectize.xwiki-selectize {
+  margin-top: 6px;
+}
 </style>

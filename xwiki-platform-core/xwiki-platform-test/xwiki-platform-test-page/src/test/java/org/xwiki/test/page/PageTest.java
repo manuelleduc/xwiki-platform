@@ -23,11 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.xwiki.cache.Cache;
 import org.xwiki.cache.CacheManager;
 import org.xwiki.cache.config.CacheConfiguration;
+import org.xwiki.component.manager.ComponentLookupException;
 import org.xwiki.context.Execution;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.context.ExecutionContextManager;
@@ -76,6 +79,8 @@ import static org.mockito.Mockito.when;
 @PageComponentList
 public class PageTest
 {
+    private static final String SKIN_PROPERTIES_PATH = "/skins/flamingo/skin.properties";
+
     @InjectMockitoOldcore
     protected MockitoOldcore oldcore;
 
@@ -175,6 +180,16 @@ public class PageTest
         return doc.getRenderedContent(this.context);
     }
 
+    protected Document renderPageDocument(DocumentReference documentReference) throws Exception
+    {
+        return Jsoup.parse(renderPage(documentReference));
+    }
+
+    protected Document renderPageDocument(XWikiDocument document) throws Exception
+    {
+        return Jsoup.parse(document.getRenderedContent(this.context));
+    }
+
     /**
      * Sets the Syntax with which the Document to test will be rendered into. If not called, the Document will be
      * rendered as XHTML.
@@ -231,6 +246,8 @@ public class PageTest
 
         // Set up Skin Extensions
         SkinExtensionSetup.setUp(xwiki, context);
+
+        initSkinEnvironment();
     }
 
     /**
@@ -257,5 +274,12 @@ public class PageTest
     {
         VelocityManager velocityManager = this.oldcore.getMocker().getInstance(VelocityManager.class);
         velocityManager.getVelocityContext().put(name, tool);
+    }
+
+    private void initSkinEnvironment() throws ComponentLookupException
+    {
+        // Load the environment from the test resources. This is needed to access the skins properties.
+        Environment environment = this.componentManager.getInstance(Environment.class);
+        when(environment.getResource(SKIN_PROPERTIES_PATH)).thenReturn(getClass().getResource(SKIN_PROPERTIES_PATH));
     }
 }

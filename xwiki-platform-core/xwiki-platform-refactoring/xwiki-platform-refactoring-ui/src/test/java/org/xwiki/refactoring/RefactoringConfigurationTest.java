@@ -19,21 +19,12 @@
  */
 package org.xwiki.refactoring;
 
-import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
-import org.xwiki.environment.Environment;
 import org.xwiki.model.reference.DocumentReference;
-import org.xwiki.rendering.internal.macro.html.renderers.html5.HTMLMacroHTML5Renderer;
-import org.xwiki.rendering.internal.renderer.html5.HTML5BlockRenderer;
-import org.xwiki.rendering.internal.renderer.html5.HTML5Renderer;
-import org.xwiki.rendering.internal.renderer.html5.HTML5RendererFactory;
-import org.xwiki.rendering.internal.renderer.xhtml.image.DefaultXHTMLImageRenderer;
-import org.xwiki.rendering.internal.renderer.xhtml.image.DefaultXHTMLImageTypeRenderer;
-import org.xwiki.rendering.internal.renderer.xhtml.link.DefaultXHTMLLinkRenderer;
-import org.xwiki.rendering.internal.renderer.xhtml.link.DefaultXHTMLLinkTypeRenderer;
 import org.xwiki.rendering.syntax.Syntax;
 import org.xwiki.test.annotation.ComponentList;
 import org.xwiki.test.junit5.mockito.MockComponent;
+import org.xwiki.test.page.HTML50ComponentList;
 import org.xwiki.test.page.PageTest;
 import org.xwiki.test.page.XWikiSyntax21ComponentList;
 import org.xwiki.velocity.tools.EscapeTool;
@@ -53,23 +44,14 @@ import static org.mockito.Mockito.when;
  * @since 12.10.6
  */
 @XWikiSyntax21ComponentList
+@HTML50ComponentList
 @ComponentList({
-    HTMLMacroHTML5Renderer.class,
-    HTML5BlockRenderer.class,
-    HTML5Renderer.class,
-    HTML5RendererFactory.class,
-    DefaultXHTMLLinkRenderer.class,
-    DefaultXHTMLLinkTypeRenderer.class,
-    DefaultXHTMLImageRenderer.class,
-    DefaultXHTMLImageTypeRenderer.class,
     ControlCharactersFilter.class
 })
 class RefactoringConfigurationTest extends PageTest
 {
-    public static final DocumentReference REFACTORING_CONFIGURATION_REFERENCE =
+    private static final DocumentReference REFACTORING_CONFIGURATION_REFERENCE =
         new DocumentReference("xwiki", asList("Refactoring", "Code"), "RefactoringConfiguration");
-
-    public static final String SKIN_PROPERTIES_PATH = "/skins/flamingo/skin.properties";
 
     @MockComponent
     private StoreConfiguration storeConfiguration;
@@ -78,18 +60,13 @@ class RefactoringConfigurationTest extends PageTest
     void verifyFormXRedirectField() throws Exception
     {
         setOutputSyntax(Syntax.HTML_5_0);
-
         registerVelocityTool("escapetool", new EscapeTool());
-
-        // Load the environment from the test resources. This is needed to access the 
-        Environment environment = this.componentManager.getInstance(Environment.class);
-        when(environment.getResource(SKIN_PROPERTIES_PATH)).thenReturn(getClass().getResource(SKIN_PROPERTIES_PATH));
 
         // Activates the recyclebin feature.
         when(this.storeConfiguration.isRecycleBinEnabled()).thenReturn(true);
 
-        String content = renderPage(REFACTORING_CONFIGURATION_REFERENCE);
-        String value = Jsoup.parse(content).getElementsByAttributeValue("name", "xredirect").first().attr("value");
+        String value = renderPageDocument(REFACTORING_CONFIGURATION_REFERENCE)
+            .getElementsByAttributeValue("name", "xredirect").first().attr("value");
         // Checks that the xredirect URL is relative.
         assertEquals("/xwiki/bin/Main/WebHome", value);
     }

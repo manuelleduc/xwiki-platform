@@ -34,6 +34,9 @@ import org.xwiki.model.reference.SpaceReference;
 import org.xwiki.rest.model.jaxb.Page;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.docker.junit5.browser.Browser;
+import org.xwiki.test.docker.junit5.database.Database;
+import org.xwiki.test.docker.junit5.servletengine.ServletEngine;
 import org.xwiki.test.ui.TestUtils;
 import org.xwiki.test.ui.po.FormContainerElement;
 import org.xwiki.test.ui.po.ViewPage;
@@ -50,7 +53,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version $Id$
  * @since 11.3RC1
  */
-@UITest
+@UITest(
+    database = Database.MYSQL,
+    databaseTag = "8",
+    servletEngine = ServletEngine.TOMCAT,
+    servletEngineTag = "9",
+    browser = Browser.CHROME
+)
 public class ConfigurableClassIT
 {
     @BeforeEach
@@ -59,413 +68,413 @@ public class ConfigurableClassIT
         setup.loginAsSuperAdmin();
     }
 
-    /*
-     * Verify that if a value is specified for the {@code linkPrefix} xproperty, then a link is generated with
-     * linkPrefix + prettyName of the property from the configuration class.
-     */
-    @Test
-    @Order(1)
-    public void labelLinkGeneration(TestUtils setup, TestReference testReference)
-    {
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", testReference.getLastSpaceReference().getName(),
-            "heading", "Some Heading",
-            "configureGlobally", "true",
-            "configurationClass", setup.serializeReference(testReference),
-            "linkPrefix", "TheLinkPrefix");
-
-        // Check that the links are there and contain the expected values
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(
-            testReference.getLastSpaceReference().getName());
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(asp.hasLink("TheLinkPrefixString"));
-        assertTrue(asp.hasLink("TheLinkPrefixBoolean"));
-        assertTrue(asp.hasLink("TheLinkPrefixTextArea"));
-        assertTrue(asp.hasLink("TheLinkPrefixSelect"));
-    }
-
-    /*
-     * Creates a document with 2 configurable objects, one gets configured globally in one section and displays
-     * 2 configuration fields, the other is configured in the space in another section and displays the other 2
-     * fields. Fails if they are not displayed as they should be.
-     *
-     * Tests: XWiki.ConfigurableClass
-     */
-    @Test
-    @Order(2)
-    public void testApplicationConfiguredInMultipleSections(TestUtils setup, TestReference testReference)
-    {
-        String app1Section = testReference.getLastSpaceReference().getName() + "_1";
-        String app2Section = testReference.getLastSpaceReference().getName() + "_2";
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", app1Section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "String, Boolean");
-
-        setup.addObject(testReference, "XWiki.ConfigurableClass",
-            "displayInSection", app2Section,
-            "configureGlobally", "false",
-            "heading", "Some Other Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "TextArea, Select");
-
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-
-        // Assert that half of the configuration shows up but not the other half.
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(app1Section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(asp.hasHeading(2, "HSomeHeading"));
-        // Save button
-        // Javascript injects a save button outside of the form and removes the default save button.
-        setup.getDriver().waitUntilElementIsVisible(By.xpath(
-            "//div/div/p/span/input[@type='submit'][@value='Save']"));
-
-        FormContainerElement formContainerElement = asp.getFormContainerElement();
-
-        // Form and fields
-        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
-            formContainerElement.getFormAction());
-        assertEquals(setup.getDriver().getCurrentUrl(),
-            formContainerElement.getFieldValue(By.name("xredirect")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
-        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
-
-        // Should not be there
-        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
-        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_Select")));
-
-        // Now we go to where the other half of the configuration should be.
-        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), app2Section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(asp.hasHeading(2, "HSomeOtherHeading"));
-        // Save button
-        // Javascript injects a save button outside of the form and removes the default save button.
-        setup.getDriver().waitUntilElementIsVisible(By.xpath(
-            "//div/div/p/span/input[@type='submit'][@value='Save']"));
-
-        formContainerElement = asp.getFormContainerElement();
-
-        // Form and fields
-        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
-            formContainerElement.getFormAction());
-        assertEquals(setup.getDriver().getCurrentUrl(),
-            formContainerElement.getFieldValue(By.name("xredirect")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
-        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
-
-        // Should not be there
-        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_String")));
-        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
-    }
-
-    /*
-     * If CodeToExecute is defined in a configurable app, then it should be evaluated.
-     * Also header should be evaluated and not just printed.
-     * If XWiki.ConfigurableClass is saved with programming rights, it should resave itself so that it doesn't have them.
-     */
-    @Test
-    @Order(3)
-    public void testCodeToExecutionAndAutoSandboxing(TestUtils setup, TestReference testReference) throws Exception
-    {
-        // fixture
-        String codeToExecute = "#set($code = 's sh')"
-            + "Thi${code}ould be displayed."
-            + "#if($xcontext.hasProgrammingRights())"
-            + "This should be displayed too."
-            + "#end";
-        String heading = "#set($code = 'his sho')"
-            + "T${code}uld also be displayed.";
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", testReference.getLastSpaceReference().getName(),
-            "configureGlobally", "true",
-            "codeToExecute", codeToExecute,
-            "heading", heading
-            );
-        LocalDocumentReference configurableClassReference = new LocalDocumentReference("XWiki", "ConfigurableClass");
-        Page restPage = setup.rest().get(configurableClassReference);
-        String standardContent = restPage.getContent();
-        try {
-            // Modify content
-            restPage.setContent(standardContent +
-                "\n\n{{velocity}}Has Programming permission: $xcontext.hasProgrammingRights(){{/velocity}}");
-            // Our admin will foolishly save XWiki.ConfigurableClass, giving it programming rights.
-            setup.rest().save(restPage);
-
-            // Now we look at the section for our configurable.
-            setup.gotoPage(configurableClassReference, "view",
-                "editor=globaladmin&section=" + testReference.getLastSpaceReference().getName());
-            ViewPage viewPage = new ViewPage();
-            viewPage.waitUntilPageJSIsLoaded();
-            String content = viewPage.getContent();
-            assertTrue(content.contains("This should be displayed."));
-            assertTrue(content.contains("This should also be displayed."));
-            assertTrue(content.contains("This should be displayed too."));
-            // It's false because of the dropPermission in ConfigurableClass (but supposed to be fixed at some point)
-            assertTrue(content.contains("Has Programming permission: false"));
-            // Make sure javascript has not added a Save button.
-            assertFalse(setup.getDriver().hasElementWithoutWaiting(
-                By.xpath("//div/div/p/span/input[@type='submit'][@value='Save']")));
-        } finally {
-            // Restore initial content
-            restPage.setContent(standardContent);
-            // Save
-            setup.rest().save(restPage);
-        }
-    }
-
-    /**
-     * Test add configurable application to existing section.
-     *
-     * This test depends on the "Presentation" section existing.
-     */
-    @Test
-    @Order(4)
-    public void testAddConfigurableApplicationInExistingSection(TestUtils setup, TestReference testReference)
-    {
-        String section = "presentation";
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "String, Boolean, TextArea, Select");
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-
-        // Check it's available in global section.
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
-        assertTrue(asp.hasHeading(2, "HSomeHeading"));
-
-        FormContainerElement formContainerElement = asp.getFormContainerElementForClass(fullName);
-        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
-            formContainerElement.getFormAction());
-        assertEquals(setup.getDriver().getCurrentUrl(),
-            formContainerElement.getFieldValue(By.name("xredirect")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
-        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
-
-        // Check it's not available in space section.
-        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
-        assertFalse(asp.hasHeading(2, "HSomeHeading"));
-
-        // Switch application to non-global
-        setup.updateObject(testReference, "XWiki.ConfigurableClass", 0, "configureGlobally", false);
-
-        // Check that it is available in space section.
-        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(asp.hasHeading(2, "HSomeHeading"));
-        formContainerElement = asp.getFormContainerElementForClass(fullName);
-        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
-            formContainerElement.getFormAction());
-        assertEquals(setup.getDriver().getCurrentUrl(),
-            formContainerElement.getFieldValue(By.name("xredirect")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
-        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
-
-        // Check that it's not available in another space.
-        asp = AdministrationSectionPage.gotoSpaceAdministration(new SpaceReference("xwiki", "XWiki"), section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
-        assertFalse(asp.hasHeading(2, "HSomeHeading"));
-
-        // Check that it's not available in global section.
-        asp = AdministrationSectionPage.gotoPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
-        assertFalse(asp.hasHeading(2, "HSomeHeading"));
-    }
-
-    /**
-     * Test add configurable application to a nonexistent section.
-     * This test depends on the "HopingThereIsNoSectionByThisName" section not existing.
-     */
-    @Test
-    @Order(5)
-    public void testAddConfigurableApplicationInNonexistantSection(TestUtils setup, TestReference testReference)
-    {
-        String section = testReference.getLastSpaceReference().getName();
-
-        // Ensure the section does not exist yet
-        AdministrationPage administrationPage = AdministrationPage.gotoPage();
-        assertTrue(administrationPage.hasNotSection("Other", section));
-
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "String, Boolean, TextArea, Select");
-
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-
-        // Check it's available in global section.
-        administrationPage = AdministrationPage.gotoPage();
-        assertTrue(administrationPage.hasSection("Other", section));
-        administrationPage.clickSection("Other", section);
-        AdministrationSectionPage asp = new AdministrationSectionPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(asp.hasHeading(2, "HSomeHeading"));
-        FormContainerElement formContainerElement = asp.getFormContainerElement();
-        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
-            formContainerElement.getFormAction());
-        assertEquals(setup.getDriver().getCurrentUrl(),
-            formContainerElement.getFieldValue(By.name("xredirect")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
-        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
-        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
-
-        administrationPage = AdministrationPage.gotoSpaceAdministrationPage(testReference.getLastSpaceReference());
-        asp.waitUntilActionButtonIsLoaded();
-        assertTrue(administrationPage.hasNotSection(section));
-    }
-
-    /**
-     * Fails if a user can create a Configurable application without having edit access to the configuration page (in
-     * this case: XWikiPreferences)
-     */
-    @Test
-    @Order(6)
-    public void testConfigurableCreatedByUnauthorizedWillNotExecute(TestUtils setup, TestReference testReference)
-    {
-        // Make sure the configurable page doesn't exist because otherwise we may fail to overwrite it with a
-        // non-administrator user.
-        setup.deletePage(testReference);
-
-        setup.createUserAndLogin("anotherJoker", "bentOnMalice");
-        String section = testReference.getLastSpaceReference().getName();
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "String, Boolean, TextArea, Select");
-
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-
-        setup.loginAsSuperAdmin();
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().
-            hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
-        assertFalse(asp.hasHeading(2, "HSomeHeading"));
-    }
-
-    /*
-     * Proves that ConfigurationClass#codeToExecute is not rendered inline even if there is no
-     * custom configuration class and the only content is custom content.
-     */
-    @Test
-    @Order(7)
-    public void testCodeToExecuteNotInlineIfNoConfigurationClass(TestUtils setup, TestReference testReference)
-    {
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-        String helloDiv = String.format("%s_%s", fullName, "hello");
-        String test = "{{html}} <div id=\""+helloDiv+"\"> <p> hello </p> </div> {{/html}}";
-        String section = testReference.getLastSpaceReference().getName();
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "codeToExecute", test);
-
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.className("xwikirenderingerror")));
-        assertTrue(setup.getDriver().hasElementWithoutWaiting(By.id(helloDiv)));
-    }
-
-    /*
-     * Proves that ConfigurationClass#codeToExecute is not rendered inline whether it's at the top of the
-     * form or inside of the form.
-     */
-    @Test
-    @Order(8)
-    public void testCodeToExecuteNotInline(TestUtils setup, TestReference testReference)
-    {
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-        String helloDiv = String.format("%s_%s", fullName, "hello");
-        String test = "{{html}} <div id=\""+helloDiv+"\"> <p> hello </p> </div> {{/html}}";
-        String section = testReference.getLastSpaceReference().getName();
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "codeToExecute", test,
-            "propertiesToShow", "String, Boolean");
-
-        setup.addObject(testReference, "XWiki.ConfigurableClass",
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Other Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "TextArea, Select");
-
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        assertFalse(setup.getDriver().hasElement(By.className("xwikirenderingerror")));
-        assertTrue(setup.getDriver().hasElementWithoutWaiting(By.id(helloDiv)));
-    }
-
-    /*
-     * Make sure html macros and pre tags are not being stripped
-     * @see: https://jira.xwiki.org/browse/XAADMINISTRATION-141
-     */
-    @Test
-    @Order(9)
-    public void testNotStrippingHtmlMacros(TestUtils setup, TestReference testReference)
-    {
-        String test = "{{html}} <pre> {{html clean=\"false\"}} </pre> {{/html}}";
-        String section = testReference.getLastSpaceReference().getName();
-        String fullName = setup.serializeReference(testReference).split(":")[1];
-
-        // Fixture
-        setupConfigurableApplication(setup, testReference,
-            "displayInSection", section,
-            "configureGlobally", "true",
-            "heading", "Some Heading",
-            "configurationClass", setup.serializeReference(testReference),
-            "propertiesToShow", "String, Boolean, TextArea, Select");
-
-        setup.updateObject(testReference, fullName, 0,
-            "TextArea", test,
-            "String", test);
-
-        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
-        asp.waitUntilActionButtonIsLoaded();
-        FormContainerElement formContainerElement = asp.getFormContainerElement();
-        assertEquals(test, formContainerElement.getFieldValue(By.name(fullName + "_0_TextArea")));
-        assertEquals(test, formContainerElement.getFieldValue(By.name(fullName + "_0_String")));
-    }
+//    /*
+//     * Verify that if a value is specified for the {@code linkPrefix} xproperty, then a link is generated with
+//     * linkPrefix + prettyName of the property from the configuration class.
+//     */
+//    @Test
+//    @Order(1)
+//    public void labelLinkGeneration(TestUtils setup, TestReference testReference)
+//    {
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", testReference.getLastSpaceReference().getName(),
+//            "heading", "Some Heading",
+//            "configureGlobally", "true",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "linkPrefix", "TheLinkPrefix");
+//
+//        // Check that the links are there and contain the expected values
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(
+//            testReference.getLastSpaceReference().getName());
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(asp.hasLink("TheLinkPrefixString"));
+//        assertTrue(asp.hasLink("TheLinkPrefixBoolean"));
+//        assertTrue(asp.hasLink("TheLinkPrefixTextArea"));
+//        assertTrue(asp.hasLink("TheLinkPrefixSelect"));
+//    }
+//
+//    /*
+//     * Creates a document with 2 configurable objects, one gets configured globally in one section and displays
+//     * 2 configuration fields, the other is configured in the space in another section and displays the other 2
+//     * fields. Fails if they are not displayed as they should be.
+//     *
+//     * Tests: XWiki.ConfigurableClass
+//     */
+//    @Test
+//    @Order(2)
+//    public void testApplicationConfiguredInMultipleSections(TestUtils setup, TestReference testReference)
+//    {
+//        String app1Section = testReference.getLastSpaceReference().getName() + "_1";
+//        String app2Section = testReference.getLastSpaceReference().getName() + "_2";
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", app1Section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "String, Boolean");
+//
+//        setup.addObject(testReference, "XWiki.ConfigurableClass",
+//            "displayInSection", app2Section,
+//            "configureGlobally", "false",
+//            "heading", "Some Other Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "TextArea, Select");
+//
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//
+//        // Assert that half of the configuration shows up but not the other half.
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(app1Section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(asp.hasHeading(2, "HSomeHeading"));
+//        // Save button
+//        // Javascript injects a save button outside of the form and removes the default save button.
+//        setup.getDriver().waitUntilElementIsVisible(By.xpath(
+//            "//div/div/p/span/input[@type='submit'][@value='Save']"));
+//
+//        FormContainerElement formContainerElement = asp.getFormContainerElement();
+//
+//        // Form and fields
+//        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
+//            formContainerElement.getFormAction());
+//        assertEquals(setup.getDriver().getCurrentUrl(),
+//            formContainerElement.getFieldValue(By.name("xredirect")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
+//        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
+//
+//        // Should not be there
+//        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
+//        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_Select")));
+//
+//        // Now we go to where the other half of the configuration should be.
+//        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), app2Section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(asp.hasHeading(2, "HSomeOtherHeading"));
+//        // Save button
+//        // Javascript injects a save button outside of the form and removes the default save button.
+//        setup.getDriver().waitUntilElementIsVisible(By.xpath(
+//            "//div/div/p/span/input[@type='submit'][@value='Save']"));
+//
+//        formContainerElement = asp.getFormContainerElement();
+//
+//        // Form and fields
+//        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
+//            formContainerElement.getFormAction());
+//        assertEquals(setup.getDriver().getCurrentUrl(),
+//            formContainerElement.getFieldValue(By.name("xredirect")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
+//        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
+//
+//        // Should not be there
+//        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_String")));
+//        assertFalse(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
+//    }
+//
+//    /*
+//     * If CodeToExecute is defined in a configurable app, then it should be evaluated.
+//     * Also header should be evaluated and not just printed.
+//     * If XWiki.ConfigurableClass is saved with programming rights, it should resave itself so that it doesn't have them.
+//     */
+//    @Test
+//    @Order(3)
+//    public void testCodeToExecutionAndAutoSandboxing(TestUtils setup, TestReference testReference) throws Exception
+//    {
+//        // fixture
+//        String codeToExecute = "#set($code = 's sh')"
+//            + "Thi${code}ould be displayed."
+//            + "#if($xcontext.hasProgrammingRights())"
+//            + "This should be displayed too."
+//            + "#end";
+//        String heading = "#set($code = 'his sho')"
+//            + "T${code}uld also be displayed.";
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", testReference.getLastSpaceReference().getName(),
+//            "configureGlobally", "true",
+//            "codeToExecute", codeToExecute,
+//            "heading", heading
+//        );
+//        LocalDocumentReference configurableClassReference = new LocalDocumentReference("XWiki", "ConfigurableClass");
+//        Page restPage = setup.rest().get(configurableClassReference);
+//        String standardContent = restPage.getContent();
+//        try {
+//            // Modify content
+//            restPage.setContent(standardContent +
+//                "\n\n{{velocity}}Has Programming permission: $xcontext.hasProgrammingRights(){{/velocity}}");
+//            // Our admin will foolishly save XWiki.ConfigurableClass, giving it programming rights.
+//            setup.rest().save(restPage);
+//
+//            // Now we look at the section for our configurable.
+//            setup.gotoPage(configurableClassReference, "view",
+//                "editor=globaladmin&section=" + testReference.getLastSpaceReference().getName());
+//            ViewPage viewPage = new ViewPage();
+//            viewPage.waitUntilPageJSIsLoaded();
+//            String content = viewPage.getContent();
+//            assertTrue(content.contains("This should be displayed."));
+//            assertTrue(content.contains("This should also be displayed."));
+//            assertTrue(content.contains("This should be displayed too."));
+//            // It's false because of the dropPermission in ConfigurableClass (but supposed to be fixed at some point)
+//            assertTrue(content.contains("Has Programming permission: false"));
+//            // Make sure javascript has not added a Save button.
+//            assertFalse(setup.getDriver().hasElementWithoutWaiting(
+//                By.xpath("//div/div/p/span/input[@type='submit'][@value='Save']")));
+//        } finally {
+//            // Restore initial content
+//            restPage.setContent(standardContent);
+//            // Save
+//            setup.rest().save(restPage);
+//        }
+//    }
+//
+//    /**
+//     * Test add configurable application to existing section.
+//     * <p>
+//     * This test depends on the "Presentation" section existing.
+//     */
+//    @Test
+//    @Order(4)
+//    public void testAddConfigurableApplicationInExistingSection(TestUtils setup, TestReference testReference)
+//    {
+//        String section = "presentation";
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "String, Boolean, TextArea, Select");
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//
+//        // Check it's available in global section.
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
+//        assertTrue(asp.hasHeading(2, "HSomeHeading"));
+//
+//        FormContainerElement formContainerElement = asp.getFormContainerElementForClass(fullName);
+//        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
+//            formContainerElement.getFormAction());
+//        assertEquals(setup.getDriver().getCurrentUrl(),
+//            formContainerElement.getFieldValue(By.name("xredirect")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
+//        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
+//
+//        // Check it's not available in space section.
+//        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
+//        assertFalse(asp.hasHeading(2, "HSomeHeading"));
+//
+//        // Switch application to non-global
+//        setup.updateObject(testReference, "XWiki.ConfigurableClass", 0, "configureGlobally", false);
+//
+//        // Check that it is available in space section.
+//        asp = AdministrationSectionPage.gotoSpaceAdministration(testReference.getLastSpaceReference(), section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(asp.hasHeading(2, "HSomeHeading"));
+//        formContainerElement = asp.getFormContainerElementForClass(fullName);
+//        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
+//            formContainerElement.getFormAction());
+//        assertEquals(setup.getDriver().getCurrentUrl(),
+//            formContainerElement.getFieldValue(By.name("xredirect")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
+//        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
+//
+//        // Check that it's not available in another space.
+//        asp = AdministrationSectionPage.gotoSpaceAdministration(new SpaceReference("xwiki", "XWiki"), section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
+//        assertFalse(asp.hasHeading(2, "HSomeHeading"));
+//
+//        // Check that it's not available in global section.
+//        asp = AdministrationSectionPage.gotoPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
+//        assertFalse(asp.hasHeading(2, "HSomeHeading"));
+//    }
+//
+//    /**
+//     * Test add configurable application to a nonexistent section. This test depends on the
+//     * "HopingThereIsNoSectionByThisName" section not existing.
+//     */
+//    @Test
+//    @Order(5)
+//    public void testAddConfigurableApplicationInNonexistantSection(TestUtils setup, TestReference testReference)
+//    {
+//        String section = testReference.getLastSpaceReference().getName();
+//
+//        // Ensure the section does not exist yet
+//        AdministrationPage administrationPage = AdministrationPage.gotoPage();
+//        assertTrue(administrationPage.hasNotSection("Other", section));
+//
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "String, Boolean, TextArea, Select");
+//
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//
+//        // Check it's available in global section.
+//        administrationPage = AdministrationPage.gotoPage();
+//        assertTrue(administrationPage.hasSection("Other", section));
+//        administrationPage.clickSection("Other", section);
+//        AdministrationSectionPage asp = new AdministrationSectionPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(asp.hasHeading(2, "HSomeHeading"));
+//        FormContainerElement formContainerElement = asp.getFormContainerElement();
+//        assertEquals(String.format("%ssave/%s", setup.getBaseBinURL(), fullName.replace('.', '/')),
+//            formContainerElement.getFormAction());
+//        assertEquals(setup.getDriver().getCurrentUrl(),
+//            formContainerElement.getFieldValue(By.name("xredirect")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_String")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Boolean")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_TextArea")));
+//        assertTrue(formContainerElement.hasField(By.name(fullName + "_0_Select")));
+//        assertTrue(formContainerElement.hasField(By.id(fullName + "_redirect")));
+//
+//        administrationPage = AdministrationPage.gotoSpaceAdministrationPage(testReference.getLastSpaceReference());
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertTrue(administrationPage.hasNotSection(section));
+//    }
+//
+//    /**
+//     * Fails if a user can create a Configurable application without having edit access to the configuration page (in
+//     * this case: XWikiPreferences)
+//     */
+//    @Test
+//    @Order(6)
+//    public void testConfigurableCreatedByUnauthorizedWillNotExecute(TestUtils setup, TestReference testReference)
+//    {
+//        // Make sure the configurable page doesn't exist because otherwise we may fail to overwrite it with a
+//        // non-administrator user.
+//        setup.deletePage(testReference);
+//
+//        setup.createUserAndLogin("anotherJoker", "bentOnMalice");
+//        String section = testReference.getLastSpaceReference().getName();
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "String, Boolean, TextArea, Select");
+//
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//
+//        setup.loginAsSuperAdmin();
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().
+//            hasElementWithoutWaiting(By.id(String.format("%s_%s", section, fullName))));
+//        assertFalse(asp.hasHeading(2, "HSomeHeading"));
+//    }
+//
+//    /*
+//     * Proves that ConfigurationClass#codeToExecute is not rendered inline even if there is no
+//     * custom configuration class and the only content is custom content.
+//     */
+//    @Test
+//    @Order(7)
+//    public void testCodeToExecuteNotInlineIfNoConfigurationClass(TestUtils setup, TestReference testReference)
+//    {
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//        String helloDiv = String.format("%s_%s", fullName, "hello");
+//        String test = "{{html}} <div id=\"" + helloDiv + "\"> <p> hello </p> </div> {{/html}}";
+//        String section = testReference.getLastSpaceReference().getName();
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "codeToExecute", test);
+//
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().hasElementWithoutWaiting(By.className("xwikirenderingerror")));
+//        assertTrue(setup.getDriver().hasElementWithoutWaiting(By.id(helloDiv)));
+//    }
+//
+//    /*
+//     * Proves that ConfigurationClass#codeToExecute is not rendered inline whether it's at the top of the
+//     * form or inside of the form.
+//     */
+//    @Test
+//    @Order(8)
+//    public void testCodeToExecuteNotInline(TestUtils setup, TestReference testReference)
+//    {
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//        String helloDiv = String.format("%s_%s", fullName, "hello");
+//        String test = "{{html}} <div id=\"" + helloDiv + "\"> <p> hello </p> </div> {{/html}}";
+//        String section = testReference.getLastSpaceReference().getName();
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "codeToExecute", test,
+//            "propertiesToShow", "String, Boolean");
+//
+//        setup.addObject(testReference, "XWiki.ConfigurableClass",
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Other Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "TextArea, Select");
+//
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        assertFalse(setup.getDriver().hasElement(By.className("xwikirenderingerror")));
+//        assertTrue(setup.getDriver().hasElementWithoutWaiting(By.id(helloDiv)));
+//    }
+//
+//    /*
+//     * Make sure html macros and pre tags are not being stripped
+//     * @see: https://jira.xwiki.org/browse/XAADMINISTRATION-141
+//     */
+//    @Test
+//    @Order(9)
+//    public void testNotStrippingHtmlMacros(TestUtils setup, TestReference testReference)
+//    {
+//        String test = "{{html}} <pre> {{html clean=\"false\"}} </pre> {{/html}}";
+//        String section = testReference.getLastSpaceReference().getName();
+//        String fullName = setup.serializeReference(testReference).split(":")[1];
+//
+//        // Fixture
+//        setupConfigurableApplication(setup, testReference,
+//            "displayInSection", section,
+//            "configureGlobally", "true",
+//            "heading", "Some Heading",
+//            "configurationClass", setup.serializeReference(testReference),
+//            "propertiesToShow", "String, Boolean, TextArea, Select");
+//
+//        setup.updateObject(testReference, fullName, 0,
+//            "TextArea", test,
+//            "String", test);
+//
+//        AdministrationSectionPage asp = AdministrationSectionPage.gotoPage(section);
+//        asp.waitUntilActionButtonIsLoaded();
+//        FormContainerElement formContainerElement = asp.getFormContainerElement();
+//        assertEquals(test, formContainerElement.getFieldValue(By.name(fullName + "_0_TextArea")));
+//        assertEquals(test, formContainerElement.getFieldValue(By.name(fullName + "_0_String")));
+//    }
 
     /*
      * Fails unless XWiki.ConfigurableClass locks each page on view and unlocks any other configurable page.
      * Also fails if codeToExecute is not being evaluated.
      */
     @Test
-    @Order(10)
+//    @Order(10)
     public void testLockingAndUnlocking(TestUtils setup, TestReference testReference)
     {
         // Fixture

@@ -68,7 +68,6 @@ public class DefaultLiveDataEntryPropertyResource extends AbstractLiveDataResour
         Optional<LiveDataSource> source = this.liveDataSourceManager.get(querySource, namespace);
         if (source.isPresent()) {
             try {
-
                 LiveDataSource liveDataSource = source.get();
                 if (!(boolean) liveDataSource.getProperties().get(propertyId)
                     .map(LiveDataPropertyDescriptor::isEditable)

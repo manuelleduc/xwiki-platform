@@ -32,7 +32,7 @@ export default {
   directives: {
     // Only used by the date displayer.
     onInserted: {
-      inserted(el, binding) {
+      inserted (el, binding) {
         const handler = binding.value;
         if (!(handler instanceof Function)) {
           return void console.warn(`Warning: v-on-inserted directive expects a function`);
@@ -44,9 +44,7 @@ export default {
     // This can be useful in order to autofocus the input in the Editor widget
     // right after the user switched from the Viewer widget
     autofocus: {
-      inserted(el) {
-        el.focus();
-      }
+      inserted (el) { el.focus(); }
     },
   },
 
@@ -58,24 +56,27 @@ export default {
   // The computed values provide common data needed by displayers
   computed: {
     // The value to be displayed
-    value() {
+    value () {
       return this.entry[this.propertyId];
     },
     // The property descriptor of `this.propertyId`
-    propertyDescriptor() {
+    propertyDescriptor () {
       return this.logic.getPropertyDescriptor(this.propertyId);
     },
     // The configuration (aka displayerDescriptor) of the displayer
-    config() {
+    config () {
       return this.logic.getDisplayerDescriptor(this.propertyId);
     },
     // The whole Livedata data object
-    data() {
+    data () {
       return this.logic.data;
     },
   },
 
   methods: {
+    /**
+     * Generic save operation where the saved value is the 
+     */
     genericSave() {
       this.editBus.save(this.entry, this.propertyId, [{[this.propertyId]: this.editedValue}])
     }

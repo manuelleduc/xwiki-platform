@@ -75,7 +75,9 @@ export default {
   },
 
   methods: {
-
+    /**
+     * Process the edit form content and send it to be saved.
+     */
     applyEdit() {
       const documentName = this.entry["doc.fullName"];
       if (!documentName) {
@@ -172,6 +174,13 @@ export default {
           })
       }
     },
+    /**
+     * Reload the edit or view field according the new editor state.
+     * When forced is false, the field value will not be reloaded if it has already been initialized.
+     * @param isView if true the view field must be updated, if false the edit field must be updated
+     * @param forced if true the updated field will be reloaded even if it already has a value, if false the field will
+     * only be updated if it undefined
+     */
     refreshXClassProperty({isView, forced}) {
       if (!isView) {
         // Updates the edit form when passing edit mode.
@@ -183,19 +192,13 @@ export default {
     }
   },
 
-  computed: {
-    isEditing() {
-      return this.editField !== undefined;
-    },
-    isDisabled() {
-      return this.isView && this.isEditing;
-    }
-  },
-
   watch: {
+    // Refreshes the edit or view field when the view mode changes.
     isView: function(isView) {
       this.refreshXClassProperty({isView, forced: false})
     },
+    // Watches the timestamp change to force a full refresh of the edit and view fields when the 
+    // whole livedata is reloaded.
     timestamp: function(timestamp) {
       // Reset the edit field and force the reload of the view field when the component is re-rendered.
       this.editField = undefined

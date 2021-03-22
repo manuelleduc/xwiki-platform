@@ -27,7 +27,7 @@
   instead of reimplementing the whole displayer logic each time.
 -->
 <template>
-  <div :class="{view: isView, edit: !isView, editing: isView && isEditing}" ref="displayerRoot">
+  <div :class="{view: isView, edit: !isView, editing: isView}" ref="displayerRoot">
     <!--
       The base displayer contains three slots: `viewer`, `editor`, and `loading`.
       It displays `viewer` or `loading` according to its current state: `this.isView` when `this.isLoading` is false,
@@ -38,7 +38,7 @@
     <div @dblclick="setEdit"
          @keypress.self.enter="setEdit"
          tabindex="0"
-         v-if="isView && !isLoading && !isEditing">
+         v-if="isView && !isLoading">
       <slot name="viewer">
         <!--
           Default Viewer widget
@@ -54,7 +54,7 @@
     <!-- The slot containing the displayer Editor widget -->
     <div @keypress.enter="applyEdit"
          @keydown.esc="cancelEdit"
-         v-if="(!isView && !isLoading) || isEditing"
+         v-if="!isView && !isLoading"
          tabindex="0"
          ref="editBlock"
     >
@@ -115,6 +115,8 @@ export default {
   },
 
   computed: {
+    // Checks if the displayed is allowed to be edited and if the livedata is in a state where this displayer can be
+    // edited.
     isEditable() {
       const editable = this.logic.isEditable({
         entry: this.entry,
@@ -145,10 +147,7 @@ export default {
   // The following methods are only used by the BaseDisplayer component
   // The methods for specific displayers can be found in the displayerMixin
   methods: {
-    setView() {
-      this.$emit('update:isView', true);
-    },
-
+    // Switches the displayer to edit mode.
     setEdit() {
       if (this.isEditable) {
         this.$emit('update:isView', false);
@@ -160,23 +159,23 @@ export default {
     // This should rarely be used directly as it does not validate modified data
     // Used the `applyEdit` method instead (found in the displayerMixin)
     // which call this view function after validating data
-    view () {
-      if (this.isView) { return; }
+    view() {
+      if (this.isView) {
+        return;
+      }
       this.$el.focus();
     },
 
     // This method should be used to apply edit and go back to view mode.
     // The validation of the edited property is done once the whole entry is done editing.
     applyEdit() {
-      // Skip the event if the new focused element is contained by the edit block.
-
       // When edit slot is redefined by the parent component, the edited value is always undefined and 
       // can is ignored by the parent, which has access the the value of its own edit slot.
       this.$emit('saveEdit', this.editedValue);
       // Go back to view mode
-      this.setView();
-
+      this.$emit('update:isView', true);
     },
+
     // This method should be used to cancel edit and go back to view mode.
     // This is like applyEdit but it does not save the entered value
     cancelEdit() {
@@ -184,11 +183,11 @@ export default {
       this.editBus.cancel(this.entry, this.propertyId)
 
       // Switches to view mode.
-      this.setView();
+      this.$emit('update:isView', true);
     }
   },
   watch: {
-    /** Focus on a cell when it passes to edit mode. */
+    // Focus on a cell when it passes to edit mode.
     isView: function(newIsView) {
       // Focuses in the current cell.
       if (newIsView) this.view();
@@ -210,8 +209,9 @@ export default {
           targetElement = targetElement.parentNode;
         } while (targetElement);
 
-        // Wait a little before switch back to view mode, otherwise the change case cause a column width change 
-        // and make the user click on the wrong column, for instance when trying to edit the next column.
+        // Wait a little before switching back to view mode, otherwise the change case cause a column width change 
+        // and make the user click on the wrong column, for instance when trying to edit the next column by double 
+        // clicking on it.
         setTimeout(() => this.applyEdit(), 200);
       }
     })

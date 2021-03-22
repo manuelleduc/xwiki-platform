@@ -133,6 +133,12 @@
                 <new>class com.xpn.xwiki.web.SaveAction</new>
                 <justification>Should not have any impact in practice.</justification>
               </item>
+              <item>
+                <code>java.method.parameterTypeChanged</code>
+                <old>parameter javax.ws.rs.core.Response org.xwiki.livedata.rest.LiveDataEntryPropertyResource::setProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, ===java.lang.Object===) throws java.lang.Exception</old>
+                <new>parameter javax.ws.rs.core.Response org.xwiki.livedata.rest.LiveDataEntryPropertyResource::setProperty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, ===java.lang.String===) throws java.lang.Exception</new>
+                <justification>Unstable API: Object type for the request body lead to initializing a bytes array.</justification>
+              </item>
             </revapi.ignore>
           </analysisConfiguration>
         </configuration>

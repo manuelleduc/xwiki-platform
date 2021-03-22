@@ -18,6 +18,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 export default {
+  /**
+   * Common states for the displayers relying on BaseDisplayer.
+   * - isView: true when the displayer is in view state, false when the displayer is in edit state
+   * - isLoading: true when the displayer is currently loading, because it needs to be initialized by an asynchronous
+   * pperatio
+   * This mixing can be used to avoid redeclaring the mandatory states in each displayer.
+   * @returns {{isLoading: boolean, isView: boolean}} the mixing data values.
+   */
   data() {
     return {
       isView: true,

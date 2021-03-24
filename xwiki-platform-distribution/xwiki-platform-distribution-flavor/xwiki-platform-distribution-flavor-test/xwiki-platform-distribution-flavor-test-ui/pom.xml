@@ -33,6 +33,10 @@
   <description>XWiki Platform - Distribution - Flavor - Functional Tests - UI</description>
   <dependencies>
     <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-distribution-flavor-test-pageobjects</artifactId>
       <version>${project.version}</version>

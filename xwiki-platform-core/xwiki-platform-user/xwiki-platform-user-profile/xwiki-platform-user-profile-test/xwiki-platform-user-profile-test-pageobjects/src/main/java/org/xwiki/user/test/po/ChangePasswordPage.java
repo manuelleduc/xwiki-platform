@@ -19,14 +19,13 @@
  */
 package org.xwiki.user.test.po;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.function.BooleanSupplier;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.xwiki.test.ui.po.BasePage;
 
 /**
@@ -54,15 +53,6 @@ public class ChangePasswordPage extends BasePage
 
     @FindBy(css = "a.secondary.button")
     private WebElement cancelPasswordChange;
-
-    @FindBy(css = ERROR_MESSAGE_SELECTOR)
-    private WebElement errorMessage;
-
-    @FindBy(css = VALIDATION_ERROR_MESSAGE_SELECTOR)
-    private WebElement validationErrorMessage;
-
-    @FindBy(css = SUCCESS_MESSAGE_SELECTOR)
-    private WebElement successMessage;
 
     /**
      * Fill the change password form with the original password, the new password and the confirmation of the new
@@ -103,7 +93,8 @@ public class ChangePasswordPage extends BasePage
      */
     public String getErrorMessage()
     {
-        return this.errorMessage.getText();
+        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
+        return getDriver().findElement(By.cssSelector(ERROR_MESSAGE_SELECTOR)).getText();
     }
 
     /**
@@ -111,7 +102,8 @@ public class ChangePasswordPage extends BasePage
      */
     public String getValidationErrorMessage()
     {
-        return this.validationErrorMessage.getText();
+        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
+        return getDriver().findElement(By.cssSelector(VALIDATION_ERROR_MESSAGE_SELECTOR)).getText();
     }
 
     /**
@@ -119,46 +111,98 @@ public class ChangePasswordPage extends BasePage
      */
     public String getSuccessMessage()
     {
-        return this.successMessage.getText();
+        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
+        return getDriver().findElement(By.cssSelector(SUCCESS_MESSAGE_SELECTOR)).getText();
     }
 
     /**
-     * Submit the change password form.
+     * Submit the change password form and wait for at least one success or error message to be displayed before
+     * continuing. If you wish to assert a form error message after submitting, use {@link #submit(BooleanSupplier)} and
+     * define a condition with the error message you except to see displayed.
      *
-     * @return the new {@link ChangePasswordPage} after submission.
+     * @return the new {@link ChangePasswordPage} after submission
+     * @see #submit(BooleanSupplier)
      */
     public ChangePasswordPage submit()
     {
-        this.changePassword.click();
-
         // We cannot wait on a page reload because of the live error messages,
         // so we wait on the various kind of messages we can have, to avoid getting
         // StaleElementReference afterwards.
-        getDriver().waitUntilCondition(new ExpectedCondition<Boolean>()
-        {
-            @Override
-            public Boolean apply(@Nullable WebDriver webDriver)
-            {
-                return isDisplayed(By.cssSelector(VALIDATION_ERROR_MESSAGE_SELECTOR))
-                    || isDisplayed(By.cssSelector(ERROR_MESSAGE_SELECTOR))
-                    || isDisplayed(By.cssSelector(SUCCESS_MESSAGE_SELECTOR));
-            }
+        return submit(() -> isValidationErrorMessageDisplayed()
+            || isErrorMessageDisplayed()
+            || isSuccessMessageDisplayed());
+    }
 
-            private boolean isDisplayed(By target)
-            {
-                boolean liveErrorIsDisplayed = false;
-                try {
-                    // Fails fast with findElementWithoutWaiting when the targeted element is staled,
-                    // because isDisplayed fails too but much more slowly, increasing the chance to see 
-                    // waitUntilCondition timeout even if the expected message is finally displayed. 
-                    WebElement elementWithoutWaiting = getDriver().findElementWithoutWaiting(target);
-                    liveErrorIsDisplayed = elementWithoutWaiting.isDisplayed();
-                } catch (StaleElementReferenceException | NoSuchElementException e) {
-                }
-                return liveErrorIsDisplayed;
-            }
-        });
+    /**
+     * Submit the change password form and wait for the provided continuation condition to be true. The continuation
+     * conditions are often a boolean expression combining {@link #isSuccessMessageDisplayed()}, {@link
+     * #isErrorMessageDisplayed()}, and {@link #isValidationErrorMessageDisplayed()}.
+     *
+     * @param condition the continuation condition
+     * @return the new {@link ChangePasswordPage} after submission
+     * @since 13.2
+     * @since 12.10.6
+     */
+    public ChangePasswordPage submit(BooleanSupplier condition)
+    {
+        this.changePassword.click();
+
+        getDriver().waitUntilCondition(input -> condition.getAsBoolean());
         return new ChangePasswordPage();
+    }
+
+    /**
+     * @return {@code true} if a success message is displayed, {@code false} otherwise
+     * @since 13.2
+     * @since 12.10.6
+     */
+    public boolean isSuccessMessageDisplayed()
+    {
+        return isDisplayed(By.cssSelector(SUCCESS_MESSAGE_SELECTOR));
+    }
+
+    /**
+     * @return {@code true} if an error message message is displayed, {@code false} otherwise
+     * @since 13.2
+     * @since 12.10.6
+     */
+    public boolean isErrorMessageDisplayed()
+    {
+        return isDisplayed(By.cssSelector(ERROR_MESSAGE_SELECTOR));
+    }
+
+    /**
+     * @return {@code true} if a validation error message message is displayed, {@code false} otherwise
+     * @since 13.2
+     * @since 12.10.6
+     */
+    public boolean isValidationErrorMessageDisplayed()
+    {
+        return isDisplayed(By.cssSelector(VALIDATION_ERROR_MESSAGE_SELECTOR));
+    }
+
+    /**
+     * Inspects the target and returns {@code true} if it is displayed. This method is safe regarding staled targets,
+     * and the returned value is {@code false} in this case.
+     * <p>
+     * Note that the target is inspected without waiting and {@code false} is returned instantaneously if the target is
+     * not found.
+     *
+     * @param target the target
+     * @return {@code true} if the target is displayed, {@code false} otherwise
+     */
+    private boolean isDisplayed(By target)
+    {
+        boolean liveErrorIsDisplayed = false;
+        try {
+            // Fails fast with findElementWithoutWaiting when the targeted element is staled,
+            // because isDisplayed fails too but much more slowly, increasing the chance to see 
+            // waitUntilCondition timeout even if the expected message is finally displayed. 
+            WebElement elementWithoutWaiting = getDriver().findElementWithoutWaiting(target);
+            liveErrorIsDisplayed = elementWithoutWaiting.isDisplayed();
+        } catch (StaleElementReferenceException | NoSuchElementException e) {
+        }
+        return liveErrorIsDisplayed;
     }
 
     /**

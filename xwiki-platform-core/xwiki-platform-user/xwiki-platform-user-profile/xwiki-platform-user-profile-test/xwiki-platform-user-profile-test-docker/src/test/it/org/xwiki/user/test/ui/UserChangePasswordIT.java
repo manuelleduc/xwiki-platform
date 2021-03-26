@@ -72,7 +72,9 @@ class UserChangePasswordIT
         new EditPage();
     }
 
-    /** Functionality check: changing the password. */
+    /**
+     * Functionality check: changing the password.
+     */
     @Test
     @Order(1)
     void changePassword(TestUtils setup, TestReference testReference)
@@ -98,9 +100,9 @@ class UserChangePasswordIT
 
         userProfilePage = ProfileUserProfilePage.gotoPage(this.userName);
         preferencesPage = userProfilePage.switchToPreferences();
-        changePasswordPage = preferencesPage.changePassword();
+        preferencesPage.changePassword();
         changePasswordPage.changePasswordAsAdmin(DEFAULT_PASSWORD, DEFAULT_PASSWORD);
-        changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isSuccessMessageDisplayed);
         assertEquals("Your password has been successfully changed.", changePasswordPage.getSuccessMessage());
     }
 
@@ -112,7 +114,7 @@ class UserChangePasswordIT
         PreferencesUserProfilePage preferencesPage = userProfilePage.switchToPreferences();
         ChangePasswordPage changePasswordPage = preferencesPage.changePassword();
         changePasswordPage.changePassword(DEFAULT_PASSWORD, PASSWORD_1, PASSWORD_2);
-        changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
         assertEquals("The two passwords do not match.", changePasswordPage.getValidationErrorMessage());
     }
 
@@ -122,7 +124,7 @@ class UserChangePasswordIT
     {
         ChangePasswordPage changePasswordPage = ProfileUserProfilePage.gotoPage(this.userName)
             .switchToPreferences().changePassword();
-        changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
         assertEquals("This field is required.", changePasswordPage.getValidationErrorMessage());
     }
 
@@ -137,7 +139,7 @@ class UserChangePasswordIT
         PreferencesUserProfilePage preferencesPage = userProfilePage.switchToPreferences();
         ChangePasswordPage changePasswordPage = preferencesPage.changePassword();
         changePasswordPage.changePasswordAsAdmin(PASSWORD_1, PASSWORD_2);
-        changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
         assertEquals("The two passwords do not match.", changePasswordPage.getValidationErrorMessage());
     }
 
@@ -149,7 +151,7 @@ class UserChangePasswordIT
         PreferencesUserProfilePage preferencesPage = userProfilePage.switchToPreferences();
         ChangePasswordPage changePasswordPage = preferencesPage.changePassword();
         changePasswordPage.changePassword("badPassword", PASSWORD_1, PASSWORD_1);
-        changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isErrorMessageDisplayed);
         assertEquals("Current password is invalid.", changePasswordPage.getErrorMessage());
     }
 
@@ -167,15 +169,14 @@ class UserChangePasswordIT
         PreferencesUserProfilePage preferencesPage = userProfilePage.switchToPreferences();
         ChangePasswordPage changePasswordPage = preferencesPage.changePassword();
         changePasswordPage.changePasswordAsAdmin("foo", "foo");
-        changePasswordPage = changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
         assertEquals("Your new password must be at least 8 characters long.",
             changePasswordPage.getValidationErrorMessage());
         changePasswordPage.changePasswordAsAdmin("foofoofoo", "foofoofoo");
-        changePasswordPage = changePasswordPage.submit();
-        assertEquals("The password must contain at least one number.",
-            changePasswordPage.getValidationErrorMessage());
+        changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
+        assertEquals("The password must contain at least one number.", changePasswordPage.getValidationErrorMessage());
         changePasswordPage.changePasswordAsAdmin("foofoofoo42", "foofoofoo42");
-        changePasswordPage = changePasswordPage.submit();
+        changePasswordPage.submit(changePasswordPage::isSuccessMessageDisplayed);
         assertEquals("Your password has been successfully changed.", changePasswordPage.getSuccessMessage());
     }
 }

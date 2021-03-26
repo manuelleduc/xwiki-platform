@@ -148,14 +148,14 @@ public class ApplicationClassEditPage extends ApplicationEditPage
      */
     public static ApplicationClassEditPage goToEditor(DocumentReference reference)
     {
-        getUtil().gotoPage(reference, "edit",
-            "editor", "inline", "template", "AppWithinMinutes.ClassTemplate", "title",
-            reference.getName() + " Class");
+        getUtil().gotoPage(reference, "edit", "editor", "inline", "template", "AppWithinMinutes.ClassTemplate", "title",
+            reference.getLastSpaceReference().getName() + " Class");
         return new ApplicationClassEditPage();
     }
 
     /**
      * Creates a new application with the given name.
+     *
      * @param appName the application name
      * @return the corresponding page object
      * @since 13.2

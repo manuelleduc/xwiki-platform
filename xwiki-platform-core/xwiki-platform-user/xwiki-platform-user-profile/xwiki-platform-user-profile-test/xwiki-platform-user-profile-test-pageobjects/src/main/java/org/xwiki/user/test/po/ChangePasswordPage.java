@@ -54,6 +54,15 @@ public class ChangePasswordPage extends BasePage
     @FindBy(css = "a.secondary.button")
     private WebElement cancelPasswordChange;
 
+    @FindBy(css = ERROR_MESSAGE_SELECTOR)
+    private WebElement errorMessage;
+
+    @FindBy(css = VALIDATION_ERROR_MESSAGE_SELECTOR)
+    private WebElement validationErrorMessage;
+
+    @FindBy(css = SUCCESS_MESSAGE_SELECTOR)
+    private WebElement successMessage;
+
     /**
      * Fill the change password form with the original password, the new password and the confirmation of the new
      * password.
@@ -93,8 +102,7 @@ public class ChangePasswordPage extends BasePage
      */
     public String getErrorMessage()
     {
-        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
-        return getDriver().findElement(By.cssSelector(ERROR_MESSAGE_SELECTOR)).getText();
+        return this.errorMessage.getText();
     }
 
     /**
@@ -102,8 +110,7 @@ public class ChangePasswordPage extends BasePage
      */
     public String getValidationErrorMessage()
     {
-        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
-        return getDriver().findElement(By.cssSelector(VALIDATION_ERROR_MESSAGE_SELECTOR)).getText();
+        return this.validationErrorMessage.getText();
     }
 
     /**
@@ -111,8 +118,7 @@ public class ChangePasswordPage extends BasePage
      */
     public String getSuccessMessage()
     {
-        // We need to use findElement, otherwise the element might be stalled when queried, leading to an exception.
-        return getDriver().findElement(By.cssSelector(SUCCESS_MESSAGE_SELECTOR)).getText();
+        return this.successMessage.getText();
     }
 
     /**
@@ -120,17 +126,14 @@ public class ChangePasswordPage extends BasePage
      * continuing. If you wish to assert a form error message after submitting, use {@link #submit(BooleanSupplier)} and
      * define a condition with the error message you except to see displayed.
      *
-     * @return the new {@link ChangePasswordPage} after submission
      * @see #submit(BooleanSupplier)
      */
-    public ChangePasswordPage submit()
+    public void submit()
     {
         // We cannot wait on a page reload because of the live error messages,
         // so we wait on the various kind of messages we can have, to avoid getting
         // StaleElementReference afterwards.
-        return submit(() -> isValidationErrorMessageDisplayed()
-            || isErrorMessageDisplayed()
-            || isSuccessMessageDisplayed());
+        submit(() -> isValidationErrorMessageDisplayed() || isErrorMessageDisplayed() || isSuccessMessageDisplayed());
     }
 
     /**
@@ -139,16 +142,14 @@ public class ChangePasswordPage extends BasePage
      * #isErrorMessageDisplayed()}, and {@link #isValidationErrorMessageDisplayed()}.
      *
      * @param condition the continuation condition
-     * @return the new {@link ChangePasswordPage} after submission
      * @since 13.2
      * @since 12.10.6
      */
-    public ChangePasswordPage submit(BooleanSupplier condition)
+    public void submit(BooleanSupplier condition)
     {
         this.changePassword.click();
 
         getDriver().waitUntilCondition(input -> condition.getAsBoolean());
-        return new ChangePasswordPage();
     }
 
     /**

@@ -125,7 +125,8 @@ class UserChangePasswordIT
         ChangePasswordPage changePasswordPage = ProfileUserProfilePage.gotoPage(this.userName)
             .switchToPreferences().changePassword();
         changePasswordPage.submit(changePasswordPage::isValidationErrorMessageDisplayed);
-        assertEquals("This field is required.", changePasswordPage.getValidationErrorMessage());
+        // Need to figure out why here, and only here I need to recreate a ChangePasswordPage instance to avoid a stale issue. 
+        assertEquals("This field is required.", new ChangePasswordPage().getValidationErrorMessage());
     }
 
     @Test

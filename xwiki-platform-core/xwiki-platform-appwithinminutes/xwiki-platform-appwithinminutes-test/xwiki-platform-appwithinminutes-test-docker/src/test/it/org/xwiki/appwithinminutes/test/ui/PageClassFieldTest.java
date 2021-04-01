@@ -17,26 +17,30 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.test.ui.appwithinminutes;
+package org.xwiki.appwithinminutes.test.ui;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.xwiki.appwithinminutes.test.po.ApplicationClassEditPage;
 import org.xwiki.appwithinminutes.test.po.SuggestClassFieldEditPane;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.test.docker.junit5.TestReference;
+import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.ui.AbstractTest;
 import org.xwiki.test.ui.po.InlinePage;
 import org.xwiki.test.ui.po.SuggestInputElement;
 import org.xwiki.test.ui.po.SuggestInputElement.SuggestionElement;
-import org.xwiki.xclass.test.po.ClassSheetPage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.xwiki.appwithinminutes.test.po.ApplicationClassEditPage.goToEditor;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Special class editor tests that address only the Page class field type.
@@ -44,27 +48,31 @@ import static org.junit.Assert.assertTrue;
  * @version $Id$
  * @since 10.6
  */
-public class PageClassFieldTest extends AbstractClassEditorTest
+@UITest
+class PageClassFieldTest
 {
-    @Before
-    @Override
-    public void setUp() throws Exception
-    {
-        String className = getTestClassName();
-        getUtil().deleteSpace(className);
-        getUtil().createPage(className, "pageclassfieldpage1", "Content", className + " Page 1");
-        getUtil().createPage(className, "pageclassfieldpage2", "Content", className + " Page 2");
-        getUtil().createPage(Arrays.asList(className, "space"), "pageclassfieldtesthome", "Content",
-            className + " TestHome");
-        getUtil().gotoPage(className, getTestMethodName(), "edit",
-            "editor=inline&template=AppWithinMinutes.ClassTemplate&title=" + getTestMethodName() + " Class");
-        editor = new ApplicationClassEditPage();
-    }
+//    @Before
+//    @Override
+//    public void setUp() throws Exception
+//    {
+//        String className = getTestClassName();
+//        AbstractTest.getUtil().deleteSpace(className);
+//        AbstractTest.getUtil().createPage(className, "pageclassfieldpage1", "Content", className + " Page 1");
+//        AbstractTest.getUtil().createPage(className, "pageclassfieldpage2", "Content", className + " Page 2");
+//        AbstractTest.getUtil().createPage(Arrays.asList(className, "space"), "pageclassfieldtesthome", "Content",
+//            className + " TestHome");
+//        AbstractTest.getUtil().gotoPage(className, getTestMethodName(), "edit",
+//            "editor=inline&template=AppWithinMinutes.ClassTemplate&title=" + getTestMethodName() + " Class");
+//        editor = new ApplicationClassEditPage();
+//    }
 
     @Test
-    public void testSuggestions() throws Exception
+    void suggestions(TestReference testReference)
     {
-        String className = getTestClassName();
+
+        ApplicationClassEditPage editor = goToEditor(testReference);
+        
+        String className = testReference.getLastSpaceReference().getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
 
         // Make sure the picker is ready.
@@ -93,9 +101,10 @@ public class PageClassFieldTest extends AbstractClassEditorTest
     }
 
     @Test
-    public void testSingleSelection()
+    void singleSelection(TestReference testReference)
     {
-        String className = getTestClassName();
+        ApplicationClassEditPage editor = goToEditor(testReference);
+        String className = testReference.getLastSpaceReference().getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
 
         // Make sure the picker is ready.
@@ -121,9 +130,10 @@ public class PageClassFieldTest extends AbstractClassEditorTest
     }
 
     @Test
-    public void testMultipleSelection()
+    void multipleSelection(DocumentReference testReference)
     {
-        String className = getTestClassName();
+        ApplicationClassEditPage editor = goToEditor(testReference);
+        String className = testReference.getLastSpaceReference().getName();
         SuggestClassFieldEditPane pageField = new SuggestClassFieldEditPane(editor.addField("Page").getName());
         pageField.openConfigPanel();
         pageField.setMultipleSelect(true);
@@ -161,9 +171,10 @@ public class PageClassFieldTest extends AbstractClassEditorTest
     }
 
     @Test
-    public void testSaveAndInitialSelection()
+    void saveAndInitialSelection(TestReference testReference)
     {
-        String className = getTestClassName();
+        ApplicationClassEditPage editor = goToEditor(testReference);
+        String className = testReference.getLastSpaceReference().getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
         // Make sure the picker is ready.
         pagePicker.click().waitForSuggestions();
@@ -226,9 +237,10 @@ public class PageClassFieldTest extends AbstractClassEditorTest
 
 
     @Test
-    public void testApplicationEntry()
+    void applicationEntry(TestReference testReference)
     {
-        String className = getTestClassName();
+        ApplicationClassEditPage editor = goToEditor(testReference);
+        String className = testReference.getLastSpaceReference().getName();
         // Create the application class.
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
         // Make sure the picker is ready.
@@ -242,7 +254,7 @@ public class PageClassFieldTest extends AbstractClassEditorTest
 
         // Assert the initial value.
         String id = className + "." + getTestMethodName() + "_0_page1";
-        pagePicker = new SuggestInputElement(getDriver().findElement(By.id(id)));
+        pagePicker = new SuggestInputElement(AbstractTest.getDriver().findElement(By.id(id)));
         List<SuggestionElement> selectedPages = pagePicker.getSelectedSuggestions();
         assertEquals(1, selectedPages.size());
         assertEquals(className + " Page 1", selectedPages.get(0).getLabel());
@@ -257,7 +269,7 @@ public class PageClassFieldTest extends AbstractClassEditorTest
         entryEditPage.clickSaveAndView().waitUntilPageIsLoaded();
 
         // Assert the view mode.
-        List<WebElement> pages = getDriver().findElements(By.cssSelector("#xwikicontent dd a"));
+        List<WebElement> pages = AbstractTest.getDriver().findElements(By.cssSelector("#xwikicontent dd a"));
         assertEquals(1, pages.size());
         assertEquals(className + " TestHome", pages.get(0).getText());
     }

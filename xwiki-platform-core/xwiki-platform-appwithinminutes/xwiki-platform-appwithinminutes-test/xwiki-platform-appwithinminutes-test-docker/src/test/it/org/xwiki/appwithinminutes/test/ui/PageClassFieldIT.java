@@ -23,24 +23,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.xwiki.appwithinminutes.test.po.ApplicationClassEditPage;
 import org.xwiki.appwithinminutes.test.po.SuggestClassFieldEditPane;
-import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
-import org.xwiki.test.ui.AbstractTest;
+import org.xwiki.test.docker.junit5.servletengine.ServletEngine;
+import org.xwiki.test.ui.TestUtils;
 import org.xwiki.test.ui.po.InlinePage;
 import org.xwiki.test.ui.po.SuggestInputElement;
 import org.xwiki.test.ui.po.SuggestInputElement.SuggestionElement;
+import org.xwiki.xclass.test.po.ClassSheetPage;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xwiki.appwithinminutes.test.po.ApplicationClassEditPage.goToEditor;
-
-import org.junit.jupiter.api.Test;
 
 /**
  * Special class editor tests that address only the Page class field type.
@@ -48,31 +50,28 @@ import org.junit.jupiter.api.Test;
  * @version $Id$
  * @since 10.6
  */
-@UITest
-class PageClassFieldTest
+@UITest(servletEngine = ServletEngine.EXTERNAL)
+class PageClassFieldIT
 {
-//    @Before
-//    @Override
-//    public void setUp() throws Exception
-//    {
-//        String className = getTestClassName();
-//        AbstractTest.getUtil().deleteSpace(className);
-//        AbstractTest.getUtil().createPage(className, "pageclassfieldpage1", "Content", className + " Page 1");
-//        AbstractTest.getUtil().createPage(className, "pageclassfieldpage2", "Content", className + " Page 2");
-//        AbstractTest.getUtil().createPage(Arrays.asList(className, "space"), "pageclassfieldtesthome", "Content",
-//            className + " TestHome");
-//        AbstractTest.getUtil().gotoPage(className, getTestMethodName(), "edit",
-//            "editor=inline&template=AppWithinMinutes.ClassTemplate&title=" + getTestMethodName() + " Class");
-//        editor = new ApplicationClassEditPage();
-//    }
+    @BeforeEach
+    void setUp(TestUtils testUtils, TestReference testReference)
+    {
+        testUtils.loginAsSuperAdmin();
+        String className = testReference.getSpaceReferences().get(0).getName();
+        testUtils.deleteSpace(className);
+        testUtils.createPage(className, "pageclassfieldpage1", "Content", className + " Page 1");
+        testUtils.createPage(className, "pageclassfieldpage2", "Content", className + " Page 2");
+        testUtils.createPage(Arrays.asList(className, "space"), "pageclassfieldtesthome", "Content",
+            className + " TestHome");
+    }
 
     @Test
+    @Order(1)
     void suggestions(TestReference testReference)
     {
-
         ApplicationClassEditPage editor = goToEditor(testReference);
-        
-        String className = testReference.getLastSpaceReference().getName();
+
+        String className = testReference.getSpaceReferences().get(0).getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
 
         // Make sure the picker is ready.
@@ -80,7 +79,7 @@ class PageClassFieldTest
 
         List<SuggestionElement> suggestions =
             pagePicker.sendKeys(className, " pag").waitForSuggestions().getSuggestions();
-        assertEquals(2, suggestions.size());
+        assertEquals(3, suggestions.size());
         assertEquals(className + " Page 1", suggestions.get(0).getLabel());
         assertEquals(className, suggestions.get(0).getHint());
         assertEquals(className + " Page 2", suggestions.get(1).getLabel());
@@ -101,10 +100,11 @@ class PageClassFieldTest
     }
 
     @Test
+    @Order(2)
     void singleSelection(TestReference testReference)
     {
         ApplicationClassEditPage editor = goToEditor(testReference);
-        String className = testReference.getLastSpaceReference().getName();
+        String className = testReference.getSpaceReferences().get(0).getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
 
         // Make sure the picker is ready.
@@ -130,10 +130,11 @@ class PageClassFieldTest
     }
 
     @Test
-    void multipleSelection(DocumentReference testReference)
+    @Order(3)
+    void multipleSelection(TestReference testReference)
     {
         ApplicationClassEditPage editor = goToEditor(testReference);
-        String className = testReference.getLastSpaceReference().getName();
+        String className = testReference.getSpaceReferences().get(0).getName();
         SuggestClassFieldEditPane pageField = new SuggestClassFieldEditPane(editor.addField("Page").getName());
         pageField.openConfigPanel();
         pageField.setMultipleSelect(true);
@@ -171,10 +172,11 @@ class PageClassFieldTest
     }
 
     @Test
+    @Order(4)
     void saveAndInitialSelection(TestReference testReference)
     {
         ApplicationClassEditPage editor = goToEditor(testReference);
-        String className = testReference.getLastSpaceReference().getName();
+        String className = testReference.getSpaceReferences().get(0).getName();
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
         // Make sure the picker is ready.
         pagePicker.click().waitForSuggestions();
@@ -235,12 +237,14 @@ class PageClassFieldTest
         assertTrue(pagePicker.getValues().isEmpty());
     }
 
-
     @Test
-    void applicationEntry(TestReference testReference)
+    @Order(5)
+    void applicationEntry(TestReference testReference, TestUtils testUtils)
     {
         ApplicationClassEditPage editor = goToEditor(testReference);
-        String className = testReference.getLastSpaceReference().getName();
+        String className = testReference.getSpaceReferences().get(0).getName();
+        String methodName = testReference.getLastSpaceReference().getName();
+
         // Create the application class.
         SuggestInputElement pagePicker = new SuggestClassFieldEditPane(editor.addField("Page").getName()).getPicker();
         // Make sure the picker is ready.
@@ -250,11 +254,13 @@ class PageClassFieldTest
 
         // Create the application entry.
         ClassSheetPage classSheetPage = new ClassSheetPage();
-        InlinePage entryEditPage = classSheetPage.createNewDocument(className, getTestMethodName() + "Entry");
+        // TODO: find out how to have access to the expected UI here. a Class Template object must be created
+        // ça doit être possible en crééant le template, puis recliquant sur le lien qui propose d'ajouter un truc dedans
+        InlinePage entryEditPage = classSheetPage.createNewDocument(className, methodName + "Entry");
 
         // Assert the initial value.
-        String id = className + "." + getTestMethodName() + "_0_page1";
-        pagePicker = new SuggestInputElement(AbstractTest.getDriver().findElement(By.id(id)));
+        String id = className + "." + methodName + "_0_page1";
+        pagePicker = new SuggestInputElement(testUtils.getDriver().findElement(By.id(id)));
         List<SuggestionElement> selectedPages = pagePicker.getSelectedSuggestions();
         assertEquals(1, selectedPages.size());
         assertEquals(className + " Page 1", selectedPages.get(0).getLabel());
@@ -269,7 +275,7 @@ class PageClassFieldTest
         entryEditPage.clickSaveAndView().waitUntilPageIsLoaded();
 
         // Assert the view mode.
-        List<WebElement> pages = AbstractTest.getDriver().findElements(By.cssSelector("#xwikicontent dd a"));
+        List<WebElement> pages = testUtils.getDriver().findElements(By.cssSelector("#xwikicontent dd a"));
         assertEquals(1, pages.size());
         assertEquals(className + " TestHome", pages.get(0).getText());
     }

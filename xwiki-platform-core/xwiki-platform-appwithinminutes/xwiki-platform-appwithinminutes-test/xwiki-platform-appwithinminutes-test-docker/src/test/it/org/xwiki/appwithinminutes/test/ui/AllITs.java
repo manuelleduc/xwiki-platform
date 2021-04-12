@@ -61,4 +61,10 @@ public class AllITs
     class NestedAddEntryIT extends AddEntryIT
     {
     }
+
+    @Nested
+    @DisplayName("Page class field test")
+    class NestedPageClassFieldIT extends PageClassFieldIT
+    {
+    }
 }

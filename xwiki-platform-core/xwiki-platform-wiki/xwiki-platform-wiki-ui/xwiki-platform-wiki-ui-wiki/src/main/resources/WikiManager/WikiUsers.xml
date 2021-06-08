@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.3" reference="WikiManager.WikiUsers" locale="">
+<xwikidoc version="1.4" reference="WikiManager.WikiUsers" locale="">
   <web>WikiManager</web>
   <name>WikiUsers</name>
   <language/>
@@ -102,16 +102,17 @@
   &lt;div class='xform'&gt;
     &lt;h2&gt;$services.localization.render('admin.xwiki.members.title')&lt;/h2&gt;
   &lt;/div&gt;
-  #set ($columnOptions = {
-    "member" : {'type': 'text', 'html': true},
-    'scope': {'filterable': false, 'sortable': false, 'html': true},
-    "_actions" : {
-      'actions': ['delete'],
-      'actionCallbacks': {'delete': 'table.deleteRow(i);'},
-      'ajaxActions': {'delete': true},
-      'filterable': false
-     }
-  })
+## TODO: see how to define this actionCallbacks things...
+##  #set ($columnOptions = {
+##    "member" : {'type': 'text', 'html': true},
+##    'scope': {'filterable': false, 'sortable': false, 'html': true},
+##    "_actions" : {
+##      'actions': ['delete'],
+##      'actionCallbacks': {'delete': 'table.deleteRow(i);'},
+##      'ajaxActions': {'delete': true},
+##      'filterable': false
+##     }
+##  })
   #set ($columns = ['member'])
   #if ($services.wiki.user.userScope != 'LOCAL_ONLY')
     #set ($discard = $columns.add('scope'))
@@ -120,12 +121,37 @@
     #set ($discard = $columns.add('_actions'))
   #end
   &lt;div class="medium-avatars"&gt;
-    #livetable('groupusers', $columns, $columnOptions, {
-      'url': $groupDoc.getURL('view', 'xpage=getgroupmembers'),
-      'translationPrefix': 'xe.admin.groups.',
-      'javascriptName': 'editgrouptable',
-      'outputOnlyHtml': true
+##    #livetable('oldgroupusers', $columns, $columnOptions, {
+##      'url': $groupDoc.getURL('view', 'xpage=getgroupmembers'),
+##      'translationPrefix': 'xe.admin.groups.',
+##      'javascriptName': 'editgrouptable',
+##      'outputOnlyHtml': true
+##    })
+    #set ($liveDataConfig = {
+      'meta': {
+        'propertyDescriptors': [
+          { 'id': 'scope', 'filterable': false, 'sortable': false },
+          { 'id': 'member', 'displayer': 'html' },
+          { 'id': '_actions', 'displayer': { 'actions': ['delete'] } }
+        ]
+      }
     })
+    #set ($sourceParameters = $escapetool.url({
+      'template': 'getgroupmembers.vm',
+      'translationPrefix': 'xe.admin.groups.',
+      '$doc': "$groupDoc.prefixedFullName"
+    }))
+
+
+    ## TODO: Admin is displayed but shouldn't (same behavior when useLiveData=true) + $doc must be defined in the source parameters to have results, don't know why + replace $doc by an actual computed value
+    {{liveData
+      id='groupusers'
+      source='liveTable'
+      sourceParameters="$sourceParameters"
+      properties="$stringtool.join($columns, ',')"
+    }}$jsontool.serialize($liveDataConfig){{/liveData}}
+
+
   &lt;/div&gt;
 #end
 
@@ -411,7 +437,7 @@
     &lt;/p&gt;
 {{/html}}
 
-{{html clean="false"}}
+{{html clean="false" wiki="true"}}
     &lt;div class="hidden"&gt;
       #set ($redirectURL = $doc.getExternalURL($xcontext.action, $request.queryString))
       &lt;input type='hidden' name='xredirect' value="$redirectURL" /&gt;
@@ -452,8 +478,11 @@
       <validationScript/>
       <cache>
         <cache>0</cache>
+        <defaultValue>long</defaultValue>
         <disabled>0</disabled>
         <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
         <multiSelect>0</multiSelect>
         <name>cache</name>
         <number>5</number>
@@ -501,6 +530,8 @@
         <cache>0</cache>
         <disabled>0</disabled>
         <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
         <multiSelect>0</multiSelect>
         <name>use</name>
         <number>3</number>
@@ -596,8 +627,11 @@ require(['jquery'], function($) {
       <validationScript/>
       <cache>
         <cache>0</cache>
+        <defaultValue>long</defaultValue>
         <disabled>0</disabled>
         <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
         <multiSelect>0</multiSelect>
         <name>cache</name>
         <number>5</number>
@@ -626,6 +660,8 @@ require(['jquery'], function($) {
         <cache>0</cache>
         <disabled>0</disabled>
         <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
         <multiSelect>0</multiSelect>
         <name>contentType</name>
         <number>6</number>
@@ -661,6 +697,8 @@ require(['jquery'], function($) {
         <cache>0</cache>
         <disabled>0</disabled>
         <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
         <multiSelect>0</multiSelect>
         <name>use</name>
         <number>3</number>

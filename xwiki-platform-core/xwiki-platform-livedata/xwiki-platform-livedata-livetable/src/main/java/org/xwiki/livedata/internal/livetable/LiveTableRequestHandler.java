@@ -135,6 +135,7 @@ public class LiveTableRequestHandler
             try {
                 XWikiDocument contextDoc = xcontext.getWiki().getDocument(contextDocRef, xcontext);
                 xcontext.setDoc(contextDoc);
+                xcontext.setWikiId(contextDocRef.getWikiReference().getName());
             } catch (XWikiException e) {
                 this.logger.debug("Failed to set context document [{}] for live table results.", contextDocRefString,
                     e);

@@ -126,6 +126,29 @@ public class TableLayoutElement extends BaseElement
         }
     }
 
+    private static class DatePatternMatcher extends TypeSafeMatcher<WebElement>
+    {
+        private static final String REGEX = "\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}";
+
+        @Override
+        protected boolean matchesSafely(WebElement item)
+        {
+            return item.getText().matches(REGEX);
+        }
+
+        @Override
+        public void describeTo(Description description)
+        {
+            description.appendValue(String.format("Regex %s", REGEX));
+        }
+
+        @Override
+        protected void describeMismatchSafely(WebElement item, Description mismatchDescription)
+        {
+            mismatchDescription.appendText(item.getAttribute(INNER_HTML_ATTRIBUTE));
+        }
+    }
+
     private static final String SELECT_CELLS_BY_COLUMN_INDEX = "tr td:nth-child(%d)";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TableLayoutElement.class);
@@ -411,6 +434,17 @@ public class TableLayoutElement extends BaseElement
     }
 
     /**
+     * Return a hamcrest {@link Matcher}. This matcher assert that the text of a {@link WebElement} matches the date
+     * pattern {@code YYYY/MM/DD HH:MM}.
+     *
+     * @return 13.5RC1
+     */
+    public Matcher<WebElement> getDatePatternMatcher()
+    {
+        return new DatePatternMatcher();
+    }
+
+    /**
      * Return a hamcrest {@link Matcher} on the links of a {@link WebElement}. This matcher matches when a link is found
      * on the {@link WebElement} with the expected text and link. For instance, the {@link Matcher} will match on the
      * web element containing the following html source {@code <p>Links: <a href="/path">label</a>, <a
@@ -424,7 +458,7 @@ public class TableLayoutElement extends BaseElement
     public Matcher<WebElement> getWebElementCellWithLinkMatcher(String text, String link)
     {
         return new CellWithLinkMatcher(text, link);
-    } 
+    }
 
     /**
      * Returns the column index of the given column. The indexes start at {@code 1}, corresponding to the leftest
@@ -512,8 +546,8 @@ public class TableLayoutElement extends BaseElement
     /**
      * Does the steps for the edition of a cell, until the {@code newValue} is set on the requested field. Then call an
      * {@code userAction} (for instance a click outside of the cell, or pressing escape). The {@code userAction} is
-     * expected to switch the Live Data back to the view mode (i.e., not cells are edited). Finally,
-     * waits for the result of the user action to be completed before continuing.
+     * expected to switch the Live Data back to the view mode (i.e., not cells are edited). Finally, waits for the
+     * result of the user action to be completed before continuing.
      *
      * @param columnLabel the label of the column
      * @param rowNumber the number of the row to update (the first line is number 1)

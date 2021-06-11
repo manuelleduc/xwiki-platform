@@ -88,6 +88,9 @@ public class DefaultLiveDataConfigurationProvider implements Provider<LiveDataCo
             LiveDataConfiguration defaultConfig = this.stringLiveDataConfigResolver.resolve(this.defaultConfigJSON);
             maybeSetDateFormat(defaultConfig.getMeta());
             setSearchURLForUserFilter(defaultConfig.getMeta());
+            // TODO: compute this url..
+            defaultConfig.getQuery().getSource().setParameter("webjar",
+                "/xwiki/webjars/wiki%3Axwiki/xwiki-platform-livedata-livetable-webjar/13.5-SNAPSHOT/liveTable.js?r=1");
             return defaultConfig;
         } catch (LiveDataException e) {
             throw new RuntimeException("Failed to parse the default live data configuration for the live table source.",

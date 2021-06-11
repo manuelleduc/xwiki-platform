@@ -76,7 +76,11 @@ define('xwiki-livedata', [
    */
   const Logic = function (element) {
     this.element = element;
-    this.data = JSON.parse(element.getAttribute("data-config") || "{}");
+    const data = JSON.parse(element.getAttribute("data-config") || "{}");
+    // Initialize the possibly missing fields to make them reactive.
+    data.data = data.data || {};
+    data.data.messages = data.data.messages || [];
+    this.data = data;
     this.currentLayoutId = "";
     this.changeLayout(this.data.meta.defaultLayout);
     this.entrySelection = {
@@ -112,22 +116,37 @@ define('xwiki-livedata', [
     editBus.init(this);
 
     /**
-     * Load given translations from the server
-     *
-     * @param {object} parameters
-     * @param {string} componentName The name component who needs the translations
-     * Used to avoid loading the same translations several times
-     * @param {string} prefix The translation keys prefix
-     * @param {string[]} keys
+     * Store the keys already translated.
+     * @type {Set<String>}
      */
-    this.loadTranslations = async function ({ componentName, prefix, keys }) {
-      // If translations were already loaded, return.
-      if (this.loadTranslations[componentName]) return;
-      this.loadTranslations[componentName] = true;
+    const translatedKeys = new Set();
+
+    /**
+     * Load given translations from the server using the translation REST service.
+     * The obtained translations are loaded into vue-i18n.
+     * Already resolved keys are ignored to avoid redundant and expensive REST queries for already resolved translation
+     * keys. If all the the translations are already known, no request is fired.
+     *
+     * @param {string} prefix the translation keys prefix
+     * @param {string[]} keys a list of translation keys to translate
+     */
+    this.loadTranslations = async function ({prefix, keys}) {
       // Fetch translation and load them.
       try {
-        const translations = await liveDataSource.getTranslations(locale, prefix, keys);
-        i18n.mergeLocaleMessage(locale, translations)
+        const unknownKeys = [];
+        // Filters the keys and only keep the one that are not already translated (taking into account the prefix).
+        for (const key of keys) {
+          const prefixedKey = prefix + keys;
+          if (!translatedKeys.has(prefixedKey)) {
+            unknownKeys.push(key);
+          }
+        }
+        if (unknownKeys.length > 0) {
+          const translations = await liveDataSource.getTranslations(locale, prefix, unknownKeys);
+          i18n.mergeLocaleMessage(locale, translations)
+          // Save the translated key in the already translated keys set (taking into account the prefix).
+          unknownKeys.forEach(it => translatedKeys.add(prefix + it));
+        }
       } catch (error) {
         console.error(error);
       }
@@ -474,9 +493,25 @@ define('xwiki-livedata', [
     },
 
 
-    updateEntries () {
+    updateEntries() {
       return this.fetchEntries()
-        .then(data => this.data.data = data)
+        .then(data => {
+          // Initialize the messages if missing to maje them reactive.
+          data.messages = data.messages || [];
+          this.data.data = data
+          return data;
+        })
+        .then(data => {
+          // If a external webjar exists, import it if needed and call the message operation.
+          if (this.data.query.source.webjar) {
+            require([this.data.query.source.webjar], (sourceComponent) => {
+              if (sourceComponent.messages) {
+                this.data.data.messages = sourceComponent.messages(this);
+              }
+            })
+          }
+          return data;
+        })
         .catch(err => console.error(err));
     },
 

@@ -32,7 +32,7 @@
       @saveEdit="genericSave">
 
     <template #viewer>
-      <div>{{ $t(value ? trueLabelKey : falseLabelKey) }}</div>
+      <div>{{ $t(value ? trueLabelKey : falseLabelKey) }} <MessageIndexes :messageIndexes="messageIndexes" /></div>
     </template>
 
     <template #editor>
@@ -45,10 +45,14 @@
 import displayerMixin from "./displayerMixin.js";
 import displayerStatesMixin from "./displayerStatesMixin.js"
 import BaseDisplayer from "./BaseDisplayer.vue";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
   name: "displayer-boolean",
-  components: {BaseDisplayer,},
+  components: {
+    BaseDisplayer,
+    MessageIndexes
+  },
 
   // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component.
   mixins: [displayerMixin, displayerStatesMixin],

@@ -44,7 +44,7 @@
           However, this is useful if a custom displayer only implement
           its Editor widget, as a default Viewer widget would still be provided
         -->
-        <span>{{ value }}</span>
+        <span>{{ value }} <MessageIndexes :messageIndexes="messageIndexes" /></span>
       </slot>
     </div>
 
@@ -84,6 +84,7 @@
 <script>
 import displayerMixin from "./displayerMixin.js";
 import XWikiLoader from "../utilities/XWikiLoader.vue";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
 
@@ -93,6 +94,7 @@ export default {
   mixins: [displayerMixin],
 
   components: {
+    MessageIndexes,
     XWikiLoader,
   },
 

@@ -83,6 +83,25 @@ export default {
       set(value) {
         this.editedValue = value;
       }
+    },
+    // Resolve the message numbers to display after the content.
+    messageIndexes() {
+      const messages = this.logic.data.data.messages;
+      if (!messages) {
+        return [];
+      }
+      var ret = [];
+      var messageIndex = 1;
+      for (let message of messages) {
+        if (message.entryReferences.some(
+          ref => ref.propertyId === this.propertyId && ref.entryIdValue === this.logic.getEntryId(this.entry)))
+        {
+          ret.push(messageIndex);
+        }
+        messageIndex++;
+      }
+
+      return ret;
     }
   },
 

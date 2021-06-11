@@ -36,6 +36,7 @@
     <!-- Provide the Html Viewer widget to the `viewer` slot -->
     <template #viewer>
       <div :class="['html-wrapper', isLoading ? 'disabled' : '']" v-html="value" ref="xObjectPropertyView"></div>
+      <MessageIndexes :messageIndexes="messageIndexes" />
     </template>
 
     <!-- Provide the Html Editor widget to the `editor` slot -->
@@ -53,6 +54,7 @@ import BaseDisplayer from "./BaseDisplayer.vue";
 import displayerStatesMixin from "./displayerStatesMixin.js";
 import $ from "jquery";
 import xObjectPropertyHelper from "xwiki-livedata-xObjectPropertyHelper";
+import MessageIndexes from "./MessageIndexes";
 
 
 export default {
@@ -66,7 +68,10 @@ export default {
 
   props: ['timestamp'],
 
-  components: {BaseDisplayer,},
+  components: {
+    BaseDisplayer,
+    MessageIndexes
+  },
 
   data() {
     return {

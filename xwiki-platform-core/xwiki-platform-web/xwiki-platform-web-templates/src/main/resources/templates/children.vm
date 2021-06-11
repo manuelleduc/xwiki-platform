@@ -71,8 +71,9 @@
     ## undefined rights was implicitly allowed as long as it was not an admin action (admin, rename, or rights).
     #set ($liveDataConfig = {
       'meta': {
-      'propertyDescriptors': [
-        { 'id': '_actions', 'displayer': { 'id': 'actions', 'actions': ['copy', 'rename', 'rights', 'delete'] } }
+        'propertyDescriptors': [
+          { 'id': '_actions', 'displayer': { 'id': 'actions', 'actions': ['copy', 'rename', 'rights', 'delete'] } },
+          { 'id': 'doc.title_raw', 'visible': false}
         ],
         'actions': [ { 'id': 'copy', 'allowProperty': '' } ]
       }
@@ -88,7 +89,7 @@
       id='childrenIndex'
       source='liveTable'
       sourceParameters="$sourceParameters"
-      properties='doc.title,doc.location,doc.date,doc.author,_actions'
+      properties='doc.title,doc.location,doc.date,doc.author,_actions,doc.title_raw'
       sort='doc.location:asc'
       }}$jsontool.serialize($liveDataConfig){{/liveData}}
   #end

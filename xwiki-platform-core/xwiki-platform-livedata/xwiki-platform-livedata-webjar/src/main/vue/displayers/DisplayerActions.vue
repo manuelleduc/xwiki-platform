@@ -48,6 +48,7 @@
         >
           <XWikiIcon :iconDescriptor="action.icon" /><span class="action-name">{{ action.name }}</span>
         </a>
+        <MessageIndexes :messageIndexes="messageIndexes" />
       </div>
     </template>
 
@@ -69,12 +70,14 @@
 import displayerMixin from "./displayerMixin.js";
 import BaseDisplayer from "./BaseDisplayer.vue";
 import XWikiIcon from "../utilities/XWikiIcon.vue";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
 
   name: "displayer-actions",
 
   components: {
+    MessageIndexes,
     BaseDisplayer,
     XWikiIcon,
   },

@@ -34,6 +34,7 @@
     <!-- Provide the Html Viewer widget to the `viewer` slot -->
     <template #viewer>
       <div class="html-wrapper" v-html="value"></div>
+      <MessageIndexes :messageIndexes="messageIndexes" />
     </template>
   </BaseDisplayer>
 </template>
@@ -41,10 +42,14 @@
 <script>
 import displayerMixin from "./displayerMixin.js";
 import BaseDisplayer from "./BaseDisplayer.vue";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
   name: "displayer-html",
-  components: {BaseDisplayer,},
+  components: {
+    BaseDisplayer,
+    MessageIndexes
+  },
   mixins: [displayerMixin]
 };
 </script>

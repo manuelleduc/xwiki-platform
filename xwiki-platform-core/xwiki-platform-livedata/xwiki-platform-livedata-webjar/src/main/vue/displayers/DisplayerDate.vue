@@ -38,7 +38,7 @@
 
     <!-- Provide the Date Viewer widget to the `viewer` slot -->
     <template #viewer>
-      <div class="displayed-date">{{ valueFormatted }}</div>
+      <div class="displayed-date">{{ valueFormatted }} <MessageIndexes :messageIndexes="messageIndexes" /></div>
     </template>
 
     <!-- Provide the Date Editor widget to the `editor` slot -->
@@ -68,6 +68,7 @@ import BaseDisplayer from "./BaseDisplayer.vue";
 import "daterangepicker";
 import moment from "moment";
 import $ from "jquery";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
 
@@ -75,6 +76,7 @@ export default {
 
   components: {
     BaseDisplayer,
+    MessageIndexes
   },
 
   props: {

@@ -45,9 +45,10 @@
       -->
       <a
         :href="href"
-        :class="{'explicit-empty-value': !htmlValue}"
-        v-html="htmlValue || $t('livedata.displayer.link.noValue')"
-      ></a>
+        :class="{'explicit-empty-value': !htmlValue}">
+        <span v-html="htmlValue || $t('livedata.displayer.link.noValue')"></span>
+        <MessageIndexes :messageIndexes="messageIndexes" />
+      </a>
     </template>
 
 
@@ -62,13 +63,15 @@
 import displayerMixin from "./displayerMixin.js";
 import displayerStatesMixin from "./displayerStatesMixin";
 import BaseDisplayer from "./BaseDisplayer.vue";
+import MessageIndexes from "./MessageIndexes";
 
 export default {
 
   name: "displayer-link",
 
   components: {
-    BaseDisplayer,
+    BaseDisplayer, 
+    MessageIndexes 
   },
 
   // Add the displayerMixin to get access to all the displayers methods and computed properties inside this component

@@ -20,7 +20,7 @@
 
 
 <!--
-  The LivedataTopbar component can be use to create consistent topbars
+  The LivedataBottombar component can be use to create consistent topbars
   for the different layout implementations.
   It usually contains the dropdown menu, the refresh button, the global search
   and the pagination.
@@ -29,48 +29,24 @@
   organize its content to stick to the left or to the right
 -->
 <template>
-  <div class="livedata-topbar">
-
-    <div class="livedata-topbar-left">
-      <slot name="left"></slot>
-    </div>
-
-    <div class="livedata-topbar-right">
-      <slot name="right"></slot>
-    </div>
-
+  <div class="livedata-bottombar">
+    <slot></slot>
   </div>
 </template>
 
 
 <script>
 export default {
-  name: "LivedataTopbar",
-
+  name: "LivedataBottombar",
 };
 </script>
 
 
 <style>
-
-.livedata-topbar {
+.livedata-bottombar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-
-.livedata-topbar-left,
-.livedata-topbar-right {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.livedata-dropdown-menu {
-  margin-left: 1rem;
-}
-
-
 </style>

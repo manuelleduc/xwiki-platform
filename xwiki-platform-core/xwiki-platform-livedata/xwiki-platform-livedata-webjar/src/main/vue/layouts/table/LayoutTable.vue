@@ -82,6 +82,11 @@
       </table>
     </div>
 
+    <LivedataBottombar>
+      <div v-if="this.entries.length === 0" class="noentries-table">
+        {{ $t('livedata.bottombar.noEntries') }}
+      </div>
+    </LivedataBottombar>
   </div>
 </template>
 
@@ -96,12 +101,14 @@ import LayoutTableHeaderFilters from "./LayoutTableHeaderFilters.vue";
 import LayoutTableRow from "./LayoutTableRow.vue";
 import LayoutTableNewRow from "./LayoutTableNewRow.vue";
 import LayoutLoader from "../LayoutLoader.vue";
+import LivedataBottombar from "../../LivedataBottombar";
 
 export default {
 
   name: "layout-table",
 
   components: {
+    LivedataBottombar,
     LivedataTopbar,
     LivedataDropdownMenu,
     LivedataPagination,
@@ -164,6 +171,13 @@ export default {
       width: calc(50vw - @grid-gutter-width);
     }
   }
+}
+
+.noentries-table {
+  text-align: center;
+  color: #777777;
+  width: 100%;
+  padding-bottom: 1em;
 }
 
 </style>

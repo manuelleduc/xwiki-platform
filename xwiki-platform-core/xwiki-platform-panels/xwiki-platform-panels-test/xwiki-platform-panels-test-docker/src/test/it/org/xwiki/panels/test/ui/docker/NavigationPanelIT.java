@@ -60,7 +60,7 @@ class NavigationPanelIT
     {
         // Make sure the application we're about to create doesn't exist.
         String appName = testReference.getSpaceReferences().get(0).getName() + "App";
-        AppWithinMinutesHomePage.gotoPage().deleteApplication(appName);
+        AppWithinMinutesHomePage.gotoPage().clickDeleteApplication(appName).clickYes();
 
         // Configure the Navigation Panel to exclude top level application pages.
         NavigationPanelAdministrationPage navigationPanelAdminPage = NavigationPanelAdministrationPage.gotoPage();

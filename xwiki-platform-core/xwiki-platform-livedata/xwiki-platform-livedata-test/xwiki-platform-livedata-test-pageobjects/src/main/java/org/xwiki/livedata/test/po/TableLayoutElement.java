@@ -333,15 +333,16 @@ public class TableLayoutElement extends BaseElement
     {
         // Waits for all the live data to be loaded and the cells to be finished loading.
         getDriver().waitUntilCondition(webDriver -> {
-            boolean isWaiting =
-                Arrays.asList(getClasses(getRoot().findElement(By.cssSelector(".layout-loader")))).contains("waiting");
+            List<String> layoutLoaderClasses =
+                Arrays.asList(getClasses(getRoot().findElement(By.cssSelector(".layout-loader"))));
+            boolean isWaiting = layoutLoaderClasses.contains("waiting");
             if (isWaiting) {
                 return false;
             }
             if (!noFiltering()) {
                 return false;
             }
-            return !expectRows || hasLines() && areCellsLoaded();
+            return !expectRows || !layoutLoaderClasses.contains("loading") && areCellsLoaded();
         }, 20);
     }
 
@@ -487,8 +488,9 @@ public class TableLayoutElement extends BaseElement
     public void clickAction(int rowNumber, String actionName)
     {
         getRoot().findElement(By.cssSelector(
-            String.format("tbody tr:nth-child(%d) [name='%s']", rowNumber, actionName)))
+            String.format("tbody tr:nth-child(%1$d) [name='%2$s'], tbody tr:nth-child(%1$d) a.%2$s", rowNumber, actionName)))
             .click();
+        
     }
 
     /**
@@ -584,6 +586,28 @@ public class TableLayoutElement extends BaseElement
         return new CellWithLinkMatcher(text, link);
     }
 
+    /**
+     * Validate if the Live Data has a column with the requested label.
+     *
+     * @param columnLabel the label of the column (for instance, {@code "Actions"})
+     * @return {@code true} if the Live Data has a column with the requested label, {@code false} otherwise
+     */
+    public boolean hasColumn(String columnLabel)
+    {
+        return this.findColumnIndex(columnLabel) >= 0;
+    }
+
+    public String getFilterValue(String columnLabel)
+    {
+        int columnIndex = getColumnIndex(columnLabel);
+        
+        WebElement filterCell = getDriver().findElementWithoutWaiting(getRoot(),
+            By.cssSelector(String.format("thead tr:nth-child(2) th:nth-child(%d)", columnIndex)));
+
+        // TODO: probably not the best solution.
+        return filterCell.getText();
+    }
+    
     /**
      * Returns the column index of the given column. The indexes start at {@code 1}, corresponding to the leftest
      * column.

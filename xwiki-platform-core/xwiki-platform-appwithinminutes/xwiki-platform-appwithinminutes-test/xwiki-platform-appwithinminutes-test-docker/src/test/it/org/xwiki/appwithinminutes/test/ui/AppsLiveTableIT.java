@@ -28,8 +28,8 @@ import org.xwiki.appwithinminutes.test.po.ApplicationClassEditPage;
 import org.xwiki.appwithinminutes.test.po.ApplicationCreatePage;
 import org.xwiki.appwithinminutes.test.po.ApplicationHomeEditPage;
 import org.xwiki.appwithinminutes.test.po.ApplicationHomePage;
-import org.xwiki.appwithinminutes.test.po.ApplicationsLiveTableElement;
 import org.xwiki.appwithinminutes.test.po.ClassFieldEditPane;
+import org.xwiki.livedata.test.po.TableLayoutElement;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
@@ -91,29 +91,28 @@ class AppsLiveTableIT
     @Test
     void deleteApplication()
     {
-        // Check the the applications live table lists the created application.
-        ApplicationsLiveTableElement appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
-        assertTrue(appsLiveTable.hasColumn("Actions"));
-        appsLiveTable.filterApplicationName(appName.substring(0, 3));
-        assertTrue(appsLiveTable.isApplicationListed(appName));
+        // Check the applications Live Data lists of the created application.
+        TableLayoutElement liveData = this.appWithinMinutesHomePage.getLiveData().getTableLayout();
+        assertTrue(liveData.hasColumn("Actions"));
+        String appFilteringValue = this.appName.substring(0, 3);
+        liveData.filterColumn("Application", appFilteringValue);
+        assertTrue(this.appWithinMinutesHomePage.isApplicationListed(this.appName));
 
         // Click the delete icon then cancel the confirmation.
-        appsLiveTable.clickDeleteApplication(appName).clickNo();
+        this.appWithinMinutesHomePage.clickDeleteApplication(this.appName).clickNo();
         // We should be taken back to the AppWithinMinutes home page.
-        appWithinMinutesHomePage = new AppWithinMinutesHomePage();
-        appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
+        this.appWithinMinutesHomePage = AppWithinMinutesHomePage.gotoPage();
         // The application name filter should've been preserved.
-        assertEquals(appName.substring(0, 3), appsLiveTable.getApplicationNameFilter());
+        assertEquals(appFilteringValue, this.appWithinMinutesHomePage.getApplicationNameFilter());
 
         // Click the delete icon again and this confirm the action.
-        appsLiveTable.clickDeleteApplication(appName).clickYes();
+        this.appWithinMinutesHomePage.clickDeleteApplication(this.appName).clickYes();
         // We should be taken back to the AppWithinMinutes home page.
-        appWithinMinutesHomePage = new AppWithinMinutesHomePage();
-        appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
+        this.appWithinMinutesHomePage = AppWithinMinutesHomePage.gotoPage();
         // The application name filter should've been preserved.
-        assertEquals(appName.substring(0, 3), appsLiveTable.getApplicationNameFilter());
+        assertEquals(appFilteringValue, this.appWithinMinutesHomePage.getApplicationNameFilter());
         // And the deleted application shouldn't be listed anymore.
-        assertFalse(appsLiveTable.isApplicationListed(appName));
+        assertFalse(this.appWithinMinutesHomePage.isApplicationListed(this.appName));
     }
 
     @Order(2)
@@ -121,8 +120,8 @@ class AppsLiveTableIT
     void testEditApplication()
     {
         // Edit the application.
-        ApplicationsLiveTableElement appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
-        ApplicationClassEditPage classEditor = appsLiveTable.clickEditApplication(appName);
+//        TableLayoutElement liveData = this.appWithinMinutesHomePage.getLiveData().getTableLayout();
+        ApplicationClassEditPage classEditor = this.appWithinMinutesHomePage.editApplication(this.appName);
 
         // Edit the existing class field.
         ClassFieldEditPane fieldEditPane = new ClassFieldEditPane("shortText1");
@@ -141,7 +140,7 @@ class AppsLiveTableIT
 
     @Order(3)
     @Test
-    void testActionRights(TestUtils testUtils, TestReference testReference)
+    void testActionRights(TestUtils testUtils)
     {
         // set some rights before the test
         DocumentReference xwikiPreferences = new DocumentReference("xwiki", "XWiki", "XWikiPreferences");
@@ -155,29 +154,30 @@ class AppsLiveTableIT
             "users", String.format("XWiki.%s,XWiki.%s", USERNAME, anotherUserName));
 
         testUtils.login(USERNAME, PASSWORD);
-        appWithinMinutesHomePage = AppWithinMinutesHomePage.gotoPage();
+        this.appWithinMinutesHomePage = AppWithinMinutesHomePage.gotoPage();
         try {
             // The application author should be able to edit and delete the application.
-            ApplicationsLiveTableElement appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
-            appsLiveTable.filterApplicationName(appName);
-            assertTrue(appsLiveTable.canEditApplication(appName));
-            assertTrue(appsLiveTable.canDeleteApplication(appName));
+            TableLayoutElement liveData = this.appWithinMinutesHomePage.getLiveData().getTableLayout();
+            liveData.filterColumn("Application", this.appName);
+
+            assertTrue(this.appWithinMinutesHomePage.canEditApplication(this.appName));
+            assertTrue(this.appWithinMinutesHomePage.canDeleteApplication(this.appName));
 
             // Logout. Guests shouldn't be able to edit nor delete the application.
             appWithinMinutesHomePage.logout();
             testUtils.recacheSecretToken();
             appWithinMinutesHomePage = new AppWithinMinutesHomePage();
-            appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
-            appsLiveTable.filterApplicationName(appName);
-            assertFalse(appsLiveTable.canEditApplication(appName));
-            assertFalse(appsLiveTable.canDeleteApplication(appName));
+            liveData = appWithinMinutesHomePage.getLiveData().getTableLayout();
+            liveData.filterColumn("Application", this.appName);
+            assertFalse(this.appWithinMinutesHomePage.canEditApplication(this.appName));
+            assertFalse(this.appWithinMinutesHomePage.canDeleteApplication(this.appName));
 
             // Login with a different user. The new user shouldn't be able to delete the application.
             testUtils.createUserAndLogin(anotherUserName, "somePassword");
-            appsLiveTable = AppWithinMinutesHomePage.gotoPage().getAppsLiveTable();
-            appsLiveTable.filterApplicationName(appName);
-            assertTrue(appsLiveTable.canEditApplication(appName));
-            assertFalse(appsLiveTable.canDeleteApplication(appName));
+            liveData = AppWithinMinutesHomePage.gotoPage().getLiveData().getTableLayout();
+            liveData.filterColumn("Application", this.appName);
+            assertTrue(this.appWithinMinutesHomePage.canEditApplication(this.appName));
+            assertFalse(this.appWithinMinutesHomePage.canDeleteApplication(this.appName));
         } finally {
             // We don't want to keep the rights
             testUtils.deletePage(xwikiPreferences);

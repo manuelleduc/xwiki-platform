@@ -31,7 +31,6 @@ import org.xwiki.appwithinminutes.test.po.ApplicationCreatePage;
 import org.xwiki.appwithinminutes.test.po.ApplicationHomeEditPage;
 import org.xwiki.appwithinminutes.test.po.ApplicationHomePage;
 import org.xwiki.appwithinminutes.test.po.ApplicationTemplateProviderEditPage;
-import org.xwiki.appwithinminutes.test.po.ApplicationsLiveTableElement;
 import org.xwiki.appwithinminutes.test.po.ClassFieldEditPane;
 import org.xwiki.appwithinminutes.test.po.EntryEditPage;
 import org.xwiki.appwithinminutes.test.po.EntryNamePane;
@@ -43,6 +42,7 @@ import org.xwiki.test.docker.junit5.UITest;
 import org.xwiki.test.integration.junit.LogCaptureConfiguration;
 import org.xwiki.test.ui.TestUtils;
 import org.xwiki.test.ui.XWikiWebDriver;
+import org.xwiki.test.ui.po.ConfirmationPage;
 import org.xwiki.test.ui.po.LiveTableElement;
 import org.xwiki.test.ui.po.ViewPage;
 
@@ -84,7 +84,10 @@ class WizardIT
         String defaultDocSyntax = testUtils.setWikiPreference("core.defaultDocumentSyntax", "plain/1.0");
 
         String appName = testReference.getLastSpaceReference().getName();
-        AppWithinMinutesHomePage.gotoPage().deleteApplication(appName);
+        ConfirmationPage confirmationPage = AppWithinMinutesHomePage.gotoPage().clickDeleteApplication(appName);
+        if (confirmationPage != null) {
+            confirmationPage.clickYes();
+        }
 
         testUtils.login(USER_NAME, PASSWORD);
 
@@ -282,11 +285,10 @@ class WizardIT
         AppWithinMinutesHomePage appWithinMinutesHomePage = AppWithinMinutesHomePage.gotoPage();
 
         // Assert that the created application is listed in the live table.
-        ApplicationsLiveTableElement appsLiveTable = appWithinMinutesHomePage.getAppsLiveTable();
-        assertTrue(appsLiveTable.isApplicationListed(appName));
+        assertTrue(appWithinMinutesHomePage.isApplicationListed(appName));
 
         // Delete the application entries.
-        homePage = appsLiveTable.viewApplication(appName);
+        homePage = appWithinMinutesHomePage.viewApplication(appName);
         assertEquals('/' + StringUtils.join(appPath, '/'), homePage.getBreadcrumbContent());
         homePage.clickDeleteAllEntries().clickYes();
         // Verify that the entries live table is empty.
@@ -297,8 +299,8 @@ class WizardIT
         // Delete the application.
         homePage.clickDeleteApplication().clickYes();
         // Verify that the application is not listed anymore.
-        appsLiveTable = AppWithinMinutesHomePage.gotoPage().getAppsLiveTable();
-        assertFalse(appsLiveTable.isApplicationListed(appName));
+        AppWithinMinutesHomePage.gotoPage();
+        assertFalse(appWithinMinutesHomePage.isApplicationListed(appName));
 
         logCaptureConfiguration.registerExcludes(
             "WikiComponentException: Registering UI extensions at wiki level requires wiki administration rights");

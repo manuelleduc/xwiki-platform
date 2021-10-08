@@ -585,6 +585,17 @@ public class TableLayoutElement extends BaseElement
     }
 
     /**
+     * TODO.
+     * @param columnLabel
+     * @return
+     */
+    public boolean hasColumn(String columnLabel)
+    {
+        return findColumnIndex(columnLabel) >= 0;
+    }
+
+
+    /**
      * Returns the column index of the given column. The indexes start at {@code 1}, corresponding to the leftest
      * column.
      *

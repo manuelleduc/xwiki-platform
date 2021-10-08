@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.1">
+<xwikidoc version="1.4" reference="XWiki.AllAttachmentsResults" locale="">
   <web>XWiki</web>
   <name>AllAttachmentsResults</name>
   <language/>
@@ -39,6 +39,34 @@
   <content>{{template name="hierarchy_macros.vm" /}}
 
 {{velocity output="false"}}
+## TODO: remove duplicate and move to macros.vm
+#macro (parseDateRange $matchType $filterValue $dateRange)
+  ## Transform the filter value into a date range if needed.
+  #if ($matchType == 'after')
+    #set ($dateRangeString = "$filterValue/")
+  #elseif ($matchType == 'before')
+    #set ($dateRangeString = "/$filterValue")
+  #else
+    ## Between start and end date.
+    #set ($dateRangeString = $filterValue)
+  #end
+  ## Try to parse as ISO 8601 time interval (see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+  #set ($parts = $dateRangeString.split('/', -1))
+  #if ($parts.size() == 2)
+    #set ($dateRange.start = $datetool.toDate('iso_tz', $parts[0]))
+    #set ($dateRange.end = $datetool.toDate('iso_tz', $parts[1]))
+  #end
+  #if (!$dateRange.start &amp;&amp; !$dateRange.end)
+    ## Try to parse as timestamp range. Note that this doesn't handle well negative timestamps.
+    #set ($parts = $dateRangeString.split('-', -1))
+    #if ($parts.size() == 2)
+      #set ($dateRange.start = $datetool.toDate($numbertool.toNumber($parts[0])))
+      #set ($dateRange.end = $datetool.toDate($numbertool.toNumber($parts[1])))
+    #end
+  #end
+#end
+
+
 #macro (maybeApplyStringFilter $fieldName $defaultMatchType $constraints $queryParameters)
   #if ("$!request.getParameter($fieldName)" != '')
     #set ($fieldNameWithAlias = $fieldName)
@@ -67,9 +95,14 @@
 
 #macro (maybeApplyIntegerRangeFilter $fieldName $constraints $queryParameters)
   #set ($fieldValue = $request.getParameter($fieldName))
+  #set ($matchType = $request.getParameter("${fieldName}_match"))
   #if ("$!fieldValue" != '')
-    #set ($range = $fieldValue.split('-'))
-    #set ($range = [$numbertool.toNumber($range.get(0)).intValue(), $numbertool.toNumber($range.get(1)).intValue()])
+    #if ($matchType != 'empty')
+      #set ($range = $fieldValue.split('-'))
+      #set ($range = [$numbertool.toNumber($range.get(0)).intValue(), $numbertool.toNumber($range.get(1)).intValue()])
+    #else
+      #set ($range = [-2,-1])
+    #end
     #applyRangeFilter($fieldName $range $constraints $queryParameters)
   #end
 #end
@@ -77,11 +110,10 @@
 #macro (maybeApplyDateRangeFilter $fieldName $constraints $queryParameters)
   #set ($fieldValue = $request.getParameter($fieldName))
   #if ("$!fieldValue" != '')
-    #set ($range = $fieldValue.split('-'))
-    #set ($range = [
-      $datetool.toDate($numbertool.toNumber($range.get(0))),
-      $datetool.toDate($numbertool.toNumber($range.get(1)))
-    ])
+    #set ($dateRange = {})
+    #parseDateRange('' $fieldValue $dateRange)
+    >> $dateRange
+    #set ($range = [$dateRange.start,$dateRange.end])
     #applyRangeFilter($fieldName $range $constraints $queryParameters)
   #end
 #end
@@ -219,6 +251,7 @@
     #set ($row = {
       'acclev': $hasAccess,
       'fullName': $location,
+      'doc.fullName': $location,
       'filename': $attachmentReference.name,
       'fileurl': $xwiki.getURL($attachmentReference)
     })

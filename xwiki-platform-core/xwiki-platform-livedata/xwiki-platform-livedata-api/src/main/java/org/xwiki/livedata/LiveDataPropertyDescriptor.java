@@ -138,6 +138,8 @@ public class LiveDataPropertyDescriptor
     public static class OperatorDescriptor extends BaseDescriptor
     {
         private String name;
+        
+        private boolean activated = true;
 
         /**
          * Default constructor.
@@ -159,11 +161,25 @@ public class LiveDataPropertyDescriptor
         }
 
         /**
+         * Creates a new operator with the specified id and name.
+         *
+         * @param id the operator id
+         * @param name the operator name
+         * @param activated the activation status of the operator (true by default)
+         */
+        public OperatorDescriptor(String id, String name, boolean activated)
+        {
+            setId(id);
+            setName(name);
+            setActivated(activated);
+        }
+
+        /**
          * @return the operator pretty name
          */
         public String getName()
         {
-            return name;
+            return this.name;
         }
 
         /**
@@ -174,6 +190,25 @@ public class LiveDataPropertyDescriptor
         public void setName(String name)
         {
             this.name = name;
+        }
+
+        /**
+         * @return the activation status of the operator (true by default)
+         */
+        public boolean isActivated()
+        {
+            return this.activated;
+        }
+
+        /**
+         * Update the activation status of the operator. A listed operator with an activation status set to false is
+         * ignored.
+         *
+         * @param activated the activation status of the operator
+         */
+        public void setActivated(boolean activated)
+        {
+            this.activated = activated;
         }
     }
 

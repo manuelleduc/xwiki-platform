@@ -109,7 +109,8 @@ export default {
       return this.filterEntry.operator !== 'empty' || !this.isAdvanced
     },
     hasEmptyOperator() {
-      return this.config.operators.some(it => it.id === 'empty');
+      return this.config.operators
+        .some(it => it.id === 'empty' && (it.activated === true || it.activated === undefined));
     }
   },
 

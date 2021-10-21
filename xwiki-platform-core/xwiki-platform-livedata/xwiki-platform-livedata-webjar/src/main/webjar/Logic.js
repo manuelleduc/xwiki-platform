@@ -1244,12 +1244,16 @@ define('xwiki-livedata', [
       // get valid operator descriptor
       const filterDescriptor = this.getFilterDescriptor(propertyId);
       if (!filterDescriptor) { return; }
-      const filterOperators = filterDescriptor.operators;
+      var filterOperators = filterDescriptor.operators;
       if (!(filterOperators instanceof Array)) { return; }
+      filterOperators = filterOperators
+        .filter(operator => operator.activated === true || operator.activated === undefined)
       if (filterOperators.length === 0) { return; }
       // get default operator
       const defaultOperator = filterDescriptor.defaultOperator;
-      const isDefaultOperatorValid = !!filterOperators.find(operator => operator.id === defaultOperator);
+      const isDefaultOperatorValid = !!filterOperators
+        .find(operator => operator.id === defaultOperator 
+          && (operator.activated === true || operator.activated === undefined));
       if (defaultOperator && isDefaultOperatorValid) {
         return defaultOperator;
       } else {

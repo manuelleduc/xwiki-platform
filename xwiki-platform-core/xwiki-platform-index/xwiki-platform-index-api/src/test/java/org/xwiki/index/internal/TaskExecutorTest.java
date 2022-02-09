@@ -19,6 +19,7 @@
  */
 package org.xwiki.index.internal;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -81,6 +82,11 @@ class TaskExecutorTest
 
     @InjectComponentManager
     private MockitoComponentManager componentManager;
+    
+    @MockComponent
+    @Named("testtask")
+    private TaskConsumer testTaskConsumer;
+    
 
     @BeforeEach
     void setUp()
@@ -99,8 +105,6 @@ class TaskExecutorTest
         when(this.tasksStore.getDocument("wikiId", 42)).thenReturn(this.xwikiDocument);
         when(this.documentRevisionProvider.getRevision(this.xwikiDocument, "1.5")).thenReturn(this.xwikiDocument);
 
-        when(this.componentManager.<TaskConsumer>getInstance(TaskConsumer.class, "testtask"))
-            .thenReturn(this.taskConsumer);
         when(this.xwikiDocument.getDocumentReference()).thenReturn(DOCUMENT_REFERENCE);
         when(this.xwikiDocument.getVersion()).thenReturn("1.5");
 
@@ -108,7 +112,7 @@ class TaskExecutorTest
 
         verify(this.context).setWikiId("wikiId");
         verify(this.context).setWikiId("oldWikiId");
-        verify(this.taskConsumer).consume(DOCUMENT_REFERENCE, "1.5");
+        verify(this.testTaskConsumer).consume(DOCUMENT_REFERENCE, "1.5");
         assertNotNull(task.getFuture().get());
         verify(this.tasksStore).deleteTask("wikiId", 42, "1.5", "testtask");
     }

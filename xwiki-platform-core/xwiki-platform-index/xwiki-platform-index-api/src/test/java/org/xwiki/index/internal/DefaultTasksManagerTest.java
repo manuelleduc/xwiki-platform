@@ -193,9 +193,6 @@ class DefaultTasksManagerTest
         CompletableFuture<TaskData> taskFuture =
             this.tasksManager.addTask("wikiId", 42, "1.3", "testtask");
 
-        assertEquals(1, this.tasksManager.getQueueSize());
-        assertEquals(1, this.tasksManager.getQueueSize("testtask"));
-
         TaskData taskData = new TaskData(42, "1.3", "testtask", "wikiId");
         assertEquals(taskData, taskFuture.get());
         verify(this.taskExecutor).execute(taskData);

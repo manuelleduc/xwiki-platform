@@ -32,16 +32,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version $Id$
  * @since 14.1RC1
  */
-public class XWikiTask implements Serializable
+public class XWikiDocumentIndexingTask implements Serializable
 {
-    private XWikiTaskId id;
+    private static final long serialVersionUID = -2306455239336814283L;
+
+    private XWikiDocumentIndexingTaskId id;
 
     private Date timestamp;
 
     /**
      * @return the compound id of the task
      */
-    public XWikiTaskId getId()
+    public XWikiDocumentIndexingTaskId getId()
     {
         return this.id;
     }
@@ -49,7 +51,7 @@ public class XWikiTask implements Serializable
     /**
      * @param id the compound id of the task
      */
-    public void setId(XWikiTaskId id)
+    public void setId(XWikiDocumentIndexingTaskId id)
     {
         this.id = id;
     }
@@ -81,7 +83,7 @@ public class XWikiTask implements Serializable
             return false;
         }
 
-        XWikiTask xWikiTask = (XWikiTask) o;
+        XWikiDocumentIndexingTask xWikiTask = (XWikiDocumentIndexingTask) o;
         
         return new EqualsBuilder().append(this.id, xWikiTask.id).isEquals();
     }

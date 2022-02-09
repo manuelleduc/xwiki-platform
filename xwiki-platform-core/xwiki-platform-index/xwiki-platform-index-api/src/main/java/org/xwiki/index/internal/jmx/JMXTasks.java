@@ -33,18 +33,18 @@ public class JMXTasks implements JMXTasksMBean
 {
     private final LongSupplier queueSize;
 
-    private final Supplier<Map<String, Long>> queueSizePerKind;
+    private final Supplier<Map<String, Long>> queueSizePerType;
 
     /**
      * Default constructor, let the method initializing the MBean provide the suppliers for the MBean operations.
      *
      * @param queueSize the queue size supplier
-     * @param queueSizePerKind the queue size per kind supplier
+     * @param queueSizePerType the queue size per type supplier
      */
-    public JMXTasks(LongSupplier queueSize, Supplier<Map<String, Long>> queueSizePerKind)
+    public JMXTasks(LongSupplier queueSize, Supplier<Map<String, Long>> queueSizePerType)
     {
         this.queueSize = queueSize;
-        this.queueSizePerKind = queueSizePerKind;
+        this.queueSizePerType = queueSizePerType;
     }
 
     @Override
@@ -54,8 +54,8 @@ public class JMXTasks implements JMXTasksMBean
     }
 
     @Override
-    public Map<String, Long> getQueueSizePerKind()
+    public Map<String, Long> getQueueSizePerType()
     {
-        return this.queueSizePerKind.get();
+        return this.queueSizePerType.get();
     }
 }

@@ -36,6 +36,7 @@ import org.xwiki.observation.remote.RemoteObservationManagerContext;
 import com.xpn.xwiki.doc.XWikiDocument;
 
 import static java.util.Collections.singletonList;
+import static org.xwiki.mentions.MentionsConfiguration.MENTION_TASK_ID;
 
 /**
  * Listen to entities update.
@@ -79,6 +80,6 @@ public class MentionsUpdatedEventListener extends AbstractEventListener
 
         XWikiDocument doc = (XWikiDocument) source;
         this.taskManager.addTask(doc.getDocumentReference().getWikiReference().getName(), doc.getId(), doc.getVersion(),
-            "mention");
+            MENTION_TASK_ID);
     }
 }

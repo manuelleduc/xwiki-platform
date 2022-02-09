@@ -31,6 +31,7 @@ import org.xwiki.component.annotation.Component;
 import org.xwiki.context.Execution;
 import org.xwiki.index.IndexException;
 import org.xwiki.index.TaskConsumer;
+import org.xwiki.mentions.MentionsConfiguration;
 import org.xwiki.mentions.events.NewMentionsEvent;
 import org.xwiki.mentions.internal.analyzer.CreatedDocumentMentionsAnalyzer;
 import org.xwiki.mentions.internal.analyzer.UpdatedDocumentMentionsAnalyzer;
@@ -59,7 +60,7 @@ import com.xpn.xwiki.objects.LargeStringProperty;
  */
 @Component
 @Singleton
-@Named("mention")
+@Named(MentionsConfiguration.MENTION_TASK_ID)
 public class DefaultMentionsDataConsumer implements TaskConsumer
 {
     @Inject

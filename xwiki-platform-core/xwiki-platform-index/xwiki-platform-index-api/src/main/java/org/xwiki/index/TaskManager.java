@@ -41,26 +41,21 @@ public interface TaskManager
      * @param wikiId the wiki containing the document
      * @param docId the document id
      * @param version the document version
-     * @param kind the kind of task to add
+     * @param type the type of task to add
      * @return a completable future for this task
      */
-    CompletableFuture<TaskData> addTask(String wikiId, long docId, String version, String kind);
+    CompletableFuture<TaskData> addTask(String wikiId, long docId, String version, String type);
 
     /**
-     * Replace all the tasks of the queue with the same document and task kind with the new task.
+     * Replace all the tasks of the queue with the same document and task type with the new task.
      *
      * @param wikiId the wiki containing the document
      * @param docId the document id
      * @param version the document version
-     * @param kind the kind of task to add
+     * @param type the type of task to add
      * @return a completable future for this task
      */
-    CompletableFuture<TaskData> replaceTask(String wikiId, long docId, String version, String kind);
-
-    /**
-     * Starts the consumer thread.
-     */
-    void startThread();
+    CompletableFuture<TaskData> replaceTask(String wikiId, long docId, String version, String type);
 
     /**
      * @return the number of tasks in the queue
@@ -68,8 +63,8 @@ public interface TaskManager
     long getQueueSize();
 
     /**
-     * @param kind the kind of task to count
-     * @return the number of  tasks of a given kind in the queue
+     * @param type the type of task to count
+     * @return the number of  tasks of a given type in the queue
      */
-    long getQueueSize(String kind);
+    long getQueueSize(String type);
 }

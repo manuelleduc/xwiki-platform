@@ -32,6 +32,8 @@ import org.xwiki.mentions.MentionsFormatter;
 import org.xwiki.mentions.internal.MentionFormatterProvider;
 import org.xwiki.script.service.ScriptService;
 
+import static org.xwiki.mentions.MentionsConfiguration.MENTION_TASK_ID;
+
 /**
  * Script service for the Mentions application.
  *
@@ -78,7 +80,7 @@ public class MentionsScriptService implements ScriptService
      */
     public long getQueueSize()
     {
-        return this.eventExecutor.getQueueSize("mention");
+        return this.eventExecutor.getQueueSize(MENTION_TASK_ID);
     }
 
     /**

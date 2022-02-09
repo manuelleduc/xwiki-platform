@@ -24,24 +24,23 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.suigeneris.jrcs.rcs.Version;
 
 /**
  * Hold the information about the compound id of a queued task.
  *
  * @version $Id$
- * @see XWikiTask
+ * @see XWikiDocumentIndexingTask
  * @since 14.1RC1
  */
-public class XWikiTaskId implements Serializable
+public class XWikiDocumentIndexingTaskId implements Serializable
 {
+    private static final long serialVersionUID = -7991702269746938433L;
+
     private long docId;
 
-    private int versionMinor;
-
-    private int versionMajor;
-
-    private String kind;
+    private String version;
+    
+    private String type;
 
     private String instanceId;
 
@@ -62,68 +61,35 @@ public class XWikiTaskId implements Serializable
     }
 
     /**
-     * @return the major version of the document (e.g., 1 in 1.2)
-     */
-    public int getVersionMajor()
-    {
-        return this.versionMajor;
-    }
-
-    /**
-     * @param versionMajor the major version of the document (e.g., 1 in 1.2)
-     */
-    public void setVersionMajor(int versionMajor)
-    {
-        this.versionMajor = versionMajor;
-    }
-
-    /**
-     * @return the minor version of the document (e.g., 2 in 1.2)
-     */
-    public int getVersionMinor()
-    {
-        return this.versionMinor;
-    }
-
-    /**
-     * @param versionMinor the minor version of the document (e.g., 2 in 1.2)
-     */
-    public void setVersionMinor(int versionMinor)
-    {
-        this.versionMinor = versionMinor;
-    }
-
-    /**
      * @return the version to of the document to be processed
      */
-    public Version getVersion()
+    public String getVersion()
     {
-        return new Version(this.versionMajor, this.versionMinor);
+        return this.version;
     }
 
     /**
      * @param version the version of the document to be processed
      */
-    public void setVersion(Version version)
+    public void setVersion(String version)
     {
-        this.versionMajor = version.at(0);
-        this.versionMinor = version.at(1);
+        this.version = version;
     }
 
     /**
-     * @return the kind of the task to do on the document
+     * @return the type of the task to do on the document
      */
-    public String getKind()
+    public String getType()
     {
-        return this.kind;
+        return this.type;
     }
 
     /**
-     * @param kind the kind of the task to do on the document
+     * @param type the type of the task to do on the document
      */
-    public void setKind(String kind)
+    public void setType(String type)
     {
-        this.kind = kind;
+        this.type = type;
     }
 
     /**
@@ -147,7 +113,7 @@ public class XWikiTaskId implements Serializable
     {
         return new ToStringBuilder(this)
             .append("docId", this.docId)
-            .append("kind", this.kind)
+            .append("type", this.type)
             .append("version", getVersion())
             .append("instanceId", getInstanceId())
             .toString();
@@ -164,13 +130,12 @@ public class XWikiTaskId implements Serializable
             return false;
         }
 
-        XWikiTaskId that = (XWikiTaskId) o;
+        XWikiDocumentIndexingTaskId that = (XWikiDocumentIndexingTaskId) o;
 
         return new EqualsBuilder()
-            .append(this.versionMinor, that.versionMinor)
-            .append(this.versionMajor, that.versionMajor)
+            .append(this.version, that.version)
             .append(this.docId, that.docId)
-            .append(this.kind, that.kind)
+            .append(this.type, that.type)
             .append(this.instanceId, that.instanceId)
             .isEquals();
     }
@@ -180,9 +145,8 @@ public class XWikiTaskId implements Serializable
     {
         return new HashCodeBuilder(17, 37)
             .append(this.docId)
-            .append(this.versionMinor)
-            .append(this.versionMajor)
-            .append(this.kind)
+            .append(this.version)
+            .append(this.type)
             .append(this.instanceId)
             .toHashCode();
     }

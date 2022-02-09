@@ -50,7 +50,7 @@
       <artifactId>xwiki-platform-query-manager</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!-- Required to have access to XWikiTask. -->
+    <!-- Required to have access to XWikiDocumentIndexingTask. -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-oldcore</artifactId>

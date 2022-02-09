@@ -27,6 +27,8 @@ package org.xwiki.index;
  */
 public class IndexException extends Exception
 {
+    private static final long serialVersionUID = -3385872034448286735L;
+
     /**
      * Constructs a new index exception with {@code null} as its detail message. The cause is not initialized, and may
      * subsequently be initialized by a call to {@link #initCause}.

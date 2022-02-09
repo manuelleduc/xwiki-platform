@@ -25,7 +25,6 @@ import java.util.concurrent.CompletableFuture;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.suigeneris.jrcs.rcs.Version;
 
 /**
  * Store the information about a task.
@@ -44,13 +43,11 @@ public class TaskData implements Serializable
 
     private Long timestamp;
 
-    private int version1;
-
-    private int version2;
+    private String version;
 
     private long docId;
 
-    private String kind;
+    private String type;
 
     private int attempts;
 
@@ -75,6 +72,22 @@ public class TaskData implements Serializable
     }
 
     /**
+     * Constructor with the business related information.
+     *
+     * @param docId the id of the document to analyze
+     * @param version the version of the document to analyze
+     * @param type the type of the task to execute
+     * @param wikiId the id of the wiki in which the task must be executed
+     */
+    public TaskData(long docId, String version, String type, String wikiId)
+    {
+        this.docId = docId;
+        this.version = version;
+        this.type = type;
+        this.wikiId = wikiId;
+    }
+
+    /**
      * @return the timestamp of the creation of the task
      */
     public long getTimestamp()
@@ -95,19 +108,18 @@ public class TaskData implements Serializable
     /**
      * @return the version of the document to analyze
      */
-    public Version getVersion()
+    public String getVersion()
     {
-        return new Version(this.version1, this.version2);
+        return this.version;
     }
 
     /**
      * @param version the version of the document to analyze (e.g., 1.2)
      * @return the current task
      */
-    public TaskData setVersion(Version version)
+    public TaskData setVersion(String version)
     {
-        this.version1 = version.at(0);
-        this.version2 = version.at(1);
+        this.version = version;
         return this;
     }
 
@@ -130,20 +142,20 @@ public class TaskData implements Serializable
     }
 
     /**
-     * @return the kind of the task to execute
+     * @return the type of the task to execute
      */
-    public String getKind()
+    public String getType()
     {
-        return this.kind;
+        return this.type;
     }
 
     /**
-     * @param kind the kind of the task to execute
+     * @param type the type of the task to execute
      * @return the current task
      */
-    public TaskData setKind(String kind)
+    public TaskData setType(String type)
     {
-        this.kind = kind;
+        this.type = type;
         return this;
     }
 
@@ -165,7 +177,7 @@ public class TaskData implements Serializable
     }
 
     /**
-     * @return TODO document...
+     * @return {@code true} if the task is a stop task or comes from another classload, {@code false} otherwise
      */
     public boolean isDeprecated()
     {
@@ -212,11 +224,10 @@ public class TaskData implements Serializable
         TaskData taskData = (TaskData) o;
 
         return new EqualsBuilder()
-            .append(this.version1, taskData.version1)
-            .append(this.version2, taskData.version2)
+            .append(this.version, taskData.version)
             .append(this.stopFlag, taskData.stopFlag)
             .append(this.docId, taskData.docId)
-            .append(this.kind, taskData.kind)
+            .append(this.type, taskData.type)
             .append(this.wikiId, taskData.wikiId)
             .isEquals();
     }
@@ -225,10 +236,9 @@ public class TaskData implements Serializable
     public int hashCode()
     {
         return new HashCodeBuilder(17, 37)
-            .append(this.version1)
-            .append(this.version2)
+            .append(this.version)
             .append(this.docId)
-            .append(this.kind)
+            .append(this.type)
             .append(this.stopFlag)
             .append(this.wikiId)
             .toHashCode();
@@ -240,7 +250,7 @@ public class TaskData implements Serializable
         return new ToStringBuilder(this)
             .append("timestamp", this.timestamp)
             .append("docId", this.docId)
-            .append("kind", this.kind)
+            .append("type", this.type)
             .append("attempts", this.attempts)
             .append("stop", this.stopFlag)
             .append("wikiId", this.wikiId)

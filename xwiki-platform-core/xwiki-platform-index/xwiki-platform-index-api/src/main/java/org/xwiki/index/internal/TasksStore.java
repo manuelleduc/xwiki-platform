@@ -27,7 +27,6 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.hibernate.Session;
-import org.suigeneris.jrcs.rcs.Version;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.context.ExecutionContextManager;
@@ -36,8 +35,8 @@ import org.xwiki.model.reference.DocumentReferenceResolver;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.doc.tasks.XWikiTask;
-import com.xpn.xwiki.doc.tasks.XWikiTaskId;
+import com.xpn.xwiki.doc.tasks.XWikiDocumentIndexingTask;
+import com.xpn.xwiki.doc.tasks.XWikiDocumentIndexingTaskId;
 import com.xpn.xwiki.store.XWikiHibernateBaseStore;
 
 /**
@@ -68,10 +67,11 @@ public class TasksStore extends XWikiHibernateBaseStore
      * @return the list of all the task
      * @throws XWikiException in case of error when creating or executing the query
      */
-    public List<XWikiTask> getAllTasks(String wikiId, String instanceId) throws XWikiException
+    public List<XWikiDocumentIndexingTask> getAllTasks(String wikiId, String instanceId) throws XWikiException
     {
         return initWikiContext(xWikiContext -> executeRead(xWikiContext,
-            session -> session.createQuery("SELECT t FROM XWikiTask t WHERE t.id.instanceId = :instanceId")
+            session -> session.createQuery("SELECT t FROM XWikiDocumentIndexingTask t " 
+                    + "WHERE t.id.instanceId = :instanceId")
                 .setParameter("instanceId", instanceId)
                 .getResultList()), wikiId);
     }
@@ -83,7 +83,7 @@ public class TasksStore extends XWikiHibernateBaseStore
      * @param task the task to persist
      * @throws XWikiException in case of error when saving the task
      */
-    public void addTask(String wikiId, XWikiTask task) throws XWikiException
+    public void addTask(String wikiId, XWikiDocumentIndexingTask task) throws XWikiException
     {
         initWikiContext(xWikiContext -> {
             executeWrite(xWikiContext, session -> {
@@ -100,22 +100,20 @@ public class TasksStore extends XWikiHibernateBaseStore
      * @param wikiId the wiki in which to execute the query
      * @param docId the docId to remove
      * @param version the version to remove
-     * @param kind the kind of the task to remove
+     * @param type the type of the task to remove
      * @throws XWikiException in case of error when removing the task
      */
-    public void deleteTask(String wikiId, long docId, Version version, String kind) throws XWikiException
+    public void deleteTask(String wikiId, long docId, String version, String type) throws XWikiException
     {
         initWikiContext(xWikiContext -> {
             executeWrite(xWikiContext, session -> {
 
-                session.createQuery("delete from XWikiTask t where t.id.docId = :docId "
-                        + "and t.id.versionMajor = :versionMajor "
-                        + "and t.id.versionMinor = :versionMinor "
-                        + "and t.id.kind = :kind")
+                session.createQuery("delete from XWikiDocumentIndexingTask t where t.id.docId = :docId "
+                        + "and t.id.version = :version "
+                        + "and t.id.type = :type")
                     .setParameter("docId", docId)
-                    .setParameter("versionMajor", version.at(0))
-                    .setParameter("versionMinor", version.at(1))
-                    .setParameter("kind", kind)
+                    .setParameter("version", version)
+                    .setParameter("type", type)
                     .executeUpdate();
                 return null;
             });
@@ -124,21 +122,21 @@ public class TasksStore extends XWikiHibernateBaseStore
     }
 
     /**
-     * Remove all tasks of the same kind and document, regardless of tehe version, then add the new task to the queue.
+     * Remove all tasks of the same type and document, regardless of tehe version, then add the new task to the queue.
      *
      * @param wikiId the wiki in which to execute the query
-     * @param task the task replacing the previously queued tasks for the same document and the same kind
+     * @param task the task replacing the previously queued tasks for the same document and the same type
      * @throws XWikiException in case of error when removing or adding the tasks
      */
-    public void replaceTask(String wikiId, XWikiTask task) throws XWikiException
+    public void replaceTask(String wikiId, XWikiDocumentIndexingTask task) throws XWikiException
     {
         initWikiContext(xWikiContext -> {
             executeWrite(xWikiContext, session -> {
-                XWikiTaskId taskId = task.getId();
-                session.createQuery("delete from XWikiTask t where t.id.docId = :docId "
-                        + "and t.id.kind = :kind")
+                XWikiDocumentIndexingTaskId taskId = task.getId();
+                session.createQuery("delete from XWikiDocumentIndexingTask t where t.id.docId = :docId "
+                        + "and t.id.type = :type")
                     .setParameter("docId", taskId.getDocId())
-                    .setParameter("kind", taskId.getKind())
+                    .setParameter("type", taskId.getType())
                     .executeUpdate();
                 innerAddTask(task, session);
                 return null;
@@ -177,7 +175,7 @@ public class TasksStore extends XWikiHibernateBaseStore
         }
     }
 
-    private void innerAddTask(XWikiTask task, Session session)
+    private void innerAddTask(XWikiDocumentIndexingTask task, Session session)
     {
         if (task.getTimestamp() == null) {
             task.setTimestamp(new Date());

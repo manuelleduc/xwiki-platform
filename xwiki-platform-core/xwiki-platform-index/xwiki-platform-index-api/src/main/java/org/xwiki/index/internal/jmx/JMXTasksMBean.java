@@ -36,7 +36,7 @@ public interface JMXTasksMBean
 
     /**
      * 
-     * @return the total number of tasks in the queue, grouped per kind of tasks
+     * @return the total number of tasks in the queue, grouped per type of tasks
      */
-    Map<String, Long> getQueueSizePerKind();
+    Map<String, Long> getQueueSizePerType();
 }

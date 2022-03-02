@@ -1,0 +1,3 @@
+org.xwiki.image.style.internal.DefaultImageStyleConfiguration
+org.xwiki.image.style.internal.DefaultImageStyleManager
+org.xwiki.image.style.internal.ImageStyleConfigurationSource

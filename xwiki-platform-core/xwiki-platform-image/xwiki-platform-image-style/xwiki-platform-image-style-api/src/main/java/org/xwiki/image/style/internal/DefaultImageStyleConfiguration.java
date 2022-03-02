@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+/*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
@@ -18,22 +16,34 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
--->
+ */
+package org.xwiki.image.style.internal;
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-core</artifactId>
-    <version>14.3-SNAPSHOT</version>
-  </parent>
-  <artifactId>xwiki-platform-image</artifactId>
-  <name>XWiki Platform - Image - Parent POM</name>
-  <description>XWiki Platform - Image - Parent POM</description>
-  <packaging>pom</packaging>
-  <modules>
-    <module>xwiki-platform-image-lightbox</module>
-    <module>xwiki-platform-image-processing</module>
-    <module>xwiki-platform-image-style</module>
-  </modules>
-</project>
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.xwiki.component.annotation.Component;
+import org.xwiki.configuration.ConfigurationSource;
+import org.xwiki.image.style.ImageStyleConfiguration;
+
+/**
+ * Configuration of the Image Style application.
+ *
+ * @version $Id$
+ * @since 14.2RC1
+ */
+@Component
+@Singleton
+public class DefaultImageStyleConfiguration implements ImageStyleConfiguration
+{
+    @Inject
+    @Named(ImageStyleConfigurationSource.HINT)
+    private ConfigurationSource configurationSource;
+    
+    @Override
+    public String getDefaultStyle()
+    {
+        return this.configurationSource.getProperty("defaultStyle", "");
+    }
+}

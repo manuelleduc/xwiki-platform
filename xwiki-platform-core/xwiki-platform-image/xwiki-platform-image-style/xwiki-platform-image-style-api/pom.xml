@@ -24,16 +24,30 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-core</artifactId>
-    <version>14.3-SNAPSHOT</version>
+    <artifactId>xwiki-platform-image-style</artifactId>
+    <version>14.2-SNAPSHOT</version>
   </parent>
-  <artifactId>xwiki-platform-image</artifactId>
-  <name>XWiki Platform - Image - Parent POM</name>
-  <description>XWiki Platform - Image - Parent POM</description>
-  <packaging>pom</packaging>
-  <modules>
-    <module>xwiki-platform-image-lightbox</module>
-    <module>xwiki-platform-image-processing</module>
-    <module>xwiki-platform-image-style</module>
-  </modules>
+  <artifactId>xwiki-platform-image-style-api</artifactId>
+  <name>XWiki Platform - Image - Style - API</name>
+  <properties>
+    <xwiki.jacoco.instructionRatio>1.00</xwiki.jacoco.instructionRatio>
+    <!-- Name to display by the Extension Manager. -->
+    <xwiki.extension.name>API for the Image Style Application.</xwiki.extension.name>
+    <!-- Description to display by the Extension Manager. -->
+    <xwiki.extension.description>Provides the API to interact with the Image Style configurations.</xwiki.extension.description>
+    <!-- Category to display in the Extension Manager. -->
+    <xwiki.extension.category>api</xwiki.extension.category>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.xwiki.commons</groupId>
+      <artifactId>xwiki-commons-stability</artifactId>
+      <version>${commons.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-configuration-default</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

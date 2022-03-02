@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+/*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
@@ -18,22 +16,35 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
--->
+ */
+package org.xwiki.image.style.rest;
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-core</artifactId>
-    <version>14.3-SNAPSHOT</version>
-  </parent>
-  <artifactId>xwiki-platform-image</artifactId>
-  <name>XWiki Platform - Image - Parent POM</name>
-  <description>XWiki Platform - Image - Parent POM</description>
-  <packaging>pom</packaging>
-  <modules>
-    <module>xwiki-platform-image-lightbox</module>
-    <module>xwiki-platform-image-processing</module>
-    <module>xwiki-platform-image-style</module>
-  </modules>
-</project>
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+import org.xwiki.image.style.ImageStyleException;
+import org.xwiki.image.style.rest.model.jaxb.Styles;
+import org.xwiki.stability.Unstable;
+
+/**
+ * TODO: document me.
+ *
+ * @version $Id$
+ * @since 14.2RC1
+ */
+@Path("/wikis/{wikiName}/imageStyles")
+@Unstable
+public interface ImageStylesResource
+{
+    /**
+     * Return the list of styles for a given wiki.
+     *
+     * @param wikiName the name of the wiki (e.g., {@code xwiki})
+     * @return the list of image styles
+     * @throws ImageStyleException in case of error while retrieving the list of styles
+     */
+    @GET
+    @Path("/")
+    Styles getStyles(@PathParam("wikiName") String wikiName) throws ImageStyleException;
+}

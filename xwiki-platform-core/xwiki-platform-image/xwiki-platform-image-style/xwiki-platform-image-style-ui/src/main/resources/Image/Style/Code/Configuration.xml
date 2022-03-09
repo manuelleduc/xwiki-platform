@@ -53,22 +53,36 @@
       <nameField/>
       <validationScript/>
       <defaultStyle>
+        <cache>0</cache>
+        <classname/>
         <customDisplay/>
+        <defaultValue/>
         <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText/>
         <hint/>
+        <idField/>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
         <name>defaultStyle</name>
         <number>1</number>
-        <picker>0</picker>
-        <prettyName>Default Style</prettyName>
-        <size>30</size>
+        <picker>1</picker>
+        <prettyName>defaultStyle</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators/>
+        <size>1</size>
+        <sort/>
+        <sql>select doc.fullName, propName.value from XWikiDocument as doc, BaseObject as theme, StringProperty propName where doc.fullName=theme.name and theme.className='Image.Style.Code.ImageStyleClass' and theme.id = propName.id and propName.name = 'prettyName' and doc.space = 'Image.Style.Code.ImageStyles'</sql>
         <unmodifiable>0</unmodifiable>
         <validationMessage/>
         <validationRegExp/>
-        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+        <valueField/>
+        <classType>com.xpn.xwiki.objects.classes.DBListClass</classType>
       </defaultStyle>
     </class>
     <property>
-      <defaultStyle/>
+      <defaultStyle>Image.Style.Code.ImageStyles.default</defaultStyle>
     </property>
   </object>
   <object>

@@ -40,6 +40,8 @@
   <content>admin.image.style=Image Styles
 image.style.admin.heading=Image Style Administration
 image.style.administration.imageStyleList.heading=Image Styles
+image.style.administation.newImageStyle.button=Create the image style
+image.style.administation.defaultImageStyle.button=Update the default image style
 image.style.imageStyleSheet.backToAdministration.link=Back to the administation
 image.style.administration.liveData.doc.title=Identifier
 image.style.administration.liveData._actions=Actions
@@ -76,7 +78,9 @@ Image.Style.Code.ImageStyleClass_defaultWidth_hint=The default with of the image
 Image.Style.Code.ImageStyleClass_prettyName=Pretty Name
 Image.Style.Code.ImageStyleClass_prettyName_hint=User oriented name of the image style.
 Image.Style.Code.ImageStyleClass_type=Type
-Image.Style.Code.ImageStyleClass_type_hint=The type of the image style (used as a css class).</content>
+Image.Style.Code.ImageStyleClass_type_hint=The type of the image style (used as a css class).
+Image.Style.Code.ConfigurationClass_defaultStyle=Default Style
+Image.Style.Code.ConfigurationClass_defaultStyle_hint=The default style for this wiki.</content>
   <object>
     <name>Image.Style.Code.Translations</name>
     <number>0</number>

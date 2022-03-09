@@ -22,6 +22,7 @@ package org.xwiki.image.style.rest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 import org.xwiki.image.style.ImageStyleException;
 import org.xwiki.image.style.rest.model.jaxb.Styles;
@@ -45,6 +46,16 @@ public interface ImageStylesResource
      * @throws ImageStyleException in case of error while retrieving the list of styles
      */
     @GET
-    @Path("/")
     Styles getStyles(@PathParam("wikiName") String wikiName) throws ImageStyleException;
+
+    /**
+     * Return the identifier of the default style for a given document
+     * @param documentReference the document reference to resolve the default style for
+     * @return the identifier of the default style
+     * @throws ImageStyleException in case of error while retrieving the default style
+     */
+    @GET
+    @Path("/default")
+    String getDefaultStyleIdentifier(@QueryParam("documentReference") String documentReference)
+        throws ImageStyleException;
 }

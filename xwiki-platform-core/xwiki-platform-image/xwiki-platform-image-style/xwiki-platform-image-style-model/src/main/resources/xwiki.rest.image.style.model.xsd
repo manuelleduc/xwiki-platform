@@ -34,9 +34,18 @@
       <documentation>Image Style metadata.</documentation>
     </annotation>
     <sequence>
-      <element name="id" type="string"/>
+      <element name="identifier" type="string"/>
       <element name="prettyName" type="string"/>
       <element name="type" type="string"/>
+      <element name="adjustableSize" type="boolean"/>
+      <element name="defaultWidth" type="long"/>
+      <element name="defaultHeight" type="long"/>
+      <element name="adjustableBorder" type="boolean"/>
+      <element name="defaultBorder" type="boolean"/>
+      <element name="adjustableAlignment" type="boolean"/>
+      <element name="defaultAlignment" type="string"/>
+      <element name="adjustableTextWrap" type="boolean"/>
+      <element name="defaultTextWrap" type="boolean"/>
     </sequence>
   </complexType>
 
@@ -47,7 +56,7 @@
     <sequence>
       <!-- A collection of resolved translations. -->
       <element name="imageStyle" type="imageStyle:Style" minOccurs="0" maxOccurs="unbounded"/>
-      <element name="default" type="string"/>
+<!--      <element name="default" type="string"/>-->
     </sequence>
   </complexType>
 

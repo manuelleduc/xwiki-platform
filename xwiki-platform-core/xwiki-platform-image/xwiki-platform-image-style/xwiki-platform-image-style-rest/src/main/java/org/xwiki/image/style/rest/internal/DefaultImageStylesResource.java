@@ -58,9 +58,15 @@ public class DefaultImageStylesResource implements ImageStylesResource, XWikiRes
     public Styles getStyles(String wikiName) throws ImageStyleException
     {
         Styles styles = new Styles();
-        styles.setDefault(this.imageStyleConfiguration.getDefaultStyle());
         styles.getImageStyles().addAll(convert(this.imageStyleManager.getImageStyles(wikiName)));
         return styles;
+    }
+
+    @Override
+    public String getDefaultStyleIdentifier(String documentReference) throws ImageStyleException
+    {
+        // TODO: search for the default style in the space or the wiki (or the parent wiki).
+        return this.imageStyleConfiguration.getDefaultStyle(documentReference);
     }
 
     private List<Style> convert(Set<ImageStyle> imageStyles)
@@ -74,9 +80,18 @@ public class DefaultImageStylesResource implements ImageStylesResource, XWikiRes
     private Style convert(ImageStyle imageStyle)
     {
         Style style = new Style();
-        style.setClazz(imageStyle.getType());
-        style.setId(imageStyle.getIdentifier());
+        style.setIdentifier(imageStyle.getIdentifier());
         style.setPrettyName(imageStyle.getPrettyName());
+        style.setType(imageStyle.getType());
+        style.setAdjustableSize(imageStyle.getAdjustableSize());
+        style.setDefaultWidth(imageStyle.getDefaultWidth());
+        style.setDefaultHeight(imageStyle.getDefaultHeight());
+        style.setAdjustableBorder(imageStyle.getAdjustableBorder());
+        style.setDefaultBorder(imageStyle.getDefaultBorder());
+        style.setAdjustableAlignment(imageStyle.getAdjustableAlignment());
+        style.setDefaultAlignment(imageStyle.getDefaultAlignment());
+        style.setAdjustableTextWrap(imageStyle.getAdjustableTextWrap());
+        style.setDefaultTextWrap(imageStyle.getDefaultTextWrap());
         return style;
     }
 }

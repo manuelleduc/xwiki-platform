@@ -33,7 +33,9 @@ import org.xwiki.stability.Unstable;
 public interface ImageStyleConfiguration
 {
     /**
+     * TODO take into account the document reference when resolving the default style.
+     * @param documentReference
      * @return the identifier of the default image style (the empty string by default, i.e. no default image style)
      */
-    String getDefaultStyle();
+    String getDefaultStyle(String documentReference);
 }

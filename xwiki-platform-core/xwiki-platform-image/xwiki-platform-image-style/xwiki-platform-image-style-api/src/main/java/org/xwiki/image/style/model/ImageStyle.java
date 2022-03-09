@@ -33,22 +33,29 @@ import org.xwiki.stability.Unstable;
 @Unstable
 public class ImageStyle
 {
-    private String prettyName;
-
     private String identifier;
+
+    private String prettyName;
 
     private String type;
 
-    public String getPrettyName()
-    {
-        return this.prettyName;
-    }
+    private Boolean adjustableSize;
 
-    public ImageStyle setPrettyName(String prettyName)
-    {
-        this.prettyName = prettyName;
-        return this;
-    }
+    private Long defaultWidth;
+
+    private Long defaultHeight;
+
+    private Boolean adjustableBorder;
+
+    private Boolean defaultBorder;
+
+    private Boolean adjustableAlignment;
+
+    private String defaultAlignment;
+
+    private Boolean adjustableTextWrap;
+
+    private Boolean defaultTextWrap;
 
     public String getIdentifier()
     {
@@ -61,6 +68,17 @@ public class ImageStyle
         return this;
     }
 
+    public String getPrettyName()
+    {
+        return this.prettyName;
+    }
+
+    public ImageStyle setPrettyName(String prettyName)
+    {
+        this.prettyName = prettyName;
+        return this;
+    }
+
     public String getType()
     {
         return this.type;
@@ -69,6 +87,105 @@ public class ImageStyle
     public ImageStyle setType(String type)
     {
         this.type = type;
+        return this;
+    }
+
+    public Boolean getAdjustableSize()
+    {
+        return this.adjustableSize;
+    }
+
+    public ImageStyle setAdjustableSize(Boolean adjustableSize)
+    {
+        this.adjustableSize = adjustableSize;
+        return this;
+    }
+
+    public Long getDefaultWidth()
+    {
+        return this.defaultWidth;
+    }
+
+    public ImageStyle setDefaultWidth(Long defaultWidth)
+    {
+        this.defaultWidth = defaultWidth;
+        return this;
+    }
+
+    public Long getDefaultHeight()
+    {
+        return this.defaultHeight;
+    }
+
+    public ImageStyle setDefaultHeight(Long defaultHeight)
+    {
+        this.defaultHeight = defaultHeight;
+        return this;
+    }
+
+    public Boolean getAdjustableBorder()
+    {
+        return this.adjustableBorder;
+    }
+
+    public ImageStyle setAdjustableBorder(Boolean adjustableBorder)
+    {
+        this.adjustableBorder = adjustableBorder;
+        return this;
+    }
+
+    public Boolean getDefaultBorder()
+    {
+        return this.defaultBorder;
+    }
+
+    public ImageStyle setDefaultBorder(Boolean defaultBorder)
+    {
+        this.defaultBorder = defaultBorder;
+        return this;
+    }
+
+    public Boolean getAdjustableAlignment()
+    {
+        return this.adjustableAlignment;
+    }
+
+    public ImageStyle setAdjustableAlignment(Boolean adjustableAlignment)
+    {
+        this.adjustableAlignment = adjustableAlignment;
+        return this;
+    }
+
+    public String getDefaultAlignment()
+    {
+        return this.defaultAlignment;
+    }
+
+    public ImageStyle setDefaultAlignment(String defaultAlignment)
+    {
+        this.defaultAlignment = defaultAlignment;
+        return this;
+    }
+
+    public Boolean getAdjustableTextWrap()
+    {
+        return this.adjustableTextWrap;
+    }
+
+    public ImageStyle setAdjustableTextWrap(Boolean adjustableTextWrap)
+    {
+        this.adjustableTextWrap = adjustableTextWrap;
+        return this;
+    }
+
+    public Boolean getDefaultTextWrap()
+    {
+        return this.defaultTextWrap;
+    }
+
+    public ImageStyle setDefaultTextWrap(Boolean defaultTextWrap)
+    {
+        this.defaultTextWrap = defaultTextWrap;
         return this;
     }
 
@@ -86,9 +203,18 @@ public class ImageStyle
         ImageStyle that = (ImageStyle) o;
 
         return new EqualsBuilder()
-            .append(this.prettyName, that.prettyName)
             .append(this.identifier, that.identifier)
+            .append(this.prettyName, that.prettyName)
             .append(this.type, that.type)
+            .append(this.adjustableSize, that.adjustableSize)
+            .append(this.defaultWidth, that.defaultWidth)
+            .append(this.defaultHeight, that.defaultHeight)
+            .append(this.adjustableBorder, that.adjustableBorder)
+            .append(this.defaultBorder, that.defaultBorder)
+            .append(this.adjustableAlignment, that.adjustableAlignment)
+            .append(this.defaultAlignment, that.defaultAlignment)
+            .append(this.adjustableTextWrap, that.adjustableTextWrap)
+            .append(this.defaultTextWrap, that.defaultTextWrap)
             .isEquals();
     }
 
@@ -96,9 +222,18 @@ public class ImageStyle
     public int hashCode()
     {
         return new HashCodeBuilder(17, 37)
-            .append(this.prettyName)
             .append(this.identifier)
+            .append(this.prettyName)
             .append(this.type)
+            .append(this.adjustableSize)
+            .append(this.defaultWidth)
+            .append(this.defaultHeight)
+            .append(this.adjustableBorder)
+            .append(this.defaultBorder)
+            .append(this.adjustableAlignment)
+            .append(this.defaultAlignment)
+            .append(this.adjustableTextWrap)
+            .append(this.defaultTextWrap)
             .toHashCode();
     }
 
@@ -106,9 +241,18 @@ public class ImageStyle
     public String toString()
     {
         return new ToStringBuilder(this)
-            .append("prettyName", this.prettyName)
             .append("identifier", this.identifier)
+            .append("prettyName", this.prettyName)
             .append("type", this.type)
+            .append("adjustableSize", this.adjustableSize)
+            .append("defaultWidth", this.defaultWidth)
+            .append("defaultHeight", this.defaultHeight)
+            .append("adjustableBorder", this.adjustableBorder)
+            .append("defaultBorder", this.defaultBorder)
+            .append("adjustableAlignment", this.adjustableAlignment)
+            .append("defaultAlignment", this.defaultAlignment)
+            .append("adjustableTextWrap", this.adjustableTextWrap)
+            .append("defaultTextWrap", this.defaultTextWrap)
             .toString();
     }
 }

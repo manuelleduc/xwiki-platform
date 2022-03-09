@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.context.ExecutionContextException;
@@ -47,8 +48,10 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+
 /**
- * TODO: document me.
+ * Provide the operations to interact with the stored images style.
  *
  * @version $Id$
  * @since 14.2RC1
@@ -57,6 +60,9 @@ import com.xpn.xwiki.objects.BaseObject;
 @Singleton
 public class DefaultImageStyleManager implements ImageStyleManager
 {
+    private static final LocalDocumentReference IMAGE_STYPE_CLASS_REFERENCE =
+        new LocalDocumentReference(List.of("Image", "Style", "Code"), "ImageStyleClass");
+
     @Inject
     private QueryManager queryManager;
 
@@ -69,13 +75,18 @@ public class DefaultImageStyleManager implements ImageStyleManager
     @Inject
     private DocumentReferenceResolver<String> documentReferenceResolver;
 
+    @Inject
+    private Logger logger;
+
     @Override
     public Set<ImageStyle> getImageStyles(String wikiName) throws ImageStyleException
     {
         try {
             this.contextManager.pushContext(new ExecutionContext(), true);
             this.xcontextProvider.get().setWikiId(wikiName);
-            return this.queryManager.createQuery("from doc.object(Image.Style.Code.ImageStyleClass) as imageStyle",
+            return this.queryManager.createQuery("select doc.fullName " 
+                        + "from Document doc, doc.object(Image.Style.Code.ImageStyleClass) as obj " 
+                        + "where doc.space = 'Image.Style.Code.ImageStyles'",
                     Query.XWQL)
                 .setWiki(wikiName)
                 .<String>execute()
@@ -98,18 +109,24 @@ public class DefaultImageStyleManager implements ImageStyleManager
             XWikiContext context = this.xcontextProvider.get();
             DocumentReference resolve = this.documentReferenceResolver.resolve(documentReference);
             XWikiDocument document = context.getWiki().getDocument(resolve, context);
-            LocalDocumentReference classReference =
-                new LocalDocumentReference(List.of("Image", "Style", "Code"), "ImageStyleClass");
-            BaseObject xObject = document.getXObject(classReference);
+            BaseObject xObject = document.getXObject(IMAGE_STYPE_CLASS_REFERENCE);
             return new ImageStyle()
-                .setType(xObject.getStringValue("type"))
                 .setIdentifier(document.getDocumentReference().getName())
-                .setPrettyName(xObject.getStringValue("prettyName"));
+                .setPrettyName(xObject.getStringValue("prettyName"))
+                .setType(xObject.getStringValue("type"))
+                .setAdjustableSize(xObject.getLongValue("adjustableSize") == 1)
+                .setDefaultWidth(xObject.getLongValue("defaultWidth"))
+                .setDefaultHeight(xObject.getLongValue("defaultHeight"))
+                .setAdjustableBorder(xObject.getLongValue("adjustableBorder") == 1)
+                .setDefaultBorder(xObject.getLongValue("defaultBorder") == 1)
+                .setAdjustableAlignment(xObject.getLongValue("adjustableAlignment") == 1)
+                .setDefaultAlignment(xObject.getStringValue("defaultAlignment"))
+                .setAdjustableTextWrap(xObject.getLongValue("adjustableTextWrap") == 1)
+                .setDefaultTextWrap(xObject.getLongValue("defaultTextWrap") == 1);
         } catch (XWikiException e) {
-            // TODO: log
+            this.logger.warn("Failed to resolve document reference [{}]. Cause: [{}].", documentReference,
+                getRootCauseMessage(e));
             return null;
         }
     }
-    
-    
 }

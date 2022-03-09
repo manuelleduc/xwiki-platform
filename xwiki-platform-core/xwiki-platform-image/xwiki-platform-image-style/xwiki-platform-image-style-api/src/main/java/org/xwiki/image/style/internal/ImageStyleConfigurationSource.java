@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
 import org.xwiki.configuration.ConfigurationSource;
-import org.xwiki.configuration.internal.AbstractDocumentConfigurationSource;
+import org.xwiki.configuration.internal.AbstractXWikiPreferencesConfigurationSource;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.LocalDocumentReference;
 
@@ -39,7 +39,7 @@ import org.xwiki.model.reference.LocalDocumentReference;
 @Component
 @Singleton
 @Named(ImageStyleConfigurationSource.HINT)
-public class ImageStyleConfigurationSource extends AbstractDocumentConfigurationSource
+public class ImageStyleConfigurationSource extends AbstractXWikiPreferencesConfigurationSource
 {
     /**
      * Hint of the component.

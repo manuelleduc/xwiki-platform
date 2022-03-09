@@ -42,7 +42,7 @@ public class DefaultImageStyleConfiguration implements ImageStyleConfiguration
     private ConfigurationSource configurationSource;
     
     @Override
-    public String getDefaultStyle()
+    public String getDefaultStyle(String documentReference)
     {
         return this.configurationSource.getProperty("defaultStyle", "");
     }

@@ -17,26 +17,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.image.style;
+package org.xwiki.image.style.internal.configuration.source;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.xwiki.component.annotation.Component;
+import org.xwiki.configuration.ConfigurationSource;
+import org.xwiki.configuration.internal.AbstractSpacesConfigurationSource;
 
 /**
- * Image Style specific exception class.
+ *  Spaces image style configuration, check for the presence of a {@link AbstractWikiImageStyleConfigurationSource#XCLASS_REFERENCE}
+ *  XObject in the {@code WebPreferences} document of this space or on of its parents. 
  *
  * @version $Id$
  * @since 14.2RC1
  */
-public class ImageStyleException extends Exception
+@Component
+@Singleton
+@Named("image.style.spaces")
+public class SpacesImageStyleConfigurationSource extends AbstractSpacesConfigurationSource
 {
-    private static final long serialVersionUID = 166877246779078320L;
+    @Inject
+    @Named("image.style.space")
+    private ConfigurationSource spacePreferencesSource;
 
-    /**
-     * Constructs a new imaeg style exception with the specified detail message and cause.
-     *
-     * @param message the detail message
-     * @param cause the cause
-     */
-    public ImageStyleException(String message, Throwable cause)
+    @Override
+    protected ConfigurationSource getSpaceConfigurationSource()
     {
-        super(message, cause);
+        return this.spacePreferencesSource;
     }
 }

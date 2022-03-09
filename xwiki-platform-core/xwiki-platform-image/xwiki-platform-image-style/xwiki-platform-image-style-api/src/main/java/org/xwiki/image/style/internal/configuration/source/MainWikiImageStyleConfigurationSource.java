@@ -17,26 +17,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.image.style;
+package org.xwiki.image.style.internal.configuration.source;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.xwiki.component.annotation.Component;
+import org.xwiki.model.reference.WikiReference;
 
 /**
- * Image Style specific exception class.
+ *  Main wiki global configuration.
  *
  * @version $Id$
  * @since 14.2RC1
  */
-public class ImageStyleException extends Exception
+@Component
+@Singleton
+@Named("image.style.wiki.main")
+public class MainWikiImageStyleConfigurationSource extends AbstractWikiImageStyleConfigurationSource
 {
-    private static final long serialVersionUID = 166877246779078320L;
-
-    /**
-     * Constructs a new imaeg style exception with the specified detail message and cause.
-     *
-     * @param message the detail message
-     * @param cause the cause
-     */
-    public ImageStyleException(String message, Throwable cause)
+    @Override
+    protected String getCacheId()
     {
-        super(message, cause);
+        return "configuration.image.style.wiki.main";
+    }
+    
+    @Override
+    protected WikiReference getWikiReference()
+    {
+        return new WikiReference(this.wikiManager.getMainWikiId());
     }
 }

@@ -17,33 +17,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.image.style.internal;
+package org.xwiki.image.style.internal.configuration.source;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.configuration.ConfigurationSource;
-import org.xwiki.image.style.ImageStyleConfiguration;
+import org.xwiki.model.reference.WikiReference;
 
 /**
- * Configuration of the Image Style application.
+ * Current wiki global configuration.
  *
  * @version $Id$
  * @since 14.2RC1
  */
 @Component
 @Singleton
-public class DefaultImageStyleConfiguration implements ImageStyleConfiguration
+@Named("image.style.wiki.current")
+public class CurrentWikiImageStyleConfigurationSource extends AbstractWikiImageStyleConfigurationSource
 {
-    @Inject
-    @Named(ImageStyleConfigurationSource.HINT)
-    private ConfigurationSource configurationSource;
+    @Override
+    protected String getCacheId()
+    {
+        return "configuration.image.style.wiki.current";
+    }
     
     @Override
-    public String getDefaultStyle(String documentReference)
+    protected WikiReference getWikiReference()
     {
-        return this.configurationSource.getProperty("defaultStyle", "");
+        return getCurrentWikiReference();
     }
 }

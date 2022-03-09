@@ -23,7 +23,7 @@ import org.xwiki.component.annotation.Role;
 import org.xwiki.stability.Unstable;
 
 /**
- * TODO: document me.
+ * Give access to the image style configuration.
  *
  * @version $Id$
  * @since 14.2RC1
@@ -33,9 +33,12 @@ import org.xwiki.stability.Unstable;
 public interface ImageStyleConfiguration
 {
     /**
-     * TODO take into account the document reference when resolving the default style.
-     * @param documentReference
+     * Resolve the default style for a given wiki and, optionally a given document.
+     *
+     * @param wikiName the name of the wiki (e.g., "xwiki")
+     * @param documentReference the reference of the document for which we want to get the default style, ignored
+     *     when {@code null}
      * @return the identifier of the default image style (the empty string by default, i.e. no default image style)
      */
-    String getDefaultStyle(String documentReference);
+    String getDefaultStyle(String wikiName, String documentReference) throws ImageStyleException;
 }

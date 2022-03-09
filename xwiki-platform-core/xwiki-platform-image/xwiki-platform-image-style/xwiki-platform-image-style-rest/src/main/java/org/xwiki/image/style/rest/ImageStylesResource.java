@@ -49,13 +49,16 @@ public interface ImageStylesResource
     Styles getStyles(@PathParam("wikiName") String wikiName) throws ImageStyleException;
 
     /**
-     * Return the identifier of the default style for a given document
+     * Return the identifier of the default style for a given document.
+     *
+     * @param wikiName the name of the wiki (e.g., {@code xwiki})
      * @param documentReference the document reference to resolve the default style for
      * @return the identifier of the default style
      * @throws ImageStyleException in case of error while retrieving the default style
      */
     @GET
     @Path("/default")
-    String getDefaultStyleIdentifier(@QueryParam("documentReference") String documentReference)
+    String getDefaultStyleIdentifier(@PathParam("wikiName") String wikiName,
+        @QueryParam("documentReference") String documentReference)
         throws ImageStyleException;
 }

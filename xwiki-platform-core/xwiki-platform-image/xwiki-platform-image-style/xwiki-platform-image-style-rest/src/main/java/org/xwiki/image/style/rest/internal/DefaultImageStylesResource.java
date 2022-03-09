@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
@@ -37,8 +38,12 @@ import org.xwiki.image.style.rest.model.jaxb.Style;
 import org.xwiki.image.style.rest.model.jaxb.Styles;
 import org.xwiki.rest.XWikiRestComponent;
 
+import com.xpn.xwiki.XWikiContext;
+
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
+
 /**
- * TODO: document me.
+ * Default image style rest endpoint implementation.
  *
  * @version $Id$
  * @since 14.2RC1
@@ -54,6 +59,9 @@ public class DefaultImageStylesResource implements ImageStylesResource, XWikiRes
     @Inject
     private ImageStyleManager imageStyleManager;
 
+    @Inject
+    private Provider<XWikiContext> contextProvider;
+
     @Override
     public Styles getStyles(String wikiName) throws ImageStyleException
     {
@@ -63,10 +71,13 @@ public class DefaultImageStylesResource implements ImageStylesResource, XWikiRes
     }
 
     @Override
-    public String getDefaultStyleIdentifier(String documentReference) throws ImageStyleException
+    public String getDefaultStyleIdentifier(String wikiName, String documentReference) throws ImageStyleException
     {
-        // TODO: search for the default style in the space or the wiki (or the parent wiki).
-        return this.imageStyleConfiguration.getDefaultStyle(documentReference);
+        String defaultStyle = this.imageStyleConfiguration.getDefaultStyle(wikiName, documentReference);
+        if (defaultStyle.isEmpty()) {
+            this.contextProvider.get().getResponse().setStatus(NO_CONTENT.getStatusCode());
+        }
+        return defaultStyle;
     }
 
     private List<Style> convert(Set<ImageStyle> imageStyles)

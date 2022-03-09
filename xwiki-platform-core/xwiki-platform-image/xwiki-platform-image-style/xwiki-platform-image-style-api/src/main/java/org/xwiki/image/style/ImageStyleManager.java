@@ -26,7 +26,7 @@ import org.xwiki.image.style.model.ImageStyle;
 import org.xwiki.stability.Unstable;
 
 /**
- * TODO: document me.
+ * Gives access to the image styles of the wiki.
  *
  * @version $Id$
  * @since 14.2RC1

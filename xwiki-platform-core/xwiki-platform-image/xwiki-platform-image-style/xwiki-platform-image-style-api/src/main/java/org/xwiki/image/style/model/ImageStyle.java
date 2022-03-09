@@ -25,7 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.xwiki.stability.Unstable;
 
 /**
- * TODO: document me.
+ * The image style POJO. Contains the list of all the configurable properties of an image style.
  *
  * @version $Id$
  * @since 14.2RC1
@@ -57,132 +57,219 @@ public class ImageStyle
 
     private Boolean defaultTextWrap;
 
+    /**
+     * @return the unique identifier of the style (e.g., "thumbnail")
+     */
     public String getIdentifier()
     {
         return this.identifier;
     }
 
+    /**
+     * @param identifier the unique identifier of the style (e.g., "thumbnail")
+     * @return the current object
+     */
     public ImageStyle setIdentifier(String identifier)
     {
         this.identifier = identifier;
         return this;
     }
 
+    /**
+     * @return the pretty name of the style (e.g., "Thumbnail")
+     */
     public String getPrettyName()
     {
         return this.prettyName;
     }
 
+    /**
+     * @param prettyName the pretty name of the style (e.g., "Thumbnail")
+     * @return the current object
+     */
     public ImageStyle setPrettyName(String prettyName)
     {
         this.prettyName = prettyName;
         return this;
     }
 
+    /**
+     * @return the type of the style (e.g., "thumbnail-style")
+     */
     public String getType()
     {
         return this.type;
     }
 
+    /**
+     * @param type the type of the style (e.g., "thumbnail-style")
+     * @return the current object
+     */
     public ImageStyle setType(String type)
     {
         this.type = type;
         return this;
     }
 
+    /**
+     * @return {@code true} if the style allows user to adjust the size of the image, {@code false} otherwise
+     */
     public Boolean getAdjustableSize()
     {
         return this.adjustableSize;
     }
 
+    /**
+     * @param adjustableSize {@code true} if the style allows user to adjust the size of the image, {@code false}
+     *     otherwise
+     * @return the current object
+     */
     public ImageStyle setAdjustableSize(Boolean adjustableSize)
     {
         this.adjustableSize = adjustableSize;
         return this;
     }
 
+    /**
+     * @return the default image width size in pixels, or {@code null} if undefined
+     */
     public Long getDefaultWidth()
     {
         return this.defaultWidth;
     }
 
+    /**
+     * @param defaultWidth the default image width size in pixels, or {@code null} if undefined
+     * @return the current object
+     */
     public ImageStyle setDefaultWidth(Long defaultWidth)
     {
         this.defaultWidth = defaultWidth;
         return this;
     }
 
+    /**
+     * @return the default image height size in pixels, or {@code null} if undefined
+     */
     public Long getDefaultHeight()
     {
         return this.defaultHeight;
     }
 
+    /**
+     * @param defaultHeight the default image height size in pixels, or {@code null} if undefined
+     * @return the current object
+     */
     public ImageStyle setDefaultHeight(Long defaultHeight)
     {
         this.defaultHeight = defaultHeight;
         return this;
     }
 
+    /**
+     * @return {@code true} if the style allows user to adjust the border configuration of the image, {@code false}
+     *     otherwise
+     */
     public Boolean getAdjustableBorder()
     {
         return this.adjustableBorder;
     }
 
+    /**
+     * @param adjustableBorder {@code true} if the style allows user to adjust the border configuration of the
+     *     image, {@code false}
+     * @return the current object
+     */
     public ImageStyle setAdjustableBorder(Boolean adjustableBorder)
     {
         this.adjustableBorder = adjustableBorder;
         return this;
     }
 
+    /**
+     * @return {@code true} when the image has a border, {@code false} otherwise
+     */
     public Boolean getDefaultBorder()
     {
         return this.defaultBorder;
     }
 
+    /**
+     * @param defaultBorder {@code true} when the image has a border, {@code false} otherwise
+     * @return the current object
+     */
     public ImageStyle setDefaultBorder(Boolean defaultBorder)
     {
         this.defaultBorder = defaultBorder;
         return this;
     }
 
+    /**
+     * @return {@code true} when the alignment is adjustable, {@code false} otherwise
+     */
     public Boolean getAdjustableAlignment()
     {
         return this.adjustableAlignment;
     }
 
+    /**
+     * @param adjustableAlignment {@code true} when the alignment is adjustable, {@code false} otherwise
+     * @return the current object
+     */
     public ImageStyle setAdjustableAlignment(Boolean adjustableAlignment)
     {
         this.adjustableAlignment = adjustableAlignment;
         return this;
     }
 
+    /**
+     * @return the default alignment of the image, {@code null} if undefined
+     */
     public String getDefaultAlignment()
     {
         return this.defaultAlignment;
     }
 
+    /**
+     * @param defaultAlignment the default alignment of the image, {@code null} if undefined
+     * @return the current object
+     */
     public ImageStyle setDefaultAlignment(String defaultAlignment)
     {
         this.defaultAlignment = defaultAlignment;
         return this;
     }
 
+    /**
+     * @return {@code true} if the text wrap is adjustable, {@code false} otherwise
+     */
     public Boolean getAdjustableTextWrap()
     {
         return this.adjustableTextWrap;
     }
 
+    /**
+     * @param adjustableTextWrap {@code true} if the text wrap is adjustable, {@code false} otherwise
+     * @return the current object
+     */
     public ImageStyle setAdjustableTextWrap(Boolean adjustableTextWrap)
     {
         this.adjustableTextWrap = adjustableTextWrap;
         return this;
     }
 
+    /**
+     * @return the default text wrap configuration, {@code null} if undefined
+     */
     public Boolean getDefaultTextWrap()
     {
         return this.defaultTextWrap;
     }
 
+    /**
+     * @param defaultTextWrap the default text wrap configuration, {@code null} if undefined
+     * @return the current object
+     */
     public ImageStyle setDefaultTextWrap(Boolean defaultTextWrap)
     {
         this.defaultTextWrap = defaultTextWrap;

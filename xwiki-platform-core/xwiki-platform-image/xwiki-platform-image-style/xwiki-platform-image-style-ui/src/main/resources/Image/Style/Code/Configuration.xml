@@ -312,7 +312,7 @@
       <displayInSection>image.style</displayInSection>
     </property>
     <property>
-      <heading>TODO</heading>
+      <heading>$services.localization.render('image.style.admin.heading')</heading>
     </property>
     <property>
       <iconAttachment/>

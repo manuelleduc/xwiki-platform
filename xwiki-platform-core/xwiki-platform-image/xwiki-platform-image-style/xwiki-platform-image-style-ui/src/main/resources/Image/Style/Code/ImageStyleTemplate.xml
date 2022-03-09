@@ -52,12 +52,155 @@
       <defaultWeb/>
       <nameField/>
       <validationScript/>
+      <adjustableAlignment>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>adjustableAlignment</name>
+        <number>8</number>
+        <prettyName>adjustableAlignment</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </adjustableAlignment>
+      <adjustableBorder>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>adjustableBorder</name>
+        <number>6</number>
+        <prettyName>adjustableBorder</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </adjustableBorder>
+      <adjustableSize>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>adjustableSize</name>
+        <number>3</number>
+        <prettyName>adjustableSize</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </adjustableSize>
+      <adjustrableTextWrap>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>adjustrableTextWrap</name>
+        <number>10</number>
+        <prettyName>adjustrableTextWrap</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </adjustrableTextWrap>
+      <defaultAlignment>
+        <cache>0</cache>
+        <customDisplay/>
+        <defaultValue>default</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText/>
+        <hint/>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>defaultAlignment</name>
+        <number>9</number>
+        <picker>1</picker>
+        <prettyName>defaultAlignment</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <sort/>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <values>default=|left=Left|center=Center|right=Right</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </defaultAlignment>
+      <defaultBorder>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>defaultBorder</name>
+        <number>7</number>
+        <prettyName>defaultBorder</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </defaultBorder>
+      <defaultHeight>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint/>
+        <name>defaultHeight</name>
+        <number>5</number>
+        <numberType>long</numberType>
+        <prettyName>defaultHeight</prettyName>
+        <size/>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </defaultHeight>
+      <defaultTextWrap>
+        <customDisplay/>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>checkbox</displayFormType>
+        <displayType/>
+        <hint/>
+        <name>defaultTextWrap</name>
+        <number>11</number>
+        <prettyName>defaultTextWrap</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </defaultTextWrap>
+      <defaultWidth>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint/>
+        <name>defaultWidth</name>
+        <number>4</number>
+        <numberType>long</numberType>
+        <prettyName>Default Width</prettyName>
+        <size/>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </defaultWidth>
       <prettyName>
         <customDisplay/>
         <disabled>0</disabled>
         <hint/>
         <name>prettyName</name>
-        <number>2</number>
+        <number>1</number>
         <picker>0</picker>
         <prettyName>prettyName</prettyName>
         <size>30</size>
@@ -66,9 +209,53 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
       </prettyName>
+      <type>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint>The css class of the image style.</hint>
+        <name>type</name>
+        <number>2</number>
+        <picker>0</picker>
+        <prettyName>type</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </type>
     </class>
     <property>
+      <adjustableAlignment>0</adjustableAlignment>
+    </property>
+    <property>
+      <adjustableBorder>0</adjustableBorder>
+    </property>
+    <property>
+      <adjustableSize>0</adjustableSize>
+    </property>
+    <property>
+      <adjustrableTextWrap>0</adjustrableTextWrap>
+    </property>
+    <property>
+      <defaultAlignment>default</defaultAlignment>
+    </property>
+    <property>
+      <defaultBorder>0</defaultBorder>
+    </property>
+    <property>
+      <defaultHeight/>
+    </property>
+    <property>
+      <defaultTextWrap>0</defaultTextWrap>
+    </property>
+    <property>
+      <defaultWidth/>
+    </property>
+    <property>
       <prettyName/>
+    </property>
+    <property>
+      <type/>
     </property>
   </object>
 </xwikidoc>

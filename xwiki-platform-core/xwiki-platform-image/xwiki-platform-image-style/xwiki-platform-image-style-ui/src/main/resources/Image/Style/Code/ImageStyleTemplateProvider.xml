@@ -239,7 +239,7 @@
       </visibilityRestrictions>
     </class>
     <property>
-      <action/>
+      <action>edit</action>
     </property>
     <property>
       <creationRestrictions>

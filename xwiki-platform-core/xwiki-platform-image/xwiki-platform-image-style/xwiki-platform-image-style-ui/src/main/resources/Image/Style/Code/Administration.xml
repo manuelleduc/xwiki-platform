@@ -37,11 +37,41 @@
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
-  <content>{{liveData
+  <content>{{velocity}}
+{{html}}
+&lt;form action="$!xwiki.getURL('Image.Style.Code.ImageStyleClass')" class="xform half" id="newdoc" method="post"&gt;
+  &lt;div class="hidden"&gt;
+    &lt;input name="form_token" type="hidden" value="$!{services.csrf.getToken()}"&gt;
+    &lt;input name="parent" type="hidden" value="Image.Style.Code.ImageStyleClass"&gt;
+    &lt;input name="template" type="hidden"value="Image.Style.Code.ImageStyleTemplate"&gt;
+    &lt;input name="sheet" type="hidden" value="1"&gt;
+    &lt;input name="spaceName" type="hidden" value="Image.Style.Code.ImageStyles"&gt;
+  &lt;/div&gt;
+  &lt;dl class="location-picker"&gt;
+    &lt;dt&gt;
+      &lt;label for="targetTitle"&gt;$services.localization.render('image.style.administation.newImageStyle.label')&lt;/label&gt;
+      &lt;span class="xHint"&gt;$services.localization.render('image.style.administation.newImageStyle.label')&lt;/span&gt;
+    &lt;/dt&gt;
+    &lt;dd&gt;
+      &lt;input class="location-title-field" id="targetTitle" name="docName" placeholder="$services.localization.render('image.style.administation.newImageStyle.placeHolder')" type="text" value=""&gt;
+    &lt;/dd&gt;
+  &lt;/dl&gt;
+  &lt;p&gt;
+    &lt;span class="buttonwrapper"&gt;
+      &lt;input class="button" type="submit" value="Create this image style"&gt;
+    &lt;/span&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
+{{/html}}
+{{/velocity}}
+
+=== {{translation key="image.style.administration.imageStyleList.heading"/}} ==
+
+{{liveData
   id='imageStyles'
   source='liveTable'
-  sourceParameters='className=Image.Style.Code.ImageStyleClass&amp;translationPrefix=TODO'
-  properties='doc.title,prettyName,_actions'
+  sourceParameters='className=Image.Style.Code.ImageStyleClass&amp;translationPrefix=image.style.administration.liveData.'
+  properties='doc.title,prettyName,type,_actions'
   sort='doc.title:asc'}}{
   "meta": {
     "propertyDescriptors": [
@@ -51,7 +81,5 @@
       }
     ]
   }
-}{{/liveData}}
-
-TODO: Button add a new Image Style.</content>
+}{{/liveData}}</content>
 </xwikidoc>

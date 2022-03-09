@@ -20,14 +20,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="Image.Style.WebHome" locale="">
-  <web>Image.Style</web>
+<xwikidoc version="1.5" reference="Image.Style.Code.ImageStyles.WebHome" locale="">
+  <web>Image.Style.Code.ImageStyles</web>
   <name>WebHome</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
   <creator>xwiki:XWiki.Admin</creator>
-  <parent>Image</parent>
   <author>xwiki:XWiki.Admin</author>
   <originalMetadataAuthor>xwiki:XWiki.Admin</originalMetadataAuthor>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>

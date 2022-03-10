@@ -1,0 +1,2 @@
+- make external dependencies provided by webjars excluded from the build (e.g., vue, jQuery...)
+- find out how to compile less files on separate files

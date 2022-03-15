@@ -52,11 +52,7 @@ public class DefaultImageStyleConfiguration implements ImageStyleConfiguration
     @Inject
     @Named(ImageStyleConfigurationSource.HINT)
     private ConfigurationSource configurationSource;
-
-    @Inject
-    @Named("xwikiproperties")
-    private ConfigurationSource xwikiPropertiesSource;
-
+    
     @Inject
     private ExecutionContextManager contextManager;
 
@@ -68,19 +64,6 @@ public class DefaultImageStyleConfiguration implements ImageStyleConfiguration
 
     @Override
     public String getDefaultStyle(String wikiName, String documentReference) throws ImageStyleException
-    {
-        String defaultStyle = getXObjectDefaultStyle(wikiName, documentReference);
-        if (defaultStyle != null) {
-            return defaultStyle;
-        } else {
-            // Fallback to the wiki properties if the configuration was not found in the XObjects.
-            // This is not part of the image.style configuration source since the key is prefix with the name of the 
-            // module in the xwiki properties.
-            return this.xwikiPropertiesSource.getProperty("image.style.defaultStyle", "");
-        }
-    }
-
-    private String getXObjectDefaultStyle(String wikiName, String documentReference) throws ImageStyleException
     {
         try {
             this.contextManager.pushContext(new ExecutionContext(), false);

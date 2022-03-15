@@ -19,11 +19,15 @@
  */
 package org.xwiki.image.style.internal.configuration.source;
 
+import java.util.List;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.model.reference.WikiReference;
+import org.xwiki.configuration.internal.AbstractXClassConfigurationSource;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.LocalDocumentReference;
 
 /**
  * Current wiki global configuration.
@@ -34,17 +38,37 @@ import org.xwiki.model.reference.WikiReference;
 @Component
 @Singleton
 @Named("image.style.wiki.current")
-public class CurrentWikiImageStyleConfigurationSource extends AbstractWikiImageStyleConfigurationSource
+public class CurrentWikiImageStyleConfigurationSource extends AbstractXClassConfigurationSource
 {
+    private static final List<String> IMAGE_STYLE_SPACE = List.of("Image", "Style", "Code");
+
+    private static final LocalDocumentReference XOBJECT_REFERENCE =
+        new LocalDocumentReference(IMAGE_STYLE_SPACE, "Configuration");
+
+    static final LocalDocumentReference XCLASS_REFERENCE =
+        new LocalDocumentReference(IMAGE_STYLE_SPACE, "ConfigurationClass");
+
+    @Override
+    protected LocalDocumentReference getClassReference()
+    {
+        return XCLASS_REFERENCE;
+    }
+
+    @Override
+    protected String getCacheKeyPrefix()
+    {
+        return this.wikiManager.getCurrentWikiId();
+    }
+
+    @Override
+    protected DocumentReference getDocumentReference()
+    {
+        return new DocumentReference(XOBJECT_REFERENCE, getCurrentWikiReference());
+    }
+
     @Override
     protected String getCacheId()
     {
         return "configuration.image.style.wiki.current";
-    }
-    
-    @Override
-    protected WikiReference getWikiReference()
-    {
-        return getCurrentWikiReference();
     }
 }

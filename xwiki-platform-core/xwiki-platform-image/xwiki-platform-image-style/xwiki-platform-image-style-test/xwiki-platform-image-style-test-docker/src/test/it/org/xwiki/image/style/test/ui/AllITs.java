@@ -17,34 +17,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.image.style.internal.configuration.source;
+package org.xwiki.image.style.test.ui;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import org.xwiki.component.annotation.Component;
-import org.xwiki.model.reference.WikiReference;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.xwiki.test.docker.junit5.UITest;
 
 /**
- *  Main wiki global configuration.
+ * All tests for the Image Style application.
  *
- * @version $Id$
  * @since 14.2RC1
  */
-@Component
-@Singleton
-@Named("image.style.wiki.main")
-public class MainWikiImageStyleConfigurationSource extends AbstractWikiImageStyleConfigurationSource
+@UITest
+public class AllITs
 {
-    @Override
-    protected String getCacheId()
+    @Nested
+    @DisplayName("Image Style Tests")
+    class NestedImageStyleIT extends ImageStyleIT
     {
-        return "configuration.image.style.wiki.main";
-    }
-    
-    @Override
-    protected WikiReference getWikiReference()
-    {
-        return new WikiReference(this.wikiManager.getMainWikiId());
     }
 }

@@ -17,35 +17,24 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.image.style.internal.configuration.source;
+package org.xwiki.image.style.test.ui;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import org.xwiki.component.annotation.Component;
-import org.xwiki.configuration.ConfigurationSource;
-import org.xwiki.configuration.internal.AbstractSpacesConfigurationSource;
+import org.junit.jupiter.api.Test;
+import org.xwiki.test.docker.junit5.UITest;
 
 /**
- * Spaces image style configuration, check for the presence of a {@link CurrentWikiImageStyleConfigurationSource#XCLASS_REFERENCE}
- * XObject in the {@code WebPreferences} document of this space or on of its parents.
+ * Docker tests for the image style administration, tests the user interface of the administation as well as the rest
+ * endpoints.
  *
  * @version $Id$
  * @since 14.2RC1
  */
-@Component
-@Singleton
-@Named("image.style.spaces")
-public class SpacesImageStyleConfigurationSource extends AbstractSpacesConfigurationSource
+@UITest
+ class ImageStyleIT
 {
-    @Inject
-    @Named("image.style.space")
-    private ConfigurationSource spacePreferencesSource;
-
-    @Override
-    protected ConfigurationSource getSpaceConfigurationSource()
+    @Test
+    void imageStyleAdministration()
     {
-        return this.spacePreferencesSource;
+        
     }
 }

@@ -24,24 +24,27 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.platform</groupId>
-    <artifactId>xwiki-platform-image</artifactId>
+    <artifactId>xwiki-platform-image-style</artifactId>
     <version>14.2-SNAPSHOT</version>
   </parent>
-  <artifactId>xwiki-platform-image-style</artifactId>
-  <name>XWiki Platform - Image - Style - Parent POM</name>
-  <description>Code relate to image styles configuration.</description>
+  <artifactId>xwiki-platform-image-style-test</artifactId>
+  <name>XWiki Platform - Image - Style - Tests - Parent POM</name>
   <packaging>pom</packaging>
+  <description>XWiki Platform - Image - Style - Tests - Parent POM</description>
+  <properties>
+    <!-- Don't run backward-compatibility checks in test modules since we don't consider them as public APIs -->
+    <xwiki.revapi.skip>true</xwiki.revapi.skip>
+    <!-- Don't run Checkstyle in test modules -->
+    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
+  </properties>
   <modules>
-    <module>xwiki-platform-image-style-api</module>
-    <module>xwiki-platform-image-style-model</module>
-    <module>xwiki-platform-image-style-rest</module>
-    <module>xwiki-platform-image-style-ui</module>
+    <module>xwiki-platform-image-style-test-pageobjects</module>
   </modules>
   <profiles>
     <profile>
-      <id>integration-tests</id>
+      <id>docker</id>
       <modules>
-        <module>xwiki-platform-image-style-test</module>
+        <module>xwiki-platform-image-style-test-docker</module>
       </modules>
     </profile>
   </profiles>

@@ -30,10 +30,10 @@ import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.model.reference.LocalDocumentReference;
 
-import static org.xwiki.image.style.internal.configuration.source.AbstractWikiImageStyleConfigurationSource.XCLASS_REFERENCE;
+import static org.xwiki.image.style.internal.configuration.source.CurrentWikiImageStyleConfigurationSource.XCLASS_REFERENCE;
 
 /**
- * Space image style configuration, check for the presence of an {@link AbstractWikiImageStyleConfigurationSource#XCLASS_REFERENCE}
+ * Space image style configuration, check for the presence of an {@link CurrentWikiImageStyleConfigurationSource#XCLASS_REFERENCE}
  * XObject in the {@code WebPreferences} document of this space.
  *
  * @version $Id$

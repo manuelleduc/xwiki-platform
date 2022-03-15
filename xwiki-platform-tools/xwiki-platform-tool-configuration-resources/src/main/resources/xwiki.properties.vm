@@ -1230,14 +1230,4 @@ edit.defaultEditor.org.xwiki.rendering.block.XDOM#wysiwyg=$xwikiPropertiesDefaul
 #-# The default value is:
 # skinx.jsStrictModeEnabled = false
 
-#-------------------------------------------------------------------------------------
-# Image Style
-#-------------------------------------------------------------------------------------
-
-#-# [Since 14.2RC1] 
-#-# Indicates the identifier of the default image style. If the identifier does not match an existing image style, its
-#-# is ignored. 
-
-# image.style.defaultStyle =
-
 $!xwikiPropertiesAdditionalProperties

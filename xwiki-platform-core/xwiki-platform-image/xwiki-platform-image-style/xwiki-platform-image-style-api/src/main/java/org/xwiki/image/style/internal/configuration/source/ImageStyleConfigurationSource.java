@@ -21,7 +21,6 @@ package org.xwiki.image.style.internal.configuration.source;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,7 +29,6 @@ import javax.inject.Singleton;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.configuration.ConfigurationSource;
 import org.xwiki.configuration.internal.CompositeConfigurationSource;
-import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
 /**
  * {@link ConfigurationSource} for the Image Style configuration. Reads the values from the configuration page.
@@ -53,34 +51,12 @@ public class ImageStyleConfigurationSource extends CompositeConfigurationSource
     private ConfigurationSource currentWkiImageStyleSource;
 
     @Inject
-    @Named("image.style.wiki.main")
-    private ConfigurationSource mainWikiImageStyleSource;
-
-    @Inject
     @Named("image.style.spaces")
     private ConfigurationSource spacesImageStyleSource;
-
-    @Inject
-    private WikiDescriptorManager wikiManager;
 
     @Override
     public Iterator<ConfigurationSource> iterator()
     {
-        List<ConfigurationSource> sources;
-        // Skip the current wiki sources when the current wiki is the main wiki, otherwise the same configuration would
-        // be checked twice for nothing. 
-        if (Objects.equals(this.wikiManager.getCurrentWikiId(), this.wikiManager.getMainWikiId())) {
-            sources = List.of(
-                this.spacesImageStyleSource,
-                this.mainWikiImageStyleSource
-            );
-        } else {
-            sources = List.of(
-                this.spacesImageStyleSource,
-                this.currentWkiImageStyleSource,
-                this.mainWikiImageStyleSource
-            );
-        }
-        return sources.iterator();
+        return List.of(this.spacesImageStyleSource, this.currentWkiImageStyleSource).iterator();
     }
 }

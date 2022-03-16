@@ -28,6 +28,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.image.style.ImageStyleConfiguration;
 import org.xwiki.image.style.ImageStyleException;
@@ -74,7 +75,7 @@ public class DefaultImageStylesResource implements ImageStylesResource, XWikiRes
     public String getDefaultStyleIdentifier(String wikiName, String documentReference) throws ImageStyleException
     {
         String defaultStyle = this.imageStyleConfiguration.getDefaultStyle(wikiName, documentReference);
-        if (defaultStyle.isEmpty()) {
+        if (StringUtils.isEmpty(defaultStyle)) {
             this.contextProvider.get().getResponse().setStatus(NO_CONTENT.getStatusCode());
         }
         return defaultStyle;

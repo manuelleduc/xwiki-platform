@@ -37,15 +37,15 @@
       <element name="identifier" type="string"/>
       <element name="prettyName" type="string"/>
       <element name="type" type="string"/>
-      <element name="adjustableSize" type="boolean"/>
-      <element name="defaultWidth" type="long"/>
-      <element name="defaultHeight" type="long"/>
-      <element name="adjustableBorder" type="boolean"/>
-      <element name="defaultBorder" type="boolean"/>
-      <element name="adjustableAlignment" type="boolean"/>
+      <element name="adjustableSize" type="boolean" nillable="true"/>
+      <element name="defaultWidth" type="long" nillable="true"/>
+      <element name="defaultHeight" type="long" nillable="true"/>
+      <element name="adjustableBorder" type="boolean" nillable="true"/>
+      <element name="defaultBorder" type="boolean" nillable="true"/>
+      <element name="adjustableAlignment" type="boolean" nillable="true"/>
       <element name="defaultAlignment" type="string"/>
-      <element name="adjustableTextWrap" type="boolean"/>
-      <element name="defaultTextWrap" type="boolean"/>
+      <element name="adjustableTextWrap" type="boolean" nillable="true"/>
+      <element name="defaultTextWrap" type="boolean" nillable="true"/>
     </sequence>
   </complexType>
 

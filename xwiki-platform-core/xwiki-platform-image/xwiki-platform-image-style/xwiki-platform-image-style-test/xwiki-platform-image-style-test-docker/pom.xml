@@ -45,6 +45,16 @@
       <type>xar</type>
       <scope>runtime</scope>
     </dependency>
+    <!-- We currently need to depend on administration-ui in the tests since we are testing the administration of
+    panels which is located in the administration. See the dependency comment in panels-ui's pom.xml.
+    -->
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-administration-ui</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+      <type>xar</type>
+    </dependency>
     <!-- Test only dependencies. -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>

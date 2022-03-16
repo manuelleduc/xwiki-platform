@@ -35,7 +35,7 @@
   <title>Translations</title>
   <comment/>
   <minorEdit>false</minorEdit>
-  <syntaxId>xwiki/2.1</syntaxId>
+  <syntaxId>plain/1.0</syntaxId>
   <hidden>true</hidden>
   <content>admin.image.style=Image Styles
 image.style.admin.heading=Image Style Administration
@@ -80,7 +80,7 @@ Image.Style.Code.ImageStyleClass_prettyName_hint=User oriented name of the image
 Image.Style.Code.ImageStyleClass_type=Type
 Image.Style.Code.ImageStyleClass_type_hint=The type of the image style (used as a css class).
 Image.Style.Code.ConfigurationClass_defaultStyle=Default Style
-Image.Style.Code.ConfigurationClass_defaultStyle_hint=The default style for this wiki.</content>
+Image.Style.Code.ConfigurationClass_defaultStyle_hint=The default image style for this wiki.</content>
   <object>
     <name>Image.Style.Code.Translations</name>
     <number>0</number>

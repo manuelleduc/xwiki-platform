@@ -82,7 +82,7 @@
       </defaultStyle>
     </class>
     <property>
-      <defaultStyle>Image.Style.Code.ImageStyles.default</defaultStyle>
+      <defaultStyle/>
     </property>
   </object>
   <object>

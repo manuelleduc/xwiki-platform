@@ -32,9 +32,8 @@ import org.xwiki.image.style.test.po.ImageStyleAdministrationPage;
 import org.xwiki.image.style.test.po.ImageStyleConfigurationForm;
 import org.xwiki.livedata.test.po.LiveDataElement;
 import org.xwiki.livedata.test.po.TableLayoutElement;
-import org.xwiki.model.reference.SpaceReference;
+import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.test.docker.junit5.UITest;
-import org.xwiki.test.docker.junit5.servletengine.ServletEngine;
 import org.xwiki.test.ui.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,14 +46,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @version $Id$
  * @since 14.2RC1
  */
-@UITest(servletEngine = ServletEngine.EXTERNAL)
+@UITest
 class ImageStyleIT
 {
     @Test
     void imageStyleAdministration(TestUtils testUtils) throws Exception
     {
         testUtils.loginAsSuperAdmin();
-        testUtils.deleteSpace(new SpaceReference("xwiki", List.of("Image", "Style", "Code", "ImageStyles")));
+        // Make sure that an icon theme is configured.
+        testUtils.setWikiPreference("iconTheme", "IconThemes.Silk");
+        testUtils.deletePage(
+            new DocumentReference("xwiki", List.of("Image", "Style", "Code", "ImageStyles"), "default"));
+        testUtils.updateObject(new DocumentReference("xwiki", List.of("Image", "Style", "Code"), "Configuration"),
+            "Image.Style.Code.ConfigurationClass", 0, "defaultStyle", "");
 
         assertNull(getDefaultFromRest(testUtils));
 
@@ -69,19 +73,35 @@ class ImageStyleIT
             .setType("default-class")
             .clickSaveAndContinue(true);
         imageStyleAdministrationPage = imageStyleConfigurationForm.clickBackToTheAdministration();
+        assertEquals("", imageStyleAdministrationPage.getDefaultStyle());
         imageStyleAdministrationPage.submitDefaultStyleForm("default");
+        assertEquals("default", imageStyleAdministrationPage.getDefaultStyle());
 
         TableLayoutElement tableLayout = new LiveDataElement("imageStyles").getTableLayout();
         assertEquals(1, tableLayout.countRows());
-        assertEquals("default", tableLayout.getCell("Identifier", 0).getText());
-        assertEquals("Default", tableLayout.getCell("Pretty Name", 0).getText());
-        assertEquals("default-class", tableLayout.getCell("Type", 0).getText());
+        assertEquals("default", tableLayout.getCell("Identifier", 1).getText());
+        assertEquals("Default", tableLayout.getCell("Pretty Name", 1).getText());
+        assertEquals("default-class", tableLayout.getCell("Type", 1).getText());
+
+        assertEquals("default", getDefaultFromRest(testUtils));
 
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            + "<icons xmlns=\"http://www.xwiki.org/icon\"/>", getDefaultFromRest(testUtils));
-
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            + "<icons xmlns=\"http://www.xwiki.org/icon\"/>", getImageStylesFromRest(testUtils));
+            + "<styles xmlns=\"http://www.xwiki.org/imageStyle\">"
+            + "<imageStyle>"
+            + "<identifier>default</identifier>"
+            + "<prettyName>Default</prettyName>"
+            + "<type>default-class</type>"
+            + "<adjustableSize>false</adjustableSize>"
+            + "<defaultWidth>0</defaultWidth>"
+            + "<defaultHeight>0</defaultHeight>"
+            + "<adjustableBorder>false</adjustableBorder>"
+            + "<defaultBorder>false</defaultBorder>"
+            + "<adjustableAlignment>false</adjustableAlignment>"
+            + "<defaultAlignment>default</defaultAlignment>"
+            + "<adjustableTextWrap>false</adjustableTextWrap>"
+            + "<defaultTextWrap>false</defaultTextWrap>"
+            + "</imageStyle>"
+            + "</styles>", getImageStylesFromRest(testUtils));
     }
 
     private String getDefaultFromRest(TestUtils testUtils) throws Exception

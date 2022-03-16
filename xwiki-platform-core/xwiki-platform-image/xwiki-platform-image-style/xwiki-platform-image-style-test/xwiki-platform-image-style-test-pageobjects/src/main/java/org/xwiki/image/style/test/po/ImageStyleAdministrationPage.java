@@ -35,6 +35,10 @@ import org.xwiki.test.ui.po.ViewPage;
  */
 public class ImageStyleAdministrationPage extends ViewPage
 {
+    private static final String DEFAULT_IMAGE_STYLE_FORM_ID = "defaultImageStyleForm";
+
+    private static final String DEFAULT_IMAGE_STYLE_FIELD_NAME = "Image.Style.Code.ConfigurationClass_0_defaultStyle";
+
     /**
      * @return the page object for the administration of the image styles
      */
@@ -68,10 +72,18 @@ public class ImageStyleAdministrationPage extends ViewPage
      */
     public void submitDefaultStyleForm(String identifier)
     {
-        String defaultImageStyleFormId = "defaultImageStyleForm";
-        new FormContainerElement(By.id(defaultImageStyleFormId))
-            .setFieldValue(By.id("Image.Style.Code.ConfigurationClass_0_defaultStyle"), identifier);
-        getDriver().findElementById(defaultImageStyleFormId).findElement(By.cssSelector("input[type='submit']"))
+        new FormContainerElement(By.id(DEFAULT_IMAGE_STYLE_FORM_ID))
+            .setFieldValue(By.name(DEFAULT_IMAGE_STYLE_FIELD_NAME), identifier);
+        getDriver().findElement(By.id(DEFAULT_IMAGE_STYLE_FORM_ID)).findElement(By.cssSelector("input[type='submit']"))
             .click();
+    }
+
+    /**
+     * @return the value of the current default style
+     */
+    public String getDefaultStyle()
+    {
+        return new FormContainerElement(By.id(DEFAULT_IMAGE_STYLE_FORM_ID)).getFieldValue(By.name(
+            DEFAULT_IMAGE_STYLE_FIELD_NAME));
     }
 }

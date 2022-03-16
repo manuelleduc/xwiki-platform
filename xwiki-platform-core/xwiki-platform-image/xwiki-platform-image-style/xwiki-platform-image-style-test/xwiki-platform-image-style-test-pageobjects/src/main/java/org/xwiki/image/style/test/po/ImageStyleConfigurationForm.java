@@ -38,7 +38,7 @@ public class ImageStyleConfigurationForm extends EditPage
      */
     public ImageStyleConfigurationForm setPrettyName(String prettyName)
     {
-        getDriver().findElementById("Image.Style.Code.ImageStyleClass_0_prettyName").sendKeys(prettyName);
+        getDriver().findElement(By.name("Image.Style.Code.ImageStyleClass_0_prettyName")).sendKeys(prettyName);
         return this;
     }
 
@@ -50,7 +50,7 @@ public class ImageStyleConfigurationForm extends EditPage
      */
     public ImageStyleConfigurationForm setType(String type)
     {
-        getDriver().findElementById("Image.Style.Code.ImageStyleClass_0_type").sendKeys(type);
+        getDriver().findElement(By.name("Image.Style.Code.ImageStyleClass_0_type")).sendKeys(type);
         return this;
     }
 

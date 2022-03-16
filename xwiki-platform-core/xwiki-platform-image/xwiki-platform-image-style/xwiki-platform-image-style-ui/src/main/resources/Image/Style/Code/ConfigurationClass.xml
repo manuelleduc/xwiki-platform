@@ -68,7 +68,7 @@
       <separators/>
       <size>1</size>
       <sort/>
-      <sql>select doc.fullName, propName.value from XWikiDocument as doc, BaseObject as theme, StringProperty propName where doc.fullName=theme.name and theme.className='Image.Style.Code.ImageStyleClass' and theme.id = propName.id and propName.name = 'prettyName' and doc.space = 'Image.Style.Code.ImageStyles'</sql>
+      <sql>select doc.name, propName.value from XWikiDocument as doc, BaseObject as theme, StringProperty propName where doc.fullName=theme.name and theme.className='Image.Style.Code.ImageStyleClass' and theme.id = propName.id and propName.name = 'prettyName' and doc.space = 'Image.Style.Code.ImageStyles'</sql>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>

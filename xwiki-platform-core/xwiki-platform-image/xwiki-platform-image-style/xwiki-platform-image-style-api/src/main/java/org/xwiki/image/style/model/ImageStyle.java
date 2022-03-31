@@ -28,7 +28,7 @@ import org.xwiki.stability.Unstable;
  * The image style POJO. Contains the list of all the configurable properties of an image style.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Unstable
 public class ImageStyle

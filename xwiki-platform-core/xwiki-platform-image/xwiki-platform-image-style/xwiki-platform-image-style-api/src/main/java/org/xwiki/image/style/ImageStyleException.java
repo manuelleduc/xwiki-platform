@@ -23,7 +23,7 @@ package org.xwiki.image.style;
  * Image Style specific exception class.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 public class ImageStyleException extends Exception
 {

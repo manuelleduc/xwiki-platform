@@ -26,7 +26,7 @@ import org.xwiki.stability.Unstable;
  * Give access to the image style configuration.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Role
 @Unstable

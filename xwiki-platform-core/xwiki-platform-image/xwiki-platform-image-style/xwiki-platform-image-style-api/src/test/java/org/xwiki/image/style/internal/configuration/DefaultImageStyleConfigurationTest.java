@@ -56,7 +56,7 @@ import static org.mockito.Mockito.when;
  * Test of {@link DefaultImageStyleConfiguration}.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @ComponentTest
 class DefaultImageStyleConfigurationTest

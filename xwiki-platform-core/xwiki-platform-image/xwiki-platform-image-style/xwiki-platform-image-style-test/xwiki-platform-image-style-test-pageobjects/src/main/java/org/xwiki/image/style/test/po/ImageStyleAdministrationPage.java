@@ -31,7 +31,7 @@ import org.xwiki.test.ui.po.ViewPage;
  * Page object of the image style administration.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 public class ImageStyleAdministrationPage extends ViewPage
 {

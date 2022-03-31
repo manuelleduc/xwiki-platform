@@ -54,7 +54,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMess
  * Provide the operations to interact with the stored images style.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

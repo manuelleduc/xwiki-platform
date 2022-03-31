@@ -37,7 +37,7 @@ import com.xpn.xwiki.objects.BaseProperty;
  * Base class for class based configuration.
  *
  * @version $Id$
- * @since 13.2RC1
+ * @since 14.3RC1
  */
 @Unstable
 public abstract class AbstractXClassConfigurationSource extends AbstractDocumentConfigurationSource

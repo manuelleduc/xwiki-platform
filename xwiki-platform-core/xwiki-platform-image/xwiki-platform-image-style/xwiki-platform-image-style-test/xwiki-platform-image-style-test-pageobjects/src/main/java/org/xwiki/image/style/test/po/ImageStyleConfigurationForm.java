@@ -26,7 +26,7 @@ import org.xwiki.test.ui.po.editor.EditPage;
  * Page object for the image style configuration form.
  *
  * @version $Id$
- * @since 14.1RC1
+ * @since 14.3RC1
  */
 public class ImageStyleConfigurationForm extends EditPage
 {

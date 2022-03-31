@@ -34,7 +34,7 @@ import org.xwiki.configuration.internal.CompositeConfigurationSource;
  * {@link ConfigurationSource} for the Image Style configuration. Reads the values from the configuration page.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

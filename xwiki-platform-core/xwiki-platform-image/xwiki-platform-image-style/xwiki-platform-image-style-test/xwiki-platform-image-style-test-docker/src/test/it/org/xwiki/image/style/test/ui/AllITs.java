@@ -26,7 +26,7 @@ import org.xwiki.test.docker.junit5.UITest;
 /**
  * All tests for the Image Style application.
  *
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @UITest
 public class AllITs

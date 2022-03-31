@@ -32,7 +32,7 @@ import org.xwiki.configuration.internal.AbstractSpacesConfigurationSource;
  * XObject in the {@code WebPreferences} document of this space or on of its parents.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

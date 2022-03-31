@@ -43,7 +43,7 @@ import com.xpn.xwiki.doc.XWikiDocument;
  * Configuration of the Image Style application.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

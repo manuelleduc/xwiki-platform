@@ -47,7 +47,7 @@ import static javax.ws.rs.core.Response.Status.NO_CONTENT;
  * Default image style rest endpoint implementation.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Named("org.xwiki.image.style.rest.internal.DefaultImageStylesResource")

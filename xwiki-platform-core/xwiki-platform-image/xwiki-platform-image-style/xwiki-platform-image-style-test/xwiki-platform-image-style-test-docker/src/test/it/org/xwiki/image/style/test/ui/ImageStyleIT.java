@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * endpoints.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @UITest
 class ImageStyleIT

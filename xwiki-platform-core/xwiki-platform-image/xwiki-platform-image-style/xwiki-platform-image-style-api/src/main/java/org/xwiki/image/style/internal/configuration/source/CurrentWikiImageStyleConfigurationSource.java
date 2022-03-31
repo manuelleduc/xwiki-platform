@@ -32,7 +32,7 @@ import org.xwiki.model.reference.LocalDocumentReference;
  * Current wiki global configuration.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

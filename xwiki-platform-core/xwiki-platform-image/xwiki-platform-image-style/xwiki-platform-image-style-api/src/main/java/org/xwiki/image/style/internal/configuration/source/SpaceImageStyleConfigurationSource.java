@@ -36,7 +36,7 @@ import static org.xwiki.image.style.internal.configuration.source.CurrentWikiIma
  * XObject in the {@code WebPreferences} document of this space.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Component
 @Singleton

@@ -29,7 +29,7 @@ import org.xwiki.stability.Unstable;
  * Gives access to the image styles of the wiki.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Role
 @Unstable

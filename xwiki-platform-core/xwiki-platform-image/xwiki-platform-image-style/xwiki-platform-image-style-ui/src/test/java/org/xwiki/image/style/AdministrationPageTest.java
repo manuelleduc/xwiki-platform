@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
  * Page test of {@code Image.Style.Code.Administration}.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @XWikiSyntax21ComponentList
 @HTML50ComponentList

@@ -29,10 +29,10 @@ import org.xwiki.image.style.rest.model.jaxb.Styles;
 import org.xwiki.stability.Unstable;
 
 /**
- * TODO: document me.
+ * Rest endpoint for the image styles.
  *
  * @version $Id$
- * @since 14.2RC1
+ * @since 14.3RC1
  */
 @Path("/wikis/{wikiName}/imageStyles")
 @Unstable

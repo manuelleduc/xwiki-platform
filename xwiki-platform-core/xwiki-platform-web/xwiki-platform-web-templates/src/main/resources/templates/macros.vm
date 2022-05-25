@@ -1722,6 +1722,11 @@ $displayName##
   ## When the total number of rows is not bigger than the limit, we remove the obfuscated results from the response since
   ## this has no impact on the pagination.
   #set ($rows = $map.get('rows'))
+  ## TODO: Maybe decreate the offset by 1?
+  #set ($offset = 1)
+  #if($map.get('offset'))
+    #set ($offset = $map.get('offset'))
+  #end
   #if ($map.get('totalrows') <= $map.get('returnedrows'))
     #set ($filteredRows = [])
     #foreach ($row in $rows)
@@ -1729,7 +1734,7 @@ $displayName##
         #set ($discard = $filteredRows.add($row))
       #end
     #end
-    #set($discard = $map.put('totalrows', $filteredRows.size()))
+    #set($discard = $map.put('totalrows', $filteredRows.size() + $offset))
     #set($discard = $map.put('returnedrows', $filteredRows.size()))
   #else
     #set ($filteredRows = $rows)

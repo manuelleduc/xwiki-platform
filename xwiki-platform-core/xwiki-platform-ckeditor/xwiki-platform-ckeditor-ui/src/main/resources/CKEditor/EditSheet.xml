@@ -155,7 +155,7 @@
     </property>
     <property>
       <code>/*
-#set ($ckeditorPath = $services.webjars.url('org.xwiki.contrib:application-ckeditor-webjar', 'ckeditor'))
+#set ($ckeditorPath = $services.webjars.url('org.xwiki.platform:xwiki-platform-ckeditor-webjar', 'ckeditor'))
 #set ($ckeditorBasePath = $stringtool.removeEnd($stringtool.removeEnd($ckeditorPath, '.js'), 'ckeditor'))
 #set ($resourcePickerBundlePath = "${ckeditorBasePath}plugins/xwiki-resource/resourcePicker.bundle.min")
 #set ($macroWizardBundlePath = "${ckeditorBasePath}plugins/xwiki-macro/macroWizard.bundle.min")
@@ -847,7 +847,7 @@ require(['jquery'], function($) {
       <code>#template('colorThemeInit.vm')
 
 /*
-#set ($ckeditorSkinPath = $services.webjars.url('org.xwiki.contrib:application-ckeditor-webjar', 'skins/moono-lisa'))
+#set ($ckeditorSkinPath = $services.webjars.url('org.xwiki.platform:xwiki-platform-ckeditor-webjar', 'skins/moono-lisa'))
 #if ($ckeditorSkinPath.indexOf('?') &gt;= 0)
   ## The WebJar resource path was specified in the query string before 7.1M1 which prevented the browser from resolving
   ## relative paths. See XWIKI-10880 (A CSS file inside a webjar cannot use a resource from that webjar).
@@ -1518,7 +1518,7 @@ body[data-maximized="true"] {
     </property>
     <property>
       <parameters>id=xwiki-ckeditor
-path=$xwiki.getURL('CKEditor.EditSheet', 'jsx', $escapetool.url({'v': $services.extension.installed.getInstalledExtension('org.xwiki.contrib:application-ckeditor-ui', "wiki:$xcontext.database").version.value, 'xwiki-version': $services.extension.core.getCoreExtension('org.xwiki.platform:xwiki-platform-tree-webjar').version.value, 'fast-diff-version': $services.extension.installed.getInstalledExtension('org.webjars.npm:fast-diff', "wiki:$xcontext.database").version.value, 'bs3typeahead-version': $services.extension.installed.getInstalledExtension('org.webjars.npm:bootstrap-3-typeahead', "wiki:$xcontext.database").version.value}))</parameters>
+path=$xwiki.getURL('CKEditor.EditSheet', 'jsx', $escapetool.url({'v': $services.extension.installed.getInstalledExtension('org.xwiki.platform:xwiki-platform-ckeditor-ui', "wiki:$xcontext.database").version.value, 'xwiki-version': $services.extension.core.getCoreExtension('org.xwiki.platform:xwiki-platform-tree-webjar').version.value, 'fast-diff-version': $services.extension.installed.getInstalledExtension('org.webjars.npm:fast-diff', "wiki:$xcontext.database").version.value, 'bs3typeahead-version': $services.extension.installed.getInstalledExtension('org.webjars.npm:bootstrap-3-typeahead', "wiki:$xcontext.database").version.value}))</parameters>
     </property>
     <property>
       <scope>wiki</scope>

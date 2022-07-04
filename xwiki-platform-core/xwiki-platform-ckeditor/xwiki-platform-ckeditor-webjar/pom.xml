@@ -23,13 +23,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-runtime</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
-    <relativePath>../application-ckeditor-runtime</relativePath>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
   <packaging>jar</packaging>
-  <artifactId>application-ckeditor-webjar</artifactId>
+  <artifactId>xwiki-platform-ckeditor-webjar</artifactId>
   <name>CKEditor Integration WebJar</name>
   <description>Packages CKEditor and our custom plugins in a single WebJar.</description>
   <properties>
@@ -40,16 +39,18 @@
     <!-- Where to unpack the WebJars with the custom CKEditor plugins. -->
     <webjars.unpack.directory>${project.build.directory}/webjars</webjars.unpack.directory>
     <webjars.unpack.contentDirectory>
-      ${webjars.unpack.directory}/META-INF/resources/webjars/application-ckeditor-plugins/${project.version}
+      ${webjars.unpack.directory}/META-INF/resources/webjars/xwiki-platform-ckeditor-plugins/${project.version}
     </webjars.unpack.contentDirectory>
+    <!-- Old name of this module used for retro compatibility when resolving dependencies of old extensions -->
+    <xwiki.extension.features>org.xwiki.contrib:application-ckeditor-webjar</xwiki.extension.features>
   </properties>
   <dependencies>
     <!-- Even though we bundle the custom plugins with the CKEditor code (the plugins WebJar is merged with the CKEditor
-      WebJar) we still need to declare this dependency in order to brind the transitive dependencies that our custom
+      WebJar) we still need to declare this dependency in order to bring the transitive dependencies that our custom
       plugins may have (the alternative is to duplicate the dependencies here, which is too fragile). -->
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>application-ckeditor-plugins</artifactId>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-ckeditor-plugins</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -80,8 +81,8 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.xwiki.contrib</groupId>
-                  <artifactId>application-ckeditor-plugins</artifactId>
+                  <groupId>org.xwiki.platform</groupId>
+                  <artifactId>xwiki-platform-ckeditor-plugins</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
                   <outputDirectory>${webjars.unpack.directory}</outputDirectory>

@@ -23,21 +23,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-pom</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
   <packaging>pom</packaging>
-  <artifactId>application-ckeditor-runtime</artifactId>
+  <artifactId>xwiki-platform-ckeditor-runtime</artifactId>
   <name>CKEditor Integration Import</name>
-  <description>Customize defualt dependency management for the target minimum supported version.</description>
+  <description>Customize default dependency management for the target minimum supported version.</description>
   <dependencyManagement>
     <dependencies>
       <!-- Import XWiki dependencies from the minimum supported version -->
       <dependency>
         <groupId>org.xwiki.platform</groupId>
         <artifactId>xwiki-platform-core</artifactId>
-        <version>${minimum.platform.version}</version>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

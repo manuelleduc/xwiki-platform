@@ -143,7 +143,7 @@
 #end
 
 #macro (importCKEditorCSS $path $evaluate)
-  #ckeditor_importCSS('org.xwiki.contrib' 'application-ckeditor-webjar' $path $evaluate)
+  #ckeditor_importCSS('org.xwiki.platform' 'xwiki-platform-ckeditor-webjar' $path $evaluate)
 #end
 
 #macro (importCKEditorResources)
@@ -152,7 +152,7 @@
   ## to make sure the browser cache is invalidated when one of these versions changes (e.g. when we upgrade XWiki or one
   ## of these dependencies but the CKEditor version remains the same).
   #set ($discard = $xwiki.jsx.use('CKEditor.EditSheet', {
-    'v': $services.extension.installed.getInstalledExtension('org.xwiki.contrib:application-ckeditor-ui',
+    'v': $services.extension.installed.getInstalledExtension('org.xwiki.platform:xwiki-platform-ckeditor-ui',
       "wiki:$xcontext.database").version.value,
     'xwiki-version': $services.extension.core.getCoreExtension(
       'org.xwiki.platform:xwiki-platform-tree-webjar').version.value,

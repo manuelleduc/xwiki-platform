@@ -23,33 +23,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-runtime</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
-    <relativePath>../application-ckeditor-runtime</relativePath>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
-  <artifactId>application-ckeditor-ui</artifactId>
+  <artifactId>xwiki-platform-ckeditor-ui</artifactId>
   <name>CKEditor Integration UI</name>
   <packaging>xar</packaging>
   <description>Adds support for editing wiki pages using CKEditor.</description>
-  <scm>
-    <!-- Point to the root of the sources since this artifact is the one loaded on extensions.xwiki.org and we want 
-         that the sources button there points to the full sources for CKEditor -->
-    <url>https://github.com/xwiki-contrib/application-ckeditor/tree/master</url>
-    <tag>HEAD</tag>
-  </scm>
   <properties>
     <!-- Name to display by the Extension Manager -->
     <xwiki.extension.name>CKEditor Integration</xwiki.extension.name>
     <!-- Don't run CLIRR and Revapi here because there's no Java code. -->
     <xwiki.clirr.skip>true</xwiki.clirr.skip>
     <xwiki.revapi.skip>true</xwiki.revapi.skip>
+    <!-- Old name of this module used for retro compatibility when resolving dependencies of old extensions -->
+    <xwiki.extension.features>org.xwiki.contrib:application-ckeditor-ui</xwiki.extension.features>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>application-ckeditor-webjar</artifactId>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-ckeditor-webjar</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
@@ -64,7 +59,7 @@
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-sheet-ui</artifactId>
-      <version>${minimum.platform.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
       <type>xar</type>
     </dependency>
@@ -72,13 +67,13 @@
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-rendering-macro-velocity</artifactId>
-      <version>${minimum.platform.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.xwiki.rendering</groupId>
       <artifactId>xwiki-rendering-macro-html</artifactId>
-      <version>${minimum.rendering.version}</version>
+      <version>${rendering.version}</version>
       <scope>runtime</scope>
     </dependency>
     <!-- Used by the configuration section. -->
@@ -91,7 +86,7 @@
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-administration-ui</artifactId>
-      <version>${minimum.platform.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
       <type>xar</type>
     </dependency>

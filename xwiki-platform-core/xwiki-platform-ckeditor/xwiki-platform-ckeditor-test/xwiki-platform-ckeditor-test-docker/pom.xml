@@ -23,11 +23,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-test</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor-test</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
-  <artifactId>application-ckeditor-test-docker</artifactId>
+  <artifactId>xwiki-platform-ckeditor-test-docker</artifactId>
   <name>CKEditor Integration Tests</name>
   <!-- TODO: Move to use "functional-test" in the future when http://jira.codehaus.org/browse/MNG-1911 is fixed,
        see http://jira.xwiki.org/jira/browse/XWIKI-7683 -->
@@ -68,8 +68,8 @@
   <dependencies>
     <!-- Dependencies for tested features. -->
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>application-ckeditor-ui</artifactId>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-ckeditor-ui</artifactId>
       <version>${project.version}</version>
       <type>xar</type>
     </dependency>
@@ -89,8 +89,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>application-ckeditor-test-pageobjects</artifactId>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-ckeditor-test-pageobjects</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>

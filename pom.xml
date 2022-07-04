@@ -50,7 +50,6 @@
     <rendering.version>${platform.version}</rendering.version>
 
     <!-- Dependencies versions -->
-    <ckeditor.version>1.64.2</ckeditor.version>
     <bootstrap.version>3.4.1</bootstrap.version>
     <batik.version>1.14</batik.version>
     <restlet.version>2.3.12</restlet.version>
@@ -382,9 +381,9 @@
       </dependency>
       <!-- Embedded in the Standard Flavor and used by the Dashboard Application (to add/edit gadgets) -->
       <dependency>
-        <groupId>org.xwiki.contrib</groupId>
-        <artifactId>application-ckeditor-ui</artifactId>
-        <version>${ckeditor.version}</version>
+        <groupId>org.xwiki.platform</groupId>
+        <artifactId>xwiki-platform-ckeditor-ui</artifactId>
+        <version>${project.version}</version>
         <type>xar</type>
       </dependency>
       <!-- Drawn by several transitive dependencies -->

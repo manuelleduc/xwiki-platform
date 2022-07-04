@@ -133,9 +133,9 @@
     new XWiki.Document('EditSheet', 'CKEditor').getURL('ssx'),
     // Custom styles for the edited content.
     new XWiki.Document('ContentSheet', 'CKEditor').getURL('ssx'),
-    $jsontool.serialize($services.webjars.url('org.xwiki.contrib:application-ckeditor-webjar',
+    $jsontool.serialize($services.webjars.url('org.xwiki.platform:xwiki-platform-ckeditor-webjar',
       'plugins/xwiki-resource/resourcePicker.min.css', {'evaluate': true})),
-    $jsontool.serialize($services.webjars.url('org.xwiki.contrib:application-ckeditor-webjar',
+    $jsontool.serialize($services.webjars.url('org.xwiki.platform:xwiki-platform-ckeditor-webjar',
       'plugins/xwiki-macro/macroWizard.min.css', {'evaluate': true})),
     $jsontool.serialize($services.webjars.url('org.xwiki.platform:xwiki-platform-tree-webjar', 'tree.min.css',
       {'evaluate': true})),
@@ -358,7 +358,7 @@
     </property>
     <property>
       <parameters>id=xwiki-ckeditor-inline
-path=$xwiki.getURL('CKEditor.InlineEditor', 'jsx', $escapetool.url({'v': $services.extension.installed.getInstalledExtension('org.xwiki.contrib:application-ckeditor-ui', "wiki:$xcontext.database").version.value, 'xwiki-version': $services.extension.core.getCoreExtension('org.xwiki.platform:xwiki-platform-tree-webjar').version.value}))</parameters>
+path=$xwiki.getURL('CKEditor.InlineEditor', 'jsx', $escapetool.url({'v': $services.extension.installed.getInstalledExtension('org.xwiki.platform:xwiki-platform-ckeditor-ui', "wiki:$xcontext.database").version.value, 'xwiki-version': $services.extension.core.getCoreExtension('org.xwiki.platform:xwiki-platform-tree-webjar').version.value}))</parameters>
     </property>
     <property>
       <scope>wiki</scope>

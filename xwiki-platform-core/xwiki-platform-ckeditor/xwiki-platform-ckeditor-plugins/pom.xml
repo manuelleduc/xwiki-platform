@@ -23,13 +23,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-runtime</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
-    <relativePath>../application-ckeditor-runtime</relativePath>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
   <packaging>jar</packaging>
-  <artifactId>application-ckeditor-plugins</artifactId>
+  <artifactId>xwiki-platform-ckeditor-plugins</artifactId>
   <name>CKEditor Integration Plugins</name>
   <description>Custom plugins that help the integration of the CKEditor in XWiki.</description>
   <properties>
@@ -37,6 +36,8 @@
     <xwiki.extension.name>CKEditor Plugins for XWiki</xwiki.extension.name>
     <!-- Explicitly indicate it's a webjar -->
     <xwiki.extension.jar.type>webjar</xwiki.extension.jar.type>
+    <!-- Old name of this module used for retro compatibility when resolving dependencies of old extensions -->
+    <xwiki.extension.features>org.xwiki.contrib:application-ckeditor-ckeditor</xwiki.extension.features>
   </properties>
   <dependencies>
     <dependency>
@@ -56,7 +57,7 @@
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-tree-webjar</artifactId>
-      <version>${minimum.platform.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <!-- This is used by the resource suggest picker on the link modal. -->
@@ -76,8 +77,8 @@
 
     <!-- Test dependencies -->
     <dependency>
-      <groupId>org.xwiki.contrib</groupId>
-      <artifactId>application-ckeditor-base</artifactId>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-ckeditor-base</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>

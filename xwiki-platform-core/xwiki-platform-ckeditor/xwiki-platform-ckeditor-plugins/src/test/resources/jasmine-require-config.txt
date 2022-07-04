@@ -13,7 +13,7 @@ paths: {
   'fast-diff': '/webjars/diff',
 
   // We need the full path here because ckeditor.js loads other resources using relative paths.
-  ckeditor: '/webjars/application-ckeditor-base/${project.version}/ckeditor',
+  ckeditor: '/webjars/xwiki-platform-ckeditor-base/${project.version}/ckeditor',
 
   testUtils: '/spec/testUtils',
 

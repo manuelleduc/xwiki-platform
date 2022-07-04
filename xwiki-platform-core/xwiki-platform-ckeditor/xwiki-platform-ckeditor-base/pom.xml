@@ -23,20 +23,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.contrib</groupId>
-    <artifactId>application-ckeditor-runtime</artifactId>
-    <version>1.64.3-SNAPSHOT</version>
-    <relativePath>../application-ckeditor-runtime</relativePath>
+    <groupId>org.xwiki.platform</groupId>
+    <artifactId>xwiki-platform-ckeditor</artifactId>
+    <version>14.6-SNAPSHOT</version>
   </parent>
   <packaging>jar</packaging>
-  <artifactId>application-ckeditor-base</artifactId>
+  <artifactId>xwiki-platform-ckeditor-base</artifactId>
   <name>CKEditor Integration Base</name>
   <description>A WebJar that packages the standard CKEditor with the default skin and a set of default plugins. This is mainly used for testing custom CKEditor plugins.</description>
   <properties>
     <!-- Name to display by the Extension Manager -->
     <xwiki.extension.name>CKEditor Base</xwiki.extension.name>
-    <!-- Explicitely indicate it's a webjar -->
+    <!-- Explicitly indicate it's a webjar -->
     <xwiki.extension.jar.type>webjar</xwiki.extension.jar.type>
+    <!-- Old name of this module used for retro compatibility when resolving dependencies of old extensions -->
+    <xwiki.extension.features>org.xwiki.contrib:application-ckeditor-base</xwiki.extension.features>
   </properties>
   <build>
     <plugins>

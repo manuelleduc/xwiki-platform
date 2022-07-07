@@ -65,51 +65,50 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
   },
 
   macroListTemplate = '<ul class="macro-list form-control" tabindex="0"></ul>',
-  macroListItemTemplate =
-    '<li data-macroCategory="" data-macroId="" ' +
-        'data-extensionId="" data-extensionVersion="" data-extensionInstallAllowed="">' +
-      '<div>' +
-        '<span class="macro-name"></span>' +
-        '<span class="macro-extension"></span>' +
-        '<span class="macro-category badge"></span>' +
-      '</div>' +
-      '<div class="macro-description"></div>' +
-    '</li>',
 
   displayMacros = function(macros) {
     var list = $(macroListTemplate);
-    var categories = {};
-    macros.forEach(function(macro) {
-      var macroCategory = macro.defaultCategory || '';
-      categories[macroCategory] = (categories[macroCategory] || 0) + 1;
-      var macroListItem = $(macroListItemTemplate).attr({
-        'data-macroId': macro.id.id,
-        'data-macroCategory': macroCategory
-      }).appendTo(list);
-      macroListItem.find('.macro-name').text(macro.name);
-      if (macro.extensionName) {
-        var extensionName = ' - ' + macro.extensionName + ' ' + macro.extensionVersion;
-        macroListItem.find('.macro-extension').text(extensionName);
-        macroListItem.attr({
-          'data-extensionId': macro.extensionId,
-          'data-extensionVersion': macro.extensionVersion,
-          'data-extensionInstallAllowed': macro.extensionInstallAllowed
+
+    function initMacroCategories() {
+      var categories = {};
+      // TODO: check how notinstalled macros are handled.
+      macros.forEach(function (macro) {
+        macro.categories.forEach(function(category) {
+          categories[category.id] = categories[category.id] || category; 
         });
-      }
-      if (macro.defaultCategory === '_notinstalled') {
-        macroListItem.find('.macro-category').text(translations.get('filter.category.notinstalled'));
-      }
-      macroListItem.find('.macro-description').text(macro.description);
-    });
-    var categoryFilter = createCategoryFilter(sortCategories(categories));
-    var textFilter = $(document.createElement('input')).attr({
+      });
+      return categories;
+    }
+
+    var categories = initMacroCategories();
+    var textFilter = $("<input/>").attr({
       'type': 'text',
       'class': 'macro-textFilter',
       'placeholder': translations.get('filter.text.placeholder')
     });
-    var filters = $(document.createElement('div')).addClass('macro-filters input-group');
-    filters.append(textFilter).append(categoryFilter);
-    this.removeClass('loading').append(filters).append(list);
+    var filters = $("<div/>").addClass('macro-filters input-group');
+    var categoriesFilter = $('<input/>')
+      .addClass("macro-categories-field")
+      .attr("multiple", true);
+    filters.append(textFilter).append(categoriesFilter);
+    this.removeClass('loading')
+      .append(filters)
+      .append(list);
+
+    // Initialize the selectize for the categories filter.
+    categoriesFilter.xwikiSelectize({
+      onLoad: function (typedText, callback) {
+        callback(categories.keys().filter(function(category) {
+          return category.toLowerCase().indexOf(typedText.toLowerCase()) !== -1;
+        }).map(function (category) {
+          return {
+            label: category,
+            value: category,
+          };
+        }));
+      }
+    });
+        
     // Filter the list of displayed macros to implement support for allMacrosExcludedCategories (i.e. when all macros
     // is selected, don't display macros in some given categories). More generally this makes sure that the filtering
     // is always done.
@@ -161,41 +160,6 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
     return categoryList;
   },
 
-  createCategoryFilter = function(categories) {
-    var categoryFilter = $(
-      '<div class="macro-categories input-group-btn">' +
-        '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ' +
-          'aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>' +
-        '<ul class="dropdown-menu dropdown-menu-right"></ul>' +
-      '</div>'
-    );
-    var categoryTemplate = [
-      '<li class="macro-category">',
-        '<a href="#">',
-          '<span class="macro-category-name"></span>',
-          '<span class="macro-category-count badge"></span>',
-        '</a>',
-      '</li>'].join('');
-    categoryFilter.find('ul.dropdown-menu').append(categories.map(function(category) {
-      var item = $(categoryTemplate).attr('data-category', category.id);
-      item.find('.macro-category-name').text(category.name);
-      item.find('.macro-category-count').text(category.count);
-      return item[0];
-    }));
-    var separator = '<li role="separator" class="divider"></li>';
-    // Add separator after "All Macros" category.
-    if (categories.length > 1) {
-      categoryFilter.find('.macro-category:not([data-category])').after(separator);
-    }
-    // Add separator before "Other" category.
-    categoryFilter.find('.macro-category[data-category=""]').before(separator);
-    // Add separator before "Not installed" category.
-    categoryFilter.find('.macro-category[data-category="_notinstalled"]').before(separator);
-    // Select "All Macros" by default.
-    categoryFilter.find('.caret').before(document.createTextNode(categories[0].name + ' '));
-    return categoryFilter;
-  },
-
   scrollIntoList = function(item) {
     var itemPositionTop = item.position().top;
     var list = item.parent();
@@ -211,6 +175,10 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
 
   filterMacros = function() {
     var text = $(this).find('.macro-textFilter').val().toLowerCase();
+    // TODO: update this filter to use the selectize field values, and filter on a set of categories
+    // TODO: use allMacrosExcludedCategories to excluded the macro categories that are not explicitly selected
+    // TODO: taking into account the "show hidden pages" preferences of the user
+    // TODO: show the categories in the entries of the macros
     var selectedCategory = $(this).find('.macro-categories .dropdown-toggle').attr('data-category');
     var macroSelector = $(this).closest('.macro-selector');
     macroSelector.find('.macro-list').scrollTop(0).children().each(function() {

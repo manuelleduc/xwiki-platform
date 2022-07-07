@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 
 <!--
  * See the NOTICE file distributed with this work for additional
@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.2" reference="CKEditor.MacroService" locale="">
+<xwikidoc version="1.5" reference="CKEditor.MacroService" locale="">
   <web>CKEditor</web>
   <name>MacroService</name>
   <language/>
@@ -98,11 +98,18 @@
   #foreach ($macroDescriptor in $macroDescriptors)
     #set ($macroTranslationKey = "rendering.macro.$macroDescriptor.id")
     #set ($macroCategoryTranslationKey = "rendering.macroCategory.$macroDescriptor.defaultCategory")
+    #set ($categories = [])
+    ## TODO: replace with loop over $services.rendering.getCategories(macroId) once merged.
+    #set ($discard = $categories.add({
+      'id': $macroDescriptor.defaultCategory,
+      'label': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)"
+    }))
     #set ($discard = $macroList.add({
       'id': $macroDescriptor.id,
       'name': "#maybeTranslate(""${macroTranslationKey}.name"" $macroDescriptor.name)",
       'description': "#maybeTranslate(""${macroTranslationKey}.description"" $macroDescriptor.description)",
-      'defaultCategory': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)"
+      'defaultCategory': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)",
+      'categories': $categories
     }))
   #end
   #set ($macroList = $resolvedSortTool.sort($macroList, 'name'))
@@ -128,6 +135,7 @@
             &amp;&amp; $services.security.authorization.hasAccess('admin', $xcontext.userReference, "wiki:$xcontext.database") &amp;&amp; $services.extension.isAllowed($extension, "wiki:$xcontext.database")))
       #foreach ($extensionComponent in $extension.getComponents())
         #if ($extensionComponent.roleType == 'org.xwiki.rendering.macro.Macro')
+          ## TODO: Translate categories label.
           #set ($discard = $macroExtensionsList.add({
               'id' : {
                   'id' : $extensionComponent.roleHint
@@ -135,6 +143,7 @@
               'name': $extensionComponent.roleHint,
               'description': $extension.summary,
               'defaultCategory': '_notinstalled',
+              'categories': [{'id' :'_notinstalled', 'label': 'Not Installed'}],
               'extensionId' : $extension.id.id,
               'extensionVersion' : $extension.id.version.value,
               'extensionType' : $extension.type,

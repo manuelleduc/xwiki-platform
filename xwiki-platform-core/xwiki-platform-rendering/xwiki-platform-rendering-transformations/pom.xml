@@ -36,5 +36,7 @@
     <module>xwiki-platform-rendering-transformation-api</module>
     <module>xwiki-platform-rendering-transformation-icon</module>
     <module>xwiki-platform-rendering-transformation-macro</module>
+    <module>xwiki-platform-rendering-transformation-ui</module>
+    <module>xwiki-platform-rendering-transformation-webjar</module>
   </modules>
 </project>

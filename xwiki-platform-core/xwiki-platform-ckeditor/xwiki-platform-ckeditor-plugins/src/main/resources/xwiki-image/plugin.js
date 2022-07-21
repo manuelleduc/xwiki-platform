@@ -41,6 +41,12 @@
         isInsert: isInsert
       }).done(function(data) {
         if (widget && widget.element) {
+          // The 'attach' type is the default type, we make the attach resource reference untyped in order to
+          // make them compatible with xwiki/2.0 syntax.
+          if (data.resourceReference.type === 'attach') {
+            data.resourceReference.typed = false;
+          }
+
           widget.setData(data);
 
           // With the old image dialog, image were wrapped in a p to be centered. We need to unwrap them to make them
@@ -58,7 +64,7 @@
           // Append wrapper to a temporary document. This will unify the environment in which #data listeners work when
           // creating and editing widget.
           temp.append(wrapper);
-          
+
           // Initialize an empty image widget, then update it with the data from the image dialog.
           var widgetInstance = editor.widgets.initOn(element, widget, {});
           widgetInstance.setData(data);
@@ -158,7 +164,7 @@
         // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
         // add deprecated attributes to the image.
         this.data.align = 'none';
-        
+
         if (this.data.alignment && this.data.alignment !== 'none') {
           setAttribute(this, 'data-xwiki-image-style-alignment', this.data.alignment);
         } else {

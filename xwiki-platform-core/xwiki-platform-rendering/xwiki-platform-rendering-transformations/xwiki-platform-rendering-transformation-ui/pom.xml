@@ -11,7 +11,16 @@
 
     <artifactId>xwiki-platform-rendering-transformation-ui</artifactId>
     <packaging>xar</packaging>
-    
 
-    
+    <dependencies>
+        <dependency>
+            <groupId>org.xwiki.platform</groupId>
+            <artifactId>xwiki-platform-rendering-transformation-webjar</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+
+
 </project>

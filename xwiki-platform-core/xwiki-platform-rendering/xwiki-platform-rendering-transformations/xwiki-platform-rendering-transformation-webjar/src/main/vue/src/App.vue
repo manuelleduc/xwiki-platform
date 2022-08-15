@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="rendering-transformations-vue-root">
+    <!-- TODO: Translations -->
+    <h2>Macros Administration</h2>
+    <!-- TODO: replace with an actual spinner. -->
+    <hidden-macro-categories-form
+      :default-hidden-categories="defaultHiddenCategories"
+      :rest-path="restPath"
+    />
+    <macro-categories-form
+      :rest-path="restPath"
+      :macros-map="macrosMap"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HiddenMacroCategoriesForm from "@/HiddenMacroCategoriesForm";
+import MacroCategoriesForm from "@/MacroCategoriesForm";
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: {MacroCategoriesForm, HiddenMacroCategoriesForm},
+  props: {
+    defaultHiddenCategories: {
+      type: Array,
+      required: true,
+    },
+    restPath: {
+      type: String,
+      required: true,
+    },
+    macrosMap: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>

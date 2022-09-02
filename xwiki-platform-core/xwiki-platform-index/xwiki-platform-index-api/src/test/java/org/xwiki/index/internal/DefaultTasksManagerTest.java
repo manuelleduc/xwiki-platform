@@ -234,21 +234,29 @@ class DefaultTasksManagerTest
 
         AtomicReference<CompletableFuture<TaskData>> taskDataCompletableFuture = new AtomicReference<>();
 
-        // Block the fist task and let the next tasks execute instantly.
+        // Block the fist task so that we can queue a second task before the first one is consumed.
         doAnswer(invocation -> {
+            // Introduce a second task identical to the first one but with a different timestamp during the execution
+            // of the first one.
+            // We wait 1ms to make sure that the two tasks have different timestamps. 
+            Thread.sleep(1);
             taskDataCompletableFuture.set(this.tasksManager.addTask("wikiA", 42, "1.2", "concurrent"));
             return null;
         })
             .doAnswer(invocation -> {
+                // Verify that deleteTask is not called on the first task as it would also delete the second task, which
+                // we want to execute too.
                 verify(this.tasksStore, never()).deleteTask("wikiA", 42, "1.2", "concurrent");
                 return null;
             })
+            // Following executions don't require to be intercepted.
             .doAnswer(invocation -> null)
             .when(this.taskExecutor).execute(any());
 
         this.tasksManager.addTask("wikiA", 42, "1.2", "concurrent").get();
         taskDataCompletableFuture.get().get();
 
+        // Verify that the two tasks are executed.
         verify(this.taskExecutor, times(2)).execute(any());
 
         // Queue another task to make sure that the previous tasks are fully consumed. Otherwise, the deleteTask might 

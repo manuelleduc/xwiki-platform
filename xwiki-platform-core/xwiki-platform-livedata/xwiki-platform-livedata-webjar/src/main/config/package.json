@@ -36,6 +36,6 @@
     "jquery": "3.6.0",
     "@testing-library/jest-dom": "5.16.4",
     "flush-promises": "1.0.2",
-    "@vue/vue2-jest": "^27.0.0"
+    "@vue/vue2-jest": "27.0.0"
   }
 }

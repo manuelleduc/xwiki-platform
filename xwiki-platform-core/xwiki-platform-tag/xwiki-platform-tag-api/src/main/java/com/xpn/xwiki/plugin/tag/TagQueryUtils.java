@@ -19,6 +19,7 @@
  */
 package com.xpn.xwiki.plugin.tag;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +27,23 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.query.Query;
 import org.xwiki.query.QueryException;
 import org.xwiki.query.QueryFilter;
 import org.xwiki.query.internal.HiddenDocumentFilter;
 import org.xwiki.query.internal.UniqueDocumentFilter;
+import org.xwiki.security.authorization.ContextualAuthorizationManager;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.web.Utils;
+
+import static com.xpn.xwiki.XWiki.SYSTEM_SPACE;
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
+import static java.util.stream.Collectors.toList;
+import static org.xwiki.security.authorization.Right.VIEW;
 
 /**
  * TagQueryUtils handles queries allowing to search and count tags within the wiki.
@@ -80,7 +89,7 @@ public final class TagQueryUtils
                 String.format("Failed to get all tags for query [%s]", hql), e);
         }
 
-        Collections.sort(results, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(results, CASE_INSENSITIVE_ORDER);
 
         return results;
     }
@@ -124,10 +133,37 @@ public final class TagQueryUtils
     private static Map<String, Integer> getTagCountForQuery(String fromHql, String whereHql, Object parameters,
         XWikiContext context) throws XWikiException
     {
-        List<String> results;
-        Map<String, Integer> tagCount = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        return countTags(getTagsFromViewableDocuments(fromHql, whereHql, parameters, context));
+    }
 
-        String from = "select elements(prop.list) from XWikiDocument as doc, BaseObject as tagobject, "
+    private static Map<String, Integer> countTags(List<String> results)
+    {
+        Collections.sort(results, CASE_INSENSITIVE_ORDER);
+        Map<String, String> processedTags = new HashMap<>();
+        Map<String, Integer> tagCount = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+
+        // We have to manually build a cardinality map since we have to ignore tags case.
+        for (String result : results) {
+            // This key allows to keep track of the case variants we've encountered.
+            String lowerTag = result.toLowerCase();
+
+            // We store the first case variant to reuse it in the final result set.
+            processedTags.putIfAbsent(lowerTag, result);
+
+            String tagCountKey = processedTags.get(lowerTag);
+            int tagCountForTag = 0;
+            if (tagCount.get(tagCountKey) != null) {
+                tagCountForTag = tagCount.get(tagCountKey);
+            }
+            tagCount.put(tagCountKey, tagCountForTag + 1);
+        }
+        return tagCount;
+    }
+
+    private static List<String> getTagsFromViewableDocuments(String fromHql, String whereHql, Object parameters,
+        XWikiContext context) throws XWikiException
+    {
+        String from = "select doc.fullName from XWikiDocument as doc, BaseObject as tagobject, "
             + "DBStringListProperty as prop";
         String where = " where tagobject.name=doc.fullName and tagobject.className='XWiki.TagClass' and "
             + "tagobject.id=prop.id.id and prop.id.name='tags' and doc.translation=0";
@@ -142,6 +178,10 @@ public final class TagQueryUtils
 
         String hql = from + where;
 
+        ContextualAuthorizationManager contextualAuthorizationManager = getContextualAuthorizationManager();
+        DocumentReferenceResolver<String> documentReferenceResolver = getStringDocumentReferenceResolver();
+
+        List<DocumentReference> documents;
         try {
             Query query = context.getWiki().getStore().getQueryManager().createQuery(hql, Query.HQL);
             if (parameters != null) {
@@ -152,34 +192,36 @@ public final class TagQueryUtils
                 }
             }
             query.addFilter(Utils.getComponent(QueryFilter.class, HiddenDocumentFilter.HINT));
-            results = query.execute();
+            documents = query.<String>execute()
+                .stream()
+                .map(documentReferenceResolver::resolve)
+                .filter(document -> contextualAuthorizationManager.hasAccess(VIEW, document))
+                .collect(toList());
         } catch (QueryException e) {
             throw new XWikiException(XWikiException.MODULE_XWIKI_STORE, XWikiException.ERROR_XWIKI_UNKNOWN,
                 String.format("Failed to get tag count for query [%s], with parameters [%s]", hql, parameters), e);
         }
 
-        Collections.sort(results, String.CASE_INSENSITIVE_ORDER);
-        Map<String, String> processedTags = new HashMap<>();
+        List<String> results = new ArrayList<>();
 
-        // We have to manually build a cardinality map since we have to ignore tags case.
-        for (String result : results) {
-            // This key allows to keep track of the case variants we've encountered.
-            String lowerTag = result.toLowerCase();
-
-            // We store the first case variant to reuse it in the final result set.
-            if (!processedTags.containsKey(lowerTag)) {
-                processedTags.put(lowerTag, result);
-            }
-
-            String tagCountKey = processedTags.get(lowerTag);
-            int tagCountForTag = 0;
-            if (tagCount.get(tagCountKey) != null) {
-                tagCountForTag = tagCount.get(tagCountKey);
-            }
-            tagCount.put(tagCountKey, tagCountForTag + 1);
+        for (DocumentReference document : documents) {
+            context.getWiki().getDocument(document, context)
+                .getXObjects(new DocumentReference(context.getWikiId(), SYSTEM_SPACE, "TagClass"))
+                .stream()
+                .map(xObject -> xObject.getListValue("tags"))
+                .forEach(results::addAll);
         }
+        return results;
+    }
 
-        return tagCount;
+    private static DocumentReferenceResolver<String> getStringDocumentReferenceResolver()
+    {
+        return Utils.getComponent(DocumentReferenceResolver.TYPE_STRING);
+    }
+
+    private static ContextualAuthorizationManager getContextualAuthorizationManager()
+    {
+        return Utils.getComponent(ContextualAuthorizationManager.class);
     }
 
     /**

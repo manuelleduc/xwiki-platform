@@ -26,10 +26,10 @@ if(typeof(XWiki) == "undefined" || typeof(XWiki.widgets) == "undefined" || typeo
   XWiki.widgets.ConfirmationBox = Class.create(XWiki.widgets.ModalPopup, {
     /** Default displayed texts */
     defaultInteractionParameters : {
-      confirmationText: "$services.localization.render('core.widgets.confirmationBox.defaultQuestion')",
-      yesButtonText: "$services.localization.render('core.widgets.confirmationBox.button.yes')",
-      noButtonText: "$services.localization.render('core.widgets.confirmationBox.button.no')",
-      cancelButtonText: "$services.localization.render('core.widgets.confirmationBox.button.cancel')",
+      confirmationText: "$escapetool.javascript($services.localization.render('core.widgets.confirmationBox.defaultQuestion'))",
+      yesButtonText: "$escapetool.javascript($services.localization.render('core.widgets.confirmationBox.button.yes'))",
+      noButtonText: "$escapetool.javascript($services.localization.render('core.widgets.confirmationBox.button.no'))",
+      cancelButtonText: "$escapetool.javascript($services.localization.render('core.widgets.confirmationBox.button.cancel'))",
       showCancelButton: false
     },
     /** Constructor. Registers the key listener that pops up the dialog. */

@@ -47,7 +47,7 @@ var XWiki = (function(XWiki){
     // Display a "no results" message, or simply hide the suggest box when no suggestions are available
     shownoresults : true,
     // The message to display as the "no results" message
-    noresults : "$services.localization.render('core.widgets.suggest.noResults')",
+    noresults : "$escapetool.javascript($services.localization.render('core.widgets.suggest.noResults'))",
     maxheight : 250,
     cache : false,
     seps : "",
@@ -90,7 +90,7 @@ var XWiki = (function(XWiki){
     // Should value be displayed as a hint
     displayValue: false,
     // Display value prefix text
-    displayValueText: "$services.localization.render('core.widgets.suggest.valuePrefix')",
+    displayValueText: "$escapetool.javascript($services.localization.render('core.widgets.suggest.valuePrefix'))",
     // How to align the suggestion list when its width is different from the input field width
     align: "left",
     // When there are several suggest sources, should the widget displays only one, unified, "loading" indicator for all requests undergoing,
@@ -401,7 +401,7 @@ var XWiki = (function(XWiki){
       onCreate: this.fld.addClassName.bind(this.fld, 'loading'),
       onSuccess: this.setSuggestions.bindAsEventListener(this, source, requestId),
       onFailure: function (response) {
-        new XWiki.widgets.Notification("$services.localization.render('core.widgets.suggest.transportError')" + response.statusText, "error", {timeout: 5});
+        new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.widgets.suggest.transportError'))" + response.statusText, "error", {timeout: 5});
       },
       onComplete: this.fld.removeClassName.bind(this.fld, 'loading')
     }

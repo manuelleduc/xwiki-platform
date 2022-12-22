@@ -38,7 +38,8 @@
     ## Create link
     #if($hasEdit)
       #set($url = $doc.getURL("create", $editparams))
-      $services.localization.render('core.viewers.content.doesnotexists.edittocreate', [$url])
+      #set ($message = $escapetool.xml($services.localization.render('core.viewers.content.doesnotexists.edittocreate', ['__URL_START__', '__URL_END__'])))
+      $message.replace('__URL_START__', "<a href='$escapetool.xml($url)'>").replace('__URL_END__', '</a>')
     #end
     ## UI Extensions, if any.
     #showExtensions()

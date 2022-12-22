@@ -60,10 +60,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <div class="modal-title" id="previewDiffModalTitle">$services.localization.render('core.editors.save.previewDiff.title')</div>
+        <div class="modal-title" id="previewDiffModalTitle">
+          $escapetool.xml($services.localization.render('core.editors.save.previewDiff.title'))
+        </div>
         <hr />
         <div class="xHint">
-          $services.localization.render('core.editors.save.previewDiff.description')
+          $escapetool.xml($services.localization.render('core.editors.save.previewDiff.description'))
         </div>
       </div>
       <div class="modal-body">
@@ -74,11 +76,13 @@
             </div>
             <div class="panel-heading">
               <label class="panel-title">
-                $services.localization.render('core.editors.save.previewDiff.merge.action')
-                <span class="label label-success">$services.localization.render('core.editors.save.previewDiff.merge.label')</span>
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.merge.action'))
+                <span class="label label-success">
+                  $escapetool.xml($services.localization.render('core.editors.save.previewDiff.merge.label'))
+                </span>
               </label>
               <div class="xHint">
-                $services.localization.render('core.editors.save.previewDiff.merge.hint')
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.merge.hint'))
               </div>
             </div>
           </div>
@@ -88,10 +92,10 @@
             </div>
             <div class="panel-heading">
               <label class="panel-title">
-                $services.localization.render('core.editors.save.previewDiff.forceSave.action')
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.forceSave.action'))
               </label>
               <div class="xHint">
-                $services.localization.render('core.editors.save.previewDiff.forceSave.hint')
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.forceSave.hint'))
               </div>
             </div>
           </div>
@@ -101,11 +105,13 @@
             </div>
             <div class="panel-heading">
               <label class="panel-title">
-                $services.localization.render('core.editors.save.previewDiff.reload.action')
-                <span class="label label-danger">$services.localization.render('core.editors.save.previewDiff.reload.label')</span>
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.reload.action'))
+                <span class="label label-danger">
+                  $escapetool.xml($services.localization.render('core.editors.save.previewDiff.reload.label'))
+                </span>
               </label>
               <div class="xHint">
-                $services.localization.render('core.editors.save.previewDiff.reload.hint')
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.reload.hint'))
               </div>
             </div>
           </div>
@@ -118,11 +124,13 @@
             </div>
             <div class="panel-heading">
               <label class="panel-title">
-                $services.localization.render('core.editors.save.previewDiff.custom.action')
-                <span class="label label-warning">$services.localization.render('core.editors.save.previewDiff.custom.label')</span>
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.custom.action'))
+                <span class="label label-warning">
+                  $escapetool.xml($services.localization.render('core.editors.save.previewDiff.custom.label'))
+                </span>
               </label>
               <div class="xHint">
-                $services.localization.render('core.editors.save.previewDiff.custom.hint')
+                $escapetool.xml($services.localization.render('core.editors.save.previewDiff.custom.hint'))
               </div>
             </div>
           </div>
@@ -130,7 +138,9 @@
         </div>
         <div class="panel">
           <div class="panel-heading" id="headingDiffChanges">
-            <label class="panel-title">$services.localization.render('core.editors.save.previewDiff.viewChanges')</label>
+            <label class="panel-title">
+              $escapetool.xml($services.localization.render('core.editors.save.previewDiff.viewChanges'))
+            </label>
             <span class="openDetails" data-toggle="collapse" href="#collapsePreviewDiffDiff" aria-expanded="true" aria-controls="collapsePreviewDiffDiff">$services.icon.renderHTML('caret-down')</span>
           </div>
           <div id="collapsePreviewDiffDiff" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingDiffChanges">
@@ -138,22 +148,26 @@
               ## We don't allow to change the diff in case of custom selection.
               #if ($warningConflictAction != "custom")
               <div class="previewdiff-diff-options">
-                <span class="label">$services.localization.render('extensions.upgrade.mergeConflict.changes.original')</span>
+                <span class="label">
+                  $escapetool.xml($services.localization.render('extensions.upgrade.mergeConflict.changes.original'))
+                </span>
                 <select name="original">
                   #foreach($entry in $versions.entrySet())
                     #if ($entry.value)
                       <option value="$entry.key"#if ($entry.key == $originalVersion) selected="selected"#end>
-                        $services.localization.render("core.editors.save.previewDiff.versionToCompare.${entry.key.toLowerCase()}")
+                        $escapetool.xml($services.localization.render("core.editors.save.previewDiff.versionToCompare.${entry.key.toLowerCase()}"))
                       </option>
                     #end
                   #end
                 </select>
-                <span class="label">$services.localization.render('extensions.upgrade.mergeConflict.changes.revised')</span>
+                <span class="label">
+                  $escapetool.xml($services.localization.render('extensions.upgrade.mergeConflict.changes.revised'))
+                </span>
                 <select name="revised">
                   #foreach($entry in $versions.entrySet())
                     #if ($entry.value)
                       <option value="$entry.key"#if ($entry.key == $revisedVersion) selected="selected"#end>
-                        $services.localization.render("core.editors.save.previewDiff.versionToCompare.${entry.key.toLowerCase()}")
+                        $escapetool.xml($services.localization.render("core.editors.save.previewDiff.versionToCompare.${entry.key.toLowerCase()}"))
                       </option>
                     #end
                   #end
@@ -196,8 +210,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <input type="button" id="submitDiffButton" class="btn btn-primary" value="$services.localization.render('save')" />
-        <input type="button" id="cancelDiffButton" class="btn btn-default" value="$services.localization.render('cancel')" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" id="submitDiffButton" class="btn btn-primary" 
+          value="$escapetool.xml($services.localization.render('save'))" />
+        <input type="button" id="cancelDiffButton" class="btn btn-default" 
+          value="$escapetool.xml($services.localization.render('cancel'))" data-dismiss="modal" aria-hidden="true" />
       </div>
     </div>
   </div>

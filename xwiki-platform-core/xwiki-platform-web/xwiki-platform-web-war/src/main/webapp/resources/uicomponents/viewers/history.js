@@ -52,7 +52,7 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
     e.preventDefault();
 
     var revs = getRev();
-    var confirmText = "$services.localization.render('core.viewers.history.confirmDeleteRange')"
+    var confirmText = "$escapetool.javascript($services.localization.render('core.viewers.history.confirmDeleteRange'))"
       .replace('__rev1__', revs.rev1)
       .replace('__rev2__', revs.rev2);
 

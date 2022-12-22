@@ -22,24 +22,24 @@ var XWiki = (function(XWiki){
     var importer = XWiki.importer = XWiki.importer || {};
 
     var translations = {
-                "availableDocuments" : "$services.localization.render('core.importer.availableDocuments')",
-                "importHistoryLabel" : "$services.localization.render('core.importer.importHistory')",
-                    "selectionEmpty" : "$services.localization.render('core.importer.selectionEmptyWarning')",
-                            "import" : "$services.localization.render('core.importer.import')",
-                           "package" : "$services.localization.render('core.importer.package')",
-                       "description" : "$services.localization.render('core.importer.package.description')",
-                           "version" : "$services.localization.render('core.importer.package.version')",
-                           "licence" : "$services.localization.render('core.importer.package.licence')",
-                            "author" : "$services.localization.render('core.importer.package.author')",
-                  "documentSelected" : "$services.localization.render('core.importer.documentSelected')",
-         "whenDocumentAlreadyExists" : "$services.localization.render('core.importer.whenDocumentAlreadyExists')",
-                     "addNewVersion" : "$services.localization.render('core.importer.addNewVersion')",
-            "replaceDocumentHistory" : "$services.localization.render('core.importer.replaceDocumentHistory')",
-                      "resetHistory" : "$services.localization.render('core.importer.resetHistory')",
-                    "importAsBackup" : "$services.localization.render('core.importer.importAsBackup')",
-                            "select" : "$services.localization.render('core.importer.select')",
-                               "all" : "$services.localization.render('core.importer.selectAll')",
-                              "none" : "$services.localization.render('core.importer.selectNone')"
+                "availableDocuments" : "$escapetool.javascript($services.localization.render('core.importer.availableDocuments'))",
+                "importHistoryLabel" : "$escapetool.javascript($services.localization.render('core.importer.importHistory'))",
+                    "selectionEmpty" : "$escapetool.javascript($services.localization.render('core.importer.selectionEmptyWarning'))",
+                            "import" : "$escapetool.javascript($services.localization.render('core.importer.import'))",
+                           "package" : "$escapetool.javascript($services.localization.render('core.importer.package'))",
+                       "description" : "$escapetool.javascript($services.localization.render('core.importer.package.description'))",
+                           "version" : "$escapetool.javascript($services.localization.render('core.importer.package.version'))",
+                           "licence" : "$escapetool.javascript($services.localization.render('core.importer.package.licence'))",
+                            "author" : "$escapetool.javascript($services.localization.render('core.importer.package.author'))",
+                  "documentSelected" : "$escapetool.javascript($services.localization.render('core.importer.documentSelected'))",
+         "whenDocumentAlreadyExists" : "$escapetool.javascript($services.localization.render('core.importer.whenDocumentAlreadyExists'))",
+                     "addNewVersion" : "$escapetool.javascript($services.localization.render('core.importer.addNewVersion'))",
+            "replaceDocumentHistory" : "$escapetool.javascript($services.localization.render('core.importer.replaceDocumentHistory'))",
+                      "resetHistory" : "$escapetool.javascript($services.localization.render('core.importer.resetHistory'))",
+                    "importAsBackup" : "$escapetool.javascript($services.localization.render('core.importer.importAsBackup'))",
+                            "select" : "$escapetool.javascript($services.localization.render('core.importer.select'))",
+                               "all" : "$escapetool.javascript($services.localization.render('core.importer.selectAll'))",
+                              "none" : "$escapetool.javascript($services.localization.render('core.importer.selectNone'))"
     };
 
     /**
@@ -70,7 +70,7 @@ var XWiki = (function(XWiki){
                     }
                     event.findElement('li').remove();
                 }},
-                {confirmationText: "$services.localization.render('core.viewers.attachments.delete.confirm')"}
+                {confirmationText: "$escapetool.javascript($services.localization.render('core.viewers.attachments.delete.confirm'))"}
             );
         });
     }

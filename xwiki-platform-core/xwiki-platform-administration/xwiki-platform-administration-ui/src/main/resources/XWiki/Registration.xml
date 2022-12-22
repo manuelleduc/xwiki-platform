@@ -364,7 +364,8 @@
         #generateHtml($fields, $request)
         &lt;p class="buttons"&gt;
           &lt;span class="buttonwrapper"&gt;
-            &lt;input type="submit" value="$services.localization.render('core.register.submit')" class="button"/&gt;
+            &lt;input type="submit" value="$escapetool.xml($services.localization.render('core.register.submit'))"
+             class="button"/&gt;
           &lt;/span&gt;
         &lt;/p&gt;
       &lt;/form&gt;

@@ -19,9 +19,11 @@
  */
 package org.xwiki.mentions.test.ui;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -29,6 +31,7 @@ import org.xwiki.mentions.test.po.MentionNotificationPage;
 import org.xwiki.platform.notifications.test.po.NotificationsTrayPage;
 import org.xwiki.test.docker.junit5.TestReference;
 import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.docker.junit5.servletengine.ServletEngine;
 import org.xwiki.test.ui.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,7 +58,7 @@ import static org.xwiki.platform.notifications.test.po.NotificationsTrayPage.wai
         // Required to ensure that the notifications rest endpoints are registered before XWikiJaxRsApplication is 
         // initialized.
         "org.xwiki.platform:xwiki-platform-notifications-rest"
-    }, resolveExtraJARs = true)
+    }, resolveExtraJARs = true, servletEngine = ServletEngine.EXTERNAL)
 class MentionsIT
 {
     private static final String U1_USERNAME = "U1";
@@ -68,8 +71,10 @@ class MentionsIT
 
     /**
      * A duplicate of {@link Runnable} which allows to throw checked {@link Exception}.
-     * @see  Runnable
-     * @see <a href="https://www.baeldung.com/java-lambda-exceptions">Baeldung's Exceptions in Java 8 Lambda Expressions</a>.
+     *
+     * @see Runnable
+     * @see <a href="https://www.baeldung.com/java-lambda-exceptions">Baeldung's Exceptions in Java 8 Lambda
+     *     Expressions</a>.
      */
     @FunctionalInterface
     private interface RunnableErr
@@ -77,8 +82,20 @@ class MentionsIT
         void run() throws Exception;
     }
 
+    @BeforeEach
+    void setUp(TestUtils setup) throws Exception
+    {
+        for (String userId : Arrays.asList(U1_USERNAME, U2_USERNAME, U3_USERNAME)) {
+            runAsUser(setup, userId, USERS_PWD, () -> {
+                setup.gotoPage("Main", "WebHome");
+                NotificationsTrayPage tray = new NotificationsTrayPage();
+                tray.showNotificationTray();
+                tray.clearAllNotifications();
+            });
+        }
+    }
+
     /**
-     *
      * <ul>
      *     <li>Superadmin creates U1 and U2.</li>
      *     <li>U1 adds a mention to U2.</li>
@@ -132,7 +149,6 @@ class MentionsIT
     }
 
     /**
-     *
      * <ul>
      *     <li>Superadmin creates U1 and U2.</li>
      *     <li>U1 adds a mention to U2.</li>

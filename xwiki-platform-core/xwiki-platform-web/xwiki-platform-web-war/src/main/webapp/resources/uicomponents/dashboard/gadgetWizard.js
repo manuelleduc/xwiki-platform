@@ -33,7 +33,7 @@
 ])
 #set ($l10n = {})
 #foreach ($key in $l10nKeys)
-  #set ($discard = $l10n.put($key, $services.localization.render($key)))
+  #set ($discard = $l10n.put($key, $escapetool.javascript($services.localization.render($key))))
 #end
 #[[*/
 // Start JavaScript-only code.
@@ -69,7 +69,7 @@ define(['jquery', 'xwiki-ckeditor'], function($, ckeditorPromise) {
 
   var getDefaultGadgetTitle = function(macroEditor) {
     var gadgetName = macroEditor.attr('data-macroid').split('/')[0];
-    return "$services.localization.render('rendering.macro." + gadgetName + ".name')";
+    return "$escapetool.javascript($services.localization.render('rendering.macro." + gadgetName + ".name'))";
   };
 
   var currentGadget;

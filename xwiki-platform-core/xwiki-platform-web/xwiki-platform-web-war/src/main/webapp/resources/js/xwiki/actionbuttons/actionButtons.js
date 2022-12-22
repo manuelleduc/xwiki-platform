@@ -67,14 +67,14 @@ var XWiki = (function(XWiki) {
     },
     addShortcuts : function() {
       var shortcuts = {
-        'action_cancel' : "$services.localization.render('core.shortcuts.edit.cancel')",
-        'action_preview' : "$services.localization.render('core.shortcuts.edit.preview')",
+        'action_cancel' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.cancel'))",
+        'action_preview' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.preview'))",
         // The following 2 are both "Back to edit" in the preview mode, depending on the used editor
-        'action_edit' : "$services.localization.render('core.shortcuts.edit.backtoedit')",
-        'action_inline' : "$services.localization.render('core.shortcuts.edit.backtoedit')",
-        'action_save' : "$services.localization.render('core.shortcuts.edit.saveandview')",
-        'action_propupdate' : "$services.localization.render('core.shortcuts.edit.saveandview')",
-        'action_saveandcontinue' : "$services.localization.render('core.shortcuts.edit.saveandcontinue')"
+        'action_edit' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.backtoedit'))",
+        'action_inline' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.backtoedit'))",
+        'action_save' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.saveandview'))",
+        'action_propupdate' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.saveandview'))",
+        'action_saveandcontinue' : "$escapetool.javascript($services.localization.render('core.shortcuts.edit.saveandcontinue'))"
       }
       for (var key in shortcuts) {
         var targetButtons = $$("input[name=" + key + "]");
@@ -93,7 +93,7 @@ var XWiki = (function(XWiki) {
         var input = inputs[i];
         var validator = new LiveValidation(input, { validMessage: "" });
         validator.add(Validate.Presence, {
-          failureMessage: "$services.localization.render('core.validation.required.message')"
+          failureMessage: "$escapetool.javascript($services.localization.render('core.validation.required.message'))"
         });
         validator.validate();
         this.validators.push(validator);
@@ -108,7 +108,7 @@ var XWiki = (function(XWiki) {
       var commentField = (form && form.comment) || $('commentinput');
       if (commentField && (($xwiki.isEditCommentSuggested()) || $xwiki.isEditCommentMandatory())) {
         while (commentField.value == '') {
-          var response = prompt("$services.localization.render('core.comment.prompt')", '');
+          var response = prompt("$escapetool.javascript($services.localization.render('core.comment.prompt'))", '');
           if (response === null) {
             return false;
           }
@@ -444,13 +444,13 @@ var XWiki = (function(XWiki) {
         var content =  new Element('div', {'class': 'modal-popup'});
         var buttonsDiv =  new Element('div');
 
-        content.insert("$services.localization.render('core.editors.save.authorizationError.message')");
+        content.insert("$escapetool.javascript($services.localization.render('core.editors.save.authorizationError.message'))");
         content.insert(new Element('br'));
         content.insert(new Element('br'));
         var loginUrl = XWiki.currentDocument.getURL("login");
 
         var link = new Element('a', {'title': 'login', 'href': loginUrl, 'target': '_new'});
-        link.insert("$services.localization.render('core.editors.save.authorizationError.followLink')");
+        link.insert("$escapetool.javascript($services.localization.render('core.editors.save.authorizationError.followLink'))");
         content.insert(link);
         content.insert(buttonsDiv);
 
@@ -508,12 +508,12 @@ var XWiki = (function(XWiki) {
         content.insert("$escapetool.json($services.localization.render('csrf.confirmation'))");
         content.insert(new Element('br'));
         var buttonCreate = new Element('button', {'class': 'btn btn-default', 'id': 'force-save-csrf'});
-        buttonCreate.insert("$services.localization.render('yes')");
+        buttonCreate.insert("$escapetool.javascript($services.localization.render('yes'))");
         buttonsDiv.insert(buttonCreate);
         buttonCreate.on("click", resubmit);
 
         buttonCreate = new Element('button', {'class': 'btn btn-primary', 'id': 'cancel-save-csrf'});
-        buttonCreate.insert("$services.localization.render('no')");
+        buttonCreate.insert("$escapetool.javascript($services.localization.render('no'))");
         buttonsDiv.insert(buttonCreate);
         buttonCreate.on("click", function () {
           modal.closeDialog();

@@ -46,7 +46,7 @@ public class NotificationsTrayPage extends ViewPage
     @FindBy(css = "li#tmNotifications div.notifications-area")
     private WebElement notificationsArea;
 
-    @FindBy(css = "li#tmNotifications a[title='Notifications']")
+    @FindBy(css = "#tmNotifications a.dropdown-toggle")
     private WebElement watchListButton;
 
     @FindBy(css = "li#tmNotifications")
@@ -171,7 +171,8 @@ public class NotificationsTrayPage extends ViewPage
     {
         this.showNotificationTray();
 
-        return !this.notificationsArea.getText().equals("No notifications available!");
+        String text = this.notificationsArea.getText();
+        return !text.equals("No notifications available!");
     }
 
     /**

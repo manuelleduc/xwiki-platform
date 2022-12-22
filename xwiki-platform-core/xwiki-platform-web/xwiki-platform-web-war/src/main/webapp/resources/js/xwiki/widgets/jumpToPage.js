@@ -30,12 +30,12 @@
   }
 })
 #set ($l10n = {
-  'inputTooltip': $services.localization.render('core.viewers.jump.dialog.input.tooltip'),
-  'viewLabel': $services.localization.render('core.viewers.jump.dialog.actions.view'),
-  'viewTooltip': $services.localization.render('core.viewers.jump.dialog.actions.view.tooltip'),
-  'editLabel': $services.localization.render('core.viewers.jump.dialog.actions.edit'),
-  'editTooltip': $services.localization.render('core.viewers.jump.dialog.actions.edit.tooltip'),
-  'content': $services.localization.render('core.viewers.jump.dialog.content')
+  'inputTooltip': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.input.tooltip')),
+  'viewLabel': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.actions.view')),
+  'viewTooltip': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.actions.view.tooltip')),
+  'editLabel': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.actions.edit')),
+  'editTooltip': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.actions.edit.tooltip')),
+  'content': $escapetool.javascript($services.localization.render('core.viewers.jump.dialog.content'))
 })
 #set ($shortcuts = {
   'show': 'core.viewers.jump.shortcuts',
@@ -44,7 +44,7 @@
 })
 #foreach ($entry in $shortcuts.entrySet())
   ## An action can have multiple  keyboard shortcuts associated (comma separated).
-  #set ($values = $services.localization.render($entry.value).split('\s*,\s*'))
+  #set ($values = $escapetool.javascript($services.localization.render($entry.value)).split('\s*,\s*'))
   #foreach ($value in $values)
     ## Each keyboard shortcut is wrapped in quotes because it was (poorly) designed to be injected direcly in JavaScript,
     ## which we don't do anymore. So we need to remove the quotes.

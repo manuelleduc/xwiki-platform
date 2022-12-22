@@ -40,7 +40,7 @@
 #macro (displayView $configDoc $configObj)
   #foreach ($propertyName in $configObj.propertyNames)
     ; $configDoc.displayPrettyName($propertyName)
-      (% class="xHint" %)$services.localization.render("PanelsCode.NavigationConfigurationClass_${propertyName}.hint")(%%)
+      (% class="xHint" %)$services.rendering.escape($services.localization.render("PanelsCode.NavigationConfigurationClass_${propertyName}.hint"), 'xwiki/2.1')(%%)
     : $configDoc.display($propertyName)
   #end
 #end
@@ -56,7 +56,7 @@
   {{/html}}
   (% class="row" %)(((
     (% class="col-sm-6" %)(((
-      #displayNavigationPanel
+      #displayNavigationPanel()
     )))
     (% class="col-sm-6" %)(((
       #displayExcludedPages($configObj)

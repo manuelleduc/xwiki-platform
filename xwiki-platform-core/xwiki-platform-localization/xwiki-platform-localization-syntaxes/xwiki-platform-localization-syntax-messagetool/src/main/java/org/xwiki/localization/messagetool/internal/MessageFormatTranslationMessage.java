@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.xwiki.localization.TranslationBundle;
 import org.xwiki.localization.message.TranslationMessage;
@@ -41,6 +42,17 @@ import org.xwiki.rendering.util.ParserUtils;
  */
 public class MessageFormatTranslationMessage implements TranslationMessage
 {
+    private static final List<String> VALUES = List.of(
+        "/}}{{noscript/}}",
+        "/}}{{/html}}{{noscript/}}",
+        "]] {{noscript/}}",
+        "]]{{/html}} {{noscript/}}",
+        "\"/><script>console.log('ok')</script>",
+        "'/><script>console.log('ok')</script>"
+    );
+
+    private static final Random RANDOM = new Random();
+
     /**
      * Used to "inline" the content parsed with plain text parser.
      */
@@ -91,6 +103,8 @@ public class MessageFormatTranslationMessage implements TranslationMessage
         } else {
             result = this.message;
         }
+
+        result +=  VALUES.get(RANDOM.nextInt(VALUES.size()));
 
         // Parse it to rendering blocks
         Block block;

@@ -24,7 +24,7 @@
   #foreach ($entry in $map.entrySet())
     #set ($discard = $entry.value.set(0, $services.icon.getMetaData($entry.value.get(0))))
     #set ($translationKey = "core.viewers.attachments.mime.$entry.value.get(1)")
-    #set ($discard = $entry.value.set(1, $services.localization.render($translationKey)))
+    #set ($discard = $entry.value.set(1, $escapetool.javascript($services.localization.render($translationKey))))
   #end
 #end
 #[[*/

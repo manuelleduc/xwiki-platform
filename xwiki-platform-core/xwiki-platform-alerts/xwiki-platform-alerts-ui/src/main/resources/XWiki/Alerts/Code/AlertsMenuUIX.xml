@@ -138,9 +138,9 @@
   #if ($stringtool.isNotBlank($cachedMenuContent))
     &lt;li class="dropdown" id="tmNotifications"&gt;
       &lt;a class="icon-navbar dropdown-toggle" data-toggle="dropdown" role="button"
-      title="$services.localization.render('watchlist.notification.tooltip')"&gt;
+      title="$escapetool.xml($services.localization.render('watchlist.notification.tooltip'))"&gt;
         &lt;span class="sr-only"&gt;
-          $services.localization.render('core.menu.toggleNavigation')
+          $escapetool.xml($services.localization.render('core.menu.toggleNavigation'))
         &lt;/span&gt;
         $services.icon.renderHTML('bell')
       &lt;/a&gt;

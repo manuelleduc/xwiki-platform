@@ -170,7 +170,7 @@ viewers.Comments = Class.create({
                 // Disable the button, to avoid a cascade of clicks from impatient users
                 item.disabled = true;
                 item._x_notification = new XWiki.widgets.Notification(
-                    "$services.localization.render('core.viewers.comments.editForm.fetch.inProgress')",
+                    "$escapetool.javascript($services.localization.render('core.viewers.comments.editForm.fetch.inProgress'))",
                     "inprogress");
               },
               onSuccess : function(response) {
@@ -205,7 +205,7 @@ viewers.Comments = Class.create({
               onFailure : function (response) {
                 var failureReason = response.statusText || 'Server not responding';
                 item._x_notification.replace(new XWiki.widgets.Notification(
-                    "$services.localization.render('core.viewers.comments.editForm.fetch.failed')" + failureReason,
+                    "$escapetool.javascript($services.localization.render('core.viewers.comments.editForm.fetch.failed'))" + failureReason,
                     "error"));
               }.bind(this),
               on0 : function (response) {
@@ -318,7 +318,7 @@ viewers.Comments = Class.create({
           // Create a notification message to display to the user when the submit is being sent
           form._x_notification =
               new XWiki.widgets.Notification(
-                  "$services.localization.render('core.viewers.comments.add.inProgress')",
+                  "$escapetool.javascript($services.localization.render('core.viewers.comments.add.inProgress'))",
                   "inprogress");
           form.disable();
           this.requestSucceeded = false;
@@ -332,7 +332,7 @@ viewers.Comments = Class.create({
             onFailure : function (response) {
               var failureReason = response.statusText || 'Server not responding';
               form._x_notification.replace(new XWiki.widgets.Notification(
-                  "$services.localization.render('core.viewers.comments.add.failed')" + failureReason, "error"));
+                  "$escapetool.javascript($services.localization.render('core.viewers.comments.add.failed'))" + failureReason, "error"));
             }.bind(this),
             on0 : function (response) {
               response.request.options.onFailure(response);
@@ -391,7 +391,7 @@ viewers.Comments = Class.create({
                 // We send success notification only when everything is done: our integration tests relies on it
                 // for waiting a comment added.
                 form._x_notification.replace(
-                  new XWiki.widgets.Notification("$services.localization.render('core.viewers.comments.add.done')",
+                  new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.viewers.comments.add.done'))",
                     "done"));
               }
             }.bind(this)
@@ -427,7 +427,7 @@ viewers.Comments = Class.create({
     form.previewButton = new Element('span', {'class': 'buttonwrapper'}).update(new Element('input', {
       'type': 'button',
       'class': 'button',
-      'value': "$services.localization.render('core.viewers.comments.preview.button.preview')"
+      'value': "$escapetool.javascript($services.localization.render('core.viewers.comments.preview.button.preview'))"
     }));
     form.previewButton._x_modePreview = false;
 
@@ -441,7 +441,7 @@ viewers.Comments = Class.create({
       if (!form.previewButton._x_modePreview && !form.previewButton.disabled) {
         form.previewButton.disabled = true;
         var notification = new XWiki.widgets.Notification(
-            "$services.localization.render('core.viewers.comments.preview.inProgress')", "inprogress");
+            "$escapetool.javascript($services.localization.render('core.viewers.comments.preview.inProgress'))", "inprogress");
         new Ajax.Request(previewURL, {
           method: 'post',
           parameters: {
@@ -469,7 +469,7 @@ viewers.Comments = Class.create({
           onFailure: function (response) {
             var failureReason = response.statusText || 'Server not responding';
             notification.replace(new XWiki.widgets.Notification(
-                "$services.localization.render('core.viewers.comments.preview.failed')" + failureReason, "error"));
+                "$escapetool.javascript($services.localization.render('core.viewers.comments.preview.failed'))" + failureReason, "error"));
           },
           on0: function (response) {
             response.request.options.onFailure(response);
@@ -505,7 +505,7 @@ viewers.Comments = Class.create({
       commentPreview.show();
       commentElt.hide();
       $(form.previewButton).find('input')
-        .val("$services.localization.render('core.viewers.comments.preview.button.back')");
+        .val("$escapetool.javascript($services.localization.render('core.viewers.comments.preview.button.back'))");
     }.bind(this))
   },
   /**
@@ -518,7 +518,7 @@ viewers.Comments = Class.create({
       if (form.previewButton) {
         form.previewButton._x_modePreview = false;
         $(form.previewButton).find('input')
-          .val("$services.localization.render('core.viewers.comments.preview.button.preview')");
+          .val("$escapetool.javascript($services.localization.render('core.viewers.comments.preview.button.preview'))");
       }
       const pc = $(form).find(".commentPreview");
       if (pc) {
@@ -687,7 +687,7 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
       beforeSend : function() {
         button.prop('disabled', true);
         notification = new XWiki.widgets.Notification(
-          "$services.localization.render('core.viewers.comments.delete.inProgress')", 'inprogress');
+          "$escapetool.javascript($services.localization.render('core.viewers.comments.delete.inProgress'))", 'inprogress');
       },
       success : function() {
         var comment = button.closest('.xwikicomment');
@@ -697,10 +697,10 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
           commentForm.find('.cancel')[0].click();
         }
         // Replace the comment with a "deleted comment" placeholder.
-        comment.replaceWith(createNotification("$services.localization.render('core.viewers.comments.commentDeleted')"));
+        comment.replaceWith(createNotification("$escapetool.javascript($services.localization.render('core.viewers.comments.commentDeleted'))"));
         updateCount();
         notification.replace(new XWiki.widgets.Notification(
-          "$services.localization.render('core.viewers.comments.delete.done')", 'done'));
+          "$escapetool.javascript($services.localization.render('core.viewers.comments.delete.done'))", 'done'));
         // fire an event for the annotations to know when a comment / annotation is deleted
         // FIXME: This is not the best way to go because the Annotations system should be in charge of
         // properly deleting annotations, not the Comments system. Try to find an alternative for the future.
@@ -712,7 +712,7 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
         // The button is enabled in case of error.
         button.prop('disabled', false);
         notification.replace(new XWiki.widgets.Notification(
-          "$services.localization.render('core.viewers.comments.delete.failed')", 'error'));
+          "$escapetool.javascript($services.localization.render('core.viewers.comments.delete.failed'))", 'error'));
       }
     })
   });
@@ -731,12 +731,12 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
     var commentsTab = $('#Commentstab').find('.itemCount');
     var commentsNumber = $('.xwikicomment').length;
     if(commentsTab) {
-      commentsTab.text("$services.localization.render('docextra.extranb', ['__number__'])".replace("__number__", commentsNumber));
+      commentsTab.text("$escapetool.javascript($services.localization.render('docextra.extranb', ['__number__']))".replace("__number__", commentsNumber));
     }
     if($('#tmComment').length) {
       // All the sub-nodes of tmComment are added in a normalized form.
       $('#tmComment')[0].normalize();
-      var label = " $services.localization.render('docextra.comments') $services.localization.render('docextra.extranb', ['__number__'])";
+      var label = " $escapetool.javascript($services.localization.render('docextra.comments')) $escapetool.javascript($services.localization.render('docextra.extranb', ['__number__']))";
       label = label.replace("__number__", commentsNumber);
       $('#tmComment').contents().last()[0].nodeValue=label;
     }

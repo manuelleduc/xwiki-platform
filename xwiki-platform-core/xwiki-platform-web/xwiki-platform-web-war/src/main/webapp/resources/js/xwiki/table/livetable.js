@@ -292,11 +292,11 @@ XWiki.widgets.LiveTable = Class.create({
     var f = offset + limit - 1;
     if (f > this.totalRows) f = this.totalRows;
     var off = (this.totalRows > 0) ? offset : 0;
-    var msg = "<strong>" + off + "</strong> - <strong>" + f + "</strong> $services.localization.render('platform.livetable.paginationResultsOf') <strong>" + this.totalRows + "</strong>";
+    var msg = "<strong>" + off + "</strong> - <strong>" + f + "</strong> $escapetool.javascript($services.localization.render('platform.livetable.paginationResultsOf')) <strong>" + this.totalRows + "</strong>";
     msg = msg.toLowerCase();
 
     this.limitsDisplays.each(function(limitsDisplay) {
-      limitsDisplay.innerHTML = "$services.localization.render('platform.livetable.paginationResults') " + msg;
+      limitsDisplay.innerHTML = "$escapetool.javascript($services.localization.render('platform.livetable.paginationResults')) " + msg;
     });
     this.clearDisplay();
 

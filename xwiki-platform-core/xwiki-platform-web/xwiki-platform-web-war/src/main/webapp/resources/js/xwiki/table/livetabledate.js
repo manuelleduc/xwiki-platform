@@ -25,7 +25,7 @@
   'customRange', 'from', 'to'])
 #set ($l10n = {})
 #foreach ($key in $l10nKeys)
-  #set ($discard = $l10n.put($key, $services.localization.render("daterange.$key")))
+  #set ($discard = $l10n.put($key, $escapetool.javascript($services.localization.render("daterange.$key"))))
 #end
 #[[*/
 // Start JavaScript-only code.

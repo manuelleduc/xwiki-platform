@@ -144,8 +144,9 @@
  * @since 7.3M2
  *#
 #macro(displayMenu $id $icon $menuContent $titleKey $titleAsLabel $actionUrl $extraAttribute)
-  <div class="btn-group" id="$id">
-    <a class="btn btn-default#if ("$!actionUrl" == '') dropdown-toggle#end" title="$services.localization.render($titleKey)"##
+  <div class="btn-group" id="$escapetool.xml($id)">
+    <a class="btn btn-default#if ("$!actionUrl" == '') dropdown-toggle#end"
+      title="$escapetool.xml($services.localization.render($titleKey))"##
     #if ("$!actionUrl" != '')
       href="$actionUrl"
     #else
@@ -154,14 +155,16 @@
     role="button"#if ("$!extraAttribute" != '') ${extraAttribute}#end>
       $services.icon.renderHTML($icon)
       #if ($titleAsLabel)
-        <span class="btn-label">$services.localization.render($titleKey)</span>
+        <span class="btn-label">$escapetool.xml($services.localization.render($titleKey))</span>
       #end
     </a>
     #if ($stringtool.isNotBlank("$!menuContent"))
       #if ("$!actionUrl" != '')
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
-          <span class="sr-only">$services.localization.render('core.menu.toggleDropdown')</span>
+          <span class="sr-only">
+            $escapetool.xml($services.localization.render('core.menu.toggleDropdown'))
+          </span>
         </button>
       #end
       <ul class="dropdown-menu #if ("$!actionUrl" == '')dropdown-menu-right#end">
@@ -221,7 +224,7 @@
 #end
 
 #macro (submenuheader $titleKey)
-  <li class="dropdown-header">$services.localization.render($titleKey)</li>
+  <li class="dropdown-header">$escapetool.xml($services.localization.render($titleKey))</li>
 #end
 
 #**
@@ -454,7 +457,7 @@
   <script>
   //<![CDATA[
     #if ($hasEdit && !$isReadOnly)
-      shortcut.add("$services.localization.render('core.shortcuts.view.edit')", function() {
+      shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.edit'))", function() {
         var editLink = $('tmEdit').down('a');
         // Make sure the shortcut doesn't work when the edit link is disabled.
         if (editLink && !editLink.classList.contains('disabled')) {
@@ -464,22 +467,22 @@
         }
       }, {'disable_in_input': true});
       #if($isAdvancedUser)
-        shortcut.add("$services.localization.render('core.shortcuts.view.wiki')",function() { location.href=$('tmEditWiki').href; }, { 'disable_in_input':true });
-        shortcut.add("$services.localization.render('core.shortcuts.view.wysiwyg')",function() { location.href=$('tmEditWysiwyg').href; }, { 'disable_in_input':true });
-        shortcut.add("$services.localization.render('core.shortcuts.view.inline')",function() { location.href=$('tmEditInline').href; }, { 'disable_in_input':true });
-        shortcut.add("$services.localization.render('core.shortcuts.view.rights')",function() { var editRights = $('tmEditRights'); location.href= editRights ? editRights.href : "$xwiki.getURL($spacePreferencesDocumentReference, 'admin', 'category=1')";}, { 'disable_in_input':true });
-        shortcut.add("$services.localization.render('core.shortcuts.view.objects')",function() { location.href=$('tmEditObject').href; }, { 'disable_in_input':true });
+        shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.wiki'))",function() { location.href=$('tmEditWiki').href; }, { 'disable_in_input':true });
+        shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.wysiwyg'))",function() { location.href=$('tmEditWysiwyg').href; }, { 'disable_in_input':true });
+        shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.inline'))",function() { location.href=$('tmEditInline').href; }, { 'disable_in_input':true });
+        shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.rights'))",function() { var editRights = $('tmEditRights'); location.href= editRights ? editRights.href : "$xwiki.getURL($spacePreferencesDocumentReference, 'admin', 'category=1')";}, { 'disable_in_input':true });
+        shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.objects'))",function() { location.href=$('tmEditObject').href; }, { 'disable_in_input':true });
         #if($hasAdmin)
-          shortcut.add("$services.localization.render('core.shortcuts.view.class')",function() { location.href=$('tmEditClass').href; }, { 'disable_in_input':true });
+          shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.class'))",function() { location.href=$('tmEditClass').href; }, { 'disable_in_input':true });
         #end
       #end
     #end
     #if ($canDelete && $displayAdminMenu)
-      shortcut.add("$services.localization.render('core.shortcuts.view.delete')",function() { location.href=$('tmActionDelete').href; }, { 'disable_in_input':true });
-      shortcut.add("$services.localization.render('core.shortcuts.view.rename')",function() { location.href=$('tmActionRename').href; }, { 'disable_in_input':true });
+      shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.delete'))",function() { location.href=$('tmActionDelete').href; }, { 'disable_in_input':true });
+      shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.rename'))",function() { location.href=$('tmActionRename').href; }, { 'disable_in_input':true });
     #end
     #if ($canView && $displayMoreActionsMenu)
-      shortcut.add("$services.localization.render('core.shortcuts.view.code')", function() { location.href = $('tmViewSource').href; }, { 'disable_in_input': true });
+      shortcut.add("$escapetool.javascript($services.localization.render('core.shortcuts.view.code'))", function() { location.href = $('tmViewSource').href; }, { 'disable_in_input': true });
     #end
   //]]>
   </script>

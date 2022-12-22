@@ -191,13 +191,13 @@ window.MSCheckbox = Class.create({
             //if an error occurred while trying to save a right rule, display an alert
             // and refresh the page, since probably the user does not have the right to perform
             // that action
-            alert("$services.localization.render('platform.core.rightsManagement.saveFailure')");
+            alert("$escapetool.javascript($services.localization.render('platform.core.rightsManagement.saveFailure'))");
             var rURL = unescape(window.location.pathname);
             window.location.href = rURL;
           }
         },
         onFailure: function() {
-          alert("$services.localization.render('platform.core.rightsManagement.ajaxFailure')");
+          alert("$escapetool.javascript($services.localization.render('platform.core.rightsManagement.ajaxFailure'))");
         },
         onComplete: function() {
           delete self.req;
@@ -260,7 +260,7 @@ function displayUsers(row, i, table, form_token)
     //edit user
     var edit = document.createElement('img');
     edit.src = '$xwiki.getSkinFile("js/xwiki/usersandgroups/img/edit.png")';
-    edit.title = "$services.localization.render('edit')";
+    edit.title = "$escapetool.javascript($services.localization.render('edit'))";
     Event.observe(edit, 'click', editUserOrGroup(userinlineurl, usersaveurl, docurl));
     edit.className = 'icon-manage';
     manage.appendChild(edit);
@@ -276,7 +276,7 @@ function displayUsers(row, i, table, form_token)
       Event.observe(del, 'click', deleteUserOrGroup(i, table, row.fullname, "user", form_token));
       del.className = 'icon-manage';
     }
-    del.title = "$services.localization.render('delete')";
+    del.title = "$escapetool.javascript($services.localization.render('delete'))";
     manage.appendChild(del);
   }
 
@@ -328,14 +328,14 @@ function displayGroups(row, i, table, form_token)
     //delete group
     var del = document.createElement('img');
     del.src = '$xwiki.getSkinFile("js/xwiki/usersandgroups/img/clear.png")';
-    del.title = "$services.localization.render('delete')";
+    del.title = "$escapetool.javascript($services.localization.render('delete'))";
     Event.observe(del, 'click', deleteUserOrGroup(i, table, row.fullname, "group", form_token));
     del.className = 'icon-manage';
 
     //edit user
     var edit = document.createElement('img');
     edit.src = '$xwiki.getSkinFile("js/xwiki/usersandgroups/img/edit.png")';
-    edit.title = "$services.localization.render('edit')";
+    edit.title = "$escapetool.javascript($services.localization.render('edit'))";
     Event.observe(edit, 'click', editUserOrGroup(userinlineurl, usersaveurl, docurl));
     edit.className = 'icon-manage';
 
@@ -381,7 +381,7 @@ function displayMembers(row, i, table, form_token)
       Event.observe(del, 'click', deleteMember(i, table, row.fullname, row.docurl, form_token));
       del.className = 'icon-manage';
     }
-    del.title = "$services.localization.render('delete')";
+    del.title = "$escapetool.javascript($services.localization.render('delete'))";
     membermanage.appendChild(del);
     tr.appendChild(membermanage);
   }
@@ -553,7 +553,7 @@ function setBooleanPropertyFromLiveCheckbox(self, saveDocumentURL, configuration
     paramMap["parameters"] = {};
     paramMap["parameters"][config + "_" + objNum + "_" + self.id] = setValue;
     paramMap["parameters"]["ajax"] = "1";
-    paramMap["parameters"]["comment"] = "$services.localization.render('authenticate_viewedit_savecomment')";
+    paramMap["parameters"]["comment"] = "$escapetool.javascript($services.localization.render('authenticate_viewedit_savecomment'))";
     paramMap["onSuccess"] = function() {
       pivot.alt = newAlt;
       pivot.src = newSrc;

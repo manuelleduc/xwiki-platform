@@ -29,7 +29,12 @@
 ## Title and parent
 ##
 <div id="parentinput" class="form-group">
-  <label for="xwikidocparentinput">$services.localization.render('core.editors.content.parentField.label') <a id='hideEditParentTrigger' href='#'>$services.localization.render('core.editors.content.parentField.edit.hide')</a></label>
+  <label for="xwikidocparentinput">
+    $escapetool.xml($services.localization.render('core.editors.content.parentField.label'))
+    <a id='hideEditParentTrigger' href='#'>
+      $escapetool.xml($services.localization.render('core.editors.content.parentField.edit.hide'))
+    </a>
+  </label>
   <input type="text" id="xwikidocparentinput" name="parent" value="$!{escapetool.xml("$!docParent")}" size="30" class="suggestDocuments "/>
 </div>
 #if ($editor != 'inline')

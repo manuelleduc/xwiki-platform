@@ -665,10 +665,10 @@ $xwiki.jsx.use($attachmentPickerDocName)
             }
           },
           {
-            confirmationText: "$services.localization.render('core.viewers.attachments.delete.confirm')",
-            progressMessageText : "$services.localization.render('core.viewers.attachments.delete.inProgress')",
-            successMessageText : "$services.localization.render('core.viewers.attachments.delete.done')",
-            failureMessageText : "$services.localization.render('core.viewers.attachments.delete.failed')"
+            confirmationText: "$escapetool.javascript($services.localization.render('core.viewers.attachments.delete.confirm'))",
+            progressMessageText : "$escapetool.javascript($services.localization.render('core.viewers.attachments.delete.inProgress'))",
+            successMessageText : "$escapetool.javascript($services.localization.render('core.viewers.attachments.delete.done'))",
+            failureMessageText : "$escapetool.javascript($services.localization.render('core.viewers.attachments.delete.failed'))"
           }
         );
       }

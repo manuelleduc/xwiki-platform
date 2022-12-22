@@ -32,9 +32,9 @@
 #foreach ($key in $l10nKeys)
   #set ($params = $key.subList(1, $key.size()))
   #if ($params)
-    #set ($discard = $l10n.put($key[0], $services.localization.render($key[0], $params)))
+    #set ($discard = $l10n.put($key[0], $escapetool.javascript($services.localization.render($key[0], $params))))
   #else
-    #set ($discard = $l10n.put($key, $services.localization.render($key)))
+    #set ($discard = $l10n.put($key, $escapetool.javascript($services.localization.render($key))))
   #end
 #end
 #set ($iconNames = ['pencil', 'cross', 'check'])

@@ -124,13 +124,13 @@ $xwiki.get('ssfx').use('uicomponents/widgets/validation/livevalidation.css', tru
       #set ($fieldName = $field.name)
       #if ($field.label)
         #set ($label = $field.label)
-        <dt><label for="$fieldName">$label
+        <dt><label for="$escapetool.xml($fieldName)">$escapetool.xml($label)
         #if ($field.validate.mandatory)
           <span ##
           #foreach ($entry in $fieldMandatoryStar.entrySet())
             $entry.key="$entry.value" ##
           #end
-          >$services.localization.render('core.validation.required')</span>
+          >$escapetool.xml($services.localization.render('core.validation.required'))</span>
         #end
           </label>
         </dt>
@@ -414,7 +414,9 @@ $xwiki.get('ssfx').use('uicomponents/widgets/validation/livevalidation.css', tru
   #else
     #set($configObject = $configDocument.getObject($configurationClassName))
     #if ($xcontext.action == 'register')
-      #set ($heading = "(% id='document-title'%)((( = #evaluate($configObject.getProperty('heading').getValue()) = )))(%%)")
+      #set ($heading = "#evaluate($configObject.getProperty('heading').getValue())")
+      #set ($heading = $services.rendering.escape($heading, 'xwiki/2.1'))
+      #set ($heading = "(% id='document-title'%)((( = $heading = )))(%%)")
     #else
       #set ($heading = "= #evaluate($configObject.getProperty('heading').getValue()) =")
     #end

@@ -47,8 +47,10 @@ $xwiki.ssfx.use('js/xwiki/viewers/attachments.css', true)
     ## <div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
     <div class="fileupload-field"><label class="hidden" for="xwikiuploadfile">$services.localization.render('core.viewers.attachments.upload.file')</label><input id="xwikiuploadfile" type="file" name="filepath" size="40" class="uploadFileInput noitems" data-max-file-size="$!escapetool.xml($xwiki.getSpacePreference('upload_maxsize'))" /></div>
     <div>
-      <span class="buttonwrapper"><input type="submit" value="$services.localization.render('core.viewers.attachments.upload.submit')" class="button btn btn-primary"/></span>
-      <span class="buttonwrapper"><a class="cancel secondary button btn btn-primary" href="$doc.getURL()">$services.localization.render('core.viewers.attachments.upload.cancel')</a></span>
+      <span class="buttonwrapper"><input type="submit" value="$escapetool.xml($services.localization.render('core.viewers.attachments.upload.submit'))" class="button btn btn-primary"/></span>
+      <span class="buttonwrapper"><a class="cancel secondary button btn btn-primary" href="$doc.getURL()">
+        $escapetool.xml($services.localization.render('core.viewers.attachments.upload.cancel'))
+      </a></span>
     </div>
   </fieldset>
   </div>

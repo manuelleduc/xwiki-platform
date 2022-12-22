@@ -294,7 +294,7 @@ editors.XDataEditors = Class.create({
             {
               onCreate : function() {
                 item.disabled = true;
-                item.notification = new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.inProgress')", "inprogress");
+                item.notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.add.inProgress'))", "inprogress");
               },
               onSuccess : function(response) {
                 var activator = item.up('.add_xobject');
@@ -350,11 +350,11 @@ editors.XDataEditors = Class.create({
                     insertedObject.down('.xobject-action.edit').hide();
                   }
                 }
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.done')", "done"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.add.done'))", "done"));
               }.bind(this),
               onFailure : function(response) {
                 var failureReason = response.statusText || 'Server not responding';
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.failed')" + failureReason, "error"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.add.failed'))" + failureReason, "error"));
               },
               onComplete : function() {
                 item.disabled = false;
@@ -468,7 +468,7 @@ editors.XDataEditors = Class.create({
           }
         }.bind(this),
       }, {
-        confirmationText: "$services.localization.render('core.editors.object.delete.confirmJS')",
+        confirmationText: "$escapetool.javascript($services.localization.render('core.editors.object.delete.confirmJS'))",
         // Allow the users to cancel the switch.
         showCancelButton: true
       });
@@ -493,16 +493,16 @@ editors.XDataEditors = Class.create({
             {
               onCreate : function() {
                 item.disabled = true;
-                item.notification = new XWiki.widgets.Notification("$services.localization.render('core.editors.object.removeDeprecatedProperties.inProgress')", "inprogress");
+                item.notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.removeDeprecatedProperties.inProgress'))", "inprogress");
               },
                onSuccess : function(response) {
                 // Remove deprecated properties box
                 container.select(".deprecatedProperties").invoke("remove");
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.removeDeprecatedProperties.done')", "done"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.removeDeprecatedProperties.done'))", "done"));
               },
               onFailure : function(response) {
                 var failureReason = response.statusText || 'Server not responding';
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.removeDeprecatedProperties.failed')" + failureReason, "error"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.removeDeprecatedProperties.failed'))" + failureReason, "error"));
               },
               onComplete : function() {
                 item.disabled = false;
@@ -546,7 +546,7 @@ editors.XDataEditors = Class.create({
             {
               onCreate : function() {
                 item.disabled = true;
-                item.notification = new XWiki.widgets.Notification("$services.localization.render('core.editors.class.addProperty.inProgress')", "inprogress");
+                item.notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.class.addProperty.inProgress'))))))))))))))))))))))))", "inprogress");
               },
               onSuccess : function(response) {
                 $('xclassContent').insert({bottom : response.responseText});
@@ -557,11 +557,11 @@ editors.XDataEditors = Class.create({
                 this.makeSortable(insertedPropertyElt);
                 this.ajaxPropertyDeletion(insertedPropertyElt);
                 this.makeDisableVisible(insertedPropertyElt);
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.class.addProperty.done')", "done"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.class.addProperty.done'))", "done"));
               }.bind(this),
               onFailure : function(response) {
                 var failureReason = response.responseText;
-                item.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.class.addProperty.failed') " + failureReason, "error"));
+                item.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.class.addProperty.failed')) " + failureReason, "error"));
               },
               onComplete : function() {
                 item.disabled = false;
@@ -601,10 +601,10 @@ editors.XDataEditors = Class.create({
           },
           /* Interaction parameters */
           {
-            confirmationText: "$services.localization.render('core.editors.class.deleteProperty.confirm')",
-            progressMessageText : "$services.localization.render('core.editors.class.deleteProperty.inProgress')",
-            successMessageText : "$services.localization.render('core.editors.class.deleteProperty.done')",
-            failureMessageText : "$services.localization.render('core.editors.class.deleteProperty.failed')"
+            confirmationText: "$escapetool.javascript($services.localization.render('core.editors.class.deleteProperty.confirm'))",
+            progressMessageText : "$escapetool.javascript($services.localization.render('core.editors.class.deleteProperty.inProgress'))",
+            successMessageText : "$escapetool.javascript($services.localization.render('core.editors.class.deleteProperty.done'))",
+            failureMessageText : "$escapetool.javascript($services.localization.render('core.editors.class.deleteProperty.failed'))"
           }
         );
       }
@@ -672,7 +672,7 @@ editors.XDataEditors = Class.create({
           /* Ajax request parameters */
           {
             onCreate : function() {
-              object.notification = new XWiki.widgets.Notification("$services.localization.render('core.editors.object.loadObject.inProgress')", "inprogress");
+              object.notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.loadObject.inProgress'))", "inprogress");
             },
             onSuccess : function(response) {
               // We don't use Prototype API here because we wan't to move the CSS/JavaScript includes to the page head.
@@ -684,12 +684,12 @@ editors.XDataEditors = Class.create({
               object.toggleClassName('collapsed');
               document.fire('xwiki:dom:updated', {elements: [objectContent]});
               object.removeClassName('loading');
-              object.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.loadObject.done')", "done"));
+              object.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.loadObject.done'))", "done"));
             }.bind(this),
             onFailure : function(response) {
               var failureReason = response.statusText || 'Server not responding';
               object.removeClassName('loading');
-              object.notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.loadObject.failed') " + failureReason, "error"));
+              object.notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('core.editors.object.loadObject.failed')) " + failureReason, "error"));
             },
             // 0 is returned for network failures.
             on0 : function(response) {
@@ -832,7 +832,7 @@ require(['jquery', 'xwiki-events-bridge'], function($) {
         // Switch without saving the current class.
         onNo: switchClass
       }, {
-        confirmationText: "$services.localization.render('core.editors.class.switchClass.confirm')",
+        confirmationText: "$escapetool.javascript($services.localization.render('core.editors.class.switchClass.confirm'))",
         // Allow the users to cancel the switch.
         showCancelButton: true
       });

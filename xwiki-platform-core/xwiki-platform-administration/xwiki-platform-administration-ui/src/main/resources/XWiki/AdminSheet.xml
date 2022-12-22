@@ -371,7 +371,7 @@
   #end
 #end
 (% id="document-title" %)(((
-  = $services.localization.render("administration.sectionTitle$level", [$sectionName]) =
+  = $services.rendering.escape($services.localization.render("administration.sectionTitle$level", [$sectionName]), 'xwiki/2.1') =
   ## Display the category/section description below the title.
   #set ($categoryOrSectionId = $crtCategory.id)
   #if ("$!crtSection.id" != '')

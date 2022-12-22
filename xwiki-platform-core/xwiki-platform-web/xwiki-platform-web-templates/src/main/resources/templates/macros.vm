@@ -888,9 +888,9 @@ $doc.display("content", $obj)
 #macro(xwikimessageboxstart $title $message)
   <div class="centered">
     <fieldset class="xwikimessage">
-      <legend><span>$title</span></legend>
+      <legend><span>$escapetool.xml($title)</span></legend>
       #if ("$!message" != '')
-        <p class="xwikimessage">$message</p>
+        <p class="xwikimessage">$escapetool.xml($message)</p>
       #end
 #end
 #macro(xwikimessageboxend)
@@ -2627,7 +2627,7 @@ Recursive title display detected!##
       <ul>
         #set ($count = 0)
         #foreach ($category in $options)
-          <li class="xwiki-select-category">$category.name (<span class="xwiki-select-category-count">$category.options.size()</span>)
+          <li class="xwiki-select-category">$escapetool.xml($category.name) (<span class="xwiki-select-category-count">$category.options.size()</span>)
             <ul>
               #foreach ($option in $category.options)
                 #if ("$!defaultValue" == $$option.value || ($count == 0 && $firstIsDefaultIfDefaultNull && "$!defaultValue" == ''))

@@ -191,7 +191,7 @@ var XWiki = (function (XWiki) {
         #if ($engine == $searchEngine)
           #set ($name = $source.getProperty('name').value)
           #if ($services.localization.get($name))
-            #set ($name = $services.localization.render($name))
+            #set ($name = $escapetool.javascript($services.localization.render($name)))
           #else
             ## Evaluate the Velocity code for backward compatibility.
             #set ($name = "#evaluate($name)")

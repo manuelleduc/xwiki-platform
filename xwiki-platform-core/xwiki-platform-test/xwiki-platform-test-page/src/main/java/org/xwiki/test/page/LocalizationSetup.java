@@ -21,7 +21,11 @@ package org.xwiki.test.page;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.mockito.invocation.InvocationOnMock;
@@ -47,6 +51,21 @@ import static org.mockito.Mockito.when;
  */
 public final class LocalizationSetup
 {
+    private static boolean fuzzing;
+
+    private static final List<String> VALUES = List.of(
+        "/}}{{noscript/}}",
+        "/}}{{/html}}{{noscript/}}",
+        "]] {{noscript/}}",
+        "]]{{/html}} {{noscript/}}",
+        "\"/><script>console.log('ok')</script>",
+        "'/><script>console.log('ok')</script>"
+    );
+
+    private static final Random RANDOM = new Random();
+
+    private static final Map<String, String> COMPUTED_KEYS = new HashMap<>();
+
     private LocalizationSetup()
     {
         // Utility class and thus no public constructor.
@@ -105,13 +124,26 @@ public final class LocalizationSetup
         translationBundleContext.addBundle(translationBundle);
     }
 
+    public static void fuzzing()
+    {
+        COMPUTED_KEYS.clear();
+        fuzzing = true;
+    }
+
+    public static String getComputedTranslation(String key)
+    {
+        return COMPUTED_KEYS.getOrDefault(key, null);
+    }
+
     private static WordBlock renderBlock(String translationKey, Object[] parameters)
     {
         return new WordBlock(renderString(translationKey, parameters));
     }
 
-    private static String renderString(String translationKey, Object[] parameters)
+    private static String renderString(String translationKeyRaw, Object[] parameters)
     {
+        String translationKey = computeKey(translationKeyRaw);
+
         String word;
         if (parameters.length == 0) {
             word = translationKey;
@@ -122,6 +154,19 @@ public final class LocalizationSetup
             word = String.format("%s %s", translationKey, parametersString);
         }
         return word;
+    }
+
+    private static String computeKey(String translationKey)
+    {
+        return COMPUTED_KEYS.computeIfAbsent(translationKey, key -> {
+            String computedKey;
+            if (fuzzing) {
+                computedKey = key + VALUES.get(RANDOM.nextInt(VALUES.size()));
+            } else {
+                computedKey = key;
+            }
+            return computedKey;
+        });
     }
 
     private static Object[] getVarArgs(InvocationOnMock invocationOnMockRender, int i)

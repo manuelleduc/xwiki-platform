@@ -1,0 +1,4 @@
+org.xwiki.tag.internal.selector.ExhaustiveCheckTagsSelector
+org.xwiki.tag.internal.selector.UnsafeTagsSelector
+org.xwiki.tag.internal.selector.RandomCheckTagsSelector
+org.xwiki.tag.internal.TagsSelectorProvider

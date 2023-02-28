@@ -31,7 +31,7 @@ import org.xwiki.rendering.internal.macro.toc.TocTreeBuilder;
  * Initialize a {@link TocTreeBuilder} for pdf export.
  *
  * @version $Id$
- * @since 1.8
+ * @since 15.2RC1
  */
 @Component
 @Singleton
@@ -41,6 +41,6 @@ public class PdfTocTreeBuilderFactory extends AbstractTocTreeBuilderFactory
     @Override
     public TocTreeBuilder build(String resolverHint) throws ComponentLookupException
     {
-        return new PDFTocTreeBuilder(getTocBlockFilter(), getTocEntriesResolver(resolverHint), getDecorators());
+        return new PDFTocTreeBuilder(getTocBlockFilter(), getTocEntriesResolver(resolverHint), getExtensions());
     }
 }

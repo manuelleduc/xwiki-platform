@@ -31,7 +31,7 @@ import org.xwiki.rendering.internal.macro.toc.TocTreeBuilder;
 import org.xwiki.rendering.internal.macro.toc.TreeParameters;
 import org.xwiki.rendering.listener.HeaderLevel;
 import org.xwiki.rendering.macro.toc.TocEntriesResolver;
-import org.xwiki.rendering.macro.toc.TocEntryDecorator;
+import org.xwiki.rendering.macro.toc.TocEntryExtension;
 
 /**
  * Extends {@link TocTreeBuilder} in order to distinguish between headings that correspond to document titles and
@@ -48,14 +48,13 @@ public class PDFTocTreeBuilder extends TocTreeBuilder
      *
      * @param tocBlockFilter the filter to use to generate the toc anchors
      * @param tocEntriesResolver the resolver to use to find the entries in a given {@link Block}
-     * @param decorators the decorators that will be called on each toc entry, allowing to add additional
+     * @param extensions the extensions that will be called on each toc entry, allowing to add additional
      *     information on the toc entries
      */
-
     public PDFTocTreeBuilder(TocBlockFilter tocBlockFilter, TocEntriesResolver tocEntriesResolver,
-        List<TocEntryDecorator> decorators)
+        List<TocEntryExtension> extensions)
     {
-        super(tocBlockFilter, tocEntriesResolver, decorators);
+        super(tocBlockFilter, tocEntriesResolver, extensions);
     }
 
     @Override

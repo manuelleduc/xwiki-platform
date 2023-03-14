@@ -62,7 +62,6 @@
           // Initialize an empty image widget, then update it with the data from the image dialog.
           var widgetInstance = editor.widgets.initOn(element, widget, {});
           widgetInstance.setData(data);
-          // widgetInstance.inline = data.alignment === 'center';
           editor.widgets.finalizeCreation(temp);
         }
       });
@@ -92,15 +91,9 @@
 
       var originalInit = imageWidget.init;
       imageWidget.init = function() {
-        console.log('compute inline');
-        var alignment = this.parts.image.getAttribute('data-xwiki-image-style-alignment');
-        
         originalInit.call(this);
-        
-        if()
-        
 
-
+        console.log('GHERE');
 
         // Caption
         if (this.parts.caption) {
@@ -114,47 +107,11 @@
         this.setData('imageStyle', this.parts.image.getAttribute('data-xwiki-image-style') || '');
 
         this.setData('border', this.parts.image.getAttribute('data-xwiki-image-style-border'));
-        this.setData('alignment', alignment);
+        this.setData('alignment', this.parts.image.getAttribute('data-xwiki-image-style-alignment'));
         this.setData('textWrap', this.parts.image.getAttribute('data-xwiki-image-style-text-wrap'));
       };
 
       var originalData = imageWidget.data;
-
-      function initStyleAttributes(self, setAttribute, removeAttribute)
-      {
-        if (self.data.imageStyle) {
-          setAttribute(self, 'data-xwiki-image-style', self.data.imageStyle);
-        } else {
-          removeAttribute(self, 'data-xwiki-image-style');
-        }
-
-        if (self.data.border) {
-          setAttribute(self, 'data-xwiki-image-style-border', self.data.border);
-        } else {
-          removeAttribute(self, 'data-xwiki-image-style-border');
-        }
-
-        // If alignment is undefined, try to convert from the legacy align data property.
-        var mapping = {left: 'start', right: 'end', center: 'center'};
-        self.data.alignment = self.data.alignment || mapping[self.data.align] || 'none';
-
-        // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
-        // add deprecated attributes to the image.
-        self.data.align = 'none';
-
-        if (self.data.alignment && self.data.alignment !== 'none') {
-          setAttribute(self, 'data-xwiki-image-style-alignment', self.data.alignment);
-        } else {
-          removeAttribute(self, 'data-xwiki-image-style-alignment');
-        }
-
-        if (self.data.textWrap) {
-          setAttribute(self, 'data-xwiki-image-style-text-wrap', self.data.textWrap);
-        } else {
-          removeAttribute(self, 'data-xwiki-image-style-text-wrap');
-        }
-      }
-
       imageWidget.data = function() {
 
         /**
@@ -184,19 +141,39 @@
         // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
 
         // Style
-        initStyleAttributes(this, setAttribute, removeAttribute);
+        if (this.data.imageStyle) {
+          setAttribute(this, 'data-xwiki-image-style', this.data.imageStyle);
+        } else {
+          removeAttribute(this, 'data-xwiki-image-style');
+        }
 
-        if(this.data.alignment === 'center') {
-          this.data.align= 'center';
-          this.inline = false;
-          // this.oldData = {align: 'none'};
+        if (this.data.border) {
+          setAttribute(this, 'data-xwiki-image-style-border', this.data.border);
+        } else {
+          removeAttribute(this, 'data-xwiki-image-style-border');
         }
+
+        // If alignment is undefined, try to convert from the legacy align data property.
+        var mapping = {left: 'start', right: 'end', center: 'center'};
+        this.data.alignment = this.data.alignment || mapping[this.data.align] || 'none';
+
+        // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
+        // add deprecated attributes to the image.
+        this.data.align = 'none';
         
-        originalData.call(this);
-        if(this.data.alignment === 'center') {
-          delete this.data.align;
-          this.oldData = undefined;
+        if (this.data.alignment && this.data.alignment !== 'none') {
+          setAttribute(this, 'data-xwiki-image-style-alignment', this.data.alignment);
+        } else {
+          removeAttribute(this, 'data-xwiki-image-style-alignment');
         }
+
+        if (this.data.textWrap) {
+          setAttribute(this, 'data-xwiki-image-style-text-wrap', this.data.textWrap);
+        } else {
+          removeAttribute(this, 'data-xwiki-image-style-text-wrap');
+        }
+
+        originalData.call(this);
       };
     }
   });

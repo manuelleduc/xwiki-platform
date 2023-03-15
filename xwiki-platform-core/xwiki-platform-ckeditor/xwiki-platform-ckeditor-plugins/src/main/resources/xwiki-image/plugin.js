@@ -70,12 +70,20 @@
 
   CKEDITOR.plugins.add('xwiki-image', {
     requires: 'xwiki-image-old,xwiki-dialog',
+    beforeInit: function(editor) {
+      editor.on('widgetDefinition', function(event) {
+        var widgetDefinition = event.data;
+        if (widgetDefinition.name === "image" && widgetDefinition.dialog === "image2") {
+          this.overrideImageWidget(editor, widgetDefinition);
+        }
+      }, this);
+    },
     init: function(editor) {
       this.initImageDialogWidget(editor);
     },
     initImageDialogWidget: function(editor) {
       var imageWidget = editor.widgets.registered.image;
-      this.overrideImageWidget(editor, imageWidget);
+      // this.overrideImageWidget(editor, imageWidget);
 
       imageWidget.insert = function() {
         showImageWizard(editor, this, true);
@@ -90,10 +98,38 @@
       CKEDITOR.plugins.registered['xwiki-image-old'].overrideImageWidget(editor, imageWidget);
 
       var originalInit = imageWidget.init;
-      imageWidget.init = function() {
-        originalInit.call(this);
 
-        console.log('GHERE');
+      function initCentered(widget)
+      {
+        var resizeWrapper = editor.document.createElement('span');
+
+        resizeWrapper.addClass('cke_image_resizer_wrapper');
+        resizeWrapper.append(widget.parts.image);
+        // widget.resizer.remove();
+        // var resizer = widget.resizer = editor.document.createElement('span');
+        // resizer.addClass('cke_image_resizer');
+        // resizer.setAttribute('title', editor.lang.image2.resizer);
+        // resizer.append(new CKEDITOR.dom.text('\u200b', editor.document));
+        resizeWrapper.append(widget.resizer);
+        widget.element.append(resizeWrapper, true);
+      }
+
+      imageWidget.init = function() {
+        // this.inline = false;
+        originalInit.call(this);
+        
+        
+        
+        
+        // var img = this.element;
+        // var span = editor.document.createElement('span');
+        // span.addClass('cke_widget_element');
+        // span.setAttribute('data-widget', 'image');
+        //   this.element = span;
+        // img.getParent().append(span);
+        // img.move(span);
+
+        console.log('GHERE'); // Called first, data second
 
         // Caption
         if (this.parts.caption) {
@@ -107,11 +143,53 @@
         this.setData('imageStyle', this.parts.image.getAttribute('data-xwiki-image-style') || '');
 
         this.setData('border', this.parts.image.getAttribute('data-xwiki-image-style-border'));
-        this.setData('alignment', this.parts.image.getAttribute('data-xwiki-image-style-alignment'));
+        var alignment = this.parts.image.getAttribute('data-xwiki-image-style-alignment');
+        this.setData('alignment', alignment);
         this.setData('textWrap', this.parts.image.getAttribute('data-xwiki-image-style-text-wrap'));
+
+        if (alignment === 'center') {
+          initCentered(this);
+        }
       };
 
       var originalData = imageWidget.data;
+
+      function computeStyleData(widget, setAttribute, removeAttribute)
+      {
+        // Style
+        if (widget.data.imageStyle) {
+          setAttribute(widget, 'data-xwiki-image-style', widget.data.imageStyle);
+        } else {
+          removeAttribute(widget, 'data-xwiki-image-style');
+        }
+
+        if (widget.data.border) {
+          setAttribute(widget, 'data-xwiki-image-style-border', widget.data.border);
+        } else {
+          removeAttribute(widget, 'data-xwiki-image-style-border');
+        }
+
+        // If alignment is undefined, try to convert from the legacy align data property.
+        var mapping = {left: 'start', right: 'end', center: 'center'};
+        widget.data.alignment = widget.data.alignment || mapping[widget.data.align] || 'none';
+
+        // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
+        // add deprecated attributes to the image.
+        widget.data.align = 'none';
+
+        if (widget.data.alignment && widget.data.alignment !== 'none') {
+          setAttribute(widget, 'data-xwiki-image-style-alignment', widget.data.alignment);
+        } else {
+          removeAttribute(widget, 'data-xwiki-image-style-alignment');
+        }
+
+        if (widget.data.textWrap) {
+          setAttribute(widget, 'data-xwiki-image-style-text-wrap', widget.data.textWrap);
+        } else {
+          removeAttribute(widget, 'data-xwiki-image-style-text-wrap');
+        }
+      }
+
       imageWidget.data = function() {
 
         /**
@@ -137,44 +215,74 @@
           widget.wrapper.removeAttribute(key);
         }
 
+        // Note: must be computed early.
+        var data = this.data || {};
+        var alignmentChanged = this.oldData && data.alignment !== this.oldData.alignment;
+
         // Caption
         // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
 
-        // Style
-        if (this.data.imageStyle) {
-          setAttribute(this, 'data-xwiki-image-style', this.data.imageStyle);
-        } else {
-          removeAttribute(this, 'data-xwiki-image-style');
-        }
-
-        if (this.data.border) {
-          setAttribute(this, 'data-xwiki-image-style-border', this.data.border);
-        } else {
-          removeAttribute(this, 'data-xwiki-image-style-border');
-        }
-
-        // If alignment is undefined, try to convert from the legacy align data property.
-        var mapping = {left: 'start', right: 'end', center: 'center'};
-        this.data.alignment = this.data.alignment || mapping[this.data.align] || 'none';
-
-        // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
-        // add deprecated attributes to the image.
-        this.data.align = 'none';
-        
-        if (this.data.alignment && this.data.alignment !== 'none') {
-          setAttribute(this, 'data-xwiki-image-style-alignment', this.data.alignment);
-        } else {
-          removeAttribute(this, 'data-xwiki-image-style-alignment');
-        }
-
-        if (this.data.textWrap) {
-          setAttribute(this, 'data-xwiki-image-style-text-wrap', this.data.textWrap);
-        } else {
-          removeAttribute(this, 'data-xwiki-image-style-text-wrap');
-        }
+        computeStyleData(this, setAttribute, removeAttribute);
 
         originalData.call(this);
+
+        
+        if(alignmentChanged) {
+          var newWidget = editor.widgets.initOn(this.element, 'image', this.data);
+          console.log('newWidget', newWidget);
+          newWidget.focus();
+        }
       };
+
+      var originalUpcast = imageWidget.upcast;
+      // @param {CKEDITOR.htmlParser.element} element
+      // @param {Object} data
+      imageWidget.upcast = function (element, data) {
+        console.log('upcast start');
+        var imgUpcasted = originalUpcast.apply(this, arguments);
+        console.log('upcast end', imgUpcasted);
+        var el = imgUpcasted;
+        if (imgUpcasted) {
+          var img = imgUpcasted;
+          var span = new CKEDITOR.htmlParser.element( 'span' );
+          // span.addClass('cke_widget_element');
+          // span.setAttribute('data-widget', 'image');
+          //   this.element = span;
+          // img.getParent().append(span);
+          img.wrapWith(span);
+          el = span;
+        }
+        return el;
+
+      };
+
+
+      var originalDowncast = imageWidget.downcast;
+      imageWidget.downcast = function(element) {
+        console.log('downcast start');
+        var apply = originalDowncast.apply(this, arguments);
+        console.log('downcast end', apply);
+        return apply;
+      };
+      
+      // var originalUpcast = imageWidget.upcast;
+      // imageWidget.upcast = function (editor) {
+      //   return function (el, data) {
+      //     console.log('upcast');
+      //     var internalUpcast = originalUpcast.call(this, editor);
+      //     return internalUpcast.call(this, el, data);
+      //   }.bind(this);
+      // };
+      //
+      // var originalDowncast = imageWidget.downcast;
+      // imageWidget.downcast = function (editor) {
+      //  
+      //   return function (el) {
+      //     console.log('downcast');
+      //     var internalDowncast = originalDowncast.call(this, editor);
+      //     return internalDowncast.call(this, el);
+      //   }.bind(this);
+      // };
     }
   });
 

@@ -3345,6 +3345,7 @@ public class Document extends Api
 
     /**
      * @return the required rights of the current document.
+     * @since 15.3RC1
      */
     @Unstable
     public RequiredRights getRequiredRights()

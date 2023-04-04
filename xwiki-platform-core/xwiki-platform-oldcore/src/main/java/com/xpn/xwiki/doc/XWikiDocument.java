@@ -9510,8 +9510,9 @@ public class XWikiDocument implements DocumentModelBridge, Cloneable
     {
         return this.requiredRights;
     }
-    
-    public void setRequiredRights(RequiredRights requiredRights) {
+
+    public void setRequiredRights(RequiredRights requiredRights)
+    {
         this.requiredRights = requiredRights;
     }
 

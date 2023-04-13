@@ -352,8 +352,6 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
         getBaseClassOutputFilterStream().setEntity(this.entity.getXClass());
     }
 
-    
-
     private void end(FilterEventParameters parameters)
     {
         // Set content

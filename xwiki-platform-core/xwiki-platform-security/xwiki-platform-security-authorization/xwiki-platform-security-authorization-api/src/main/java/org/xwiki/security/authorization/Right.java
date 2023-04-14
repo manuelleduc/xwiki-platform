@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.xwiki.model.EntityType;
 import org.xwiki.stability.Unstable;
 
@@ -41,126 +42,81 @@ import static org.xwiki.security.authorization.RuleState.UNDETERMINED;
 
 /**
  * Enumeration of the possible rights.
- *
  * @version $Id$
  * @since 4.0M2
  */
 public class Right implements RightDescription, Serializable, Comparable<Right>
 {
-    /**
-     * The login access right.
-     */
+    /** The login access right. */
     public static final Right LOGIN;
 
-    /**
-     * The view access right.
-     */
+    /** The view access right. */
     public static final Right VIEW;
 
-    /**
-     * The edit access right.
-     */
+    /** The edit access right. */
     public static final Right EDIT;
 
-    /**
-     * The delete access right.
-     */
+    /** The delete access right. */
     public static final Right DELETE;
 
-    /**
-     * Imply rights provided to creator of a document.
-     */
+    /** Imply rights provided to creator of a document. */
     public static final Right CREATOR;
 
-    /**
-     * The Admin access right.
-     */
+    /** The Admin access right. */
     public static final Right ADMIN;
 
-    /**
-     * The program access right.
-     */
+    /** The program access right. */
     public static final Right PROGRAM;
 
-    /**
-     * The script access right.
-     */
+    /** The script access right. */
     public static final Right SCRIPT;
 
-    /**
-     * The register access right.
-     */
+    /** The register access right. */
     public static final Right REGISTER;
 
-    /**
-     * The comment access right.
-     */
+    /** The comment access right. */
     public static final Right COMMENT;
 
-    /**
-     * The creation of a Wiki right.
-     */
+    /** The creation of a Wiki right. */
     public static final Right CREATE_WIKI;
 
-    /**
-     * Illegal value.
-     */
+    /** Illegal value. */
     public static final Right ILLEGAL;
 
-    /**
-     * Illegal right name.
-     */
+    /** Illegal right name. */
     public static final String ILLEGAL_RIGHT_NAME = "illegal";
 
-    /**
-     * Targeted entity type list to target only the main wiki.
-     */
+    /** Targeted entity type list to target only the main wiki. */
     public static final Set<EntityType> FARM_ONLY = null;
 
-    /**
-     * Targeted entity type list to target only wikis (including main wiki).
-     */
+    /** Targeted entity type list to target only wikis (including main wiki). */
     public static final Set<EntityType> WIKI_ONLY = EnumSet.of(EntityType.WIKI);
 
-    /**
-     * Targeted entity type list to target wikis and spaces.
-     */
+    /** Targeted entity type list to target wikis and spaces. */
     public static final Set<EntityType> WIKI_SPACE = EnumSet.of(EntityType.WIKI, EntityType.SPACE);
 
-    /**
-     * Targeted entity type list to target wikis, spaces and documents.
-     */
+    /** Targeted entity type list to target wikis, spaces and documents. */
     public static final Set<EntityType> WIKI_SPACE_DOCUMENT
         = EnumSet.of(EntityType.WIKI, EntityType.SPACE, EntityType.DOCUMENT);
 
-    /**
-     * Serialization identifier.
-     */
+    /** Serialization identifier. */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Internal list of existing instances.
-     */
+    /** Internal list of existing instances. */
     private static final List<Right> VALUES = new ArrayList<Right>();
 
-    /**
-     * Unmodifiable list of existing instance for public dissemination.
-     */
+    /** Unmodifiable list of existing instance for public dissemination. */
     private static final List<Right> UNMODIFIABLE_VALUES = Collections.unmodifiableList(VALUES);
 
-    /**
-     * List of all rights, as strings.
-     */
+    /** List of all rights, as strings. */
     private static final List<String> ALL_RIGHTS = new LinkedList<String>();
 
-    /**
-     * List of all rights, as strings.
-     */
+    /** List of all rights, as strings. */
     private static final List<String> UNMODIFIABLE_ALL_RIGHTS = Collections.unmodifiableList(ALL_RIGHTS);
 
     /**
-     * The enabled rights by entity types.  There is a special case hardcoded : The PROGRAM right should only be enabled
-     * for the main wiki, not for wikis in general.
+     * The enabled rights by entity types.  There is a special case hardcoded : The PROGRAM
+     * right should only be enabled for the main wiki, not for wikis in general.
      */
     private static final Map<EntityType, Set<Right>> ENABLED_RIGHTS = new HashMap<>();
 
@@ -201,34 +157,22 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
         ));
     }
 
-    /**
-     * The numeric value of this access right.
-     */
+    /** The numeric value of this access right. */
     private final int value;
 
-    /**
-     * The string representation.
-     */
+    /** The string representation. */
     private final String name;
 
-    /**
-     * The string representation.
-     */
+    /** The string representation. */
     private final RuleState defaultState;
 
-    /**
-     * Whether this right should be allowed or denied in case of a tie.
-     */
+    /** Whether this right should be allowed or denied in case of a tie. */
     private final RuleState tieResolutionPolicy;
 
-    /**
-     * Policy on how this right should be overridden by lower levels.
-     */
+    /** Policy on how this right should be overridden by lower levels. */
     private final boolean inheritanceOverridePolicy;
 
-    /**
-     * Additional rights implied by this right.
-     */
+    /** Additional rights implied by this right. */
     private final Set<Right> impliedRights;
 
     /**
@@ -236,9 +180,7 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
      */
     private transient Set<Right> immutableImpliedRights;
 
-    /**
-     * Additional rights implied by this right.
-     */
+    /** Additional rights implied by this right. */
     private final boolean isReadOnly;
 
     /**
@@ -247,8 +189,9 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
     private boolean withRequiredRights;
 
     /**
-     * Construct a new Right from its description. This is a package private constructor, the registration of a new
-     * right should be done using the {@link AuthorizationManager}
+     * Construct a new Right from its description.
+     * This is a package private constructor, the registration of a new right should be done using
+     * the {@link AuthorizationManager}
      *
      * @param description Description of the right to create.
      */
@@ -261,8 +204,9 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
     }
 
     /**
-     * Construct a new Right from its description. This is a package private constructor, the registration of a new
-     * right should be done using the {@link AuthorizationManager}
+     * Construct a new Right from its description.
+     * This is a package private constructor, the registration of a new right should be done using
+     * the {@link AuthorizationManager}
      *
      * @param description Description of the right to create.
      * @param impliedByRights the already existing rights that imply this new right.
@@ -278,7 +222,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Construct a new Right.
-     *
      * @param name The string representation of this right.
      * @param defaultState The default state, in case no matching right is found at any level.
      * @param tieResolutionPolicy Whether this right should be allowed or denied in case of a tie.
@@ -297,7 +240,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Construct a new Right.
-     *
      * @param name The string representation of this right.
      * @param defaultState The default state, in case no matching right is found at any level.
      * @param tieResolutionPolicy Whether this right should be allowed or denied in case of a tie.
@@ -365,8 +307,7 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
     }
 
     /**
-     * @param right the right to copy with required rights opted-out
-     * @return the opted-out right
+     * @return the same right, but with required rights deactivated
      */
     @Unstable
     public Right optOutRequiredRights()
@@ -381,7 +322,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Enable this right for the given entity type.
-     *
      * @param type the entity type, null for the the main wiki.
      */
     private void enableFor(EntityType type)
@@ -421,7 +361,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Clone implied Rights.
-     *
      * @param impliedRights the collection of rights to clone.
      * @return the cloned collection or an empty RightSet.
      */
@@ -446,7 +385,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Convert a string to a right.
-     *
      * @param string String representation of right.
      * @return The corresponding Right instance, or {@code ILLEGAL}.
      */
@@ -477,7 +415,6 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
 
     /**
      * Retrieve a right based on its ordinal.
-     *
      * @param ordinal the ordinal of the right
      * @return the {@code Right}
      */
@@ -512,9 +449,9 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
     }
 
     /**
-     * Remove all occurrences of the current right. This method removes the right from the list of registered right, but
-     * also removes it from the map of rights associated to the entity types, and to the different lists of implied
-     * rights.
+     * Remove all occurrences of the current right.
+     * This method removes the right from the list of registered right, but also removes it from the map of rights
+     * associated to the entity types, and to the different lists of implied rights.
      *
      * @since 13.5RC1
      */
@@ -655,14 +592,15 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
     }
 
     /**
-     * Allow to verify that implied rights are equals. This method returns {@code true} even if the current instance
-     * returns an empty set and the description null, and vice versa. For other cases we rely on an usual EqualsBuilder
-     * check. This is a bulletproof method used in {@link #like(RightDescription)} since there's no guarantee that
+     * Allow to verify that implied rights are equals.
+     * This method returns {@code true} even if the current instance returns an empty set and the description null,
+     * and vice versa. For other cases we rely on an usual EqualsBuilder check.
+     * This is a bulletproof method used in {@link #like(RightDescription)} since there's no guarantee that
      * {@link #getImpliedRights()} returns an empty set or a null value.
      *
      * @param description the description for which to check implied rights.
      * @return {@code true} if both the current instance implied right and the description's one are equals according to
-     *     {@link EqualsBuilder}, or if one is null and the other one is empty.
+     *          {@link EqualsBuilder}, or if one is null and the other one is empty.
      */
     private boolean likeImpliedRightsFrom(RightDescription description)
     {
@@ -679,5 +617,35 @@ public class Right implements RightDescription, Serializable, Comparable<Right>
                 || (otherImpliedRights == null && localImpliedRights.isEmpty());
         }
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Right right = (Right) o;
+
+        return new EqualsBuilder().append(this.value, right.value)
+            .append(this.inheritanceOverridePolicy, right.inheritanceOverridePolicy).append(this.isReadOnly, right.isReadOnly)
+            .append(this.name, right.name).append(this.defaultState, right.defaultState)
+            .append(this.tieResolutionPolicy, right.tieResolutionPolicy).append(this.impliedRights, right.impliedRights)
+            .append(this.immutableImpliedRights, right.immutableImpliedRights).isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(17, 37).append(this.value).append(this.name).append(this.defaultState).append(
+                this.tieResolutionPolicy)
+            .append(this.inheritanceOverridePolicy).append(this.impliedRights).append(this.immutableImpliedRights).append(
+                this.isReadOnly)
+            .toHashCode();
     }
 }

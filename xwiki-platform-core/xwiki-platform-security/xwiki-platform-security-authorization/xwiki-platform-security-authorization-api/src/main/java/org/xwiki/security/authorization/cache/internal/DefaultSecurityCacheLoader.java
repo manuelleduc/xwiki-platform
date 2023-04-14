@@ -194,7 +194,7 @@ public class DefaultSecurityCacheLoader implements SecurityCacheLoader
         // No entity, return default rights for user in its wiki
         if (entity == null) {
             return authorizationSettlerProvider.get().settle(user, loadUserEntry(user, user.getWikiReference(), null),
-                null, this.securityEntryReader.requiredRights(entity));
+                null, this.securityEntryReader.requiredRights(entity).orElse(null));
         }
 
         // Retrieve rules for the entity from the cache
@@ -233,7 +233,7 @@ public class DefaultSecurityCacheLoader implements SecurityCacheLoader
 
         // Settle the access
         SecurityAccessEntry accessEntry = authorizationSettlerProvider.get().settle(user, groups, ruleEntries,
-            securityEntryReader.requiredRights(entity));
+            securityEntryReader.requiredRights(entity).orElse(null));
 
         // Store the result into the cache
         getSecurityCache().add(accessEntry, entityWiki);

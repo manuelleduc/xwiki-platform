@@ -75,6 +75,7 @@ public class DefaultAuthorizationSettlerTest extends AbstractAdditionalRightsTes
     @Before
     public void configure() throws Exception
     {
+        // TODO: convert to junit 5 and add the execution context.
         defaultAccess = XWikiSecurityAccess.getDefaultAccess();
         denyAllAccess = new XWikiSecurityAccess();
         for (Right right : Right.values()) {

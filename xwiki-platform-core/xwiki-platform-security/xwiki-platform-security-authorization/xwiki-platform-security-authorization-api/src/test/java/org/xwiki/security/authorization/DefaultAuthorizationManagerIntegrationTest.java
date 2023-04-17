@@ -26,13 +26,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.xwiki.cache.CacheManager;
 import org.xwiki.cache.config.CacheConfiguration;
+import org.xwiki.context.Execution;
+import org.xwiki.context.ExecutionContext;
 import org.xwiki.model.EntityType;
 import org.xwiki.model.internal.DefaultModelConfiguration;
 import org.xwiki.model.internal.reference.DefaultEntityReferenceProvider;
@@ -136,11 +141,17 @@ class DefaultAuthorizationManagerIntegrationTest extends AbstractAuthorizationTe
     @MockComponent
     private SecurityCacheRulesInvalidator securityCacheRulesInvalidator;
 
+    @MockComponent
+    private Execution execution;
+
     /** Mocked cache */
     private TestCache<Object> cache;
 
     /** Factory for security reference */
     private SecurityReferenceFactory securityReferenceFactory;
+
+    @Mock
+    private ExecutionContext context;
 
     @BeforeComponent
     void initializeMocks() throws Exception
@@ -167,6 +178,7 @@ class DefaultAuthorizationManagerIntegrationTest extends AbstractAuthorizationTe
     {
         securityReferenceFactory = componentManager.getInstance(SecurityReferenceFactory.class);
         authorizationManager = componentManager.getInstance(AuthorizationManager.class);
+        when(this.execution.getContext()).thenReturn(this.context);
     }
 
     /**

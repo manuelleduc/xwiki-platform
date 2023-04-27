@@ -27,6 +27,8 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -193,8 +195,10 @@ public class DefaultSecurityCacheLoader implements SecurityCacheLoader
     {
         // No entity, return default rights for user in its wiki
         if (entity == null) {
-            return authorizationSettlerProvider.get().settle(user, loadUserEntry(user, user.getWikiReference(), null),
-                null, this.securityEntryReader.requiredRights(entity).orElse(null));
+            Optional<Set<Right>> rights = this.securityEntryReader.requiredRights(entity);
+            return this.authorizationSettlerProvider.get()
+                .settle(user, loadUserEntry(user, user.getWikiReference(), null),
+                    null, rights.orElse(null), rights.isPresent());
         }
 
         // Retrieve rules for the entity from the cache
@@ -232,8 +236,9 @@ public class DefaultSecurityCacheLoader implements SecurityCacheLoader
         Collection<GroupSecurityReference> groups = loadUserEntry(user, userWiki, entityWiki);
 
         // Settle the access
+        Optional<Set<Right>> rights = securityEntryReader.requiredRights(entity);
         SecurityAccessEntry accessEntry = authorizationSettlerProvider.get().settle(user, groups, ruleEntries,
-            securityEntryReader.requiredRights(entity).orElse(null));
+            rights.orElse(null), rights.isPresent());
 
         // Store the result into the cache
         getSecurityCache().add(accessEntry, entityWiki);

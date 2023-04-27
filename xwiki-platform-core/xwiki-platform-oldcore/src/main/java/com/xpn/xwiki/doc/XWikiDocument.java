@@ -4641,6 +4641,7 @@ public class XWikiDocument implements DocumentModelBridge, Cloneable
             doc.originalDocument = this.originalDocument;
 
             doc.requiredRights = new DefaultRequiredRights(doc, this.requiredRights.getRights());
+            doc.requiredRightsActivated = this.requiredRightsActivated;
         } catch (Exception e) {
             // This should not happen
             LOGGER.error("Exception while cloning document", e);
@@ -9585,7 +9586,7 @@ public class XWikiDocument implements DocumentModelBridge, Cloneable
      * @since 15.4RC1
      */
     @Unstable
-    public Boolean getRequiredRightsActivated()
+    public Boolean isRequiredRightsActivated()
     {
         return this.requiredRightsActivated;
     }

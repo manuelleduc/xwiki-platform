@@ -117,25 +117,33 @@
     overrideImageWidget: function(editor, imageWidget) {
       CKEDITOR.plugins.registered['xwiki-image-old'].overrideImageWidget(editor, imageWidget);
 
+      function initResizeWrapper(widget) {
+        var resizeWrapper;
+        if (widget.element.find('.cke_image_resizer_wrapper', true).count() === 0) {
+          resizeWrapper = editor.document.createElement('span');
+          resizeWrapper.addClass('cke_image_resizer_wrapper');
+          resizeWrapper.append(widget.parts.image);
+          resizeWrapper.append(widget.resizer);
+        }
+        return resizeWrapper;
+      }
+
       /**
        * Update the dom of the widget to place the resize span inside the previously created wrapping span.
        *
        * @param widget the image widget to update
        */
       function moveResizer(widget) {
-        if(widget.data.hasCaption) {
+        if (widget.data.hasCaption) {
           return;
-        } 
-        var resizeWrapper = editor.document.createElement('span');
-        resizeWrapper.addClass('cke_image_resizer_wrapper');
-        resizeWrapper.append(widget.parts.image);
-        resizeWrapper.append(widget.resizer);
+        }
+        var resizeWrapper = initResizeWrapper(widget);
 
         // Set the data.align to right when it's right so that the mousedown event is tricked into believing the
         // alignment is right.
         // The 'align' value is reset to 'none' on mouseout to prevent it to be persisted.
         widget.resizer.on('mouseover', function () {
-          if(widget.data.alignment === 'end') {
+          if (widget.data.alignment === 'end') {
             widget.data.align = 'right';
           }
         });
@@ -145,18 +153,22 @@
         widget.on('data', function () {
           widget.resizer[widget.data.alignment === 'end' ? 'addClass' : 'removeClass']('cke_image_resizer_left');
         });
-        
-        if(!widget.wrapper.getChild(0).hasClass('cke_widget_element')) {
+
+        if (!widget.wrapper.getChild(0).hasClass('cke_widget_element')) {
           // Re-wrap the element in a widget element.
           // This happens when removing the caption of an image. 
           var widgetElement = editor.document.createElement('span');
           widgetElement.addClass('cke_widget_element');
-          widgetElement.append(resizeWrapper);
+          if (resizeWrapper) {
+            widgetElement.append(resizeWrapper);
+          }
           widget.wrapper.append(widgetElement, true);
           widget.element = widgetElement;
           widget.element.setAttribute('data-widget', widget.name);
         } else {
-          widget.element.append(resizeWrapper, true);
+          if (resizeWrapper) {
+            widget.element.append(resizeWrapper, true);
+          }
         }
       }
 
@@ -332,8 +344,13 @@
           var img = el.findOne('img', true);
           // Cleanup and remove the wrapping span used for the resize caret.
           delete img.attributes['data-widget'];
-          img.parent.replaceWith(img);
+          el.children[0].replaceWith(el.children[0].children[0]);
+          if (el.children.length > 1) {
+            el.children.splice(1);
+          }
         }
+        
+        delete el.attributes['data-widget'];
 
         return el;
       };

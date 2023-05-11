@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -42,9 +43,11 @@ import org.xwiki.diff.MergeException;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 import org.xwiki.rendering.syntax.Syntax;
+import org.xwiki.security.authorization.Right;
 import org.xwiki.store.merge.MergeConflictDecisionsManager;
 import org.xwiki.store.merge.MergeDocumentResult;
 import org.xwiki.store.merge.MergeManager;
+import org.xwiki.store.merge.MergeManagerResult;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -53,7 +56,6 @@ import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.doc.merge.MergeConfiguration;
 import com.xpn.xwiki.doc.merge.MergeConfiguration.ConflictFallbackVersion;
-import org.xwiki.store.merge.MergeManagerResult;
 import com.xpn.xwiki.doc.merge.MergeResult;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.ElementInterface;
@@ -332,6 +334,14 @@ public class DefaultMergeManager implements MergeManager
             MergeManagerResult<List<XWikiAttachment>, XWikiAttachment> attachmentMergeManagerResult =
                 mergeAttachments(previousDoc, mergedDocument, newDoc, configuration);
             mergeResult.putMergeResult(MergeDocumentResult.DocumentPart.ATTACHMENTS, attachmentMergeManagerResult);
+
+            // Required Rights
+            MergeManagerResult<Set<Right>, Set<Right>> requiredRightsMergeManagerResult =
+                mergeObject(previousDoc.getRequiredRights().getRights(), newDoc.getRequiredRights().getRights(),
+                    currentDoc.getRequiredRights().getRights(), configuration);
+            mergeResult.putMergeResult(MergeDocumentResult.DocumentPart.REQUIRED_RIGHTS,
+                requiredRightsMergeManagerResult);
+            mergedDocument.getRequiredRights().setRights(requiredRightsMergeManagerResult.getMergeResult());
         } else {
             mergeResult.setMergeResult(currentDocument);
             mergeResult.getLog().error("Cannot merge documents that are not of XWikiDocument class.");

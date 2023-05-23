@@ -83,7 +83,7 @@ public class AnalysisResultsService
     public void analyse(XWikiDocument document)
     {
         try {
-            DocumentReference newDocumentReference =
+            DocumentReference newDocumentReference = document.getDocumentReference().appendParent(null)
                 new DocumentReference(
                     String.format("Test%d-%s", System.currentTimeMillis(), document.getDocumentReference().getName()),
                     document.getDocumentReference().getLastSpaceReference());
@@ -143,7 +143,7 @@ public class AnalysisResultsService
         BlockRenderer blockRenderer =
             this.componentManager.getInstance(BlockRenderer.class, doc.getSyntax().toIdString());
         blockRenderer.render(display, printer);
-        return printer.toString();
+        return doc.displayDocument(this.xcontextProvider.get());
     }
 
     public void removeResult(XWikiDocument doc) throws RequiredRightException

@@ -1,1 +1,6 @@
-org.xwiki.requiredrights.internal.RequiredRightsDocumentCreatedListener
+org.xwiki.requiredrights.internal.RequiredRightsDocumentListener
+org.xwiki.requiredrights.internal.RequiredRightsDataMigration
+org.xwiki.requiredrights.internal.AnalysisResultsStore
+org.xwiki.requiredrights.internal.DefaultRequiredRightsAnalyzerTaskConsumer
+org.xwiki.requiredrights.internal.RequiredRightsResultsMandatoryDocumentInitializer
+org.xwiki.requiredrights.internal.AnalysisResultsService

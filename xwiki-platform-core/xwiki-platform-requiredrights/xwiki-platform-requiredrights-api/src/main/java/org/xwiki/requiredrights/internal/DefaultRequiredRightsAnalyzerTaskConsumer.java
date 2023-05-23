@@ -19,49 +19,49 @@
  */
 package org.xwiki.requiredrights.internal;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.xwiki.bridge.event.DocumentCreatedEvent;
 import org.xwiki.component.annotation.Component;
-import org.xwiki.observation.AbstractEventListener;
-import org.xwiki.observation.event.Event;
-import org.xwiki.observation.remote.RemoteObservationManagerContext;
+import org.xwiki.index.IndexException;
+import org.xwiki.index.TaskConsumer;
+import org.xwiki.model.reference.DocumentReference;
+
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 
 /**
- * Listener for created documents and analyze the required rights they need.
- *
  * @version $Id$
- * @since 15.5RC1
+ * @since x.y.z
  */
 @Component
 @Singleton
-@Named(RequiredRightsDocumentCreatedListener.ID)
-public class RequiredRightsDocumentCreatedListener extends AbstractEventListener
+@Named(DefaultRequiredRightsAnalyzerTaskConsumer.ID)
+public class DefaultRequiredRightsAnalyzerTaskConsumer implements TaskConsumer
 {
     /**
-     * The unique id of this listener. Used to uniquely identify this listener, and also as its component hint.
+     * Component hint.
      */
-    public static final String ID = "RequiredRightsDocumentCreatedListener";
+    public static final String ID = "requiredRightsAnalysis";
 
     @Inject
-    private RemoteObservationManagerContext remoteObservationManagerContext;
+    private Provider<XWikiContext> xcontextProvider;
 
-    /**
-     * Default constructor.
-     */
-    public RequiredRightsDocumentCreatedListener()
-    {
-        super(ID, List.of(new DocumentCreatedEvent()));
-    }
+    @Inject
+    private AnalysisResultsService analysisResultsService;
 
     @Override
-    public void onEvent(Event event, Object source, Object data)
+    public void consume(DocumentReference documentReference, String version) throws IndexException
     {
-        // TODO: how to handle cluster?
-
+        try {
+            XWikiContext context = this.xcontextProvider.get();
+            // Get the latest version of the document for analysis.
+            this.analysisResultsService.analyse(context.getWiki().getDocument(documentReference, context));
+        } catch (XWikiException e) {
+            throw new IndexException(String.format("Failed to analyze required rights for document [%s] version [%s].",
+                documentReference, version), e);
+        }
     }
 }

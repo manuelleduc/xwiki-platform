@@ -9582,6 +9582,9 @@ public class XWikiDocument implements DocumentModelBridge, Cloneable
     @Unstable
     public void setRequiredRightsActivated(Boolean requiredRightsActivated)
     {
+        if (Objects.equals(requiredRightsActivated, this.requiredRightsActivated)) {
+            setMetaDataDirty(true);
+        }
         this.requiredRightsActivated = requiredRightsActivated != null && requiredRightsActivated;
     }
 

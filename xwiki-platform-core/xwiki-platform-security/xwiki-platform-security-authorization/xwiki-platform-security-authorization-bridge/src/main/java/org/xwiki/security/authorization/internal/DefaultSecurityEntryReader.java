@@ -57,6 +57,8 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 
+import static com.xpn.xwiki.doc.XWikiDocument.CKEY_SDOC;
+
 /**
  * The default implementation of the security rules reader, which reads rules from documents in a wiki.
  *
@@ -177,7 +179,10 @@ public class DefaultSecurityEntryReader implements SecurityEntryReader
             case SPACE:
                 return Optional.empty();
             case DOCUMENT:
-                XWikiDocument document = getDocument(new DocumentReference(entity));
+                XWikiDocument document = (XWikiDocument) this.xcontextProvider.get().get(CKEY_SDOC);
+                if (document == null) {
+                    document = getDocument(new DocumentReference(entity));
+                }
                 if (document == null || !document.isRequiredRightsActivated()) {
                     return Optional.empty();
                 }

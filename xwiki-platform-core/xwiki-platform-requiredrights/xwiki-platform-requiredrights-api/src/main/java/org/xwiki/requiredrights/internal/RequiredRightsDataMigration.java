@@ -26,11 +26,14 @@ import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
 import org.xwiki.internal.migration.AbstractDocumentsMigration;
+import org.xwiki.query.QueryException;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.store.migration.DataMigrationException;
 import com.xpn.xwiki.store.migration.XWikiDBVersion;
+
+import static org.xwiki.query.Query.HQL;
 
 /**
  * @version $Id$
@@ -67,15 +70,26 @@ public class RequiredRightsDataMigration extends AbstractDocumentsMigration
     @Override
     protected String getTaskType()
     {
-        return "requiredRightsAnalysis";
+        return DefaultRequiredRightsAnalyzerTaskConsumer.ID;
     }
 
     @Override
     protected List<String> selectDocuments() throws DataMigrationException
     {
-
-        XWiki wiki = getXWikiContext().getWiki();
         XWikiContext context = getXWikiContext();
-        wiki.getStore().getQueryManager().createQuery("SELECT doc.fullName from XWikiDocument doc where doc.")
+        XWiki wiki = context.getWiki();
+        String wikiId = context.getWikiId();
+
+        try {
+            return wiki.getStore()
+                .getQueryManager()
+                .createQuery("SELECT doc.fullName from XWikiDocument doc where doc.requiredRightsActivated is false",
+                    HQL)
+                .setWiki(wikiId)
+                .execute();
+        } catch (QueryException e) {
+            throw new DataMigrationException(
+                String.format("Failed retrieve the list of all the documents for wiki [%s].", wikiId), e);
+        }
     }
 }

@@ -85,6 +85,7 @@ import org.xwiki.search.solr.Solr;
 import org.xwiki.search.solr.SolrException;
 import org.xwiki.search.solr.SolrUtils;
 
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_COUNT;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
@@ -311,10 +312,12 @@ public class ExtensionIndexStore implements Initializable
      *
      * @param extensionId the extension id of the extension to update
      * @param result the security analysis results
+     * @param updateContext additional information that are useful to the 
      * @throws IOException If there is a low-level I/O error
      * @throws SolrServerException if there is an error on the server
      */
-    public void update(ExtensionId extensionId, ExtensionSecurityAnalysisResult result) throws SolrServerException, IOException
+    public void update(ExtensionId extensionId, ExtensionSecurityAnalysisResult result,
+        ExtensionUpdateContext updateContext) throws SolrServerException, IOException
     {
         SolrInputDocument doc = new SolrInputDocument();
 
@@ -332,7 +335,8 @@ public class ExtensionIndexStore implements Initializable
             // Remove the CVSS score if the new list of security vulnerabilities becomes empty.
             this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_REMOVE, SECURITY_MAX_CVSS, 0.0, Double.class, doc);
         }
-        Stream<String> cveIds = result.getSecurityVulnerabilities().stream().map(SecurityVulnerabilityDescriptor::getId);
+        Stream<String> cveIds =
+            result.getSecurityVulnerabilities().stream().map(SecurityVulnerabilityDescriptor::getId);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_ID,
             cveIds.collect(Collectors.toList()), doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_LINK,
@@ -350,6 +354,7 @@ public class ExtensionIndexStore implements Initializable
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_ADVICE, result.getAdvice(), doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_COUNT,
             result.getSecurityVulnerabilities().size(), doc);
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_SERVLET, updateContext.isFromServlet(), doc);
 
         add(doc);
         commit();

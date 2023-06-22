@@ -27,8 +27,11 @@ import javax.inject.Named;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.annotation.InstantiationStrategy;
 import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
+import org.xwiki.extension.CoreExtension;
+import org.xwiki.extension.Extension;
 import org.xwiki.extension.InstalledExtension;
 import org.xwiki.extension.index.security.ExtensionSecurityAnalysisResult;
+import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.extension.repository.InstalledExtensionRepository;
 import org.xwiki.extension.security.ExtensionSecurityIndexationEndEvent;
 import org.xwiki.extension.security.analyzer.ExtensionSecurityAnalyzer;
@@ -60,6 +63,9 @@ public class ExtensionSecurityJob
     private InstalledExtensionRepository installedExtensionRepository;
 
     @Inject
+    private CoreExtensionRepository coreExtensionRepository;
+
+    @Inject
     @Named(OsvExtensionSecurityAnalyzer.ID)
     private ExtensionSecurityAnalyzer extensionSecurityAnalyzer;
 
@@ -75,36 +81,49 @@ public class ExtensionSecurityJob
     @Override
     protected void runInternal()
     {
-        Collection<InstalledExtension> installedExtensions =
-            this.installedExtensionRepository.getInstalledExtensions();
-        this.progressManager.pushLevelProgress(installedExtensions.size(), this);
+        Collection<InstalledExtension> installedExtensions = this.installedExtensionRepository.getInstalledExtensions();
+        Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
+        this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
         try {
             // Note: for now, this step is sequential and each extension is analyzed after the previous one.
             long newVulnerabilityCount = 0;
             for (InstalledExtension extension : installedExtensions) {
-                this.progressManager.startStep(this);
-                try {
-                    ExtensionSecurityAnalysisResult analysis = this.extensionSecurityAnalyzer.analyze(extension);
-                    if (analysis != null) {
-                        boolean update = this.vulnerabilityIndexer.update(extension, analysis);
-                        if (update) {
-                            newVulnerabilityCount++;
-                        }
-                    }
-                } catch (ExtensionSecurityException e) {
-                    this.logger.warn("Failed to analyse [{}]. Cause: [{}]", extension.getId().toString(),
-                        getRootCauseMessage(e));
-                } catch (Exception e) {
-                    this.logger.warn("Unexpected error [{}]", getRootCauseMessage(e));
+                if (handleExtension(extension)) {
+                    newVulnerabilityCount++;
                 }
-                this.progressManager.endStep(this);
             }
-            
+
+            for (CoreExtension extension : coreExtensions) {
+                if (handleExtension(extension)) {
+                    newVulnerabilityCount++;
+                }
+            }
+
             this.observationManager.notify(new ExtensionSecurityIndexationEndEvent(), null, newVulnerabilityCount);
-            
         } finally {
             this.progressManager.popLevelProgress(this);
         }
+    }
+
+    private boolean handleExtension(Extension extension)
+    {
+        boolean hasNew = false;
+        this.progressManager.startStep(this);
+        try {
+            ExtensionSecurityAnalysisResult analysis = this.extensionSecurityAnalyzer.analyze(extension);
+            if (analysis != null) {
+                boolean update = this.vulnerabilityIndexer.update(extension, analysis);
+                if (update) {
+                    hasNew = true;
+                }
+            }
+        } catch (ExtensionSecurityException e) {
+            this.logger.warn("Failed to analyse [{}]. Cause: [{}]", extension.getId(), getRootCauseMessage(e));
+        } catch (Exception e) {
+            this.logger.warn("Unexpected error [{}]", getRootCauseMessage(e));
+        }
+        this.progressManager.endStep(this);
+        return hasNew;
     }
 }

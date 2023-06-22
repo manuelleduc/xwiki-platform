@@ -31,12 +31,14 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer;
 import org.xwiki.extension.index.internal.ExtensionIndexStore;
 import org.xwiki.extension.repository.search.ExtensionQuery;
 import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.search.solr.SolrUtils;
 
 import static org.xwiki.extension.InstalledExtension.FIELD_INSTALLED_NAMESPACES;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_FIX_VERSION;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_MAX_CVSS;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SOLR_FIELD_EXTENSIONID;
@@ -137,6 +139,12 @@ public class ExtensionSecuritySolrClient
                 }
             }
         }
+
+        String s = Boolean.TRUE.toString();
+        if (!Objects.equals(liveDataQuery.getSource().getParameters().get("isFromServlet"), Boolean.TRUE.toString())) {
+            s = Boolean.FALSE.toString();
+        }
+        solrQuery.addFilterQuery(IS_FROM_SERVLET + ":" + s);
     }
 
     private static void initFilter(SolrQuery solrQuery)

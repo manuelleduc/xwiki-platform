@@ -82,6 +82,7 @@ import org.xwiki.search.solr.Solr;
 import org.xwiki.search.solr.SolrException;
 import org.xwiki.search.solr.SolrUtils;
 
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_COUNT;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
@@ -93,7 +94,7 @@ import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializ
 
 /**
  * An helper to manipulate the store of indexed extensions.
- *
+ * 
  * @version $Id$
  * @since 12.10
  */
@@ -290,10 +291,12 @@ public class ExtensionIndexStore implements Initializable
      *
      * @param extensionId the extension id of the extension to update
      * @param result the security analysis results
+     * @param updateContext additional information that are useful to the 
      * @throws IOException If there is a low-level I/O error
      * @throws SolrServerException if there is an error on the server
      */
-    public void update(ExtensionId extensionId, ExtensionSecurityAnalysisResult result)
+    public void update(ExtensionId extensionId, ExtensionSecurityAnalysisResult result,
+        ExtensionUpdateContext updateContext)
         throws SolrServerException, IOException
     {
         SolrInputDocument doc = new SolrInputDocument();
@@ -332,6 +335,7 @@ public class ExtensionIndexStore implements Initializable
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_ADVICE, result.getAdvice(), doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_COUNT,
             result.getSecurityVulnerabilities().size(), doc);
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_SERVLET, updateContext.isFromServlet(), doc);
 
         add(doc);
         commit();

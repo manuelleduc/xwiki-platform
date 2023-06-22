@@ -86,6 +86,7 @@ public class OsvResponseAnalyzer
             .setResults(matchingVulns.stream().map(vulnObject -> convert(vulnObject, currentVersion))
                 .collect(Collectors.toList()));
         if (!extensionSecurityAnalysisResult.getSecurityVulnerabilities().isEmpty()) {
+            // TODO: update to add different kinds of advices (or possibily remove if it becomes useless).
             extensionSecurityAnalysisResult.setAdvice(UPGRADE_FROM_EM_ADVICE);
         }
         return extensionSecurityAnalysisResult;

@@ -140,6 +140,12 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
      */
     public static final String SECURITY_ADVICE = "security_advice";
 
+    /**
+     * When {@code true} the extension is provided by the servlet engine, {@code false} otherwise.
+     * TODO: might be moved to a more generic place. Could event be set by the indexer?
+     */
+    public static final String IS_FROM_SERVLET = "is_from_servlet";
+
     private static final Pattern COMPONENT_SPECIAL_CHARS = Pattern.compile("[<>,]+");
 
     private static final long SCHEMA_VERSION_12_9 = 120900000;
@@ -150,10 +156,12 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
     private static final long SCHEMA_VERSION_15_5 = 150500000;
 
+    private static final long SCHEMA_VERSION_15_6 = 150600000;
+
     @Override
     protected long getVersion()
     {
-        return SCHEMA_VERSION_15_5;
+        return SCHEMA_VERSION_15_6;
     }
 
     @Override
@@ -226,6 +234,10 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
             setPIntField(SECURITY_CVE_COUNT, false, false);
             setStringField(SECURITY_FIX_VERSION, false, false);
             setStringField(SECURITY_ADVICE, false, false);
+        }
+
+        if (cversion < SCHEMA_VERSION_15_6) {
+            setBooleanField(IS_FROM_SERVLET, false, false);
         }
     }
 

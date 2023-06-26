@@ -20,6 +20,7 @@
 package org.xwiki.extension.security.internal;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -85,17 +86,41 @@ public class ExtensionSecurityJob
         Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
         this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
+
+        // TODO: replace with a component, fetching this remotely.
+        Set<String> falsePositiveCVEs = Set.of(
+            "GHSA-2q8x-2p7f-574v",
+            "GHSA-3ccq-5vw3-2p6x",
+            "GHSA-64xx-cq4q-mf44",
+            "GHSA-6w62-hx7r-mw68",
+            "GHSA-6wf9-jmg9-vxcc",
+            "GHSA-8jrj-525p-826v",
+            "GHSA-cxfm-5m4g-x7xp",
+            "GHSA-f8cc-g7j8-xxpm",
+            "GHSA-g5w6-mrj7-75h2",
+            "GHSA-h7v4-7xg3-hxcc",
+            "GHSA-hph2-m3g5-xxv4",
+            "GHSA-j563-grx4-pjpv",
+            "GHSA-j9h8-phrw-h4fh",
+            "GHSA-p8pq-r894-fm8f",
+            "GHSA-qrx8-8545-4wg2",
+            "GHSA-rmr5-cpv2-vgjf",
+            "GHSA-xw4p-crpj-vjx2",
+            "GHSA-gx2c-fvhc-ph4j",
+            "GHSA-rmpj-7c96-mrg8"
+        );
+        
         try {
             // Note: for now, this step is sequential and each extension is analyzed after the previous one.
             long newVulnerabilityCount = 0;
             for (InstalledExtension extension : installedExtensions) {
-                if (handleExtension(extension)) {
+                if (handleExtension(extension, falsePositiveCVEs)) {
                     newVulnerabilityCount++;
                 }
             }
 
             for (CoreExtension extension : coreExtensions) {
-                if (handleExtension(extension)) {
+                if (handleExtension(extension, falsePositiveCVEs)) {
                     newVulnerabilityCount++;
                 }
             }
@@ -106,14 +131,14 @@ public class ExtensionSecurityJob
         }
     }
 
-    private boolean handleExtension(Extension extension)
+    private boolean handleExtension(Extension extension, Set<String> falsePositiveCVEs)
     {
         boolean hasNew = false;
         this.progressManager.startStep(this);
         try {
             ExtensionSecurityAnalysisResult analysis = this.extensionSecurityAnalyzer.analyze(extension);
             if (analysis != null) {
-                boolean update = this.vulnerabilityIndexer.update(extension, analysis);
+                boolean update = this.vulnerabilityIndexer.update(extension, analysis, falsePositiveCVEs);
                 if (update) {
                     hasNew = true;
                 }

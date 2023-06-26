@@ -145,6 +145,8 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
      * TODO: might be moved to a more generic place. Could event be set by the indexer?
      */
     public static final String IS_FROM_SERVLET = "is_from_servlet";
+    public static final String IS_IGNORED = "security_is_ignored";
+    public static final String IS_ALL_IGNORED = "security_is_all_ignored";
 
     private static final Pattern COMPONENT_SPECIAL_CHARS = Pattern.compile("[<>,]+");
 
@@ -238,6 +240,8 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
         if (cversion < SCHEMA_VERSION_15_6) {
             setBooleanField(IS_FROM_SERVLET, false, false);
+            setBooleanField(IS_IGNORED, true, false);
+            setBooleanField(IS_ALL_IGNORED, false, false);
         }
     }
 

@@ -123,13 +123,13 @@ public class SolrToLiveDataEntryMapper
             .mapToObj(cveTemplate(cveIds, cveLinks, cveCVSS))
             .collect(joining(newLineHtml));
 
-        String id = escapeXml(this.solrUtils.getId(doc));
-        if (StringUtils.isNotEmpty(ignoredStr)) {
-            notIgnored = notIgnored + newLineHtml + "<a href='#" + id
-                + "' data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"collapseExample\">Ignored</a>:"
-                + newLineHtml + "<span class=\"collapse\" id='" + id + "'>" + ignoredStr + "</span>";
+        if (StringUtils.isNotEmpty(ignoredStr) && StringUtils.isNotEmpty(notIgnored)) {
+            return notIgnored + newLineHtml + "<span class='xHint'>Ignored:" + newLineHtml + ignoredStr + "</span>";
+        } else if (StringUtils.isNotEmpty(notIgnored)) {
+            return notIgnored;
+        } else {
+            return ignoredStr;
         }
-        return notIgnored;
     }
 
     private static IntFunction<String> cveTemplate(List<String> cveIds, List<String> cveLinks,
@@ -153,7 +153,11 @@ public class SolrToLiveDataEntryMapper
 
     private String buildFixVersion(SolrDocument doc)
     {
-        return this.solrUtils.get(SECURITY_FIX_VERSION, doc);
+        Object o = doc.get(SECURITY_FIX_VERSION);
+        if (o == null) {
+            return "";
+        }
+        return String.valueOf(o);
     }
 
     private Double buildMaxCVSS(SolrDocument doc)

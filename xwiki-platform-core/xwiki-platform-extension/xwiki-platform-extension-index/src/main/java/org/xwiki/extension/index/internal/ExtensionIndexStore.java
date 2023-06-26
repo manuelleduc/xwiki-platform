@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -330,6 +331,7 @@ public class ExtensionIndexStore implements Initializable
                 .map(SecurityVulnerabilityDescriptor::getScore).collect(Collectors.toList()), doc);
         String fixVersion = result.getSecurityVulnerabilities().stream()
             .map(SecurityVulnerabilityDescriptor::getFixVersion)
+            .filter(Objects::nonNull)
             .max(Comparator.naturalOrder())
             .map(Version::getValue)
             .orElse(null);

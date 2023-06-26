@@ -19,8 +19,16 @@
  */
 package org.xwiki.extension.security.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -86,7 +94,6 @@ public class ExtensionSecurityJob
         Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
         this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
-
         // TODO: replace with a component, fetching this remotely.
         Set<String> falsePositiveCVEs = Set.of(
             "GHSA-2q8x-2p7f-574v",
@@ -109,23 +116,37 @@ public class ExtensionSecurityJob
             "GHSA-gx2c-fvhc-ph4j",
             "GHSA-rmpj-7c96-mrg8"
         );
-        
+
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+
         try {
+            List<Callable<Boolean>> tasks = new ArrayList<>();
             // Note: for now, this step is sequential and each extension is analyzed after the previous one.
             long newVulnerabilityCount = 0;
             for (InstalledExtension extension : installedExtensions) {
-                if (handleExtension(extension, falsePositiveCVEs)) {
-                    newVulnerabilityCount++;
-                }
+                tasks.add(() -> handleExtension(extension, falsePositiveCVEs));
             }
 
             for (CoreExtension extension : coreExtensions) {
-                if (handleExtension(extension, falsePositiveCVEs)) {
-                    newVulnerabilityCount++;
+                tasks.add(() -> handleExtension(extension, falsePositiveCVEs));
+            }
+
+            List<Future<Boolean>> futures = executorService.invokeAll(tasks);
+            for (Future<Boolean> future : futures) {
+                try {
+                    if (Objects.equals(Boolean.TRUE, future.get())) {
+                        newVulnerabilityCount++;
+                    }
+                } catch (ExecutionException e) {
+                    // TODO...
+                    throw new RuntimeException(e);
                 }
             }
 
             this.observationManager.notify(new ExtensionSecurityIndexationEndEvent(), null, newVulnerabilityCount);
+        } catch (InterruptedException e) {
+            // TODO...
+            throw new RuntimeException(e);
         } finally {
             this.progressManager.popLevelProgress(this);
         }

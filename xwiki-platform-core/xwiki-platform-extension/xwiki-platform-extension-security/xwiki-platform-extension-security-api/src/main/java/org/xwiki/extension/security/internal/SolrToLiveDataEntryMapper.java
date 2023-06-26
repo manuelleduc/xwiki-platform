@@ -21,13 +21,18 @@ package org.xwiki.extension.security.internal;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.solr.common.SolrDocument;
@@ -46,6 +51,7 @@ import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_IGNORED;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_ID;
@@ -98,18 +104,47 @@ public class SolrToLiveDataEntryMapper
         );
     }
 
-    private static String buildCVEList(SolrDocument doc)
+    private String buildCVEList(SolrDocument doc)
     {
-        List<Object> cveIds = new ArrayList<>(doc.getFieldValues(SECURITY_CVE_ID));
-        List<Object> cveLinks = new ArrayList<>(doc.getFieldValues(SECURITY_CVE_LINK));
-        List<Object> cveCVSS = new ArrayList<>(doc.getFieldValues(SECURITY_CVE_CVSS));
+        List<String> cveIds = mapToStrings(doc, SECURITY_CVE_ID);
+        List<String> cveLinks = mapToStrings(doc, SECURITY_CVE_LINK);
+        List<String> cveCVSS = mapToStrings(doc, SECURITY_CVE_CVSS);
+        List<Boolean> ignored = doc.getFieldValues(IS_IGNORED)
+            .stream().map(it -> (boolean) it)
+            .collect(Collectors.toList());
 
-        return IntStream.range(0, cveIds.size())
-            .mapToObj(value -> String.format("<a href='%s'>%s</a>&nbsp;(%s)",
-                escapeXml(String.valueOf(cveLinks.get(value))),
-                escapeXml(String.valueOf(cveIds.get(value))),
-                escapeXml(String.valueOf(cveCVSS.get(value)))))
-            .collect(joining("<br/>"));
+        String newLineHtml = "<br/>";
+        String notIgnored = IntStream.range(0, cveIds.size())
+            .filter(((IntPredicate) ignored::get).negate())
+            .mapToObj(cveTemplate(cveIds, cveLinks, cveCVSS))
+            .collect(joining(newLineHtml));
+
+        String ignoredStr = IntStream.range(0, cveIds.size())
+            .filter(ignored::get)
+            .mapToObj(cveTemplate(cveIds, cveLinks, cveCVSS))
+            .collect(joining(newLineHtml));
+
+        String id = escapeXml(this.solrUtils.getId(doc));
+        if (StringUtils.isNotEmpty(ignoredStr)) {
+            notIgnored = notIgnored + newLineHtml + "<a href='#" + id
+                + "' data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"collapseExample\">Ignored</a>:"
+                + newLineHtml + "<span class=\"collapse\" id='" + id + "'>" + ignoredStr + "</span>";
+        }
+        return notIgnored;
+    }
+
+    private static IntFunction<String> cveTemplate(List<String> cveIds, List<String> cveLinks,
+        List<String> cveCVSS)
+    {
+        return value -> String.format("<a href='%s'>%s</a>&nbsp;(%s)",
+            escapeXml(cveLinks.get(value)),
+            escapeXml(cveIds.get(value)),
+            escapeXml(cveCVSS.get(value)));
+    }
+
+    private static List<String> mapToStrings(SolrDocument doc, String name)
+    {
+        return doc.getFieldValues(name).stream().map(String::valueOf).collect(Collectors.toList());
     }
 
     private String buildAdvice(SolrDocument doc)

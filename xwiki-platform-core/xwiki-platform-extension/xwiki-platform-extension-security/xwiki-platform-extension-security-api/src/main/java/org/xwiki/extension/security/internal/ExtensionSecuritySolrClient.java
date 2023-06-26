@@ -38,6 +38,7 @@ import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.search.solr.SolrUtils;
 
 import static org.xwiki.extension.InstalledExtension.FIELD_INSTALLED_NAMESPACES;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_IGNORED;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_FIX_VERSION;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_MAX_CVSS;
@@ -68,6 +69,8 @@ public class ExtensionSecuritySolrClient
         FIX_VERSION, SECURITY_FIX_VERSION,
         WIKIS, FIELD_INSTALLED_NAMESPACES
     );
+
+    public static final String EXACT_MATCH_PATTERN = "%s:%s";
 
     @Inject
     private ExtensionIndexStore extensionIndexStore;
@@ -140,11 +143,17 @@ public class ExtensionSecuritySolrClient
             }
         }
 
-        String s = Boolean.TRUE.toString();
+        String isFromServlet = Boolean.TRUE.toString();
         if (!Objects.equals(liveDataQuery.getSource().getParameters().get("isFromServlet"), Boolean.TRUE.toString())) {
-            s = Boolean.FALSE.toString();
+            isFromServlet = Boolean.FALSE.toString();
         }
-        solrQuery.addFilterQuery(IS_FROM_SERVLET + ":" + s);
+        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_FROM_SERVLET, isFromServlet));
+
+        String isAllIgnored = Boolean.TRUE.toString();
+        if (!Objects.equals(liveDataQuery.getSource().getParameters().get("isIgnored"), Boolean.TRUE.toString())) {
+            isAllIgnored = Boolean.FALSE.toString();
+        }
+        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_ALL_IGNORED, isAllIgnored));
     }
 
     private static void initFilter(SolrQuery solrQuery)

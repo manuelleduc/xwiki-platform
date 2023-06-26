@@ -19,6 +19,8 @@
  */
 package org.xwiki.extension.index.internal;
 
+import java.util.Set;
+
 /**
  * @version $Id$
  * @since 15.6RC1
@@ -26,6 +28,8 @@ package org.xwiki.extension.index.internal;
 public class ExtensionUpdateContext
 {
     private boolean fromServlet;
+
+    private Set<String> falsePositiveCVEs;
 
     public ExtensionUpdateContext setFromServlet(boolean fromServlet)
     {
@@ -36,5 +40,16 @@ public class ExtensionUpdateContext
     public boolean isFromServlet()
     {
         return this.fromServlet;
+    }
+
+    public Set<String> getFalsePositiveCVEs()
+    {
+        return this.falsePositiveCVEs;
+    }
+
+    public ExtensionUpdateContext setFalsePositiveCVEs(Set<String> falsePositiveCVEs)
+    {
+        this.falsePositiveCVEs = falsePositiveCVEs;
+        return this;
     }
 }

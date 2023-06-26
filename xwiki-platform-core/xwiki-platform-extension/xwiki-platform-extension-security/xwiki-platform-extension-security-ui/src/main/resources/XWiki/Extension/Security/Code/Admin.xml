@@ -41,18 +41,61 @@
 {{velocity}}
 #if($services.security.authorization.hasAccess('admin') &amp;&amp; $services.extension.index.security.isSecurityScanEnabled())
 #set($discard = $xwiki.ssx.use("XWiki.Extension.Security.Code.Admin"))
-{{warning}}
-{{translation key="extension.security.admin.generalWarning"/}}
-{{/warning}}
+
+{{html clean='false' wiki='true'}}
+&lt;ul class="nav nav-tabs" role="tablist"&gt;
+  &lt;li role="presentation" class="active"&gt;&lt;a href="#extension-vulnerabilities" aria-controls="extension-vulnerabilities" role="tab" data-toggle="tab"&gt;Extension Vulnerabilities&lt;/a&gt;&lt;/li&gt;
+  &lt;li role="presentation"&gt;&lt;a href="#ignored-vulnerabilities" aria-controls="ignored-vulnerabilities" role="tab" data-toggle="tab"&gt;Ignored Vulnerabilities&lt;/a&gt;&lt;/li&gt;
+  &lt;li role="presentation"&gt;&lt;a href="#servlet-vulnerabilities" aria-controls="servlet-vulnerabilities" role="tab" data-toggle="tab"&gt;Servlet Vulnerabilities&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class="tab-content"&gt;
+  &lt;div role="tabpanel" class="tab-pane active" id="extension-vulnerabilities"&gt;
 
 {{liveData
   id="extension-vulnerabilities-list"
   source="extensionSecurity"
+  sourceParameters="isFromServlet=false&amp;isIgnored=false"
   properties="name,wikis,maxCVSS,cveID,fixVersion,advice"
   showPageSizeDropdown="false"}}
 {{/liveData}}
 
-{{html}}
+&lt;/div&gt;
+  &lt;div role="tabpanel" class="tab-pane" id="ignored-vulnerabilities"&gt;
+TO BE Updated
+
+{{warning}}
+Some explanation regarding why those extensions are ignored.
+{{/warning}}
+
+{{liveData
+  id="ignored-vulnerabilities-list"
+  source="extensionSecurity"
+  sourceParameters="isFromServlet=false&amp;isIgnored=true"
+  properties="name,wikis,cveID,fixVersion,advice"
+  showPageSizeDropdown="false"}}
+{{/liveData}}
+
+&lt;/div&gt;
+&lt;div role="tabpanel" class="tab-pane" id="servlet-vulnerabilities"&gt;
+To be updated
+
+{{warning}}
+Some explanation regarding what are those and how to react
+{{/warning}}
+
+{{liveData
+  id="servlet-vulnerabilities-list"
+  source="extensionSecurity"
+  sourceParameters="isFromServlet=true&amp;isIgnored=false"
+  properties="name,wikis,maxCVSS,cveID,fixVersion"
+  showPageSizeDropdown="false"}}
+{{/liveData}}
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
 #set ($indexJobStatus = $services.job.getJobStatus(['extension_security']))
 #if ($indexJobStatus)
   &lt;div class="box infomessage"&gt;
@@ -73,9 +116,12 @@
     #else
       &lt;div class="box warningmessage"&gt;$escapetool.xml($services.localization.render('extension.security.indexed.nojob'))&lt;/div&gt;
     #end
-{{/html}}
+  &lt;/div&gt;
 #end
+{{/html}}
 {{/velocity}}
+
+
 
 {{include reference="XWiki.Extension.Security.Code.ConfigClassSheet"/}}</content>
   <object>

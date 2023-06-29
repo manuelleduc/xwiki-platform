@@ -336,7 +336,7 @@ public class ExtensionIndexStore implements Initializable
                 result.getMaxCVSS(), doc);
         } else {
             // Remove the CVSS score if the new list of security vulnerabilities becomes empty.
-            this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_REMOVE, SECURITY_MAX_CVSS, 0.0, Double.class, doc);
+            this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_MAX_CVSS, null, doc);
         }
         Stream<String> cveIds =
             result.getSecurityVulnerabilities().stream().map(SecurityVulnerabilityDescriptor::getId);

@@ -20,8 +20,10 @@
 package org.xwiki.extension.security.internal;
 
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
@@ -29,6 +31,7 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.script.ScriptContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -41,13 +44,16 @@ import org.xwiki.extension.InstalledExtension;
 import org.xwiki.extension.index.internal.ExtensionIndexStore;
 import org.xwiki.localization.ContextualLocalizationManager;
 import org.xwiki.model.reference.LocalDocumentReference;
+import org.xwiki.script.ScriptContextManager;
 import org.xwiki.search.solr.SolrUtils;
 import org.xwiki.search.solr.internal.api.FieldUtils;
+import org.xwiki.template.TemplateManager;
 
 import static com.xpn.xwiki.web.ViewAction.VIEW_ACTION;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 import static java.util.stream.Collectors.joining;
+import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_IGNORED;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
@@ -86,6 +92,12 @@ public class SolrToLiveDataEntryMapper
     @Inject
     private ExtensionIndexStore extensionIndexStore;
 
+    @Inject
+    private ScriptContextManager scriptContextManager;
+
+    @Inject
+    private TemplateManager templateManager;
+
     /**
      * @param doc the document to convert to Live Data entries.
      * @return Converts a {@link SolrDocument} to a {@link Map} of Live Data entries.
@@ -105,30 +117,53 @@ public class SolrToLiveDataEntryMapper
     private String buildCVEList(SolrDocument doc)
     {
         List<String> cveIds = mapToStrings(doc, SECURITY_CVE_ID);
+        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveIds", cveIds, ENGINE_SCOPE);
         List<String> cveLinks = mapToStrings(doc, SECURITY_CVE_LINK);
+        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveLinks", cveLinks, ENGINE_SCOPE);
         List<String> cveCVSS = mapToStrings(doc, SECURITY_CVE_CVSS);
-        List<Boolean> ignored = doc.getFieldValues(IS_IGNORED)
-            .stream().map(it -> (boolean) it)
-            .collect(Collectors.toList());
+        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveCVSS", cveCVSS, ENGINE_SCOPE);
+        
+        List<Boolean> ignored = Optional.ofNullable(doc.getFieldValues(IS_IGNORED))
+            .map(values -> values.stream()
+                .map(it -> (boolean) it)
+                .collect(Collectors.toList()))
+            .orElse(List.of());
 
-        String newLineHtml = "<br/>";
-        String notIgnored = IntStream.range(0, cveIds.size())
+        List<Integer> notIgnoredCVEsIndex = IntStream.range(0, cveIds.size())
             .filter(((IntPredicate) ignored::get).negate())
-            .mapToObj(cveTemplate(cveIds, cveLinks, cveCVSS))
-            .collect(joining(newLineHtml));
+            .boxed()
+            .collect(Collectors.toList());
+        this.scriptContextManager.getCurrentScriptContext()
+            .setAttribute("notIgnoredCVEsIndex", notIgnoredCVEsIndex, ENGINE_SCOPE);
 
-        String ignoredStr = IntStream.range(0, cveIds.size())
+        List<Integer> ignoredCVEsIndex = IntStream.range(0, cveIds.size())
             .filter(ignored::get)
-            .mapToObj(cveTemplate(cveIds, cveLinks, cveCVSS))
-            .collect(joining(newLineHtml));
+            .boxed()
+            .collect(Collectors.toList());
+        this.scriptContextManager.getCurrentScriptContext()
+            .setAttribute("ignoredCVEsIndex", ignoredCVEsIndex, ENGINE_SCOPE);
+//
+//        String ignoredStr = IntStream.range(0, cveIds.size())
+//            .filter(ignored::get)
+//            .mapToObj(ignoreCveTemplate(cveIds, cveLinks, cveCVSS))
+//            .collect(joining(newLineHtml));
+//
+//        if (StringUtils.isNotEmpty(ignoredStr) && StringUtils.isNotEmpty(notIgnored)) {
+//            return notIgnored + newLineHtml + "<span class='xHint'>Ignored:" + newLineHtml + ignoredStr + "</span>";
+//        } else if (StringUtils.isNotEmpty(notIgnored)) {
+//            return notIgnored;
+//        } else {
+//            return ignoredStr;
+//        }
 
-        if (StringUtils.isNotEmpty(ignoredStr) && StringUtils.isNotEmpty(notIgnored)) {
-            return notIgnored + newLineHtml + "<span class='xHint'>Ignored:" + newLineHtml + ignoredStr + "</span>";
-        } else if (StringUtils.isNotEmpty(notIgnored)) {
-            return notIgnored;
-        } else {
-            return ignoredStr;
+        String render;
+        try {
+            render = this.templateManager.render("extension/security/cveID.vm");
+        } catch (Exception e) {
+            // TODO...
+            throw new RuntimeException(e);
         }
+        return render;
     }
 
     private static IntFunction<String> cveTemplate(List<String> cveIds, List<String> cveLinks,
@@ -140,14 +175,62 @@ public class SolrToLiveDataEntryMapper
             escapeXml(cveCVSS.get(value)));
     }
 
+    private static IntFunction<String> ignoreCveTemplate(List<String> cveIds, List<String> cveLinks,
+        List<String> cveCVSS)
+    {
+        return value -> {
+            String link = cveLinks.get(value);
+            String cveId = cveIds.get(value);
+            return String.format("<a href='%s'>%s</a>&nbsp;(%s) "
+                    + "<button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"modal\" "
+                    + "data-target=\"[data-vulnerability-modal='%s']\">"
+                    + "<span class=\"fa fa-file-text-o\"></span>"
+                    + "</button><div class=\"modal fade bs-example-modal-lg\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myLargeModalLabel\" data-vulnerability-modal='%s'>\n"
+                    + "    <div class=\"modal-dialog modal-lg\" role=\"document\">\n"
+                    + "      <div class=\"modal-content\">\n"
+                    + "\n"
+                    + "        <div class=\"modal-header\">\n"
+                    + "          <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n"
+                    + "          <h4 class=\"modal-title\">Vulnerability GHSA-2q8x-2p7f-574v of com.thoughtworks.xstream:xstream/1.4.17</h4>\n"
+                    + "        </div>\n"
+                    + "        <div class=\"modal-body\">\n"
+                    + "          <dl>\n"
+                    + "            <dt>xwiki-platform</dt>\n"
+                    + "            <dd> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum varius tortor vitae velit semper, non viverra sapien fringilla. Donec luctus tellus a neque tempus pharetra. Morbi at interdum tortor. Quisque ullamcorper vitae nibh porta venenatis. Pellentesque facilisis commodo rutrum. Praesent eu enim eleifend, maximus elit sed, tincidunt augue. Etiam id sapien sapien. Nulla facilisi. In hac habitasse platea dictumst. Sed pretium finibus libero porta faucibus. Aliquam enim risus, lacinia vel quam ac, posuere maximus sapien. Mauris ut consectetur erat. </dd>\n"
+                    + "          </dl>\n"
+                    + "          <dl>\n"
+                    + "            <dt>application-xxx-yyy</dt>\n"
+                    + "            <dd>Nam vulputate magna at turpis tristique, sit amet varius sem aliquet. Nunc sodales vulputate faucibus. Aliquam eget lorem est. Quisque vel leo eget arcu interdum volutpat a sagittis nulla.</dd>\n"
+                    + "          </dl>\n"
+                    + "        </div>\n"
+                    + "      </div><!-- /.modal-content -->\n"
+                    + "    </div><!-- /.modal-dialog -->\n"
+                    + "  </div>",
+                escapeXml(link),
+                escapeXml(cveId),
+                escapeXml(cveCVSS.get(value)),
+                escapeXml(cveId),
+                escapeXml(cveId)
+            );
+        };
+    }
+
     private static List<String> mapToStrings(SolrDocument doc, String name)
     {
-        return doc.getFieldValues(name).stream().map(String::valueOf).collect(Collectors.toList());
+        Collection<Object> fieldValues = doc.getFieldValues(name);
+        if (fieldValues == null) {
+            return List.of();
+        }
+        return fieldValues.stream().map(String::valueOf).collect(Collectors.toList());
     }
 
     private String buildAdvice(SolrDocument doc)
     {
-        return this.l10n.getTranslationPlain(this.solrUtils.get(SECURITY_ADVICE, doc));
+        String translationPlain = this.l10n.getTranslationPlain(this.solrUtils.get(SECURITY_ADVICE, doc));
+        if (translationPlain == null) {
+            return "";
+        }
+        return translationPlain;
     }
 
     private String buildFixVersion(SolrDocument doc)

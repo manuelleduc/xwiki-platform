@@ -142,10 +142,24 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
     /**
      * When {@code true} the extension is provided by the servlet engine, {@code false} otherwise.
-     * TODO: might be moved to a more generic place. Could event be set by the indexer?
      */
     public static final String IS_FROM_SERVLET = "is_from_servlet";
+
+    /**
+     * When {@code true} the extension has been analyzed and is not impacting the context in which it has been analyzed,
+     * {@code false} otherwise.
+     */
     public static final String IS_IGNORED = "security_is_ignored";
+
+    /**
+     * Contains the explanations regarding why a given extension can be ignored. This field contains an array of html
+     * contents.
+     */
+    public static final String IGNORED_EXPLANATIONS = "security_ignored_explanations";
+
+    /**
+     * {@code true} when all the known vulnerabilities of the extension are ignored.
+     */
     public static final String IS_ALL_IGNORED = "security_is_all_ignored";
 
     private static final Pattern COMPONENT_SPECIAL_CHARS = Pattern.compile("[<>,]+");
@@ -241,6 +255,7 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
         if (cversion < SCHEMA_VERSION_15_6) {
             setBooleanField(IS_FROM_SERVLET, false, false);
             setBooleanField(IS_IGNORED, true, false);
+            setStringField(IGNORED_EXPLANATIONS, true, false);
             setBooleanField(IS_ALL_IGNORED, false, false);
         }
     }

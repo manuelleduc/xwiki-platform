@@ -31,7 +31,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.xwiki.component.annotation.Component;
-import org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer;
 import org.xwiki.extension.index.internal.ExtensionIndexStore;
 import org.xwiki.extension.repository.search.ExtensionQuery;
 import org.xwiki.livedata.LiveDataQuery;
@@ -70,7 +69,7 @@ public class ExtensionSecuritySolrClient
         WIKIS, FIELD_INSTALLED_NAMESPACES
     );
 
-    public static final String EXACT_MATCH_PATTERN = "%s:%s";
+    private static final String EXACT_MATCH_PATTERN = "%s:%s";
 
     @Inject
     private ExtensionIndexStore extensionIndexStore;
@@ -143,14 +142,15 @@ public class ExtensionSecuritySolrClient
             }
         }
 
+        Map<String, Object> parametersMap = liveDataQuery.getSource().getParameters();
         String isFromServlet = Boolean.TRUE.toString();
-        if (!Objects.equals(liveDataQuery.getSource().getParameters().get("isFromServlet"), Boolean.TRUE.toString())) {
+        if (!Objects.equals(parametersMap.get("isFromServlet"), Boolean.TRUE.toString())) {
             isFromServlet = Boolean.FALSE.toString();
         }
         solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_FROM_SERVLET, isFromServlet));
 
         String isAllIgnored = Boolean.TRUE.toString();
-        if (!Objects.equals(liveDataQuery.getSource().getParameters().get("isIgnored"), Boolean.TRUE.toString())) {
+        if (!Objects.equals(parametersMap.get("isIgnored"), Boolean.TRUE.toString())) {
             isAllIgnored = Boolean.FALSE.toString();
         }
         solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_ALL_IGNORED, isAllIgnored));

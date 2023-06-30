@@ -41,6 +41,8 @@ public class ExtensionSecurityAnalysisResult
 
     private String advice;
 
+    private boolean fromServlet;
+
     /**
      * @param securityVulnerabilities the security vulnerabilities associated with the analyzed extension
      * @return the current object
@@ -66,6 +68,26 @@ public class ExtensionSecurityAnalysisResult
     public String getAdvice()
     {
         return this.advice;
+    }
+
+    /**
+     * @return {@code true} when the extension is a servlet dependency, when {@code true} the extension is from xwiki
+     *     core, an installable extension, or their transitive dependencies
+     */
+    public boolean isFromServlet()
+    {
+        return this.fromServlet;
+    }
+
+    /**
+     * @param fromServlet {@code true} when the extension is a servlet dependency, when {@code true} the extension
+     *     is from xwiki core, an installable extension, or their transitive dependencies
+     * @return the current object
+     */
+    public ExtensionSecurityAnalysisResult setFromServlet(boolean fromServlet)
+    {
+        this.fromServlet = fromServlet;
+        return this;
     }
 
     /**
@@ -111,6 +133,7 @@ public class ExtensionSecurityAnalysisResult
         return new EqualsBuilder()
             .append(this.securityVulnerabilities, that.securityVulnerabilities)
             .append(this.advice, that.advice)
+            .append(this.fromServlet, that.fromServlet)
             .isEquals();
     }
 
@@ -120,6 +143,7 @@ public class ExtensionSecurityAnalysisResult
         return new HashCodeBuilder(17, 37)
             .append(this.securityVulnerabilities)
             .append(this.advice)
+            .append(this.fromServlet)
             .toHashCode();
     }
 
@@ -129,6 +153,7 @@ public class ExtensionSecurityAnalysisResult
         return new XWikiToStringBuilder(this)
             .append("securityVulnerabilities", this.securityVulnerabilities)
             .append("advice", this.advice)
+            .append("fromServlet", this.fromServlet)
             .toString();
     }
 }

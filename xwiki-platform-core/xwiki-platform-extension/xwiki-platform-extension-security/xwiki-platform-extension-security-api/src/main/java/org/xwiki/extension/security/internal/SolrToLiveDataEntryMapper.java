@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.script.ScriptContext;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.solr.common.SolrDocument;
@@ -55,6 +53,7 @@ import static java.util.Map.ofEntries;
 import static java.util.stream.Collectors.joining;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IGNORED_EXPLANATIONS;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_IGNORED;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
@@ -80,6 +79,8 @@ import static org.xwiki.extension.security.internal.livedata.ExtensionSecurityLi
 @Singleton
 public class SolrToLiveDataEntryMapper
 {
+    private static final String EXTENSION_ID = "extensionId";
+
     @Inject
     private SolrUtils solrUtils;
 
@@ -116,103 +117,50 @@ public class SolrToLiveDataEntryMapper
 
     private String buildCVEList(SolrDocument doc)
     {
-        List<String> cveIds = mapToStrings(doc, SECURITY_CVE_ID);
-        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveIds", cveIds, ENGINE_SCOPE);
-        List<String> cveLinks = mapToStrings(doc, SECURITY_CVE_LINK);
-        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveLinks", cveLinks, ENGINE_SCOPE);
-        List<String> cveCVSS = mapToStrings(doc, SECURITY_CVE_CVSS);
-        this.scriptContextManager.getCurrentScriptContext().setAttribute("cveCVSS", cveCVSS, ENGINE_SCOPE);
-        
-        List<Boolean> ignored = Optional.ofNullable(doc.getFieldValues(IS_IGNORED))
+        // The CVEs of the current extension vulnerabilities.
+        ScriptContext currentScriptContext = this.scriptContextManager.getCurrentScriptContext();
+        currentScriptContext.setAttribute("cveIds", mapToStrings(doc, SECURITY_CVE_ID), ENGINE_SCOPE);
+        // The CVE links of the current extension vulnerabilities.
+        currentScriptContext.setAttribute("cveLinks", mapToStrings(doc, SECURITY_CVE_LINK), ENGINE_SCOPE);
+
+        // The CVSS of the current extension vulnerabilities.
+        currentScriptContext.setAttribute("cveCVSS", mapToStrings(doc, SECURITY_CVE_CVSS), ENGINE_SCOPE);
+
+        List<Boolean> ignored = getIgnored(doc);
+        currentScriptContext.setAttribute("notIgnoredCVEsIndex", getNotIgnoredCVEsIndex(doc, ignored), ENGINE_SCOPE);
+        // The index of ignored CVEs.
+        currentScriptContext.setAttribute("ignoredCVEsIndex", getIgnoredCVEsIndex(doc, ignored), ENGINE_SCOPE);
+        currentScriptContext.setAttribute(EXTENSION_ID, buildExtensionId(doc), ENGINE_SCOPE);
+        currentScriptContext.setAttribute("ignoredMessages", mapToStrings(doc, IGNORED_EXPLANATIONS), ENGINE_SCOPE);
+
+        return this.templateManager.renderNoException("extension/security/liveData/cveID.vm");
+    }
+
+    private static List<Boolean> getIgnored(SolrDocument doc)
+    {
+        // The list of ignored CVEs.
+        return Optional.ofNullable(doc.getFieldValues(IS_IGNORED))
             .map(values -> values.stream()
                 .map(it -> (boolean) it)
                 .collect(Collectors.toList()))
             .orElse(List.of());
+    }
 
-        List<Integer> notIgnoredCVEsIndex = IntStream.range(0, cveIds.size())
+    private static List<Integer> getNotIgnoredCVEsIndex(SolrDocument doc, List<Boolean> ignored)
+    {
+        // The index of non-ignored CVEs.
+        return IntStream.range(0, mapToStrings(doc, SECURITY_CVE_ID).size())
             .filter(((IntPredicate) ignored::get).negate())
             .boxed()
             .collect(Collectors.toList());
-        this.scriptContextManager.getCurrentScriptContext()
-            .setAttribute("notIgnoredCVEsIndex", notIgnoredCVEsIndex, ENGINE_SCOPE);
+    }
 
-        List<Integer> ignoredCVEsIndex = IntStream.range(0, cveIds.size())
+    private static List<Integer> getIgnoredCVEsIndex(SolrDocument doc, List<Boolean> ignored)
+    {
+        return IntStream.range(0, mapToStrings(doc, SECURITY_CVE_ID).size())
             .filter(ignored::get)
             .boxed()
             .collect(Collectors.toList());
-        this.scriptContextManager.getCurrentScriptContext()
-            .setAttribute("ignoredCVEsIndex", ignoredCVEsIndex, ENGINE_SCOPE);
-//
-//        String ignoredStr = IntStream.range(0, cveIds.size())
-//            .filter(ignored::get)
-//            .mapToObj(ignoreCveTemplate(cveIds, cveLinks, cveCVSS))
-//            .collect(joining(newLineHtml));
-//
-//        if (StringUtils.isNotEmpty(ignoredStr) && StringUtils.isNotEmpty(notIgnored)) {
-//            return notIgnored + newLineHtml + "<span class='xHint'>Ignored:" + newLineHtml + ignoredStr + "</span>";
-//        } else if (StringUtils.isNotEmpty(notIgnored)) {
-//            return notIgnored;
-//        } else {
-//            return ignoredStr;
-//        }
-
-        String render;
-        try {
-            render = this.templateManager.render("extension/security/cveID.vm");
-        } catch (Exception e) {
-            // TODO...
-            throw new RuntimeException(e);
-        }
-        return render;
-    }
-
-    private static IntFunction<String> cveTemplate(List<String> cveIds, List<String> cveLinks,
-        List<String> cveCVSS)
-    {
-        return value -> String.format("<a href='%s'>%s</a>&nbsp;(%s)",
-            escapeXml(cveLinks.get(value)),
-            escapeXml(cveIds.get(value)),
-            escapeXml(cveCVSS.get(value)));
-    }
-
-    private static IntFunction<String> ignoreCveTemplate(List<String> cveIds, List<String> cveLinks,
-        List<String> cveCVSS)
-    {
-        return value -> {
-            String link = cveLinks.get(value);
-            String cveId = cveIds.get(value);
-            return String.format("<a href='%s'>%s</a>&nbsp;(%s) "
-                    + "<button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"modal\" "
-                    + "data-target=\"[data-vulnerability-modal='%s']\">"
-                    + "<span class=\"fa fa-file-text-o\"></span>"
-                    + "</button><div class=\"modal fade bs-example-modal-lg\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myLargeModalLabel\" data-vulnerability-modal='%s'>\n"
-                    + "    <div class=\"modal-dialog modal-lg\" role=\"document\">\n"
-                    + "      <div class=\"modal-content\">\n"
-                    + "\n"
-                    + "        <div class=\"modal-header\">\n"
-                    + "          <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n"
-                    + "          <h4 class=\"modal-title\">Vulnerability GHSA-2q8x-2p7f-574v of com.thoughtworks.xstream:xstream/1.4.17</h4>\n"
-                    + "        </div>\n"
-                    + "        <div class=\"modal-body\">\n"
-                    + "          <dl>\n"
-                    + "            <dt>xwiki-platform</dt>\n"
-                    + "            <dd> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum varius tortor vitae velit semper, non viverra sapien fringilla. Donec luctus tellus a neque tempus pharetra. Morbi at interdum tortor. Quisque ullamcorper vitae nibh porta venenatis. Pellentesque facilisis commodo rutrum. Praesent eu enim eleifend, maximus elit sed, tincidunt augue. Etiam id sapien sapien. Nulla facilisi. In hac habitasse platea dictumst. Sed pretium finibus libero porta faucibus. Aliquam enim risus, lacinia vel quam ac, posuere maximus sapien. Mauris ut consectetur erat. </dd>\n"
-                    + "          </dl>\n"
-                    + "          <dl>\n"
-                    + "            <dt>application-xxx-yyy</dt>\n"
-                    + "            <dd>Nam vulputate magna at turpis tristique, sit amet varius sem aliquet. Nunc sodales vulputate faucibus. Aliquam eget lorem est. Quisque vel leo eget arcu interdum volutpat a sagittis nulla.</dd>\n"
-                    + "          </dl>\n"
-                    + "        </div>\n"
-                    + "      </div><!-- /.modal-content -->\n"
-                    + "    </div><!-- /.modal-dialog -->\n"
-                    + "  </div>",
-                escapeXml(link),
-                escapeXml(cveId),
-                escapeXml(cveCVSS.get(value)),
-                escapeXml(cveId),
-                escapeXml(cveId)
-            );
-        };
     }
 
     private static List<String> mapToStrings(SolrDocument doc, String name)
@@ -226,20 +174,20 @@ public class SolrToLiveDataEntryMapper
 
     private String buildAdvice(SolrDocument doc)
     {
-        String translationPlain = this.l10n.getTranslationPlain(this.solrUtils.get(SECURITY_ADVICE, doc));
-        if (translationPlain == null) {
+        String advice = this.l10n.getTranslationPlain(this.solrUtils.get(SECURITY_ADVICE, doc));
+        if (advice == null) {
             return "";
         }
-        return translationPlain;
+        return advice;
     }
 
     private String buildFixVersion(SolrDocument doc)
     {
-        Object o = doc.get(SECURITY_FIX_VERSION);
-        if (o == null) {
+        Object fixVersion = doc.get(SECURITY_FIX_VERSION);
+        if (fixVersion == null) {
             return "";
         }
-        return String.valueOf(o);
+        return String.valueOf(fixVersion);
     }
 
     private Double buildMaxCVSS(SolrDocument doc)
@@ -285,7 +233,7 @@ public class SolrToLiveDataEntryMapper
     {
         return List.of(
             new BasicNameValuePair("section", "XWiki.Extensions"),
-            new BasicNameValuePair("extensionId", extensionId),
+            new BasicNameValuePair(EXTENSION_ID, extensionId),
             new BasicNameValuePair("extensionVersion", extensionVersion)
         );
     }

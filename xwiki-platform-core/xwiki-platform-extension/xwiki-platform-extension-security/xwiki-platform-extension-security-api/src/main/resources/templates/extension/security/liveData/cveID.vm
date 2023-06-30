@@ -17,47 +17,44 @@
 ## Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 ## 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 ## ---------------------------------------------------------------------------
+## Since 15.6RC1
+## This template renders the content of the CVEs list of an extension.
+## The CVEs list is enriched with links to the CVEs description page, their corresponding CVSS scores.
+## Additionally, ignored CVSS have a popup with details explaining why they have been ignored (and when they shouldn't) 
+## ---------------------------------------------------------------------------
 #foreach($index in $notIgnoredCVEsIndex)
 <a href="$cveLinks[$index]">$cveIds[$index]</a>&nbsp;($cveCVSS[$index])<br>
 #end
 <div class="xHint">
   #foreach($index in $ignoredCVEsIndex)
     #set ($cveId = $cveIds[$index])
+    #set ($ignoredMessage = $ignoredMessages[$index])
     <a href="$cveLinks[$index]">$cveId</a>&nbsp;($cveCVSS[$index])&nbsp;
-    <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
-            data-target="[data-vulnerability-modal='$cveId']">
+    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#$escapetool.xml($cveId)"
+            aria-controls="$escapetool.xml($cveId)">
+      <span class="sr-only">
+        <!-- TODO: translate -->
+        Display explanations for $escapetool.xml($cveId)
+      </span>
       $services.icon.renderHTML('file-text')
     </button>
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-         data-vulnerability-modal='$cveId'>
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id='$escapetool.xml($cveId)'>
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">Vulnerability GHSA-2q8x-2p7f-574v of com.thoughtworks.xstream:xstream/1.4.17</h4>
+            <h2 class="modal-title">
+              <!-- TODO: translate -->
+              Vulnerability $escapetool.xml($cveId) of $escapetool.xml($extensionId)
+            </h2>
           </div>
           <div class="modal-body">
-            <dl>
-              <dt>xwiki-platform</dt>
-              <dd> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum varius tortor vitae velit semper, non
-                viverra sapien fringilla. Donec luctus tellus a neque tempus pharetra. Morbi at interdum tortor. Quisque
-                ullamcorper vitae nibh porta venenatis. Pellentesque facilisis commodo rutrum. Praesent eu enim eleifend,
-                maximus elit sed, tincidunt augue. Etiam id sapien sapien. Nulla facilisi. In hac habitasse platea dictumst.
-                Sed pretium finibus libero porta faucibus. Aliquam enim risus, lacinia vel quam ac, posuere maximus sapien.
-                Mauris ut consectetur erat.
-              </dd>
-            </dl>
-            <dl>
-              <dt>application-xxx-yyy</dt>
-              <dd>Nam vulputate magna at turpis tristique, sit amet varius sem aliquet. Nunc sodales vulputate faucibus.
-                Aliquam eget lorem est. Quisque vel leo eget arcu interdum volutpat a sagittis nulla.
-              </dd>
-            </dl>
+            $ignoredMessage
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+        </div>
+      </div>
     </div>
     <br>
   #end

@@ -121,8 +121,6 @@ Some explanation regarding what are those and how to react
 {{/html}}
 {{/velocity}}
 
-
-
 {{include reference="XWiki.Extension.Security.Code.ConfigClassSheet"/}}</content>
   <object>
     <name>XWiki.Extension.Security.Code.Admin</name>

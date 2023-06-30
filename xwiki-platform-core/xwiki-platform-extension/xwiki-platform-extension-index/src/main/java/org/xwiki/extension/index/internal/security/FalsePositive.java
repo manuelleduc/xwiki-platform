@@ -27,9 +27,9 @@ package org.xwiki.extension.index.internal.security;
  */
 public class FalsePositive
 {
-    private final String source;
+    private String source;
 
-    private final String explanation;
+    private String explanation;
 
     /**
      * Default constructor.
@@ -43,6 +43,12 @@ public class FalsePositive
     {
         this.source = source;
         this.explanation = explanation;
+    }
+
+    public FalsePositive()
+    {
+        this.source = null;
+        this.explanation = null;
     }
 
     /**
@@ -61,5 +67,15 @@ public class FalsePositive
     public String getExplanation()
     {
         return this.explanation;
+    }
+
+    public void setSource(String source)
+    {
+        this.source = source;
+    }
+
+    public void setExplanation(String explanation)
+    {
+        this.explanation = explanation;
     }
 }

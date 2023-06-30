@@ -53,4 +53,10 @@ public interface ExtensionSecurityConfiguration
      *     href="https://api.osv.dev/v1/query">https://api.osv.dev/v1/query</a>
      */
     String getScanURL();
+
+    /**
+     * @return the URL where the false-positive are fetched
+     * @since 15.6RC1
+     */
+    String getFalsePositiveURL();
 }

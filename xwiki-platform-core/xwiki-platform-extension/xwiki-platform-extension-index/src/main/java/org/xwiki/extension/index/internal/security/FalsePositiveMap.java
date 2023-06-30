@@ -32,7 +32,7 @@ import java.util.Optional;
  */
 public class FalsePositiveMap
 {
-    private final Map<String, List<FalsePositive>> falsePositiveMap = new HashMap<>();
+    private Map<String, List<FalsePositive>> falsePositiveMap = new HashMap<>();
 
     /**
      * @return the map of false-positive.
@@ -40,6 +40,11 @@ public class FalsePositiveMap
     public Map<String, List<FalsePositive>> getFalsePositiveMap()
     {
         return this.falsePositiveMap;
+    }
+
+    public void setFalsePositiveMap(Map<String, List<FalsePositive>> falsePositiveMap)
+    {
+        this.falsePositiveMap = falsePositiveMap;
     }
 
     /**

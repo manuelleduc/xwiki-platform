@@ -53,6 +53,12 @@ public class DefaultExtensionSecurityConfiguration implements ExtensionSecurityC
      */
     public static final String SCAN_URL = "scanURL";
 
+    /**
+     * The URL where the false-positive are fetched.
+     * @since 15.6RC1
+     */
+    public static final String FALSE_POSITIVE_URL = "falsePositiveURL";
+
     @Inject
     @Named("xwikiproperties")
     private ConfigurationSource xwikiPropertiesConfigurationSource;
@@ -77,6 +83,13 @@ public class DefaultExtensionSecurityConfiguration implements ExtensionSecurityC
     public String getScanURL()
     {
         return getWithFallback(SCAN_URL, "extension.security.scan.url", "https://api.osv.dev/v1/query");
+    }
+
+    @Override
+    public String getFalsePositiveURL()
+    {
+        return getWithFallback(FALSE_POSITIVE_URL, "extension.security.falsePositive.url",
+            "http://localhost:3000/falsePositive");
     }
 
     private <T> T getWithFallback(String classKey, String propertiesKey, T fallbackValue)

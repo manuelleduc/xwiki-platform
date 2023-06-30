@@ -365,6 +365,7 @@ public class ExtensionIndexStore implements Initializable
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_IGNORED, ignoredMapping, doc);
         List<String> ignoredExplanations = result.getSecurityVulnerabilities().stream()
             .map(SecurityVulnerabilityDescriptor::getIgnoredDescription)
+            .map(it -> it == null ? "" : it)
             .collect(Collectors.toList());
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IGNORED_EXPLANATIONS, ignoredExplanations, doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_ALL_IGNORED,

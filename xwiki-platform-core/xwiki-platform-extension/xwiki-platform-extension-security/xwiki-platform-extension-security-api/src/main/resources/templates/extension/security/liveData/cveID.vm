@@ -30,7 +30,10 @@
     #set ($cveId = $cveIds[$index])
     #set ($ignoredMessage = $ignoredMessages[$index])
     <a href="$cveLinks[$index]">$cveId</a>&nbsp;($cveCVSS[$index])&nbsp;
-    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#$escapetool.xml($cveId)"
+    <button type="button"
+            class="btn btn-default btn-xs"
+            data-toggle="modal"
+            data-target="#$escapetool.xml($cveId)"
             aria-controls="$escapetool.xml($cveId)">
       <span class="sr-only">
         <!-- TODO: translate -->

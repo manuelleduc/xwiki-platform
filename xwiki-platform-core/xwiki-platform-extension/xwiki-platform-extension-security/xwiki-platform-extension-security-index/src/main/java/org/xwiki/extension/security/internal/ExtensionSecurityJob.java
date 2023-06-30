@@ -22,7 +22,6 @@ package org.xwiki.extension.security.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +37,6 @@ import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
 import org.xwiki.extension.CoreExtension;
 import org.xwiki.extension.Extension;
 import org.xwiki.extension.InstalledExtension;
-import org.xwiki.extension.index.internal.security.FalsePositive;
 import org.xwiki.extension.index.internal.security.FalsePositiveMap;
 import org.xwiki.extension.index.security.ExtensionSecurityAnalysisResult;
 import org.xwiki.extension.repository.CoreExtensionRepository;
@@ -82,6 +80,9 @@ public class ExtensionSecurityJob
     @Inject
     private VulnerabilityIndexer vulnerabilityIndexer;
 
+    @Inject
+    private FalsePositiveFetcher falsePositiveFetcher;
+
     @Override
     public String getType()
     {
@@ -95,18 +96,18 @@ public class ExtensionSecurityJob
         Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
         this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
-        FalsePositiveMap falsePositiveCVEs = getFalsePositive();
+        FalsePositiveMap falsePositiveMap = getFalsePositiveMap();
 
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(10);
 
             List<Future<Boolean>> tasks = new ArrayList<>();
             for (InstalledExtension extension : installedExtensions) {
-                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveCVEs)));
+                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveMap)));
             }
 
             for (CoreExtension extension : coreExtensions) {
-                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveCVEs)));
+                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveMap)));
             }
 
             long newVulnerabilityCount = consumeTasks(tasks);
@@ -119,42 +120,16 @@ public class ExtensionSecurityJob
         }
     }
 
-    private static FalsePositiveMap getFalsePositive()
+    private FalsePositiveMap getFalsePositiveMap()
     {
-        // TODO: replace with a component, fetching this remotely.
-        FalsePositiveMap falsePositiveCVEs = new FalsePositiveMap();
-        Map<String, List<FalsePositive>> map = falsePositiveCVEs.getFalsePositiveMap();
-        String sourcePlatform = "xwiki-platform";
-        String explanation1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non pellentesque sem."
-            + " Maecenas ultricies, nisi quis efficitur consectetur, libero enim blandit justo, at auctor nisi arcu "
-            + "congue odio. ";
-        String explanation2 = "ivamus eget condimentum elit, in blandit turpis. Nullam suscipit eros vitae justo "
-            + "suscipit aliquam. Curabitur at nibh id elit eleifend condimentum eu a urna. Vivamus vel molestie nunc. "
-            + "Suspendisse porta porta quam, vel pulvinar magna vulputate a. In porta tincidunt dui. Cras tortor ante, "
-            + "interdum eget enim quis, posuere varius ligula.";
-        String explanation3 = "Integer ligula eros, vulputate eu sem quis, rhoncus consequat tellus. Phasellus eget "
-            + "tincidunt nibh. Ut luctus id dolor in dignissim. ";
-        map.put("GHSA-2q8x-2p7f-574v", List.of(new FalsePositive(sourcePlatform, explanation1),
-            new FalsePositive("some-extension", explanation2)));
-        map.put("GHSA-3ccq-5vw3-2p6x", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-64xx-cq4q-mf44", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-6w62-hx7r-mw68", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-6wf9-jmg9-vxcc", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-8jrj-525p-826v", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-cxfm-5m4g-x7xp", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-f8cc-g7j8-xxpm", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-g5w6-mrj7-75h2", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-h7v4-7xg3-hxcc", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-hph2-m3g5-xxv4", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-j563-grx4-pjpv", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-j9h8-phrw-h4fh", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-p8pq-r894-fm8f", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-qrx8-8545-4wg2", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-rmr5-cpv2-vgjf", List.of(new FalsePositive(sourcePlatform, explanation1)));
-//        map.put("GHSA-xw4p-crpj-vjx2", List.of(new FalsePositive(sourcePlatform, explanation2)));
-//        map.put("GHSA-gx2c-fvhc-ph4j", List.of(new FalsePositive(sourcePlatform, explanation3)));
-//        map.put("GHSA-rmpj-7c96-mrg8", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        return falsePositiveCVEs;
+        FalsePositiveMap falsePositiveMap;
+        try {
+            falsePositiveMap = this.falsePositiveFetcher.fetch().orElseGet(FalsePositiveMap::new);
+        } catch (ExtensionSecurityException e) {
+            this.logger.warn("Issue during the fetching of the false-positive. Cause: [{}]", getRootCauseMessage(e));
+            falsePositiveMap = new FalsePositiveMap();
+        }
+        return falsePositiveMap;
     }
 
     private long consumeTasks(List<Future<Boolean>> tasks) throws InterruptedException
@@ -176,19 +151,19 @@ public class ExtensionSecurityJob
         return newVulnerabilityCount;
     }
 
-    private boolean handleExtension(Extension extension, FalsePositiveMap falsePositiveCVEs)
+    private boolean handleExtension(Extension extension, FalsePositiveMap falsePositiveMap)
     {
         boolean hasNew = false;
         try {
             ExtensionSecurityAnalysisResult analysis = this.extensionSecurityAnalyzer.analyze(extension);
             if (analysis != null) {
-                boolean update = this.vulnerabilityIndexer.update(extension, analysis, falsePositiveCVEs);
+                boolean update = this.vulnerabilityIndexer.update(extension, analysis, falsePositiveMap);
                 if (update) {
                     hasNew = true;
                 }
             }
         } catch (ExtensionSecurityException e) {
-            this.logger.warn("Failed to analyse [{}]. Cause: [{}]", extension.getId(), getRootCauseMessage(e));
+            this.logger.warn("Failed to analyze [{}]. Cause: [{}]", extension.getId(), getRootCauseMessage(e));
         } catch (Exception e) {
             this.logger.warn("Unexpected error [{}]", getRootCauseMessage(e));
         }

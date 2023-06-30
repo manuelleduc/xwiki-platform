@@ -91,6 +91,7 @@ public class ExtensionSecuritySolrClient
         this.extensionIndexStore.createSolrQuery(new ExtensionQuery(), solrQuery);
 
         initFilter(solrQuery);
+        solrQuery.addFilterQuery(String.format(IS_ALL_IGNORED + ":false"));
         QueryResponse search = this.extensionIndexStore.search(solrQuery);
         return search.getResults().getNumFound();
     }

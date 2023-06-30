@@ -89,7 +89,7 @@ public class DefaultExtensionSecurityConfiguration implements ExtensionSecurityC
     public String getFalsePositiveURL()
     {
         return getWithFallback(FALSE_POSITIVE_URL, "extension.security.falsePositive.url",
-            "http://localhost:3000/falsePositive");
+            "https://extensions.xwiki.org/xwiki/bin/view/Extension/Extension/Security/Code/FalsePositive/");
     }
 
     private <T> T getWithFallback(String classKey, String propertiesKey, T fallbackValue)

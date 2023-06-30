@@ -41,7 +41,7 @@
       </span>
       $services.icon.renderHTML('file-text')
     </button>
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id='$escapetool.xml($cveId)'>
+    <div class="modal fade ignored-cve-modal" tabindex="-1" role="dialog" id='$escapetool.xml($cveId)'>
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">

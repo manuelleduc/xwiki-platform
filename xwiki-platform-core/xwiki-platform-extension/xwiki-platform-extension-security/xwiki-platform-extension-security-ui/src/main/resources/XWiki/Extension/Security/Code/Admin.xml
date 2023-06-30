@@ -487,7 +487,7 @@ Some explanation regarding what are those and how to react
       <cache>long</cache>
     </property>
     <property>
-      <code>#extension-vulnerabilities-list {
+      <code>#extension-vulnerabilities-list, #ignored-vulnerabilities-list, #servlet-vulnerabilities-list {
   td,
   th {
     inline-size: min-content;
@@ -502,6 +502,10 @@ Some explanation regarding what are those and how to react
 
   td[data-title="CVE IDs"] {
     white-space: nowrap;
+
+    .ignored-cve-modal {
+      white-space: normal;
+    }
   }
 
   .property-name {

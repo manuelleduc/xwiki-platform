@@ -63,26 +63,27 @@
 
 &lt;/div&gt;
   &lt;div role="tabpanel" class="tab-pane" id="ignored-vulnerabilities"&gt;
-TO BE Updated
 
+(((&amp;nbsp;)))
 {{warning}}
-Some explanation regarding why those extensions are ignored.
+Extensions listed in this section have known vulnerabilities, but none that are considered as dangerous in the context of XWiki.
 {{/warning}}
 
 {{liveData
   id="ignored-vulnerabilities-list"
   source="extensionSecurity"
   sourceParameters="isFromServlet=false&amp;isIgnored=true"
-  properties="name,wikis,cveID,fixVersion,advice"
+  properties="name,wikis,cveID,fixVersion"
   showPageSizeDropdown="false"}}
 {{/liveData}}
 
 &lt;/div&gt;
 &lt;div role="tabpanel" class="tab-pane" id="servlet-vulnerabilities"&gt;
-To be updated
 
+(((&amp;nbsp;)))
 {{warning}}
-Some explanation regarding what are those and how to react
+Extensions listed in this section have known vulnerabilities, but are outside of the scope of XWiki.
+This means that the extensions are provided by the servlet container running XWiki, and can't be fixed by upgrading XWiki or one of its extension.
 {{/warning}}
 
 {{liveData

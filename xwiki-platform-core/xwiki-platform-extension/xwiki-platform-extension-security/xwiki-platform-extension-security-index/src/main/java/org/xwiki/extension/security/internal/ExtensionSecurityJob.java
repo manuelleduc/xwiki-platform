@@ -151,9 +151,10 @@ public class ExtensionSecurityJob
         map.put("GHSA-p8pq-r894-fm8f", List.of(new FalsePositive(sourcePlatform, explanation2)));
         map.put("GHSA-qrx8-8545-4wg2", List.of(new FalsePositive(sourcePlatform, explanation3)));
         map.put("GHSA-rmr5-cpv2-vgjf", List.of(new FalsePositive(sourcePlatform, explanation1)));
-//        map.put("GHSA-xw4p-crpj-vjx2", List.of(new FalsePositive(sourcePlatform, explanation2)));
-//        map.put("GHSA-gx2c-fvhc-ph4j", List.of(new FalsePositive(sourcePlatform, explanation3)));
-//        map.put("GHSA-rmpj-7c96-mrg8", List.of(new FalsePositive(sourcePlatform, explanation1)));
+        map.put("GHSA-xw4p-crpj-vjx2", List.of(new FalsePositive(sourcePlatform, explanation2)));
+        map.put("GHSA-jv4x-j47q-6qvp", List.of(new FalsePositive(sourcePlatform, explanation3)));
+        map.put("GHSA-2363-cqg2-863c", List.of(new FalsePositive(sourcePlatform, explanation1)));
+        map.put("GHSA-58qw-p7qm-5rvh", List.of(new FalsePositive(sourcePlatform, explanation1)));
         return falsePositiveCVEs;
     }
 

@@ -100,7 +100,7 @@ class ExtensionSecuritySchedulerTest
         this.scheduler.start();
         verify(this.extensionSecurityConfiguration, timeout(1000)).isSecurityScanEnabled();
         this.scheduler.restart();
-        verify(this.extensionSecurityConfiguration, timeout(1000)).isSecurityScanEnabled();
+        verify(this.extensionSecurityConfiguration, timeout(1000).times(2)).isSecurityScanEnabled();
         assertEquals("Extension security scan disabled.", this.logCapture.getMessage(0));
         assertEquals("Extension security scan disabled.", this.logCapture.getMessage(1));
     }

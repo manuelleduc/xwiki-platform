@@ -87,7 +87,7 @@ public class ExtensionSecurityScheduler implements Runnable, Disposable
         if (!this.started) {
             return;
         }
-        
+
         this.executor.shutdown();
         this.executor = null;
         start();
@@ -118,6 +118,8 @@ public class ExtensionSecurityScheduler implements Runnable, Disposable
     @Override
     public void dispose()
     {
-        this.executor.shutdownNow();
+        if (this.executor != null) {
+            this.executor.shutdownNow();
+        }
     }
 }

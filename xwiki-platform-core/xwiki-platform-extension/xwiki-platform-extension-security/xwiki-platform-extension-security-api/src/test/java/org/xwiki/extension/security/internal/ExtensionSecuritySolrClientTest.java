@@ -101,10 +101,13 @@ class ExtensionSecuritySolrClientTest
         liveDataQuery.setOffset(0L);
         liveDataQuery.setSort(List.of());
         liveDataQuery.setFilters(List.of(new LiveDataQuery.Filter(FIX_VERSION, "match", "15.5")));
+        liveDataQuery.setSource(new LiveDataQuery.Source());
         this.solrClient.solrQuery(liveDataQuery);
 
         SolrQuery params = new SolrQuery();
         params.addFilterQuery("security_maxCVSS:{0 TO 10]");
+        params.addFilterQuery("is_from_servlet:false");
+        params.addFilterQuery("security_is_all_ignored:false");
         params.addFilterQuery(FIELD_INSTALLED_NAMESPACES + ":[* TO *]");
 
         verify(this.extensionIndexStore)

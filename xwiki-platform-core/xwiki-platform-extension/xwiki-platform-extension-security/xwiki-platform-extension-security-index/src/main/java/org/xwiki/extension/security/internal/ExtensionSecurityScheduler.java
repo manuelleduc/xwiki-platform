@@ -87,7 +87,7 @@ public class ExtensionSecurityScheduler implements Runnable, Disposable
         if (!this.started) {
             return;
         }
-
+        
         this.executor.shutdown();
         this.executor = null;
         start();

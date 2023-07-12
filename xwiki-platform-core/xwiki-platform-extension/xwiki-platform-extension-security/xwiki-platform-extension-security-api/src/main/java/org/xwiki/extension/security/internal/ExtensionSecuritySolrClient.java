@@ -37,8 +37,8 @@ import org.xwiki.livedata.LiveDataQuery;
 import org.xwiki.search.solr.SolrUtils;
 
 import static org.xwiki.extension.InstalledExtension.FIELD_INSTALLED_NAMESPACES;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_IGNORED;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_SAFE;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_ENVIRONMENT;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_FIX_VERSION;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_MAX_CVSS;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SOLR_FIELD_EXTENSIONID;
@@ -143,17 +143,17 @@ public class ExtensionSecuritySolrClient
         }
 
         Map<String, Object> parametersMap = liveDataQuery.getSource().getParameters();
-        String isFromServlet = Boolean.TRUE.toString();
-        if (!Objects.equals(parametersMap.get("isFromServlet"), Boolean.TRUE.toString())) {
-            isFromServlet = Boolean.FALSE.toString();
+        String isFromEnvironment = Boolean.TRUE.toString();
+        if (!Objects.equals(parametersMap.get("isFromEnvironment"), Boolean.TRUE.toString())) {
+            isFromEnvironment = Boolean.FALSE.toString();
         }
-        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_FROM_SERVLET, isFromServlet));
+        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_FROM_ENVIRONMENT, isFromEnvironment));
 
         String isAllIgnored = Boolean.TRUE.toString();
-        if (!Objects.equals(parametersMap.get("isIgnored"), Boolean.TRUE.toString())) {
+        if (!Objects.equals(parametersMap.get("isSafe"), Boolean.TRUE.toString())) {
             isAllIgnored = Boolean.FALSE.toString();
         }
-        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_ALL_IGNORED, isAllIgnored));
+        solrQuery.addFilterQuery(String.format(EXACT_MATCH_PATTERN, IS_ALL_SAFE, isAllIgnored));
     }
 
     private static void initFilter(SolrQuery solrQuery)

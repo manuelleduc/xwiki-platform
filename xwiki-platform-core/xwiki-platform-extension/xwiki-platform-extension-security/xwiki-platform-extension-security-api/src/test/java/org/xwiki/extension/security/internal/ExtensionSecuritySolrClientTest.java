@@ -37,13 +37,16 @@ import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.xwiki.extension.InstalledExtension.FIELD_INSTALLED_NAMESPACES;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_SAFE;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_ENVIRONMENT;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_MAX_CVSS;
 import static org.xwiki.extension.security.internal.livedata.ExtensionSecurityLiveDataConfigurationProvider.FIX_VERSION;
 
 /**
@@ -105,9 +108,9 @@ class ExtensionSecuritySolrClientTest
         this.solrClient.solrQuery(liveDataQuery);
 
         SolrQuery params = new SolrQuery();
-        params.addFilterQuery("security_maxCVSS:{0 TO 10]");
-        params.addFilterQuery("is_from_servlet:false");
-        params.addFilterQuery("security_is_all_ignored:false");
+        params.addFilterQuery(SECURITY_MAX_CVSS + ":{0 TO 10]");
+        params.addFilterQuery(IS_FROM_ENVIRONMENT + ":false");
+        params.addFilterQuery(IS_ALL_SAFE + ":false");
         params.addFilterQuery(FIELD_INSTALLED_NAMESPACES + ":[* TO *]");
 
         verify(this.extensionIndexStore)

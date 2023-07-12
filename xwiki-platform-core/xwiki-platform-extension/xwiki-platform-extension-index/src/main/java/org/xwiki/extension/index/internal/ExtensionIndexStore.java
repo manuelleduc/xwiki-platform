@@ -83,10 +83,10 @@ import org.xwiki.search.solr.Solr;
 import org.xwiki.search.solr.SolrException;
 import org.xwiki.search.solr.SolrUtils;
 
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IGNORED_EXPLANATIONS;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_IGNORED;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_SERVLET;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_IGNORED;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_SAFE_EXPLANATIONS;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_SAFE;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_ENVIRONMENT;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_REVIEWED_SAFE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_COUNT;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
@@ -338,17 +338,17 @@ public class ExtensionIndexStore implements Initializable
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_ADVICE, result.getAdvice(), doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_COUNT,
             result.getSecurityVulnerabilities().size(), doc);
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_SERVLET, result.isFromServlet(), doc);
-        List<Boolean> ignoredMapping = result.getSecurityVulnerabilities().stream()
-            .map(SecurityVulnerabilityDescriptor::isIgnored)
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_ENVIRONMENT, result.isFromEnvironment(), doc);
+        List<Boolean> safeMapping = result.getSecurityVulnerabilities().stream()
+            .map(SecurityVulnerabilityDescriptor::isSafe)
             .collect(Collectors.toList());
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_IGNORED, ignoredMapping, doc);
-        List<String> ignoredExplanations = result.getSecurityVulnerabilities().stream()
-            .map(SecurityVulnerabilityDescriptor::getIgnoredDescription)
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_REVIEWED_SAFE, safeMapping, doc);
+        List<String> reviewExplanations = result.getSecurityVulnerabilities().stream()
+            .map(SecurityVulnerabilityDescriptor::getReviews)
             .collect(Collectors.toList());
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IGNORED_EXPLANATIONS, ignoredExplanations, doc);
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_ALL_IGNORED,
-            ignoredMapping.stream().allMatch(it -> it), doc);
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_SAFE_EXPLANATIONS, reviewExplanations, doc);
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_ALL_SAFE,
+            safeMapping.stream().allMatch(it -> it), doc);
 
         add(doc);
         commit();

@@ -41,7 +41,7 @@ public class ExtensionSecurityAnalysisResult
 
     private String advice;
 
-    private boolean fromServlet;
+    private boolean fromEnvironment;
 
     /**
      * @param securityVulnerabilities the security vulnerabilities associated with the analyzed extension
@@ -71,22 +71,24 @@ public class ExtensionSecurityAnalysisResult
     }
 
     /**
-     * @return {@code true} when the extension is a servlet dependency, when {@code true} the extension is from xwiki
-     *     core, an installable extension, or their transitive dependencies
+     * @return {@code true} when the extension is provided by the environment (e.g., from a servlet engine),
+     *     {@code false} when the extension is from xwiki core, an installable extension, or their transitive
+     *     dependencies
      */
-    public boolean isFromServlet()
+    public boolean isFromEnvironment()
     {
-        return this.fromServlet;
+        return this.fromEnvironment;
     }
 
     /**
-     * @param fromServlet {@code true} when the extension is a servlet dependency, when {@code true} the extension
-     *     is from xwiki core, an installable extension, or their transitive dependencies
+     * @param fromEnvironment {@code true} when the extension is provided by the environment (e.g., from a servlet
+     *     engine), {@code false} when the extension is from xwiki core, an installable extension, or their transitive
+     *     dependencies
      * @return the current object
      */
-    public ExtensionSecurityAnalysisResult setFromServlet(boolean fromServlet)
+    public ExtensionSecurityAnalysisResult setFromEnvironment(boolean fromEnvironment)
     {
-        this.fromServlet = fromServlet;
+        this.fromEnvironment = fromEnvironment;
         return this;
     }
 
@@ -133,7 +135,7 @@ public class ExtensionSecurityAnalysisResult
         return new EqualsBuilder()
             .append(this.securityVulnerabilities, that.securityVulnerabilities)
             .append(this.advice, that.advice)
-            .append(this.fromServlet, that.fromServlet)
+            .append(this.fromEnvironment, that.fromEnvironment)
             .isEquals();
     }
 
@@ -143,7 +145,7 @@ public class ExtensionSecurityAnalysisResult
         return new HashCodeBuilder(17, 37)
             .append(this.securityVulnerabilities)
             .append(this.advice)
-            .append(this.fromServlet)
+            .append(this.fromEnvironment)
             .toHashCode();
     }
 
@@ -153,7 +155,7 @@ public class ExtensionSecurityAnalysisResult
         return new XWikiToStringBuilder(this)
             .append("securityVulnerabilities", this.securityVulnerabilities)
             .append("advice", this.advice)
-            .append("fromServlet", this.fromServlet)
+            .append("fromEnvironment", this.fromEnvironment)
             .toString();
     }
 }

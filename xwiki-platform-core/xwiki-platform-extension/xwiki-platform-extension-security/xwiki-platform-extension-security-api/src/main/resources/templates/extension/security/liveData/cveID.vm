@@ -22,11 +22,11 @@
 ## The CVEs list is enriched with links to the CVEs description page, their corresponding CVSS scores.
 ## Additionally, ignored CVSS have a popup with details explaining why they have been ignored (and when they shouldn't) 
 ## ---------------------------------------------------------------------------
-#foreach($index in $notIgnoredCVEsIndex)
+#foreach($index in $notSafeCVEsIndex)
 <a href="$cveLinks[$index]">$cveIds[$index]</a>&nbsp;($cveCVSS[$index])<br>
 #end
 <div class="xHint">
-  #foreach($index in $ignoredCVEsIndex)
+  #foreach($index in $safeCVEsIndex)
     #set ($cveId = $cveIds[$index])
     #set ($ignoredMessage = $ignoredMessages[$index])
     <a href="$cveLinks[$index]">$cveId</a>&nbsp;($cveCVSS[$index])&nbsp;

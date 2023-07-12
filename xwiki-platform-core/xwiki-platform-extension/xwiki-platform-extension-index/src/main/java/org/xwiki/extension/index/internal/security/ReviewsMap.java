@@ -25,38 +25,38 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Contains the maps of all the CVEs can be ignored and their corresponding list of false-positive analysis.
+ * Contains the maps of all the CVEs with available reviews.
  *
  * @version $Id$
  * @since 15.6RC1
  */
-public class FalsePositiveMap
+public class ReviewsMap
 {
-    private final Map<String, List<FalsePositive>> falsePositiveMap = new HashMap<>();
+    private final Map<String, List<Review>> reviewsMap = new HashMap<>();
 
     /**
-     * @return the map of false-positive.
+     * @return the map of CVEs and their associated reviews.
      */
-    public Map<String, List<FalsePositive>> getFalsePositiveMap()
+    public Map<String, List<Review>> getReviewsMap()
     {
-        return this.falsePositiveMap;
+        return this.reviewsMap;
     }
 
     /**
      * @param id a CVE id
-     * @return {@code true} if a given id is a known false-positive
+     * @return {@code true} if at least a review is available for a given id
      */
     public boolean contains(String id)
     {
-        return this.falsePositiveMap.containsKey(id);
+        return this.reviewsMap.containsKey(id);
     }
 
     /**
      * @param id a CVE id
-     * @return the list of false-positive analysis if found, {@link Optional#empty()} otherwise
+     * @return the list of reviews if found, {@link Optional#empty()} otherwise
      */
-    public Optional<List<FalsePositive>> getById(String id)
+    public Optional<List<Review>> getById(String id)
     {
-        return Optional.ofNullable(this.falsePositiveMap.get(id));
+        return Optional.ofNullable(this.reviewsMap.get(id));
     }
 }

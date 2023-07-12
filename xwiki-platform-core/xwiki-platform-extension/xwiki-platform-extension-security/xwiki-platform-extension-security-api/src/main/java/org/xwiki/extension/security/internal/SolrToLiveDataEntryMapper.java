@@ -53,8 +53,8 @@ import static java.util.Map.ofEntries;
 import static java.util.stream.Collectors.joining;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IGNORED_EXPLANATIONS;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_IGNORED;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_SAFE_EXPLANATIONS;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_REVIEWED_SAFE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_CVSS;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_CVE_ID;
@@ -126,39 +126,42 @@ public class SolrToLiveDataEntryMapper
         // The CVSS of the current extension vulnerabilities.
         currentScriptContext.setAttribute("cveCVSS", mapToStrings(doc, SECURITY_CVE_CVSS), ENGINE_SCOPE);
 
-        List<Boolean> ignored = getIgnored(doc);
-        currentScriptContext.setAttribute("notIgnoredCVEsIndex", getNotIgnoredCVEsIndex(doc, ignored), ENGINE_SCOPE);
-        // The index of ignored CVEs.
-        currentScriptContext.setAttribute("ignoredCVEsIndex", getIgnoredCVEsIndex(doc, ignored), ENGINE_SCOPE);
+        List<Boolean> safe = getSafe(doc);
+        currentScriptContext.setAttribute("notSafeCVEsIndex", getNotSafeCVEsIndex(doc, safe), ENGINE_SCOPE);
+        // The index of safe CVEs.
+        currentScriptContext.setAttribute("safeCVEsIndex", getSafeCVEsIndex(doc, safe), ENGINE_SCOPE);
         currentScriptContext.setAttribute(EXTENSION_ID, buildExtensionId(doc), ENGINE_SCOPE);
-        currentScriptContext.setAttribute("ignoredMessages", mapToStrings(doc, IGNORED_EXPLANATIONS), ENGINE_SCOPE);
+
+        // TODO: update to take into account that reviews can also be one unsafe code, to explain why the upgrade did
+        // not occur yet
+        currentScriptContext.setAttribute("ignoredMessages", mapToStrings(doc, IS_SAFE_EXPLANATIONS), ENGINE_SCOPE);
 
         return this.templateManager.renderNoException("extension/security/liveData/cveID.vm");
     }
 
-    private static List<Boolean> getIgnored(SolrDocument doc)
+    private static List<Boolean> getSafe(SolrDocument doc)
     {
-        // The list of ignored CVEs.
-        return Optional.ofNullable(doc.getFieldValues(IS_IGNORED))
+        // The list of safe CVEs.
+        return Optional.ofNullable(doc.getFieldValues(IS_REVIEWED_SAFE))
             .map(values -> values.stream()
                 .map(it -> (boolean) it)
                 .collect(Collectors.toList()))
             .orElse(List.of());
     }
 
-    private static List<Integer> getNotIgnoredCVEsIndex(SolrDocument doc, List<Boolean> ignored)
+    private static List<Integer> getNotSafeCVEsIndex(SolrDocument doc, List<Boolean> safe)
     {
-        // The index of non-ignored CVEs.
+        // The index of non-safe CVEs.
         return IntStream.range(0, mapToStrings(doc, SECURITY_CVE_ID).size())
-            .filter(((IntPredicate) ignored::get).negate())
+            .filter(((IntPredicate) safe::get).negate())
             .boxed()
             .collect(Collectors.toList());
     }
 
-    private static List<Integer> getIgnoredCVEsIndex(SolrDocument doc, List<Boolean> ignored)
+    private static List<Integer> getSafeCVEsIndex(SolrDocument doc, List<Boolean> safe)
     {
         return IntStream.range(0, mapToStrings(doc, SECURITY_CVE_ID).size())
-            .filter(ignored::get)
+            .filter(safe::get)
             .boxed()
             .collect(Collectors.toList());
     }

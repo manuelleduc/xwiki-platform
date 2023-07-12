@@ -38,8 +38,8 @@ import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
 import org.xwiki.extension.CoreExtension;
 import org.xwiki.extension.Extension;
 import org.xwiki.extension.InstalledExtension;
-import org.xwiki.extension.index.internal.security.FalsePositive;
-import org.xwiki.extension.index.internal.security.FalsePositiveMap;
+import org.xwiki.extension.index.internal.security.Review;
+import org.xwiki.extension.index.internal.security.ReviewsMap;
 import org.xwiki.extension.index.security.ExtensionSecurityAnalysisResult;
 import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.extension.repository.InstalledExtensionRepository;
@@ -95,18 +95,18 @@ public class ExtensionSecurityJob
         Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
         this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
-        FalsePositiveMap falsePositiveCVEs = getFalsePositive();
+        ReviewsMap reviewsMap = getReviewsMap();
 
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(10);
 
             List<Future<Boolean>> tasks = new ArrayList<>();
             for (InstalledExtension extension : installedExtensions) {
-                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveCVEs)));
+                tasks.add(executorService.submit(() -> handleExtension(extension, reviewsMap)));
             }
 
             for (CoreExtension extension : coreExtensions) {
-                tasks.add(executorService.submit(() -> handleExtension(extension, falsePositiveCVEs)));
+                tasks.add(executorService.submit(() -> handleExtension(extension, reviewsMap)));
             }
 
             long newVulnerabilityCount = consumeTasks(tasks);
@@ -119,11 +119,11 @@ public class ExtensionSecurityJob
         }
     }
 
-    private static FalsePositiveMap getFalsePositive()
+    private static ReviewsMap getReviewsMap()
     {
         // TODO: replace with a component, fetching this remotely.
-        FalsePositiveMap falsePositiveCVEs = new FalsePositiveMap();
-        Map<String, List<FalsePositive>> map = falsePositiveCVEs.getFalsePositiveMap();
+        ReviewsMap reviewsMap = new ReviewsMap();
+        Map<String, List<Review>> map = reviewsMap.getReviewsMap();
         String sourcePlatform = "xwiki-platform";
         String explanation1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non pellentesque sem."
             + " Maecenas ultricies, nisi quis efficitur consectetur, libero enim blandit justo, at auctor nisi arcu "
@@ -134,28 +134,28 @@ public class ExtensionSecurityJob
             + "interdum eget enim quis, posuere varius ligula.";
         String explanation3 = "Integer ligula eros, vulputate eu sem quis, rhoncus consequat tellus. Phasellus eget "
             + "tincidunt nibh. Ut luctus id dolor in dignissim. ";
-        map.put("GHSA-2q8x-2p7f-574v", List.of(new FalsePositive(sourcePlatform, explanation1),
-            new FalsePositive("some-extension", explanation2)));
-        map.put("GHSA-3ccq-5vw3-2p6x", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-64xx-cq4q-mf44", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-6w62-hx7r-mw68", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-6wf9-jmg9-vxcc", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-8jrj-525p-826v", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-cxfm-5m4g-x7xp", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-f8cc-g7j8-xxpm", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-g5w6-mrj7-75h2", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-h7v4-7xg3-hxcc", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-hph2-m3g5-xxv4", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-j563-grx4-pjpv", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-j9h8-phrw-h4fh", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-p8pq-r894-fm8f", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-qrx8-8545-4wg2", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-rmr5-cpv2-vgjf", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-xw4p-crpj-vjx2", List.of(new FalsePositive(sourcePlatform, explanation2)));
-        map.put("GHSA-jv4x-j47q-6qvp", List.of(new FalsePositive(sourcePlatform, explanation3)));
-        map.put("GHSA-2363-cqg2-863c", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        map.put("GHSA-58qw-p7qm-5rvh", List.of(new FalsePositive(sourcePlatform, explanation1)));
-        return falsePositiveCVEs;
+        map.put("GHSA-2q8x-2p7f-574v", List.of(new Review(sourcePlatform, explanation1),
+            new Review("some-extension", explanation2)));
+        map.put("GHSA-3ccq-5vw3-2p6x", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-64xx-cq4q-mf44", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-6w62-hx7r-mw68", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-6wf9-jmg9-vxcc", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-8jrj-525p-826v", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-cxfm-5m4g-x7xp", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-f8cc-g7j8-xxpm", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-g5w6-mrj7-75h2", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-h7v4-7xg3-hxcc", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-hph2-m3g5-xxv4", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-j563-grx4-pjpv", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-j9h8-phrw-h4fh", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-p8pq-r894-fm8f", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-qrx8-8545-4wg2", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-rmr5-cpv2-vgjf", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-xw4p-crpj-vjx2", List.of(new Review(sourcePlatform, explanation2)));
+        map.put("GHSA-jv4x-j47q-6qvp", List.of(new Review(sourcePlatform, explanation3)));
+        map.put("GHSA-2363-cqg2-863c", List.of(new Review(sourcePlatform, explanation1)));
+        map.put("GHSA-58qw-p7qm-5rvh", List.of(new Review(sourcePlatform, explanation1)));
+        return reviewsMap;
     }
 
     private long consumeTasks(List<Future<Boolean>> tasks) throws InterruptedException
@@ -163,9 +163,9 @@ public class ExtensionSecurityJob
         long newVulnerabilityCount = 0;
         for (Future<Boolean> future : tasks) {
             try {
-                Boolean b = future.get();
+                Boolean updated = future.get();
                 this.progressManager.startStep(this);
-                if (Objects.equals(Boolean.TRUE, b)) {
+                if (Objects.equals(Boolean.TRUE, updated)) {
                     newVulnerabilityCount++;
                 }
             } catch (ExecutionException e) {
@@ -177,13 +177,13 @@ public class ExtensionSecurityJob
         return newVulnerabilityCount;
     }
 
-    private boolean handleExtension(Extension extension, FalsePositiveMap falsePositiveCVEs)
+    private boolean handleExtension(Extension extension, ReviewsMap reviewsMap)
     {
         boolean hasNew = false;
         try {
             ExtensionSecurityAnalysisResult analysis = this.extensionSecurityAnalyzer.analyze(extension);
             if (analysis != null) {
-                boolean update = this.vulnerabilityIndexer.update(extension, analysis, falsePositiveCVEs);
+                boolean update = this.vulnerabilityIndexer.update(extension, analysis, reviewsMap);
                 if (update) {
                     hasNew = true;
                 }

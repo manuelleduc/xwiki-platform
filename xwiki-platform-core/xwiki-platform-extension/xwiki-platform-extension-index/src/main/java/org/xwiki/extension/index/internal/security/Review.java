@@ -20,12 +20,12 @@
 package org.xwiki.extension.index.internal.security;
 
 /**
- * Contains the metadata relative to an analyzed vulnerability.
+ * Contains the metadata relative to the review of a vulnerability.
  *
  * @version $Id$
  * @since 15.6RC1
  */
-public class FalsePositive
+public class Review
 {
     private final String source;
 
@@ -39,7 +39,7 @@ public class FalsePositive
      * @param explanation the textual explanation, detailing why a given CVE should not be considered as a security
      *     vulnerability in the context of the {@code souce}
      */
-    public FalsePositive(String source, String explanation)
+    public Review(String source, String explanation)
     {
         this.source = source;
         this.explanation = explanation;

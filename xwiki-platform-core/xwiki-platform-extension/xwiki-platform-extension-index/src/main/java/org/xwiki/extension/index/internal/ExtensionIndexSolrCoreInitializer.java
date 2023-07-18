@@ -172,8 +172,7 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
     private static final long SCHEMA_VERSION_15_5 = 150500000;
 
-    // TODO: replace with 150600000 before merging!
-    private static final long SCHEMA_VERSION_15_6 = 150600001;
+    private static final long SCHEMA_VERSION_15_6 = 150600000;
 
     @Override
     protected long getVersion()

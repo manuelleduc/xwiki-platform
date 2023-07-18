@@ -132,9 +132,6 @@ public class SolrToLiveDataEntryMapper
         // The index of safe CVEs.
         currentScriptContext.setAttribute("safeCVEsIndex", getSafeCVEsIndex(doc, safe), ENGINE_SCOPE);
         currentScriptContext.setAttribute(EXTENSION_ID, buildExtensionId(doc), ENGINE_SCOPE);
-
-        // TODO: update to take into account that reviews can also be one unsafe code, to explain why the upgrade did
-        // not occur yet
         currentScriptContext.setAttribute("messages", mapToStrings(doc, IS_SAFE_EXPLANATIONS), ENGINE_SCOPE);
 
         return this.templateManager.renderNoException("extension/security/liveData/cveID.vm");

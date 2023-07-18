@@ -33,8 +33,7 @@
             data-target="#$escapetool.xml($cveId)"
             aria-controls="$escapetool.xml($cveId)">
       <span class="sr-only">
-        <!-- TODO: translate -->
-        Display explanations for $escapetool.xml($cveId)
+        $escapetool.xml($services.localization.render("extension.security.liveData.cveID.modal.openButton", [$cveId]))
       </span>
       $services.icon.renderHTML('file-text')
     </button>
@@ -48,7 +47,8 @@
             </button>
             <h2 class="modal-title">
               <!-- TODO: translate -->
-              Vulnerability $escapetool.xml($cveId) of $escapetool.xml($extensionId)
+              $escapetool.xml($services.localization.render(
+                "extension.security.liveData.cveID.modal.title", [$cveId, $extensionId]))
             </h2>
           </div>
           <div class="modal-body">
@@ -61,10 +61,6 @@
   <br>
   #end
 #end
-
-
+##
 #showCVEs($notSafeCVEsIndex false)
 #showCVEs($safeCVEsIndex true)
-
-
-

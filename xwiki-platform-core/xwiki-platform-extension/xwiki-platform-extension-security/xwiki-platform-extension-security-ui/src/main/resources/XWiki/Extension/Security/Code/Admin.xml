@@ -474,7 +474,8 @@ This means that the extensions are provided by the environment running XWiki (e.
       <cache>long</cache>
     </property>
     <property>
-      <code>#extension-vulnerabilities-list {
+      <code>#extension-vulnerabilities-list,
+#environment-vulnerabilities-list {
   td,
   th {
     inline-size: min-content;
@@ -494,6 +495,11 @@ This means that the extensions are provided by the environment running XWiki (e.
   .property-name {
     word-wrap: break-word;
     white-space: break-spaces;
+  }
+
+  .security-vulnerability-detail-modal {
+    white-space: normal;
+    word-wrap: normal;
   }
 }
 </code>

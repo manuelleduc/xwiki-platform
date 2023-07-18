@@ -22,7 +22,6 @@ package org.xwiki.extension.security.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -38,10 +37,8 @@ import org.xwiki.component.descriptor.ComponentInstantiationStrategy;
 import org.xwiki.extension.CoreExtension;
 import org.xwiki.extension.Extension;
 import org.xwiki.extension.InstalledExtension;
-import org.xwiki.extension.index.security.review.Review;
-import org.xwiki.extension.index.security.review.ReviewResult;
-import org.xwiki.extension.index.security.review.ReviewsMap;
 import org.xwiki.extension.index.security.ExtensionSecurityAnalysisResult;
+import org.xwiki.extension.index.security.review.ReviewsMap;
 import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.extension.repository.InstalledExtensionRepository;
 import org.xwiki.extension.security.ExtensionSecurityIndexationEndEvent;
@@ -52,8 +49,6 @@ import org.xwiki.job.AbstractJob;
 import org.xwiki.job.DefaultJobStatus;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
-import static org.xwiki.extension.index.security.review.ReviewResult.SAFE;
-import static org.xwiki.extension.index.security.review.ReviewResult.UNSAFE;
 
 /**
  * Run a security analysis on the current instance's extensions.
@@ -98,7 +93,8 @@ public class ExtensionSecurityJob
         Collection<CoreExtension> coreExtensions = this.coreExtensionRepository.getCoreExtensions();
         this.progressManager.pushLevelProgress(installedExtensions.size() + coreExtensions.size(), this);
 
-        ReviewsMap reviewsMap = getReviewsMap();
+        // TODO: Replace with an actual remote reviews fetch. 
+        ReviewsMap reviewsMap = new ReviewsMap();
 
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -120,74 +116,6 @@ public class ExtensionSecurityJob
         } finally {
             this.progressManager.popLevelProgress(this);
         }
-    }
-
-    private static ReviewsMap getReviewsMap()
-    {
-        // TODO: replace with a component, fetching this remotely.
-        ReviewsMap reviewsMap = new ReviewsMap();
-        Map<String, List<Review>> map = reviewsMap.getReviewsMap();
-        String sourcePlatform = "xwiki-platform";
-        String explanation1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non pellentesque sem."
-            + " Maecenas ultricies, nisi quis efficitur consectetur, libero enim blandit justo, at auctor nisi arcu "
-            + "congue odio. ";
-        String explanation2 = "ivamus eget condimentum elit, in blandit turpis. Nullam suscipit eros vitae justo "
-            + "suscipit aliquam. Curabitur at nibh id elit eleifend condimentum eu a urna. Vivamus vel molestie nunc. "
-            + "Suspendisse porta porta quam, vel pulvinar magna vulputate a. In porta tincidunt dui. Cras tortor ante, "
-            + "interdum eget enim quis, posuere varius ligula.";
-        String explanation3 = "Integer ligula eros, vulputate eu sem quis, rhoncus consequat tellus. Phasellus eget "
-            + "tincidunt nibh. Ut luctus id dolor in dignissim. ";
-//        map.put("GHSA-2q8x-2p7f-574v",
-//            List.of(constructReview(sourcePlatform, "GHSA-2q8x-2p7f-574v" + explanation2, SAFE),
-//                constructReview(sourcePlatform, explanation2, UNSAFE)));
-//        map.put("GHSA-3ccq-5vw3-2p6x",
-//            List.of(constructReview(sourcePlatform, "GHSA-3ccq-5vw3-2p6x" + explanation2, SAFE)));
-//        map.put("GHSA-64xx-cq4q-mf44",
-//            List.of(constructReview(sourcePlatform, "GHSA-64xx-cq4q-mf44" + explanation3, SAFE)));
-//        map.put("GHSA-6w62-hx7r-mw68",
-//            List.of(constructReview(sourcePlatform, "GHSA-6w62-hx7r-mw68" + explanation1, SAFE)));
-//        map.put("GHSA-6wf9-jmg9-vxcc",
-//            List.of(constructReview(sourcePlatform, "GHSA-6wf9-jmg9-vxcc" + explanation2, SAFE)));
-//        map.put("GHSA-8jrj-525p-826v",
-//            List.of(constructReview(sourcePlatform, "GHSA-8jrj-525p-826v" + explanation3, SAFE)));
-//        map.put("GHSA-cxfm-5m4g-x7xp",
-//            List.of(constructReview(sourcePlatform, "GHSA-cxfm-5m4g-x7xp" + explanation1, SAFE)));
-//        map.put("GHSA-f8cc-g7j8-xxpm",
-//            List.of(constructReview(sourcePlatform, "GHSA-f8cc-g7j8-xxpm" + explanation2, SAFE)));
-//        map.put("GHSA-g5w6-mrj7-75h2",
-//            List.of(constructReview(sourcePlatform, "GHSA-g5w6-mrj7-75h2" + explanation3, SAFE)));
-//        map.put("GHSA-h7v4-7xg3-hxcc",
-//            List.of(constructReview(sourcePlatform, "GHSA-h7v4-7xg3-hxcc" + explanation1, SAFE)));
-////        map.put("GHSA-hph2-m3g5-xxv4", List.of(constructReview(sourcePlatformt("GHSA-hph2-m3g5-xxv4"+ explanation2, SAFE)));
-//        map.put("GHSA-j563-grx4-pjpv",
-//            List.of(constructReview(sourcePlatform, "GHSA-j563-grx4-pjpv" + explanation3, SAFE)));
-//        map.put("GHSA-j9h8-phrw-h4fh",
-//            List.of(constructReview(sourcePlatform, "GHSA-j9h8-phrw-h4fh" + explanation1, SAFE)));
-//        map.put("GHSA-p8pq-r894-fm8f",
-//            List.of(constructReview(sourcePlatform, "GHSA-p8pq-r894-fm8f" + explanation2, SAFE)));
-//        map.put("GHSA-qrx8-8545-4wg2",
-//            List.of(constructReview(sourcePlatform, "GHSA-qrx8-8545-4wg2" + explanation3, UNSAFE)));
-//        map.put("GHSA-rmr5-cpv2-vgjf",
-//            List.of(constructReview(sourcePlatform, "GHSA-rmr5-cpv2-vgjf" + explanation1, SAFE)));
-//        map.put("GHSA-xw4p-crpj-vjx2",
-//            List.of(constructReview(sourcePlatform, "GHSA-xw4p-crpj-vjx2" + explanation2, SAFE)));
-        map.put("GHSA-jv4x-j47q-6qvp",
-            List.of(constructReview(sourcePlatform, "GHSA-jv4x-j47q-6qvp" + explanation3, SAFE),
-                constructReview(sourcePlatform, "GHSA-jv4x-j47q-6qvp" + explanation3, UNSAFE)));
-        map.put("GHSA-2363-cqg2-863c",
-            List.of(constructReview(sourcePlatform, "GHSA-2363-cqg2-863c" + explanation1, UNSAFE)));
-//        map.put("GHSA-58qw-p7qm-5rvh",
-//            List.of(constructReview(sourcePlatform, "GHSA-58qw-p7qm-5rvh" + explanation1, SAFE)));
-        return reviewsMap;
-    }
-
-    private static Review constructReview(String sourcePlatform, String explanation2, ReviewResult safe)
-    {
-        Review e1 = new Review();
-        e1.setEmitter(sourcePlatform);
-        e1.setExplanation(explanation2);
-        e1.setResult(safe);
-        return e1;
     }
 
     private long consumeTasks(List<Future<Boolean>> tasks) throws InterruptedException

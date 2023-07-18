@@ -22,6 +22,7 @@ package org.xwiki.extension.security.internal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -115,7 +116,9 @@ class ExtensionSecuritySolrClientTest
 
         verify(this.extensionIndexStore)
             .search(AdditionalMatchers.<SolrQuery>and(
-                argThat(t -> Arrays.equals(t.getFilterQueries(), params.getFilterQueries())),
+                argThat(t -> Arrays.stream(t.getFilterQueries()).sorted().collect(Collectors.toList())
+                    .equals(Arrays.stream(params.getFilterQueries()).sorted().collect(
+                        Collectors.toList()))),
                 argThat(t -> Objects.equals(t.getSorts(), params.getSorts())))
             );
     }

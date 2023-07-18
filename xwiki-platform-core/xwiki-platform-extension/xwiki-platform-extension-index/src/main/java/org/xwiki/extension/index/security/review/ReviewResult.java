@@ -17,46 +17,26 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.extension.index.internal.security;
+package org.xwiki.extension.index.security.review;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import org.xwiki.stability.Unstable;
 
 /**
- * Contains the maps of all the CVEs with available reviews.
+ * The review result of a vulnerability.
  *
  * @version $Id$
  * @since 15.6RC1
  */
-public class ReviewsMap
+@Unstable
+public enum ReviewResult
 {
-    private final Map<String, List<Review>> reviewsMap = new HashMap<>();
+    /**
+     * When the conclusion of the analysis is that the vulnerability is safe.
+     */
+    SAFE,
 
     /**
-     * @return the map of CVEs and their associated reviews.
+     * When the conclusion of the analysis is that the vulnerability can be unsafe.
      */
-    public Map<String, List<Review>> getReviewsMap()
-    {
-        return this.reviewsMap;
-    }
-
-    /**
-     * @param id a CVE id
-     * @return {@code true} if at least a review is available for a given id
-     */
-    public boolean contains(String id)
-    {
-        return this.reviewsMap.containsKey(id);
-    }
-
-    /**
-     * @param id a CVE id
-     * @return the list of reviews if found, {@link Optional#empty()} otherwise
-     */
-    public Optional<List<Review>> getById(String id)
-    {
-        return Optional.ofNullable(this.reviewsMap.get(id));
-    }
+    UNSAFE
 }

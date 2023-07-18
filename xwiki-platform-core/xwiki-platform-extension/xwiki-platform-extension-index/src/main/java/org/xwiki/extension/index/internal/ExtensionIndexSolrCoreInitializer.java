@@ -147,6 +147,11 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
     public static final String IS_FROM_ENVIRONMENT = "is_from_environment";
 
     /**
+     * When {@code true} the extension is installed, otherwise the extension is provided by the core.
+     */
+    public static final String IS_INSTALLED_EXTENSION = "is_installed";
+
+    /**
      * When {@code true} the extension has been reviewed and is not is considered as safe, {@code false} otherwise.
      */
     public static final String IS_REVIEWED_SAFE = "security_is_reviewed_safe";
@@ -156,11 +161,6 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
      * array of html contents.
      */
     public static final String IS_SAFE_EXPLANATIONS = "security_is_safe_explanations";
-
-    /**
-     * {@code true} when all the known vulnerabilities of the extension are all safe.
-     */
-    public static final String IS_ALL_SAFE = "security_is_all_safe";
 
     private static final Pattern COMPONENT_SPECIAL_CHARS = Pattern.compile("[<>,]+");
 
@@ -172,7 +172,8 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
     private static final long SCHEMA_VERSION_15_5 = 150500000;
 
-    private static final long SCHEMA_VERSION_15_6 = 150600000;
+    // TODO: replace with 150600000 before merging!
+    private static final long SCHEMA_VERSION_15_6 = 150600001;
 
     @Override
     protected long getVersion()
@@ -254,9 +255,9 @@ public class ExtensionIndexSolrCoreInitializer extends AbstractSolrCoreInitializ
 
         if (cversion < SCHEMA_VERSION_15_6) {
             setBooleanField(IS_FROM_ENVIRONMENT, false, false);
+            setBooleanField(IS_INSTALLED_EXTENSION, false, false);
             setBooleanField(IS_REVIEWED_SAFE, true, false);
             setStringField(IS_SAFE_EXPLANATIONS, true, false);
-            setBooleanField(IS_ALL_SAFE, false, false);
         }
     }
 

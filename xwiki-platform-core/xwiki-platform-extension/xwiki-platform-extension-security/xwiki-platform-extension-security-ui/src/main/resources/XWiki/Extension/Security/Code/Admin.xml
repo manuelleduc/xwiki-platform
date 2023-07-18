@@ -45,8 +45,6 @@
 {{html clean='false' wiki='true'}}
 &lt;ul class="nav nav-tabs" role="tablist"&gt;
   &lt;li role="presentation" class="active"&gt;&lt;a href="#extension-vulnerabilities" aria-controls="extension-vulnerabilities" role="tab" data-toggle="tab"&gt;Extension Vulnerabilities&lt;/a&gt;&lt;/li&gt;
-  &lt;li role="presentation"&gt;&lt;a href="#safe-vulnerabilities" aria-controls="safe-vulnerabilities" 
-  role="tab" data-toggle="tab"&gt;Safe Vulnerabilities&lt;/a&gt;&lt;/li&gt;
   &lt;li role="presentation"&gt;&lt;a href="#environment-vulnerabilities" aria-controls="environment-vulnerabilities" 
   role="tab" data-toggle="tab"&gt;Environment Vulnerabilities&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -58,28 +56,13 @@
 {{liveData
   id="extension-vulnerabilities-list"
   source="extensionSecurity"
-  sourceParameters="isFromEnvironment=false&amp;isSafe=false"
+  sourceParameters="isFromEnvironment=false"
   properties="name,wikis,maxCVSS,cveID,fixVersion,advice"
   showPageSizeDropdown="false"}}
 {{/liveData}}
 
 &lt;/div&gt;
-  &lt;div role="tabpanel" class="tab-pane" id="safe-vulnerabilities"&gt;
 
-(((&amp;nbsp;)))
-{{warning}}
-Extensions listed in this section have known vulnerabilities, but none that are considered as dangerous in the context of XWiki.
-{{/warning}}
-
-{{liveData
-  id="safe-vulnerabilities-list"
-  source="extensionSecurity"
-  sourceParameters="isFromEnvironment=false&amp;isSafe=true"
-  properties="name,wikis,cveID,fixVersion"
-  showPageSizeDropdown="false"}}
-{{/liveData}}
-
-&lt;/div&gt;
 &lt;div role="tabpanel" class="tab-pane" id="environment-vulnerabilities"&gt;
 
 (((&amp;nbsp;)))
@@ -92,7 +75,7 @@ This means that the extensions are provided by the environment running XWiki (e.
 {{liveData
   id="environment-vulnerabilities-list"
   source="extensionSecurity"
-  sourceParameters="isFromEnvironment=true&amp;isSafe=false"
+  sourceParameters="isFromEnvironment=true"
   properties="name,wikis,maxCVSS,cveID,fixVersion"
   showPageSizeDropdown="false"}}
 {{/liveData}}

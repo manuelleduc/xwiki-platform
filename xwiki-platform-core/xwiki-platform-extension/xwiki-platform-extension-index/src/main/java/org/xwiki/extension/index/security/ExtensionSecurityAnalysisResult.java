@@ -43,6 +43,8 @@ public class ExtensionSecurityAnalysisResult
 
     private boolean fromEnvironment;
 
+    private boolean isInstalledExtension;
+
     /**
      * @param securityVulnerabilities the security vulnerabilities associated with the analyzed extension
      * @return the current object
@@ -119,6 +121,22 @@ public class ExtensionSecurityAnalysisResult
         }
     }
 
+    /**
+     * @param isInstalledExtension {@code true} when the extension is installed, {@code false} otherwise
+     */
+    public void setInstalledExtension(boolean isInstalledExtension)
+    {
+        this.isInstalledExtension = isInstalledExtension;
+    }
+
+    /**
+     * @return {@code true} when the extension is installed, {@code false} otherwise
+     */
+    public boolean isInstalledExtension()
+    {
+        return this.isInstalledExtension;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -136,6 +154,7 @@ public class ExtensionSecurityAnalysisResult
             .append(this.securityVulnerabilities, that.securityVulnerabilities)
             .append(this.advice, that.advice)
             .append(this.fromEnvironment, that.fromEnvironment)
+            .append(this.isInstalledExtension, that.isInstalledExtension)
             .isEquals();
     }
 
@@ -146,6 +165,7 @@ public class ExtensionSecurityAnalysisResult
             .append(this.securityVulnerabilities)
             .append(this.advice)
             .append(this.fromEnvironment)
+            .append(this.isInstalledExtension)
             .toHashCode();
     }
 
@@ -156,6 +176,7 @@ public class ExtensionSecurityAnalysisResult
             .append("securityVulnerabilities", this.securityVulnerabilities)
             .append("advice", this.advice)
             .append("fromEnvironment", this.fromEnvironment)
+            .append("isInstalledExtension", this.isInstalledExtension)
             .toString();
     }
 }

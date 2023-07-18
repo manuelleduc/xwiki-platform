@@ -83,8 +83,8 @@ import org.xwiki.search.solr.Solr;
 import org.xwiki.search.solr.SolrException;
 import org.xwiki.search.solr.SolrUtils;
 
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_INSTALLED_EXTENSION;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_SAFE_EXPLANATIONS;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_SAFE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_ENVIRONMENT;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_REVIEWED_SAFE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_ADVICE;
@@ -98,7 +98,7 @@ import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializ
 
 /**
  * An helper to manipulate the store of indexed extensions.
- * 
+ *
  * @version $Id$
  * @since 12.10
  */
@@ -338,17 +338,20 @@ public class ExtensionIndexStore implements Initializable
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_ADVICE, result.getAdvice(), doc);
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, SECURITY_CVE_COUNT,
             result.getSecurityVulnerabilities().size(), doc);
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_ENVIRONMENT, result.isFromEnvironment(), doc);
-        List<Boolean> safeMapping = result.getSecurityVulnerabilities().stream()
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_FROM_ENVIRONMENT, result.isFromEnvironment(),
+            doc);
+        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_INSTALLED_EXTENSION,
+            result.isInstalledExtension(), doc);
+        List<Boolean> safeMapping = result.getSecurityVulnerabilities()
+            .stream()
             .map(SecurityVulnerabilityDescriptor::isSafe)
             .collect(Collectors.toList());
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_REVIEWED_SAFE, safeMapping, doc);
-        List<String> reviewExplanations = result.getSecurityVulnerabilities().stream()
+        List<String> reviewExplanations = result.getSecurityVulnerabilities()
+            .stream()
             .map(SecurityVulnerabilityDescriptor::getReviews)
             .collect(Collectors.toList());
         this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_SAFE_EXPLANATIONS, reviewExplanations, doc);
-        this.utils.setAtomic(SolrUtils.ATOMIC_UPDATE_MODIFIER_SET, IS_ALL_SAFE,
-            safeMapping.stream().allMatch(it -> it), doc);
 
         add(doc);
         commit();
@@ -467,7 +470,7 @@ public class ExtensionIndexStore implements Initializable
         }
 
         if (incompatible != null) {
-            this.utils.setAtomic(incompatible.booleanValue() ? SolrUtils.ATOMIC_UPDATE_MODIFIER_ADD_DISTINCT 
+            this.utils.setAtomic(incompatible.booleanValue() ? SolrUtils.ATOMIC_UPDATE_MODIFIER_ADD_DISTINCT
                     : SolrUtils.ATOMIC_UPDATE_MODIFIER_REMOVE,
                 ExtensionIndexSolrCoreInitializer.SOLR_FIELD_INCOMPATIBLE_NAMESPACES,
                 this.extensionIndexSolrUtil.toStoredNamespace(namespace), document);

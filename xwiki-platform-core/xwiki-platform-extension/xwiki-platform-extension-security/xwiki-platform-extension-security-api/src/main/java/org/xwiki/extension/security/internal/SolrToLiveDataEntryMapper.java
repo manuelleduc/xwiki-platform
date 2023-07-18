@@ -135,7 +135,7 @@ public class SolrToLiveDataEntryMapper
 
         // TODO: update to take into account that reviews can also be one unsafe code, to explain why the upgrade did
         // not occur yet
-        currentScriptContext.setAttribute("ignoredMessages", mapToStrings(doc, IS_SAFE_EXPLANATIONS), ENGINE_SCOPE);
+        currentScriptContext.setAttribute("messages", mapToStrings(doc, IS_SAFE_EXPLANATIONS), ENGINE_SCOPE);
 
         return this.templateManager.renderNoException("extension/security/liveData/cveID.vm");
     }

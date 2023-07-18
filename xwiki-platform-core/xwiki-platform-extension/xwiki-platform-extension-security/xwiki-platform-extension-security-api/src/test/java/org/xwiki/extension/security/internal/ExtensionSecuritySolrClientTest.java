@@ -45,8 +45,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.xwiki.extension.InstalledExtension.FIELD_INSTALLED_NAMESPACES;
-import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_ALL_SAFE;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_FROM_ENVIRONMENT;
+import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.IS_INSTALLED_EXTENSION;
 import static org.xwiki.extension.index.internal.ExtensionIndexSolrCoreInitializer.SECURITY_MAX_CVSS;
 import static org.xwiki.extension.security.internal.livedata.ExtensionSecurityLiveDataConfigurationProvider.FIX_VERSION;
 
@@ -83,8 +83,9 @@ class ExtensionSecuritySolrClientTest
         assertEquals(42, this.solrClient.getVulnerableExtensionsCount());
 
         SolrQuery params = new SolrQuery();
-        params.addFilterQuery("security_maxCVSS:{0 TO 10]");
-        params.addFilterQuery(FIELD_INSTALLED_NAMESPACES + ":[* TO *]");
+        params.addFilterQuery(String.format("%s:{0 TO 10]", SECURITY_MAX_CVSS));
+        params.addFilterQuery(String.format("(%s:[* TO *] OR %s:false)", FIELD_INSTALLED_NAMESPACES,
+            IS_INSTALLED_EXTENSION));
         verify(this.extensionIndexStore)
             .search(ArgumentMatchers.<SolrQuery>argThat(
                 t -> Arrays.equals(t.getFilterQueries(), params.getFilterQueries())));
@@ -111,8 +112,8 @@ class ExtensionSecuritySolrClientTest
         SolrQuery params = new SolrQuery();
         params.addFilterQuery(SECURITY_MAX_CVSS + ":{0 TO 10]");
         params.addFilterQuery(IS_FROM_ENVIRONMENT + ":false");
-        params.addFilterQuery(IS_ALL_SAFE + ":false");
-        params.addFilterQuery(FIELD_INSTALLED_NAMESPACES + ":[* TO *]");
+        params.addFilterQuery(String.format("(%s:[* TO *] OR %s:false)", FIELD_INSTALLED_NAMESPACES,
+            IS_INSTALLED_EXTENSION));
 
         verify(this.extensionIndexStore)
             .search(AdditionalMatchers.<SolrQuery>and(

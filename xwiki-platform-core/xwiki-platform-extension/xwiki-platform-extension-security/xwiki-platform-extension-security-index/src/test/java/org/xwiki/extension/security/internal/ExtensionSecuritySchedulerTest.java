@@ -43,7 +43,6 @@ import static org.mockito.Mockito.when;
  * Test of {@link ExtensionSecurityScheduler}.
  *
  * @version $Id$
- * @since x.y.z
  */
 @ComponentTest
 class ExtensionSecuritySchedulerTest

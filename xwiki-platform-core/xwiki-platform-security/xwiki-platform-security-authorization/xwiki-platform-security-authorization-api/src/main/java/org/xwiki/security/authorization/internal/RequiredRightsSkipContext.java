@@ -32,7 +32,7 @@ import org.xwiki.context.ExecutionContext;
  * Check if the required rights have been deactivated through the execution context.
  *
  * @version $Id$
- * @since 15.5RC1
+ * @since 15.6RC1
  */
 @Component(roles = RequiredRightsSkipContext.class)
 @Singleton
@@ -41,8 +41,6 @@ public class RequiredRightsSkipContext
     /**
      * Identifier of the context key for the required rights skipping value. When {@code "true"}, the required rights
      * are not taken into account when computing the rights.
-     *
-     * @since 15.4RC1
      */
     public static final String SKIP_REQUIRED_RIGHT = "skipRequiredRight";
 
@@ -57,6 +55,6 @@ public class RequiredRightsSkipContext
         ExecutionContext context = this.execution.getContext();
         return context != null
             && context.hasProperty(SKIP_REQUIRED_RIGHT)
-            && Objects.equals(context.getProperty(SKIP_REQUIRED_RIGHT), "true");
+            && Objects.equals(context.getProperty(SKIP_REQUIRED_RIGHT), String.valueOf(Boolean.TRUE));
     }
 }

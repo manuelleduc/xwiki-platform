@@ -33,7 +33,7 @@ import org.xwiki.text.XWikiToStringBuilder;
  * Internal implementation of the SecurityRuleEntry.
  *
  * @version $Id$
- * @since 15.5RC1
+ * @since 15.6RC1
  */
 final class InternalSecurityRuleEntry extends AbstractSecurityRuleEntry implements GroupSecurityEntry
 {
@@ -49,7 +49,7 @@ final class InternalSecurityRuleEntry extends AbstractSecurityRuleEntry implemen
 
     /**
      * @param reference reference of the related entity
-     * @param rules collection of security rules applied on the entity.
+     * @param rules collection of security rules applied on the entity
      */
     InternalSecurityRuleEntry(SecurityReference reference, Collection<SecurityRule> rules)
     {

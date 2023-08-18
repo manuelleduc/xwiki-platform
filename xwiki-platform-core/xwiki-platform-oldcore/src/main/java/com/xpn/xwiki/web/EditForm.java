@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,7 +146,7 @@ public class EditForm extends XWikiForm
         setTemporaryUploadedFiles(request.getParameterValues("uploadedFiles"));
         
         setActivateRequiredRights(request.getParameter("activateRequiredRights"));
-        if (request.getParameterMap().containsKey("updateRequiredRights")) {
+        if (request.getParameterMap() != null && request.getParameterMap().containsKey("updateRequiredRights")) {
             setRequiredRights(request.getParameterValues("requiredRights"));
         }
     }
@@ -486,7 +487,9 @@ public class EditForm extends XWikiForm
     private void setRequiredRights(String[] requiredRights)
     {
         if (requiredRights != null) {
-            this.requiredRights = Arrays.stream(requiredRights).map(Right::toRight).collect(Collectors.toSet());
+            this.requiredRights = Arrays.stream(requiredRights)
+                .filter(StringUtils::isNotBlank)
+                .map(Right::toRight).collect(Collectors.toSet());
         } else {
             this.requiredRights = Set.of();
         }
@@ -507,7 +510,7 @@ public class EditForm extends XWikiForm
 
     /**
      * @return the value of the {@code activateRequiredRights} request parameter
-     * @since 15.5RC1
+     * @since 15.6RC1
      */
     @Unstable
     public Boolean getActivateRequiredRights()
@@ -517,7 +520,7 @@ public class EditForm extends XWikiForm
 
     /**
      * @return the set of required rights defined in the request parameters
-     * @since 15.5RC1
+     * @since 15.6RC1
      */
     @Unstable
     public Set<Right> getRequiredRights()

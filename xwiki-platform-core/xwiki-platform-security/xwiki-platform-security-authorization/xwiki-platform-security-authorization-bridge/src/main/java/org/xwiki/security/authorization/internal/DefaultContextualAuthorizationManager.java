@@ -21,6 +21,7 @@ package org.xwiki.security.authorization.internal;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -29,6 +30,8 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.context.Execution;
+import org.xwiki.context.ExecutionContext;
 import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
@@ -42,6 +45,8 @@ import org.xwiki.security.internal.XWikiConstants;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.doc.XWikiDocument;
+
+import static org.xwiki.security.authorization.internal.RequiredRightsSkipContext.SKIP_REQUIRED_RIGHT;
 
 /**
  * Default implementation of the {@link ContextualAuthorizationManager}.
@@ -71,6 +76,9 @@ public class DefaultContextualAuthorizationManager implements ContextualAuthoriz
 
     @Inject
     private Provider<XWikiContext> xcontextProvider;
+
+    @Inject
+    private Execution execution;
 
     @Override
     public void checkAccess(Right right) throws AccessDeniedException
@@ -119,7 +127,22 @@ public class DefaultContextualAuthorizationManager implements ContextualAuthoriz
 
     private boolean hasAccess(Right right, DocumentReference user, EntityReference entity)
     {
-        return checkPreAccess(right) && this.authorizationManager.hasAccess(right, user, getFullReference(entity));
+        boolean preAccess = checkPreAccess(right);
+        if (!preAccess) {
+            return false;
+        }
+        ExecutionContext context = this.execution.getContext();
+        Object previousValue = context.getProperty(SKIP_REQUIRED_RIGHT);
+        context.setProperty(SKIP_REQUIRED_RIGHT, String.valueOf(Boolean.TRUE));
+        try {
+            boolean hasAccess = this.authorizationManager.hasAccess(right, user, getFullReference(entity));
+            if (!hasAccess) {
+                return false;
+            }
+            return checkPostAccess(right, user, entity, previousValue);
+        } finally {
+            context.setProperty(SKIP_REQUIRED_RIGHT, previousValue);
+        }
     }
 
     private EntityReference getFullReference(EntityReference reference)
@@ -141,6 +164,22 @@ public class DefaultContextualAuthorizationManager implements ContextualAuthoriz
             return !(restricted || (right == Right.PROGRAM && this.xcontextProvider.get().hasDroppedPermissions()));
         }
 
+        return true;
+    }
+
+    private boolean checkPostAccess(Right right, DocumentReference user, EntityReference entity, Object previousValue)
+    {
+        XWikiDocument doc = getProgrammingDocument();
+        if (doc != null && doc.getRequiredRights().activated()) {
+            if (Objects.equals(previousValue, String.valueOf(Boolean.TRUE))) {
+                return true;
+            } else if (right.equals(Right.EDIT)) {
+                return doc.getRequiredRights().getRights().stream()
+                    .allMatch(r -> this.authorizationManager.hasAccess(r, user, getFullReference(entity)));
+            } else if (right.equals(Right.SCRIPT) || right.equals(Right.PROGRAM)) {
+                return doc.getRequiredRights().has(right);
+            }
+        }
         return true;
     }
 

@@ -304,8 +304,8 @@ class IncludeMacroTest
             + "beginMacroMarkerStandalone [velocity] [] [$foo]\n"
             + "beginGroup [[class]=[xwikirenderingerror]]\n"
             + "onWord [Failed to execute the [velocity] macro. Cause: [The execution of the [velocity] script "
-            + "macro is not allowed. Check the rights of its last author or the parameters if it's rendered "
-            + "from another script.]. Click on this message for details.]\n"
+            + "macro is not allowed. Check the rights of its last author, the required rights of the document, " 
+            + "or the parameters if it's rendered from another script.]. Click on this message for details.]\n"
             + "endGroup [[class]=[xwikirenderingerror]]\n"
             + "beginGroup [[class]=[xwikirenderingerrordescription hidden]]\n"
             + "onVerbatim [org.xwiki.rendering.macro.MacroExecutionException: "
@@ -729,7 +729,7 @@ class IncludeMacroTest
         if (includedPageReference != null) {
             when(this.macroEntityReferenceResolver.resolve(eq(includedPageReferenceString), eq(EntityType.PAGE),
                 any(MacroBlock.class))).thenReturn(includedPageReference);
-            when(this.dab.getDocumentInstance((EntityReference) includedPageReference))
+            when(this.dab.getDocumentInstance(includedPageReference))
                 .thenReturn(this.includedDocument);
         }
 

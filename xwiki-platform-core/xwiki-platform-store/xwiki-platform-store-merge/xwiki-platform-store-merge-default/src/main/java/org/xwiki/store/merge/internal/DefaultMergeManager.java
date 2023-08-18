@@ -19,8 +19,8 @@
  */
 package org.xwiki.store.merge.internal;
 
-import java.io.IOException;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -616,7 +616,7 @@ public class DefaultMergeManager implements MergeManager
                 result.add("");
             }
 
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             // Should never happen
             result = null;
         }

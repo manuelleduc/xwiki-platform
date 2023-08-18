@@ -132,4 +132,13 @@ public class InformationPane extends BaseElement
     {
         return new DocumentSyntaxPropertyPane().clickEdit();
     }
+
+    /**
+     * @return the page object to edit the required rights in the information pane
+     * @since 15.6RC1
+     */
+    public DocumentRequiredRightsPropertyPane editRequiredRights()
+    {
+        return new DocumentRequiredRightsPropertyPane().clickEdit();
+    }
 }

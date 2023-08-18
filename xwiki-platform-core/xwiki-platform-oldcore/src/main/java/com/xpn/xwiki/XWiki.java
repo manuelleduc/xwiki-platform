@@ -112,6 +112,7 @@ import org.xwiki.context.Execution;
 import org.xwiki.edit.EditConfiguration;
 import org.xwiki.extension.job.internal.InstallJob;
 import org.xwiki.extension.job.internal.UninstallJob;
+import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.job.Job;
 import org.xwiki.job.JobException;
 import org.xwiki.job.JobExecutor;
@@ -491,6 +492,8 @@ public class XWiki implements EventListener
 
     private ReferenceUpdater referenceUpdater;
 
+    private CoreExtensionRepository coreExtensions;
+
     private ConfigurationSource getConfiguration()
     {
         if (this.xwikicfg == null) {
@@ -857,6 +860,15 @@ public class XWiki implements EventListener
         }
 
         return this.authServices;
+    }
+
+    public CoreExtensionRepository getCoreExtensionRepository()
+    {
+        if (this.coreExtensions == null) {
+            this.coreExtensions = Utils.getComponent(CoreExtensionRepository.class);
+        }
+
+        return this.coreExtensions;
     }
 
     private String localizePlainOrKey(String key, Object... parameters)
@@ -1648,21 +1660,23 @@ public class XWiki implements EventListener
     public String getVersion()
     {
         if (this.version == null) {
-            try {
-                InputStream is = getResourceAsStream(VERSION_FILE);
-                try {
+            try (InputStream is = getResourceAsStream(VERSION_FILE)) {
+                if (is != null) {
                     XWikiConfig properties = new XWikiConfig(is);
                     this.version = properties.getProperty(VERSION_FILE_PROPERTY);
-                } finally {
-                    IOUtils.closeQuietly(is);
                 }
             } catch (Exception e) {
-                // Failed to retrieve the version, log a warning and default to "Unknown"
-                LOGGER.warn("Failed to retrieve XWiki's version from [" + VERSION_FILE + "], using the ["
-                    + VERSION_FILE_PROPERTY + "] property.", e);
-                this.version = "Unknown version";
+                // Failed to retrieve the version, log a warning
+                LOGGER.warn("Failed to retrieve XWiki's version from [{}], using the [{}] property.", VERSION_FILE,
+                    VERSION_FILE_PROPERTY, e);
+            }
+
+            if (this.version == null) {
+                // Fallback on the version of the environment extension
+                this.version = getCoreExtensionRepository().getEnvironmentExtension().getId().getVersion().getValue();
             }
         }
+
         return this.version;
     }
 
@@ -3575,9 +3589,6 @@ public class XWiki implements EventListener
 
     public void flushCache(XWikiContext context)
     {
-        // We need to flush the virtual wiki list
-        this.initializedWikis = new ConcurrentHashMap<>();
-
         // We need to flush the group service cache
         if (this.groupService != null) {
             this.groupService.flushCache();
@@ -4712,6 +4723,12 @@ public class XWiki implements EventListener
 
         XWikiDocumentArchive archive = document.getDocumentArchive(context);
 
+        if (archive.getNodes(upperBound, lowerBound).isEmpty()) {
+            throw new XWikiException(XWikiException.MODULE_XWIKI,
+                XWikiException.ERROR_XWIKI_STORE_HIBERNATE_UNEXISTANT_VERSION,
+                String.format("Cannot find any revision to delete matching the range defined by [%s] and [%s]",
+                    lowerBound, upperBound));
+        }
         // Remove the versions
         archive.removeVersions(upperBound, lowerBound, context);
 
@@ -4735,7 +4752,10 @@ public class XWiki implements EventListener
 
             // Update the archive
             context.getWiki().getVersioningStore().saveXWikiDocArchive(archive, true, context);
-            document.setDocumentArchive(archive);
+            // Make sure the cached document archive is updated too
+            XWikiDocument cachedDocument =
+                context.getWiki().getDocument(document.getDocumentReferenceWithLocale(), context);
+            cachedDocument.setDocumentArchive(archive);
 
             // There are still some versions left.
             // If we delete the most recent (current) version, then rollback to latest undeleted version.
@@ -4827,48 +4847,39 @@ public class XWiki implements EventListener
             XWikiDocument sourceDocument = this.getDocument(sourceDocumentReference, context);
             XWikiDocument targetDocument = this.getDocument(targetDocumentReference, context);
 
-            ConfigurationSource xwikiproperties = Utils.getComponent(ConfigurationSource.class, "xwikiproperties");
-            boolean useAtomicRename = xwikiproperties.getProperty("refactoring.rename.useAtomicRename", Boolean.TRUE);
-
             // Proceed on the rename only if the source document exists and if either the targetDoc does not exist or
             // the overwritten is accepted.
             if (!sourceDocument.isNew() && (overwrite || targetDocument.isNew())) {
-                if (!useAtomicRename) {
-                    this.renameByCopyAndDelete(sourceDocument, targetDocumentReference, backlinkDocumentReferences,
-                        childDocumentReferences, context);
-                    result = true;
-                } else {
-                    // Ensure that the current context contains the wiki reference of the source document.
-                    WikiReference wikiReference = context.getWikiReference();
-                    context.setWikiReference(sourceDocumentReference.getWikiReference());
+                // Ensure that the current context contains the wiki reference of the source document.
+                WikiReference wikiReference = context.getWikiReference();
+                context.setWikiReference(sourceDocumentReference.getWikiReference());
 
-                    try {
-                        // rename main document
-                        this.atomicRenameDocument(sourceDocument, targetDocumentReference, context);
+                try {
+                    // rename main document
+                    this.atomicRenameDocument(sourceDocument, targetDocumentReference, context);
 
-                        // handle translations
-                        List<Locale> translationLocales = sourceDocument.getTranslationLocales(context);
-                        for (Locale translationLocale : translationLocales) {
-                            DocumentReference translatedSourceReference =
-                                new DocumentReference(sourceDocumentReference, translationLocale);
-                            DocumentReference translatedTargetReference =
-                                new DocumentReference(targetDocumentReference, translationLocale);
-                            XWikiDocument translatedSourceDoc = this.getDocument(translatedSourceReference, context);
-                            this.atomicRenameDocument(translatedSourceDoc, translatedTargetReference, context);
-                        }
-                    } finally {
-                        context.setWikiReference(wikiReference);
+                    // handle translations
+                    List<Locale> translationLocales = sourceDocument.getTranslationLocales(context);
+                    for (Locale translationLocale : translationLocales) {
+                        DocumentReference translatedSourceReference =
+                            new DocumentReference(sourceDocumentReference, translationLocale);
+                        DocumentReference translatedTargetReference =
+                            new DocumentReference(targetDocumentReference, translationLocale);
+                        XWikiDocument translatedSourceDoc = this.getDocument(translatedSourceReference, context);
+                        this.atomicRenameDocument(translatedSourceDoc, translatedTargetReference, context);
                     }
-
-                    // Step 4: Refactor the relative links contained in the document to make sure they are relative
-                    // to the new document's location.
-                    // Step 5: For each child document, update its parent reference.
-                    // Step 6: For each backlink to rename, parse the backlink document and replace the links with
-                    // the new name.
-                    this.updateLinksForRename(sourceDocument, targetDocumentReference, backlinkDocumentReferences,
-                        childDocumentReferences, context);
-                    result = true;
+                } finally {
+                    context.setWikiReference(wikiReference);
                 }
+
+                // Step 4: Refactor the relative links contained in the document to make sure they are relative
+                // to the new document's location.
+                // Step 5: For each child document, update its parent reference.
+                // Step 6: For each backlink to rename, parse the backlink document and replace the links with
+                // the new name.
+                this.updateLinksForRename(sourceDocument, targetDocumentReference, backlinkDocumentReferences,
+                    childDocumentReferences, context);
+                result = true;
             }
         }
 
@@ -4927,48 +4938,6 @@ public class XWiki implements EventListener
                 renameLinks(backlinkDocument, sourceDoc.getDocumentReference(), newDocumentReference, context);
             }
         }
-    }
-
-    /**
-     * Perform a rename of document by copying the document and deleting the old one.
-     * This operation must be used only in case of document rename from one wiki to another, since it's not supported
-     * by the atomic store operation.
-     *
-     * @param newDocumentReference the new document reference
-     * @param backlinkDocumentReferences the list of references of documents to parse and for which links will be
-     *            modified to point to the new document reference
-     * @param childDocumentReferences the list of references of document whose parent field will be set to the new
-     *            document reference
-     * @param context the ubiquitous XWiki Context
-     * @throws XWikiException in case of an error
-     * @since 12.5
-     * @deprecated Old implementation of the rename by copy and delete. Since 12.5 the implementation using
-     * {@link XWikiStoreInterface#renameXWikiDoc(XWikiDocument, DocumentReference, XWikiContext)} should be preferred.
-     */
-    @Deprecated
-    public void renameByCopyAndDelete(XWikiDocument sourceDoc, DocumentReference newDocumentReference,
-        List<DocumentReference> backlinkDocumentReferences, List<DocumentReference> childDocumentReferences,
-        XWikiContext context) throws XWikiException
-    {
-        // Step 1: Copy the document and all its translations under a new document with the new reference.
-        copyDocument(sourceDoc.getDocumentReference(), newDocumentReference, false, context);
-
-        // Step 2: For each child document, update its parent reference.
-        // Step 3: For each backlink to rename, parse the backlink document and replace the links with the new name.
-        // Step 4: Refactor the relative links contained in the document to make sure they are relative to the new
-        // document's location.
-        updateLinksForRename(sourceDoc, newDocumentReference, backlinkDocumentReferences, childDocumentReferences,
-            context);
-
-        // Step 5: Delete the old document
-        deleteDocument(sourceDoc, context);
-
-        // Get new document
-        XWikiDocument newDocument = getDocument(newDocumentReference, context);
-
-        // Step 6: The current document needs to point to the renamed document as otherwise it's pointing to an
-        // invalid XWikiDocument object as it's been deleted...
-        sourceDoc.clone(newDocument);
     }
 
     /**

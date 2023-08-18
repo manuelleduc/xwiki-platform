@@ -25,10 +25,22 @@ import org.xwiki.stability.Unstable;
  * Provide the allow/deny/undetermined state of a full set of rights.
  *
  * @version $Id$
- * @since 4.0M2
+ * @since 4.0M2 
  */
 public interface SecurityAccess extends Cloneable
 {
+    /**
+     * Return the rule state of a given {@link Right}. By default, call {@link #get(Right, boolean)} with
+     * {@code skipRequiredRights} set to {@code false}.
+     *
+     * @param right the right to retrieve.
+     * @return the state of this right
+     */
+    default RuleState get(Right right)
+    {
+        return get(right, true);
+    }
+
     /**
      * Return the rule state of a given {@link Right}.
      *
@@ -44,10 +56,10 @@ public interface SecurityAccess extends Cloneable
      * Return the rule state of a given {@link Right}.
      *
      * @param right the right to retrieve.
-     * @param skipRequiredRights when {@code true}, the required rights are not considered when computing the
-     *     rule state
+     * @param skipRequiredRights when {@code true}, the required rights are not considered when computing the rule
+     *     state
      * @return the state of this right
-     * @since 15.5RC1
+     * @since 15.6RC1
      */
     @Unstable
     default RuleState get(Right right, boolean skipRequiredRights)

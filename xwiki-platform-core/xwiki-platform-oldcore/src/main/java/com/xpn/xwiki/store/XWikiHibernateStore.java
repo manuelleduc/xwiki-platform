@@ -1569,7 +1569,7 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
                         "select prop.name, prop.classType from BaseProperty as prop where prop.id.id = :id",
                         Object[].class);
                     query.setParameter("id", object.getId());
-                    for (Object[] result : (List<Object[]>) query.list()) {
+                    for (Object[] result : query.list()) {
                         String name = (String) result[0];
                         // No need to load fields already loaded from
                         // custom mapping
@@ -1896,7 +1896,6 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
             } catch (Exception e) {
                 this.logger.error("Failed to load the required rights of document [{}]", doc.getDocumentReference(), e);
                 Object[] args = { doc.getDocumentReference() };
-                // TODO: improve exception code.
                 throw new XWikiException(XWikiException.MODULE_XWIKI_STORE, XWikiException.ERROR_XWIKI_STORE_MISC,
                     "Exception while loading the required rights for document {0}", e, args);
             }
@@ -1934,8 +1933,6 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
     {
         XWikiContext context = getExecutionXContext(inputxcontext, true);
 
-        // Extract the links
-        Set<Right> rights = doc.getRequiredRights().getRights();
 
         // Save the links
         executeWrite(context, session -> {
@@ -1944,6 +1941,7 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
                 deleteRequiredRights(doc.getId(), context);
             }
 
+            Set<Right> rights = doc.getRequiredRights().getRights();
             if (!rights.isEmpty()) {
                 for (Right right : rights) {
                     XWikiDocumentRequiredRight xWikiDocumentRequiredRight = new XWikiDocumentRequiredRight();
@@ -2419,6 +2417,23 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
                 query.executeUpdate();
             } catch (Exception e) {
                 throw new XWikiException(XWikiException.MODULE_XWIKI_STORE,
+                    XWikiException.ERROR_XWIKI_STORE_MISC, "Exception while deleting required rights", e);
+            }
+
+            return null;
+        });
+    }
+
+    private void deleteRequiredRights(long docId, XWikiContext inputxcontext) throws XWikiException
+    {
+        executeWrite(inputxcontext, session -> {
+            try {
+                Query<?> query =
+                    session.createQuery("delete from XWikiDocumentRequiredRight as rr where rr.docId = :docId");
+                query.setParameter("docId", docId);
+                query.executeUpdate();
+            } catch (Exception e) {
+                throw new XWikiException(XWikiException.MODULE_XWIKI_STORE,
                     // TODO: improve cause error code + error message (add doc ref)
                     XWikiException.ERROR_XWIKI_STORE_MISC, "Exception while deleting required rights", e);
             }
@@ -2600,8 +2615,8 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
                 String statement = sql;
 
                 if (whereParams != null) {
-                    statement += generateWhereStatement(whereParams,
-                        legacyOrdinal ? -1 : CollectionUtils.size(parameterValues.size()));
+                    statement +=
+                        generateWhereStatement(whereParams, legacyOrdinal ? -1 : CollectionUtils.size(parameterValues));
                 }
 
                 statement = filterSQL(statement);
@@ -2611,7 +2626,7 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
 
                 if (whereParams != null) {
                     int parameterIndex = CollectionUtils.size(parameterValues);
-                    if (legacyOrdinal) {
+                    if (!legacyOrdinal) {
                         ++parameterIndex;
                     }
                     for (Object[] whereParam : whereParams) {
@@ -3035,7 +3050,7 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
         return injectInSessionFactory(config);
     }
 
-    private SessionFactory injectInSessionFactory(Configuration config) throws XWikiException
+    private SessionFactory injectInSessionFactory(Configuration config)
     {
         return config.buildSessionFactory();
     }
@@ -3403,7 +3418,6 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
                 return query.getSingleResult();
             } catch (Exception e) {
                 throw new XWikiException(XWikiException.MODULE_XWIKI_STORE,
-                    // TODO: improve code id and error message (include doc ref)o
                     XWikiException.ERROR_XWIKI_STORE_MISC, "Exception while counting required rights for {}", e);
             }
         });

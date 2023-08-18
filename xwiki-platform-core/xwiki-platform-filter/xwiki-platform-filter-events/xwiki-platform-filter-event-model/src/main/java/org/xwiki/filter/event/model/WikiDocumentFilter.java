@@ -183,14 +183,14 @@ public interface WikiDocumentFilter
 
     /**
      * @type {@link String}
-     * @since 15.5RC1
+     * @since 15.6RC1
      */
     @Unstable
     String PARAMETER_REVISION_REQUIRED_RIGHTS = "revision_required_rights";
 
     /**
      * @type {@link String}
-     * @since 15.5RC1
+     * @since 15.6RC1
      */
     @Unstable
     String PARAMETER_REVISION_REQUIRED_RIGHTS_ACTIVATED = "revision_required_rights_activated";
@@ -215,7 +215,7 @@ public interface WikiDocumentFilter
     // Events
 
     /**
-     * @param name the name of the document
+     * @param name the name part of the {@link org.xwiki.model.reference.DocumentReference}
      * @param parameters the properties of the document
      * @throws FilterException when failing to send event
      */
@@ -223,7 +223,7 @@ public interface WikiDocumentFilter
         throws FilterException;
 
     /**
-     * @param name the name of the document
+     * @param name the name part of the {@link org.xwiki.model.reference.DocumentReference}
      * @param parameters the properties of the document
      * @throws FilterException when failing to send event
      */

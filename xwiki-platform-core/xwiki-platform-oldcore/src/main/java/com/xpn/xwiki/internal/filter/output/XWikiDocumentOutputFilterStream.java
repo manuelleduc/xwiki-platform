@@ -112,6 +112,10 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
 
     private Locale currentDefaultLocale;
 
+    private UserReference previousCreationAuthor;
+
+    private Date previousCreationDate;
+
     @Override
     public void initialize() throws InitializationException
     {
@@ -249,11 +253,34 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
         }
         UserReference defaultAuthorReference = this.userDocumentResolver.resolve(defaultAuthorDocumentReference);
 
-        this.entity
-            .setCreationDate(getDate(WikiDocumentFilter.PARAMETER_CREATION_DATE, this.currentLocaleParameters, null));
+        // Resolve the current effective author
+        this.entity.getAuthors().setEffectiveMetadataAuthor(getUserReference(
+            WikiDocumentFilter.PARAMETER_REVISION_EFFECTIVEMETADATA_AUTHOR, parameters, defaultAuthorReference));
+        // Use effective metadata author as default
+        this.entity.getAuthors()
+            .setOriginalMetadataAuthor(getUserReference(WikiDocumentFilter.PARAMETER_REVISION_ORIGINALMETADATA_AUTHOR,
+                parameters, this.entity.getAuthors().getEffectiveMetadataAuthor()));
+        this.entity.getAuthors().setContentAuthor(
+            getUserReference(WikiDocumentFilter.PARAMETER_CONTENT_AUTHOR, parameters,
+                this.entity.getAuthors().getEffectiveMetadataAuthor()));
+
+        this.entity.setDate(getDate(WikiDocumentFilter.PARAMETER_REVISION_DATE, parameters, new Date()));
+        this.entity.setContentUpdateDate(
+            getDate(WikiDocumentFilter.PARAMETER_CONTENT_DATE, parameters, this.entity.getDate()));
+
+        UserReference defaultCreationAuthor = this.previousCreationAuthor;
+        Date defaultCreationDate = this.previousCreationDate;
+        if (defaultCreationAuthor == null) {
+            // Use the effective author as creator by default for the first version
+            defaultCreationAuthor = this.entity.getAuthors().getEffectiveMetadataAuthor();
+            defaultCreationDate = this.entity.getDate();
+        }
 
         this.entity.getAuthors().setCreator(getUserReference(WikiDocumentFilter.PARAMETER_CREATION_AUTHOR,
-            this.currentLocaleParameters, defaultAuthorReference));
+            this.currentLocaleParameters, defaultCreationAuthor));
+        this.entity.setCreationDate(
+            getDate(WikiDocumentFilter.PARAMETER_CREATION_DATE, this.currentLocaleParameters, defaultCreationDate));
+
         this.entity.setDefaultLocale(this.currentDefaultLocale);
 
         this.entity.setSyntax(getSyntax(WikiDocumentFilter.PARAMETER_SYNTAX, parameters, null));
@@ -267,21 +294,11 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
 
         this.entity.setMinorEdit(getBoolean(WikiDocumentFilter.PARAMETER_REVISION_MINOR, parameters, false));
 
-        this.entity.getAuthors().setEffectiveMetadataAuthor(getUserReference(
-            WikiDocumentFilter.PARAMETER_REVISION_EFFECTIVEMETADATA_AUTHOR, parameters, defaultAuthorReference));
-        // Use effectuve metadata author as default as this value used to be used both both original and effective
-        // metadata authors
-        this.entity.getAuthors()
-            .setOriginalMetadataAuthor(getUserReference(WikiDocumentFilter.PARAMETER_REVISION_ORIGINALMETADATA_AUTHOR,
-                parameters, this.entity.getAuthors().getEffectiveMetadataAuthor()));
-
-        this.entity.getAuthors().setContentAuthor(
-            getUserReference(WikiDocumentFilter.PARAMETER_CONTENT_AUTHOR, parameters, defaultAuthorReference));
-
         if (parameters.containsKey(PARAMETER_REVISION_REQUIRED_RIGHTS_ACTIVATED)) {
             this.entity.setRequiredRightsActivated(
                 getBoolean(WikiDocumentFilter.PARAMETER_REVISION_REQUIRED_RIGHTS_ACTIVATED, parameters, false));
         }
+
         this.entity.getRequiredRights()
             .setRights(getRequiredRights(WikiDocumentFilter.PARAMETER_REVISION_REQUIRED_RIGHTS, parameters));
         String revisions =
@@ -304,10 +321,7 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
             }
         }
 
-        this.entity.setDate(getDate(WikiDocumentFilter.PARAMETER_REVISION_DATE, parameters, new Date()));
         this.entity.setComment(getString(WikiDocumentFilter.PARAMETER_REVISION_COMMENT, parameters, ""));
-
-        this.entity.setContentUpdateDate(getDate(WikiDocumentFilter.PARAMETER_CONTENT_DATE, parameters, new Date()));
 
         // Content
 
@@ -399,6 +413,8 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
         this.currentLocaleParameters = null;
         this.currentLocale = null;
         this.currentDefaultLocale = null;
+        this.previousCreationAuthor = null;
+        this.previousCreationDate = null;
     }
 
     @Override
@@ -418,6 +434,8 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
         // Reset
         this.currentLocale = null;
         this.currentLocaleParameters = null;
+        this.previousCreationAuthor = null;
+        this.previousCreationDate = null;
     }
 
     @Override
@@ -432,6 +450,10 @@ public class XWikiDocumentOutputFilterStream extends AbstractEntityOutputFilterS
     public void endWikiDocumentRevision(String version, FilterEventParameters parameters) throws FilterException
     {
         end(parameters);
+
+        // Remember some metadata for next entity
+        this.previousCreationAuthor = this.entity.getAuthors().getCreator();
+        this.previousCreationDate = this.entity.getCreationDate();
 
         // Reset
         this.currentVersion = null;

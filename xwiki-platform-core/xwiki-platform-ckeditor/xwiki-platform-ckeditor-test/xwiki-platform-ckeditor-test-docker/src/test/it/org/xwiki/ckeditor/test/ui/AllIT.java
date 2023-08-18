@@ -55,4 +55,17 @@ public class AllIT
     class NestedLinkPluginIT extends LinkPluginIT
     {
     }
+    
+    @Nested
+    @DisplayName("Quick Actions")
+    class NestedQuickActionsIT extends QuickActionsIT
+    {
+    }
+
+    @Nested
+    @DisplayName("Undo / Redo")
+    class NestedUndoRedoIT extends UndoRedoIT
+    {
+    }
+    
 }

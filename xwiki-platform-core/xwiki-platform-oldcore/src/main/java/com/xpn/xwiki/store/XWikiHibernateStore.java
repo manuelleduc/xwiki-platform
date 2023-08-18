@@ -2424,24 +2424,6 @@ public class XWikiHibernateStore extends XWikiHibernateBaseStore implements XWik
         });
     }
 
-    private void deleteRequiredRights(long docId, XWikiContext inputxcontext) throws XWikiException
-    {
-        executeWrite(inputxcontext, session -> {
-            try {
-                Query<?> query =
-                    session.createQuery("delete from XWikiDocumentRequiredRight as rr where rr.docId = :docId");
-                query.setParameter("docId", docId);
-                query.executeUpdate();
-            } catch (Exception e) {
-                throw new XWikiException(XWikiException.MODULE_XWIKI_STORE,
-                    // TODO: improve cause error code + error message (add doc ref)
-                    XWikiException.ERROR_XWIKI_STORE_MISC, "Exception while deleting required rights", e);
-            }
-
-            return null;
-        });
-    }
-
     public void getContent(XWikiDocument doc, StringBuffer buf)
     {
         buf.append(doc.getContent());

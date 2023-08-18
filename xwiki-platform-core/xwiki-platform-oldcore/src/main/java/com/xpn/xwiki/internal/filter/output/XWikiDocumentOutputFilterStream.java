@@ -44,7 +44,6 @@ import org.xwiki.filter.event.model.WikiDocumentFilter;
 import org.xwiki.filter.event.xwiki.XWikiWikiDocumentFilter;
 import org.xwiki.filter.input.InputSource;
 import org.xwiki.localization.LocalizationContext;
-import org.xwiki.model.internal.document.DefaultRequiredRights;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 import org.xwiki.rendering.internal.transformation.MutableRenderingContext;

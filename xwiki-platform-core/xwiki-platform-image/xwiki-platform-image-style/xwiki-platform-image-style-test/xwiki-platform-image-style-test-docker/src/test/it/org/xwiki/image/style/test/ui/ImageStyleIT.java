@@ -95,8 +95,10 @@ class ImageStyleIT
         assertEquals(defaultPrettyName, tableLayout.getCell("Pretty Name", 1).getText());
         assertEquals(type, tableLayout.getCell("Type", 1).getText());
 
-        assertEquals(String.format("<Map1><defaultStyle>%s</defaultStyle></Map1>", defaultName),
-            getDefaultFromRest(testUtils, wikiReference));
+        assertEquals(String.format("<MapN>"
+            + "<defaultStyle>%s</defaultStyle>"
+            + "<forceDefaultStyle>false</forceDefaultStyle>"
+            + "</MapN>", defaultName), getDefaultFromRest(testUtils, wikiReference));
 
         assertEquals(String.format("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
             + "<styles xmlns=\"http://www.xwiki.org/imageStyle\">"

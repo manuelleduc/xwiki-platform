@@ -31,7 +31,7 @@ import org.xwiki.rendering.internal.macro.toc.TocTreeBuilder;
  * Initialize a {@link TocTreeBuilder} for pdf export.
  *
  * @version $Id$
- * @since 15.2RC1
+ * @since 15.8RC1
  */
 @Component
 @Singleton

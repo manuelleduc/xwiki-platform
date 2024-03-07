@@ -59,6 +59,9 @@
         isInsert: isInsert,
         setImageData: setImageData
       }).done(function(data) {
+        // Mark the widget as originating from the wizard, to be able to distinguish from pasted images, which does not 
+        // go through the wizard.
+        widget.fromWizard = true;
         if (widget && widget.element) {
           widget.setData(data);
 
@@ -473,6 +476,39 @@
       }
 
       var originalInit = imageWidget.init;
+
+      function initWidgetData(widget, image) {
+        // During init, or when the image is configured through the image wizard, use the image attributes
+        // Otherwise, use the default configuration. The later should only occur when some content is pasted. 
+        if (widget.isFromWizard || widget.editor.readOnly !== false) {
+          widget.setData('imageStyle', image.getAttribute('data-xwiki-image-style') || '');
+
+          widget.setData('border', image.getAttribute('data-xwiki-image-style-border'));
+          widget.setData('alignment', image.getAttribute('data-xwiki-image-style-alignment'));
+          widget.setData('textWrap', image.getAttribute('data-xwiki-image-style-text-wrap'));
+        } else  {
+          var config = JSON.parse(document.getElementById('image-style-config').textContent);
+          if(config.type) {
+            widget.setData('imageStyle', config.type);
+          }
+          if (config.defaultWidth) {
+            widget.setData('width', config.defaultWidth);
+          }
+          if (config.defaultHeight) {
+            widget.setData('height', config.defaultHeight);
+          }
+          if (config.defaultBorder) {
+            widget.setData('border', config.defaultBorder);
+          }
+          if (config.defaultAlignment) {
+            widget.setData('alignment', config.defaultAlignment);
+          }
+          if (config.defaultTextWrap) {
+            widget.setData('textWrap', config.defaultTextWrap);
+          }
+        }
+      }
+
       imageWidget.init = function() {
         originalInit.call(this);
 
@@ -489,11 +525,7 @@
         if (this.data.hasCaption) {
           image = this.element;
         }
-        this.setData('imageStyle', image.getAttribute('data-xwiki-image-style') || '');
-
-        this.setData('border', image.getAttribute('data-xwiki-image-style-border'));
-        this.setData('alignment', image.getAttribute('data-xwiki-image-style-alignment'));
-        this.setData('textWrap', image.getAttribute('data-xwiki-image-style-text-wrap'));
+        initWidgetData(this, image);
 
         moveResizer(this);
         disableResizer(this);

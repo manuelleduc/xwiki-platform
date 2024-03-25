@@ -48,6 +48,13 @@ public class CKEditorToolBar extends BaseElement
         this.container = findContainer(editor);
     }
 
+    public void clickNumberedList()
+    {
+        clickButton("lists");
+        getDriver().findElementWithoutWaiting(this.container, By.className("cke_menubutton__toolbar_numberedlist"))
+            .click();
+    }
+
     protected WebElement findContainer(CKEditor editor)
     {
         return (WebElement) getDriver().executeScript("return CKEDITOR.instances[arguments[0]].ui.space('top').$;",

@@ -857,7 +857,8 @@ class ImageIT extends AbstractCKEditorIT
         ViewPage savedPage = wysiwygEditPage.clickSaveAndView();
 
         // Verify that the content matches what we did using CKEditor.
-        assertEquals("1. Item 1\n"
+        assertEquals("* Item 1\n"
+            + "\n"
             + "1. Item 2 [[image:image.gif]]", savedPage.editWiki().getContent());
 
         throw new RuntimeException("SUCCESS SNAP");

@@ -38,6 +38,8 @@ public class CKEditorToolBar extends BaseElement
 {
     protected final WebElement container;
 
+    private final CKEditor editor;
+
     /**
      * Create a new tool bar instance for the given editor.
      * 
@@ -45,14 +47,28 @@ public class CKEditorToolBar extends BaseElement
      */
     public CKEditorToolBar(CKEditor editor)
     {
+        this.editor = editor;
         this.container = findContainer(editor);
     }
 
+    /**
+     * Click the numbered list action, by first unfolding the list menu and selecting the numbered list item.
+     *
+     * @since 14.10.22
+     * @since 15.10.9
+     * @since 16.3.0RC1
+     */
     public void clickNumberedList()
     {
         clickButton("lists");
-        getDriver().findElementWithoutWaiting(this.container, By.className("cke_menubutton__toolbar_numberedlist"))
-            .click();
+        WebElement subMenuFrame = getDriver().findElement(By.cssSelector("iframe.cke_panel_frame"));
+
+        try {
+            getDriver().switchTo().frame(subMenuFrame);
+            getDriver().findElement(By.className("cke_menubutton__toolbar_numberedlist")).click();
+        } finally {
+            getDriver().switchTo().parentFrame();
+        }
     }
 
     protected WebElement findContainer(CKEditor editor)

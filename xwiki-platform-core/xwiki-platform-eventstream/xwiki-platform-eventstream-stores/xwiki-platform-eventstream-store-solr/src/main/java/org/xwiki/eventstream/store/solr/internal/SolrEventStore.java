@@ -19,6 +19,26 @@
  */
 package org.xwiki.eventstream.store.solr.internal;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
@@ -31,29 +51,39 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.phase.InitializationException;
-import org.xwiki.eventstream.*;
+import org.xwiki.eventstream.EntityEvent;
+import org.xwiki.eventstream.Event;
 import org.xwiki.eventstream.Event.Importance;
+import org.xwiki.eventstream.EventQuery;
+import org.xwiki.eventstream.EventSearchResult;
+import org.xwiki.eventstream.EventStatus;
+import org.xwiki.eventstream.EventStore;
+import org.xwiki.eventstream.EventStreamException;
 import org.xwiki.eventstream.internal.AbstractAsynchronousEventStore;
 import org.xwiki.eventstream.internal.DefaultEvent;
 import org.xwiki.eventstream.internal.DefaultEventStatus;
 import org.xwiki.eventstream.internal.StreamEventSearchResult;
-import org.xwiki.eventstream.query.*;
+import org.xwiki.eventstream.query.AbstractPropertyQueryCondition;
+import org.xwiki.eventstream.query.CompareQueryCondition;
 import org.xwiki.eventstream.query.CompareQueryCondition.CompareType;
+import org.xwiki.eventstream.query.GroupQueryCondition;
+import org.xwiki.eventstream.query.InQueryCondition;
+import org.xwiki.eventstream.query.MailEntityQueryCondition;
+import org.xwiki.eventstream.query.PageableEventQuery;
+import org.xwiki.eventstream.query.QueryCondition;
+import org.xwiki.eventstream.query.SimpleEventQuery;
+import org.xwiki.eventstream.query.SortableEventQuery;
 import org.xwiki.eventstream.query.SortableEventQuery.SortClause;
 import org.xwiki.eventstream.query.SortableEventQuery.SortClause.Order;
-import org.xwiki.model.reference.*;
+import org.xwiki.eventstream.query.StatusQueryCondition;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.EntityReference;
+import org.xwiki.model.reference.EntityReferenceSerializer;
+import org.xwiki.model.reference.SpaceReference;
+import org.xwiki.model.reference.WikiReference;
 import org.xwiki.search.solr.Solr;
 import org.xwiki.search.solr.SolrException;
 import org.xwiki.search.solr.SolrUtils;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Solr based implementation of {@link EventStore}.
@@ -148,6 +178,7 @@ public class SolrEventStore extends AbstractAsynchronousEventStore
     protected Event syncSaveEvent(Event event) throws EventStreamException
     {
         try {
+            this.logger.warn("XWIKI-2262 syncSaveEvent [{}]", event);
             this.client.add(toSolrInputDocument(event));
         } catch (Exception e) {
             throw new EventStreamException("Failed to save event", e);
@@ -159,6 +190,7 @@ public class SolrEventStore extends AbstractAsynchronousEventStore
     @Override
     protected EventStatus syncSaveEventStatus(EventStatus status) throws EventStreamException
     {
+        this.logger.warn("XWIKI-2262 syncSaveEventStatus [{}]", status);
         saveEventStatus(status.getEvent().getId(), status.getEntityId(), status.isRead(), !status.isRead());
 
         return status;

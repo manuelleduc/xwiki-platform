@@ -127,8 +127,8 @@ class NotificationsIT
     public void tearDown(TestUtils setup)
     {
         setup.loginAsSuperAdmin();
-        setup.deletePage("XWiki", FIRST_USER_NAME);
-        setup.deletePage("XWiki", SECOND_USER_NAME);
+//        setup.deletePage("XWiki", FIRST_USER_NAME);
+//        setup.deletePage("XWiki", SECOND_USER_NAME);
         setup.forceGuestUser();
     }
 

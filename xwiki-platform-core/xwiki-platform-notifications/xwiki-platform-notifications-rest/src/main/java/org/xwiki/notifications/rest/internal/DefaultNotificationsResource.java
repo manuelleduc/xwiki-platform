@@ -19,18 +19,8 @@
  */
 package org.xwiki.notifications.rest.internal;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.user.api.XWikiUser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.xwiki.component.annotation.Component;
@@ -47,8 +37,16 @@ import org.xwiki.notifications.sources.internal.DefaultNotificationParametersFac
 import org.xwiki.notifications.sources.internal.DefaultNotificationParametersFactory.ParametersKey;
 import org.xwiki.rest.XWikiResource;
 
-import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.user.api.XWikiUser;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default implementation of {@link NotificationsResource}.
@@ -161,9 +159,12 @@ public class DefaultNotificationsResource extends XWikiResource implements Notif
             String cacheKey = this.cacheManager.createCacheKey(notificationParameters);
 
             // 3. Search events
-            result = this.executor.submit(cacheKey,
-                () -> getCompositeEvents(notificationParameters),
-                Boolean.parseBoolean(async), count, true);
+            List<CompositeEvent> compositeEvents = getCompositeEvents(notificationParameters);
+            if (count) {
+                result = compositeEvents.size();
+            } else {
+                result = compositeEvents;
+            }
         }
 
         return result;

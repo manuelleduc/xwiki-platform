@@ -19,15 +19,6 @@
  */
 package org.xwiki.notifications.sources.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.eventstream.Event;
@@ -49,6 +40,14 @@ import org.xwiki.user.UserReference;
 import org.xwiki.user.UserReferenceResolver;
 import org.xwiki.user.group.GroupException;
 import org.xwiki.user.group.GroupManager;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Default implementation of {@link ParametrizedNotificationManager}.
@@ -121,6 +120,7 @@ public class DefaultParametrizedNotificationManager implements ParametrizedNotif
     private List<Event> getRawEvents(NotificationParameters parameters, List<CompositeEvent> compositeEvents)
         throws NotificationException
     {
+        this.logger.warn("XWIKI-22262 getRawEvents called with parameters [{}]", parameters);
         if (Boolean.TRUE.equals(parameters.onlyUnread) && !parameters.filters.contains(eventReadAlertFilter)) {
             parameters.filters.add(eventReadAlertFilter);
         }
@@ -153,6 +153,8 @@ public class DefaultParametrizedNotificationManager implements ParametrizedNotif
                     }
                 }
             }
+
+            this.logger.warn("XWIKI-22262 getRawEvents with parameters [{}] returns [{}] size and compositeEvent [{}] size", parameters, results.size(), compositeEvents.size());
 
             return results;
         } catch (Exception e) {
@@ -214,7 +216,7 @@ public class DefaultParametrizedNotificationManager implements ParametrizedNotif
 
     /**
      * Determine if the given user reference is targeted by the event targets.
-     * 
+     *
      * @param event the event that is tested
      * @param userReference the user reference given by the parameters
      * @return {@code true} iff the user is explicitely target, or through a group.

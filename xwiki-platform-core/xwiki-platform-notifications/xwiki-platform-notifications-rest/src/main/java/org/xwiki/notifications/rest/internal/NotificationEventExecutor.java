@@ -19,23 +19,7 @@
  */
 package org.xwiki.notifications.rest.internal;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
+import com.xpn.xwiki.XWikiContext;
 import org.slf4j.Logger;
 import org.xwiki.cache.Cache;
 import org.xwiki.cache.CacheException;
@@ -54,11 +38,17 @@ import org.xwiki.notifications.NotificationConfiguration;
 import org.xwiki.notifications.NotificationException;
 import org.xwiki.notifications.notifiers.internal.DefaultNotificationCacheManager;
 
-import com.xpn.xwiki.XWikiContext;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Cache notification request results and limit the number of threads allowed to retrieve notification events.
- * 
+ *
  * @version $Id$
  * @since 10.11.4
  * @since 11.2
@@ -144,7 +134,7 @@ public class NotificationEventExecutor implements Initializable, Disposable
         @Override
         public Object call() throws Exception
         {
-            logger.debug("Starting execution [{}]", this);
+            logger.warn("Starting execution [{}]", this);
 
             // Remember the thread name
             String threadName = Thread.currentThread().getName();
@@ -165,7 +155,7 @@ public class NotificationEventExecutor implements Initializable, Disposable
 
                 throw e;
             } finally {
-                logger.debug("Finishing execution [{}]", this);
+                logger.warn("Finishing execution [{}]", this);
 
                 // Clean the queue
                 // "result" should never by null but just in case...
@@ -215,9 +205,9 @@ public class NotificationEventExecutor implements Initializable, Disposable
             synchronized (queue) {
                 // Remove from the queue map
                 if (queue.remove(this.cacheKey, this)) {
-                    logger.debug("Removed [{}] from the queue", this);
+                    logger.warn("Removed [{}] from the queue", this);
                 } else {
-                    logger.debug("Tried to remove [{}] from the queue but it could not be found", this);
+                    logger.warn("Tried to remove [{}] from the queue but it could not be found", this);
                 }
 
                 // Notify the waiting client that the execution is done
@@ -346,7 +336,7 @@ public class NotificationEventExecutor implements Initializable, Disposable
                     asyncId, composite);
                 this.queue.put(longCacheKey, entry);
 
-                this.logger.debug("Added [{}] in the queue", entry);
+                this.logger.warn("Added [{}] in the queue", entry);
 
                 this.executor.submit(entry);
             } else {
@@ -357,7 +347,7 @@ public class NotificationEventExecutor implements Initializable, Disposable
 
     /**
      * Get and remove result of the asynchronous execution associated to the passed id.
-     * 
+     *
      * @param asyncId the identifier of the asynchronous execution
      * @return the result of the asynchronous execution
      * @throws NotificationException if an exception was thrown by the asynchronous execution

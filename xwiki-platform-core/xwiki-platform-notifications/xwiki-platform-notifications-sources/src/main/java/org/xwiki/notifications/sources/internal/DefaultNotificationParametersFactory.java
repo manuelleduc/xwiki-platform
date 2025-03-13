@@ -21,6 +21,7 @@ package org.xwiki.notifications.sources.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -145,7 +146,7 @@ public class DefaultNotificationParametersFactory
 
         /**
          * See {@link NotificationParameters#endDateIncluded}: accepted values are boolean.
-         * 
+         *
          * @since 12.7RC1
          * @since 12.6.1
          */
@@ -239,7 +240,7 @@ public class DefaultNotificationParametersFactory
 
         /**
          * Default constructor.
-         * 
+         *
          * @param isDirectlyUsed {@code true} if we have a method which handle directly the parameter with its value.
          *            {@code false} if the parameters is evaluated in conjunction with others.
          */
@@ -383,7 +384,7 @@ public class DefaultNotificationParametersFactory
 
     /**
      * Modify the passed parameters to take into account user preferences.
-     * 
+     *
      * @param parameters the parameters
      * @throws NotificationException if error happens
      * @since 12.6
@@ -392,15 +393,18 @@ public class DefaultNotificationParametersFactory
     {
         if (parameters.user != null) {
             // We only request the filters that performs post-filtering.
-            parameters.filters = new HashSet<>(notificationFilterManager.getAllFilters(parameters.user, true,
-                NotificationFilter.FilteringPhase.POST_FILTERING));
-
+            ArrayList<NotificationFilter> notificationFilters =
+                new ArrayList<>(notificationFilterManager.getAllFilters(parameters.user, true,
+                    NotificationFilter.FilteringPhase.POST_FILTERING));
+            if (notificationFilters.stream().noneMatch(ForUserEventFilter.class::isInstance)) {
+                notificationFilters.add(new ForUserEventFilter(parameters.format, null));
+            }
+            notificationFilters.sort(Comparator.comparing(filter -> filter.getClass().getName()));
+            parameters.filters = notificationFilters;
             enableAllEventTypes(parameters);
-            // TODO: Could be added in the NotificationFilterManager#getAllFilters since we actually know
-            // in it if prefiltering is enabled. Now we are missing the format in this method for now.
-            parameters.filters.add(new ForUserEventFilter(parameters.format, null));
         }
     }
+
 
     /**
      * Helper method to get a notification parameters for Alert format for the given user and count.
@@ -561,7 +565,7 @@ public class DefaultNotificationParametersFactory
 
     /**
      * add the current wiki to the reference if it is missing an explicit wiki reference.
-     * 
+     *
      * @param entityRefStr the reference to check
      * @param entityType the (expected) type of the reference
      * @param currentWiki the wiki to add to the reference, if missing

@@ -178,7 +178,7 @@ public class SolrEventStore extends AbstractAsynchronousEventStore
     protected Event syncSaveEvent(Event event) throws EventStreamException
     {
         try {
-            this.logger.warn("XWIKI-2262 syncSaveEvent [{}]", event);
+            this.logger.warn("XWIKI-22262 syncSaveEvent [{}]", event);
             this.client.add(toSolrInputDocument(event));
         } catch (Exception e) {
             throw new EventStreamException("Failed to save event", e);
@@ -190,7 +190,7 @@ public class SolrEventStore extends AbstractAsynchronousEventStore
     @Override
     protected EventStatus syncSaveEventStatus(EventStatus status) throws EventStreamException
     {
-        this.logger.warn("XWIKI-2262 syncSaveEventStatus [{}]", status);
+        this.logger.warn("XWIKI-22262 syncSaveEventStatus [{}]", status);
         saveEventStatus(status.getEvent().getId(), status.getEntityId(), status.isRead(), !status.isRead());
 
         return status;
@@ -242,6 +242,7 @@ public class SolrEventStore extends AbstractAsynchronousEventStore
     @Override
     protected Event syncPrefilterEvent(Event event) throws EventStreamException
     {
+        this.logger.warn("XWIKI-22262 syncPrefilterEvent [{}]", event);
         SolrInputDocument document = new SolrInputDocument();
 
         this.utils.set(EventsSolrCoreInitializer.SOLR_FIELD_ID, event.getId(), document);

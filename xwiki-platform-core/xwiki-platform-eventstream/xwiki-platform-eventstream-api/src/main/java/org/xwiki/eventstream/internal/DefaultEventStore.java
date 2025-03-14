@@ -52,7 +52,7 @@ import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
 /**
  * The default implementation of {@link EventStore} dispatching the event in the various enabled stores.
- * 
+ *
  * @version $Id$
  * @since 12.4RC1
  */
@@ -135,6 +135,7 @@ public class DefaultEventStore implements EventStore, Initializable
     @Override
     public CompletableFuture<Event> saveEvent(Event event)
     {
+        this.logger.warn("XWIKI-22262 saveEvent [{}]", event);
         prepareEvent(event);
 
         CompletableFuture<Event> future = null;
@@ -159,6 +160,7 @@ public class DefaultEventStore implements EventStore, Initializable
     @Override
     public CompletableFuture<Event> prefilterEvent(Event event)
     {
+        this.logger.warn("XWIKI-22262 prefilterEvent [{}]", event);
         prepareEvent(event);
 
         CompletableFuture<Event> future = null;

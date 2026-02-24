@@ -38,8 +38,9 @@ import { DefaultStorageProvider } from "./storage/DefaultStorageProvider";
 import { XWikiStorage } from "./storage/XWikiStorage";
 import { DefaultLogger } from "@xwiki/platform-api";
 import { ComponentInit as DefaultAttachmentsComponentInit } from "@xwiki/platform-attachments-default";
-import { ComponentInit as UniastMarkdownXWikiComponentList } from "@xwiki/platform-uniast-markdown-xwiki"
 import { ComponentInit as MacroServiceComponentList } from "@xwiki/platform-macros-service";
+import { ComponentInit as UniastMarkdownComponentList } from "@xwiki/platform-uniast-markdown";
+import { ComponentInit as UniastMarkdownXWikiComponentList } from "@xwiki/platform-uniast-markdown-xwiki";
 import { Container, injectable } from "inversify";
 
 const container: Container = new Container();

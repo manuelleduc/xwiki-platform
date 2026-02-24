@@ -22,7 +22,7 @@ import type { Container, Factory, Newable, ResolutionContext } from "inversify";
 
 /**
  * @beta
- * @since 18.0.0RC1
+ * @since 18.2.0RC1
  */
 export class ComponentInit {
   constructor(container: Container) {

@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "@xwiki/platform-guidedtour-ui": "workspace:*",
-    "@xwiki/platform-guidedtour-xwiki": "workspace:*",
-    "@xwiki/platform-guidedtour-api": "workspace:*"
+    "@xwiki/platform-guidedtour-xwiki": "workspace:*"
   },
   "devDependencies": {
     "@xwiki/platform-tool-eslintconfig": "workspace:*",

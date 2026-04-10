@@ -62,6 +62,10 @@ function generateWebjarNodeConfig(
         },
       },
     },
+    define: {
+      // define process to avoid runtime error with jquery
+      "process.env": {},
+    },
   });
 }
 

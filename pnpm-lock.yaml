@@ -402,9 +402,6 @@ importers:
 
   xwiki-platform-core/xwiki-platform-guidedtour/xwiki-platform-guidedtour-node/xwiki-platform-guidedtour-node-ui/src/main/node:
     dependencies:
-      '@xwiki/platform-guidedtour-api':
-        specifier: workspace:*
-        version: link:../../../../../../xwiki-platform-node/src/main/node/core/guidedtour/guidedtour-api
       '@xwiki/platform-guidedtour-ui':
         specifier: workspace:*
         version: link:../../../../../../xwiki-platform-node/src/main/node/core/guidedtour/guidedtour-ui
@@ -427,9 +424,6 @@ importers:
 
   xwiki-platform-core/xwiki-platform-guidedtour/xwiki-platform-guidedtour-webjar/src/main/node:
     dependencies:
-      '@xwiki/platform-guidedtour-api':
-        specifier: workspace:*
-        version: link:../../../../../xwiki-platform-node/src/main/node/core/guidedtour/guidedtour-api
       '@xwiki/platform-guidedtour-ui':
         specifier: workspace:*
         version: link:../../../../../xwiki-platform-node/src/main/node/core/guidedtour/guidedtour-ui
@@ -439,9 +433,6 @@ importers:
       vue-i18n:
         specifier: 'catalog:'
         version: 11.2.8(vue@3.5.29(typescript@5.9.3))
-      vue3-touch-events:
-        specifier: 'catalog:'
-        version: 5.0.15(vue@3.5.29(typescript@5.9.3))
     devDependencies:
       '@tsconfig/node24':
         specifier: 'catalog:'

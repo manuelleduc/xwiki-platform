@@ -35,6 +35,16 @@ export default defineConfig({
       formats: ["es"],
     },
     sourcemap: true,
+    rollupOptions: {
+      external: [
+        "vue", "@xwiki/platform-guidedtour-ui", "vue-i18n"
+      ],
+      output: {
+        globals: {
+          vue: "Vue",
+        },
+      },
+    }
   },
   define: {
     // define process to avoid runtime error with jquery

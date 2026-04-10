@@ -27,7 +27,7 @@ function init() {
   console.info("Hi from init 1!");
   const guidedTourManager = new GuidedTourManager();
 
-  createApp({ render: () => h('div', 'Test') }).mount('#gt2');
+  // createApp({ render: () => h('div', 'Test') }).mount('#gt2');
   const app = createApp(GuidedTourWidget, { guidedTourManager });
   app.config.errorHandler = (err, instance, info) => {
     console.error('Vue error:', err, info, instance);

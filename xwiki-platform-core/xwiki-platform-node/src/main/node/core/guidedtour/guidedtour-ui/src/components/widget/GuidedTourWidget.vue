@@ -25,6 +25,7 @@
 -->
 
 <template>
+  {{ cptr }} <button @click="cptr++">ADD</button>
   <div class="guidedtour-widget" :class="widgetClass">
     <GuidedTourWidgetHeader
       @collapseGuidedTourWidget="onToggleCollapseTour"
@@ -75,6 +76,7 @@ import type {
   GuidedTourManagerApi,
   TourTour,
 } from "@xwiki/platform-guidedtour-api";
+const cptr = ref(0);
 console.info("In widget setup. 23");
 const { guidedTourManager } = defineProps<{
   guidedTourManager: GuidedTourManagerApi;

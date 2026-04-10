@@ -54,6 +54,9 @@
     "vue-tippy": "catalog:",
     "vuedraggable": "catalog:"
   },
+  "peerDependencies": {
+    "vue": "3.x"
+  },
   "devDependencies": {
     "@microsoft/api-extractor": "catalog:",
     "@types/jquery": "catalog:",

@@ -16,9 +16,7 @@
   "dependencies": {
     "@xwiki/platform-guidedtour-ui": "workspace:*",
     "@xwiki/platform-guidedtour-xwiki": "workspace:*",
-    "@xwiki/platform-guidedtour-api": "workspace:*",
-    "vue-i18n": "catalog:",
-    "vue3-touch-events": "catalog:"
+    "vue-i18n": "catalog:"
   },
   "peerDependencies": {
     "vue": "3.x"

@@ -38,6 +38,7 @@ import org.xwiki.javascript.importmap.internal.parser.JavascriptImportmapParser;
 import org.xwiki.model.namespace.WikiNamespace;
 import org.xwiki.rendering.block.Block;
 import org.xwiki.rendering.block.RawBlock;
+import org.xwiki.javascript.importmap.internal.parser.ImportmapPathDescriptor;
 import org.xwiki.webjars.WebJarsUrlFactory;
 import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
@@ -125,14 +126,25 @@ public class JavascriptImportmapResolver
             .filter(extension -> accessProperty(extension) != null)
             .map(extension -> {
                 String importMapJSON = accessProperty(extension);
-                Map<String, String> extensionImportMap;
+                Map<String, Map<String, Object>> extensionImportMap;
                 try {
                     extensionImportMap = JAVASCRIPT_IMPORTMAP_PARSER.parse(importMapJSON)
                         .entrySet()
                         .stream()
                         .collect(Collectors.toMap(
                             Map.Entry::getKey,
-                            e -> this.webJarsUrlFactory.url(e.getValue())
+                            e -> {
+                                ImportmapPathDescriptor descriptor = e.getValue();
+                                Map<String, Object> result = new LinkedH    ashMap<>();
+                                result.put("url", this.webJarsUrlFactory.url(descriptor.descriptor()));
+                                if (descriptor.eager()) {
+                                    result.put("eager", true);
+                                }
+                                if (descriptor.anonymous()) {
+                                    result.put("anonymous", true);
+                                }
+                                return result;
+                            }
                         ));
                 } catch (JavascriptImportmapException e) {
                     this.logger.warn("Unable to read property [{}] for extension [{}]. Cause: [{}]",
@@ -143,12 +155,12 @@ public class JavascriptImportmapResolver
             })
             .toList();
 
-        Map<String, String> resolvedMap = new HashMap<>();
-        for (Map<String, String> objectObjectMap : extensionsWithImportMap) {
-            for (Map.Entry<String, String> objectObjectEntry : objectObjectMap.entrySet()) {
+        Map<String, Map<String, Object>> resolvedMap = new HashMap<>();
+        for (Map<String, Map<String, Object>> objectObjectMap : extensionsWithImportMap) {
+            for (Map.Entry<String, Map<String, Object>> objectObjectEntry : objectObjectMap.entrySet()) {
                 String key = objectObjectEntry.getKey();
-                String value = objectObjectEntry.getValue();
-                String existingValue = resolvedMap.get(key);
+                Map<String, Object> value = objectObjectEntry.getValue();
+                Map<String, Object> existingValue = resolvedMap.get(key);
                 if (existingValue == null) {
                     resolvedMap.put(key, value);
                 } else if (!value.equals(existingValue)) {

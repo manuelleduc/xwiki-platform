@@ -200,4 +200,89 @@ class JavascriptImportmapResolverTest
                 "<script type='importmap'>{\"imports\":{\"lodash\":\"/webjars/lodash/4.17.21/lodash.js\"}}</script>",
                 HTML_5_0), result);
     }
+
+    @Test
+    void getBlockHandlesEagerLoading()
+    {
+        // Mock an extension with importmap property containing eager loading
+        InstalledExtension extension = mock(InstalledExtension.class);
+        when(extension.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": {
+                    "webjarId": "org.webjars.npm:vue",
+                    "path": "index.js",
+                    "eager": true
+                }
+            }
+            """);
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "index.js")))
+            .thenReturn("/webjars/vue/1.2.3/index.js");
+
+        Block result = this.javascriptImportmapResolver.getBlock();
+
+        assertEquals(
+            new RawBlock(
+                "<script type='importmap'>{\"imports\":{\"vue\":{\"eager\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                HTML_5_0), result);
+    }
+
+    @Test
+    void getBlockHandlesAnonymousLoading()
+    {
+        // Mock an extension with importmap property containing anonymous loading
+        InstalledExtension extension = mock(InstalledExtension.class);
+        when(extension.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": {
+                    "webjarId": "org.webjars.npm:vue",
+                    "path": "index.js",
+                    "anonymous": true
+                }
+            }
+            """);
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "index.js")))
+            .thenReturn("/webjars/vue/1.2.3/index.js");
+
+        Block result = this.javascriptImportmapResolver.getBlock();
+
+        assertEquals(
+            new RawBlock(
+                "<script type='importmap'>{\"imports\":{\"vue\":{\"anonymous\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                HTML_5_0), result);
+    }
+
+    @Test
+    void getBlockHandlesEagerAndAnonymousLoading()
+    {
+        // Mock an extension with importmap property containing both eager and anonymous loading
+        InstalledExtension extension = mock(InstalledExtension.class);
+        when(extension.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": {
+                    "webjarId": "org.webjars.npm:vue",
+                    "path": "index.js",
+                    "eager": true,
+                    "anonymous": true
+                }
+            }
+            """);
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "index.js")))
+            .thenReturn("/webjars/vue/1.2.3/index.js");
+
+        Block result = this.javascriptImportmapResolver.getBlock();
+
+        assertEquals(
+            new RawBlock(
+                "<script type='importmap'>{\"imports\":{\"vue\":{\"anonymous\":true,\"eager\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                HTML_5_0), result);
+    }
 }

@@ -22,6 +22,7 @@ package org.xwiki.javascript.importmap.internal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,12 +34,12 @@ import org.xwiki.component.annotation.Component;
 import org.xwiki.extension.Extension;
 import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.extension.repository.InstalledExtensionRepository;
+import org.xwiki.javascript.importmap.internal.parser.ImportmapPathDescriptor;
 import org.xwiki.javascript.importmap.internal.parser.JavascriptImportmapException;
 import org.xwiki.javascript.importmap.internal.parser.JavascriptImportmapParser;
 import org.xwiki.model.namespace.WikiNamespace;
 import org.xwiki.rendering.block.Block;
 import org.xwiki.rendering.block.RawBlock;
-import org.xwiki.javascript.importmap.internal.parser.ImportmapPathDescriptor;
 import org.xwiki.webjars.WebJarsUrlFactory;
 import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 
@@ -117,16 +118,20 @@ public class JavascriptImportmapResolver
         }
     }
 
+    private record ResolveMapEnum(String url, boolean eager, boolean anonymous)
+    {
+    }
+
     private void compute()
     {
         var wikiNamespace = new WikiNamespace(this.wikiDescriptorManager.getCurrentWikiId()).serialize();
-        List<Map<String, String>> extensionsWithImportMap = Stream.concat(
+        List<Map<String, ResolveMapEnum>> extensionsWithImportMap = Stream.concat(
                 this.installedExtensionRepository.getInstalledExtensions(wikiNamespace).stream(),
                 this.coreExtensionRepository.getCoreExtensions().stream())
             .filter(extension -> accessProperty(extension) != null)
             .map(extension -> {
                 String importMapJSON = accessProperty(extension);
-                Map<String, Map<String, Object>> extensionImportMap;
+                Map<String, ResolveMapEnum> extensionImportMap;
                 try {
                     extensionImportMap = JAVASCRIPT_IMPORTMAP_PARSER.parse(importMapJSON)
                         .entrySet()
@@ -135,15 +140,8 @@ public class JavascriptImportmapResolver
                             Map.Entry::getKey,
                             e -> {
                                 ImportmapPathDescriptor descriptor = e.getValue();
-                                Map<String, Object> result = new LinkedH    ashMap<>();
-                                result.put("url", this.webJarsUrlFactory.url(descriptor.descriptor()));
-                                if (descriptor.eager()) {
-                                    result.put("eager", true);
-                                }
-                                if (descriptor.anonymous()) {
-                                    result.put("anonymous", true);
-                                }
-                                return result;
+                                return new ResolveMapEnum(this.webJarsUrlFactory.url(descriptor.descriptor()),
+                                    descriptor.eager(), descriptor.anonymous());
                             }
                         ));
                 } catch (JavascriptImportmapException e) {
@@ -155,31 +153,60 @@ public class JavascriptImportmapResolver
             })
             .toList();
 
-        Map<String, Map<String, Object>> resolvedMap = new HashMap<>();
-        for (Map<String, Map<String, Object>> objectObjectMap : extensionsWithImportMap) {
-            for (Map.Entry<String, Map<String, Object>> objectObjectEntry : objectObjectMap.entrySet()) {
-                String key = objectObjectEntry.getKey();
-                Map<String, Object> value = objectObjectEntry.getValue();
-                Map<String, Object> existingValue = resolvedMap.get(key);
-                if (existingValue == null) {
-                    resolvedMap.put(key, value);
-                } else if (!value.equals(existingValue)) {
-                    this.logger.warn(
-                        "Conflicting importmap resolution for key [{}]. Existing value: [{}], new value: [{}]",
-                        key, existingValue, value);
-                }
+        Map<String, String> namedResolvedMap = new HashMap<>();
+        Map<String, String> eagerResolvedMap = new HashMap<>();
+        for (Map<String, ResolveMapEnum> objectObjectMap : extensionsWithImportMap) {
+            for (Map.Entry<String, ResolveMapEnum> objectObjectEntry : objectObjectMap.entrySet()) {
+                computeNamed(objectObjectEntry, namedResolvedMap);
+                computeEager(objectObjectEntry, eagerResolvedMap);
             }
         }
 
         String json;
         try {
-            json = OBJECT_MAPPER.writeValueAsString(Map.of("imports", resolvedMap));
+            json = OBJECT_MAPPER.writeValueAsString(Map.of("imports", namedResolvedMap));
         } catch (JsonProcessingException e) {
             this.logger.warn("Failed to serialize the importmap. Cause: [{}]", getRootCauseMessage(e));
             json = "{}";
         }
 
-        this.cachedValue = new RawBlock("<script type='importmap'>%s</script>".formatted(json), HTML_5_0);
+        var eagers =
+            eagerResolvedMap.values().stream().map("""
+                    <script type="module" src="%s"></script>"""::formatted)
+                .collect(Collectors.joining(System.lineSeparator()));
+
+        this.cachedValue =
+            new RawBlock("<script type='importmap'>%s</script>%s".formatted(json, eagerResolvedMap.isEmpty()
+                ? "" : System.lineSeparator() + eagers), HTML_5_0);
+    }
+
+    private void computeNamed(Map.Entry<String, ResolveMapEnum> objectObjectEntry, Map<String, String> namedResolvedMap)
+    {
+        String key = objectObjectEntry.getKey();
+        ResolveMapEnum value = objectObjectEntry.getValue();
+        String existingValue = namedResolvedMap.get(key);
+        if (existingValue == null && !value.anonymous) {
+            namedResolvedMap.put(key, value.url);
+        } else if (existingValue != null && !Objects.equals(value.url, existingValue)) {
+            this.logger.warn(
+                "Conflicting importmap resolution for key [{}]. Existing value: [{}], new value: [{}]",
+                key, existingValue, value.url);
+        }
+    }
+
+    private void computeEager(Map.Entry<String, ResolveMapEnum> objectObjectEntry,
+        Map<String, String> eager)
+    {
+        String key = objectObjectEntry.getKey();
+        ResolveMapEnum value = objectObjectEntry.getValue();
+        String existingValue = eager.get(key);
+        if (existingValue == null && value.eager) {
+            eager.put(key, value.url);
+        } else if (existingValue != null && !Objects.equals(value.url, existingValue)) {
+            this.logger.warn(
+                "Conflicting eager resolution for key [{}]. Existing value: [{}], new value: [{}]",
+                key, existingValue, value.url);
+        }
     }
 
     private static String accessProperty(Extension extension)

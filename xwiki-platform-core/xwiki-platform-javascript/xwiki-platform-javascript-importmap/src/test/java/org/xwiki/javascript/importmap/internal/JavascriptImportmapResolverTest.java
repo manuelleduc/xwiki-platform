@@ -82,7 +82,6 @@ class JavascriptImportmapResolverTest
     @Test
     void cacheIsUsedUntilCleared()
     {
-
         this.javascriptImportmapResolver.getBlock();
         // Get installed extension is used as a proxy to verify if the resolution logic is called.
         verify(this.installedExtensionRepository).getInstalledExtensions(this.wikiNamespace);
@@ -225,7 +224,9 @@ class JavascriptImportmapResolverTest
 
         assertEquals(
             new RawBlock(
-                "<script type='importmap'>{\"imports\":{\"vue\":{\"eager\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                """
+                    <script type='importmap'>{"imports":{"vue":"/webjars/vue/1.2.3/index.js"}}</script>
+                    <script type="module" src="/webjars/vue/1.2.3/index.js"></script>""",
                 HTML_5_0), result);
     }
 
@@ -253,7 +254,7 @@ class JavascriptImportmapResolverTest
 
         assertEquals(
             new RawBlock(
-                "<script type='importmap'>{\"imports\":{\"vue\":{\"anonymous\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                "<script type='importmap'>{\"imports\":{}}</script>",
                 HTML_5_0), result);
     }
 
@@ -282,7 +283,9 @@ class JavascriptImportmapResolverTest
 
         assertEquals(
             new RawBlock(
-                "<script type='importmap'>{\"imports\":{\"vue\":{\"anonymous\":true,\"eager\":true,\"url\":\"/webjars/vue/1.2.3/index.js\"}}}</script>",
+                """
+                    <script type='importmap'>{"imports":{}}</script>
+                    <script type="module" src="/webjars/vue/1.2.3/index.js"></script>""",
                 HTML_5_0), result);
     }
 }

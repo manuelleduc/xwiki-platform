@@ -111,7 +111,7 @@ class JavascriptImportmapResolverTest
         Block result = this.javascriptImportmapResolver.getBlock();
 
         assertEquals(
-            new RawBlock("<script type='importmap'>{\"imports\":{\"vue\":\"/webjars/vue/1.2.3/index.js\"}}</script>",
+            new RawBlock("<script type=\"importmap\">{\"imports\":{\"vue\":\"/webjars/vue/1.2.3/index.js\"}}</script>",
                 HTML_5_0), result);
     }
 
@@ -124,7 +124,7 @@ class JavascriptImportmapResolverTest
 
         Block result = this.javascriptImportmapResolver.getBlock();
 
-        assertEquals(new RawBlock("<script type='importmap'>{\"imports\":{}}</script>",
+        assertEquals(new RawBlock("<script type=\"importmap\">{\"imports\":{}}</script>",
             HTML_5_0), result);
     }
 
@@ -139,7 +139,7 @@ class JavascriptImportmapResolverTest
 
         Block result = this.javascriptImportmapResolver.getBlock();
 
-        assertEquals(new RawBlock("<script type='importmap'>{\"imports\":{}}</script>",
+        assertEquals(new RawBlock("<script type=\"importmap\">{\"imports\":{}}</script>",
             HTML_5_0), result);
     }
 
@@ -170,7 +170,7 @@ class JavascriptImportmapResolverTest
         Block result = this.javascriptImportmapResolver.getBlock();
 
         assertEquals(
-            new RawBlock("<script type='importmap'>{\"imports\":{\"vue\":\"/webjars/vue/1.2.3/vue.js\"}}</script>",
+            new RawBlock("<script type=\"importmap\">{\"imports\":{\"vue\":\"/webjars/vue/1.2.3/vue.js\"}}</script>",
                 HTML_5_0), result);
     }
 
@@ -196,7 +196,7 @@ class JavascriptImportmapResolverTest
 
         assertEquals(
             new RawBlock(
-                "<script type='importmap'>{\"imports\":{\"lodash\":\"/webjars/lodash/4.17.21/lodash.js\"}}</script>",
+                "<script type=\"importmap\">{\"imports\":{\"lodash\":\"/webjars/lodash/4.17.21/lodash.js\"}}</script>",
                 HTML_5_0), result);
     }
 
@@ -225,7 +225,7 @@ class JavascriptImportmapResolverTest
         assertEquals(
             new RawBlock(
                 """
-                    <script type='importmap'>{"imports":{"vue":"/webjars/vue/1.2.3/index.js"}}</script>
+                    <script type=\"importmap\">{"imports":{"vue":"/webjars/vue/1.2.3/index.js"}}</script>
                     <script type="module" src="/webjars/vue/1.2.3/index.js"></script>""",
                 HTML_5_0), result);
     }
@@ -254,7 +254,7 @@ class JavascriptImportmapResolverTest
 
         assertEquals(
             new RawBlock(
-                "<script type='importmap'>{\"imports\":{}}</script>",
+                "<script type=\"importmap\">{\"imports\":{}}</script>",
                 HTML_5_0), result);
     }
 
@@ -284,7 +284,7 @@ class JavascriptImportmapResolverTest
         assertEquals(
             new RawBlock(
                 """
-                    <script type='importmap'>{"imports":{}}</script>
+                    <script type=\"importmap\">{"imports":{}}</script>
                     <script type="module" src="/webjars/vue/1.2.3/index.js"></script>""",
                 HTML_5_0), result);
     }

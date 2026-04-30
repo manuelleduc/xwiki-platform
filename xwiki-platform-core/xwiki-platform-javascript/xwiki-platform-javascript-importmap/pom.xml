@@ -68,5 +68,9 @@
       <artifactId>xwiki-commons-javascript</artifactId>
       <version>${commons.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+    </dependency>
   </dependencies>
 </project>

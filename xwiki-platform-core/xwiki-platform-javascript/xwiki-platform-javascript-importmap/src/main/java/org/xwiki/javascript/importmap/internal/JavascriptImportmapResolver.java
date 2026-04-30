@@ -20,15 +20,18 @@
 package org.xwiki.javascript.importmap.internal;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.extension.Extension;
@@ -118,20 +121,29 @@ public class JavascriptImportmapResolver
         }
     }
 
-    private record ResolveMapEnum(String url, boolean eager, boolean anonymous)
+    /**
+     * Internal record used during the computation.
+     *
+     * @param url the resolved URL of the resource
+     * @param eager whether the resource should also be emitted as a {@code <script type="module">} tag so it loads
+     *     eagerly (in addition to being available through the importmap when not anonymous)
+     * @param anonymous whether the resource has no public name in the importmap; anonymous resources are only
+     *     emitted when {@code eager} is {@code true} (as a side-effect script load)
+     */
+    private record ResolveMapEntry(String url, boolean eager, boolean anonymous)
     {
     }
 
     private void compute()
     {
         var wikiNamespace = new WikiNamespace(this.wikiDescriptorManager.getCurrentWikiId()).serialize();
-        List<Map<String, ResolveMapEnum>> extensionsWithImportMap = Stream.concat(
+        List<Map<String, ResolveMapEntry>> extensionsWithImportMap = Stream.concat(
                 this.installedExtensionRepository.getInstalledExtensions(wikiNamespace).stream(),
                 this.coreExtensionRepository.getCoreExtensions().stream())
             .filter(extension -> accessProperty(extension) != null)
             .map(extension -> {
                 String importMapJSON = accessProperty(extension);
-                Map<String, ResolveMapEnum> extensionImportMap;
+                Map<String, ResolveMapEntry> extensionImportMap;
                 try {
                     extensionImportMap = JAVASCRIPT_IMPORTMAP_PARSER.parse(importMapJSON)
                         .entrySet()
@@ -140,7 +152,7 @@ public class JavascriptImportmapResolver
                             Map.Entry::getKey,
                             e -> {
                                 ImportmapPathDescriptor descriptor = e.getValue();
-                                return new ResolveMapEnum(this.webJarsUrlFactory.url(descriptor.descriptor()),
+                                return new ResolveMapEntry(this.webJarsUrlFactory.url(descriptor.descriptor()),
                                     descriptor.eager(), descriptor.anonymous());
                             }
                         ));
@@ -154,11 +166,11 @@ public class JavascriptImportmapResolver
             .toList();
 
         Map<String, String> namedResolvedMap = new HashMap<>();
-        Map<String, String> eagerResolvedMap = new HashMap<>();
-        for (Map<String, ResolveMapEnum> objectObjectMap : extensionsWithImportMap) {
-            for (Map.Entry<String, ResolveMapEnum> objectObjectEntry : objectObjectMap.entrySet()) {
-                computeNamed(objectObjectEntry, namedResolvedMap);
-                computeEager(objectObjectEntry, eagerResolvedMap);
+        Map<String, String> eagerResolvedMap = new LinkedHashMap<>();
+        for (Map<String, ResolveMapEntry> extensionMap : extensionsWithImportMap) {
+            for (Map.Entry<String, ResolveMapEntry> entry : extensionMap.entrySet()) {
+                merge(entry, namedResolvedMap, value -> !value.anonymous, "importmap");
+                merge(entry, eagerResolvedMap, ResolveMapEntry::eager, "eager");
             }
         }
 
@@ -170,42 +182,30 @@ public class JavascriptImportmapResolver
             json = "{}";
         }
 
-        var eagers =
-            eagerResolvedMap.values().stream().map("""
-                    <script type="module" src="%s"></script>"""::formatted)
-                .collect(Collectors.joining(System.lineSeparator()));
+        var eagerScriptTags = eagerResolvedMap.values().stream()
+            .map(url -> "<script type=\"module\" src=\"%s\"></script>".formatted(StringEscapeUtils.escapeXml11(url)))
+            .collect(Collectors.joining(System.lineSeparator()));
 
         this.cachedValue =
-            new RawBlock("<script type='importmap'>%s</script>%s".formatted(json, eagerResolvedMap.isEmpty()
-                ? "" : System.lineSeparator() + eagers), HTML_5_0);
+            new RawBlock("<script type=\"importmap\">%s</script>%s".formatted(json, eagerResolvedMap.isEmpty()
+                ? "" : System.lineSeparator() + eagerScriptTags), HTML_5_0);
     }
 
-    private void computeNamed(Map.Entry<String, ResolveMapEnum> objectObjectEntry, Map<String, String> namedResolvedMap)
+    private void merge(Map.Entry<String, ResolveMapEntry> entry, Map<String, String> target,
+        Predicate<ResolveMapEntry> include, String conflictLabel)
     {
-        String key = objectObjectEntry.getKey();
-        ResolveMapEnum value = objectObjectEntry.getValue();
-        String existingValue = namedResolvedMap.get(key);
-        if (existingValue == null && !value.anonymous) {
-            namedResolvedMap.put(key, value.url);
-        } else if (existingValue != null && !Objects.equals(value.url, existingValue)) {
-            this.logger.warn(
-                "Conflicting importmap resolution for key [{}]. Existing value: [{}], new value: [{}]",
-                key, existingValue, value.url);
+        String key = entry.getKey();
+        ResolveMapEntry value = entry.getValue();
+        if (!include.test(value)) {
+            return;
         }
-    }
-
-    private void computeEager(Map.Entry<String, ResolveMapEnum> objectObjectEntry,
-        Map<String, String> eager)
-    {
-        String key = objectObjectEntry.getKey();
-        ResolveMapEnum value = objectObjectEntry.getValue();
-        String existingValue = eager.get(key);
-        if (existingValue == null && value.eager) {
-            eager.put(key, value.url);
-        } else if (existingValue != null && !Objects.equals(value.url, existingValue)) {
+        String existingValue = target.get(key);
+        if (existingValue == null) {
+            target.put(key, value.url);
+        } else if (!Objects.equals(value.url, existingValue)) {
             this.logger.warn(
-                "Conflicting eager resolution for key [{}]. Existing value: [{}], new value: [{}]",
-                key, existingValue, value.url);
+                "Conflicting {} resolution for key [{}]. Existing value: [{}], new value: [{}]",
+                conflictLabel, key, existingValue, value.url);
         }
     }
 

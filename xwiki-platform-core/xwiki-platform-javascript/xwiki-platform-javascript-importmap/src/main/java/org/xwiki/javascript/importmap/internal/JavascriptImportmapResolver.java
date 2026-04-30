@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.extension.Extension;
@@ -51,7 +49,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import static com.fasterxml.jackson.databind.MapperFeature.SORT_PROPERTIES_ALPHABETICALLY;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 import static org.xwiki.javascript.importmap.internal.parser.JavascriptImportmapParser.JAVASCRIPT_IMPORTMAP_PROPERTY;
 import static org.xwiki.rendering.syntax.Syntax.HTML_5_0;
 
@@ -148,7 +149,7 @@ public class JavascriptImportmapResolver
                     extensionImportMap = JAVASCRIPT_IMPORTMAP_PARSER.parse(importMapJSON)
                         .entrySet()
                         .stream()
-                        .collect(Collectors.toMap(
+                        .collect(toMap(
                             Map.Entry::getKey,
                             e -> {
                                 ImportmapPathDescriptor descriptor = e.getValue();
@@ -183,8 +184,8 @@ public class JavascriptImportmapResolver
         }
 
         var eagerScriptTags = eagerResolvedMap.values().stream()
-            .map(url -> "<script type=\"module\" src=\"%s\"></script>".formatted(StringEscapeUtils.escapeXml11(url)))
-            .collect(Collectors.joining(System.lineSeparator()));
+            .map(url -> "<script type=\"module\" src=\"%s\"></script>".formatted(escapeXml11(url)))
+            .collect(joining(System.lineSeparator()));
 
         this.cachedValue =
             new RawBlock("<script type=\"importmap\">%s</script>%s".formatted(json, eagerResolvedMap.isEmpty()

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.xwiki.extension.CoreExtension;
 import org.xwiki.extension.InstalledExtension;
 import org.xwiki.extension.repository.CoreExtensionRepository;
@@ -30,6 +31,8 @@ import org.xwiki.extension.repository.InstalledExtensionRepository;
 import org.xwiki.model.namespace.WikiNamespace;
 import org.xwiki.rendering.block.Block;
 import org.xwiki.rendering.block.RawBlock;
+import org.xwiki.test.LogLevel;
+import org.xwiki.test.junit5.LogCaptureExtension;
 import org.xwiki.test.junit5.mockito.ComponentTest;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
@@ -68,6 +71,9 @@ class JavascriptImportmapResolverTest
 
     @MockComponent
     private WikiDescriptorManager wikiDescriptorManager;
+
+    @RegisterExtension
+    private LogCaptureExtension logCapture = new LogCaptureExtension(LogLevel.WARN);
 
     private String wikiNamespace;
 

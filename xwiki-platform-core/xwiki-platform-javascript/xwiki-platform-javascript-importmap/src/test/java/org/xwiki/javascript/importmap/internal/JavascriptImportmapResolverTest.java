@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.xwiki.extension.CoreExtension;
+import org.xwiki.extension.ExtensionId;
 import org.xwiki.extension.InstalledExtension;
 import org.xwiki.extension.repository.CoreExtensionRepository;
 import org.xwiki.extension.repository.InstalledExtensionRepository;
@@ -293,5 +294,95 @@ class JavascriptImportmapResolverTest
                     <script type=\"importmap\">{"imports":{}}</script>
                     <script type="module" src="/webjars/vue/1.2.3/index.js"></script>""",
                 HTML_5_0), result);
+    }
+
+    @Test
+    void getBlockLogsWarningOnMalformedImportmap()
+    {
+        InstalledExtension extension = mock(InstalledExtension.class);
+        when(extension.getId()).thenReturn(new ExtensionId("ext1", "1.0"));
+        when(extension.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("not a valid json");
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+
+        Block result = this.javascriptImportmapResolver.getBlock();
+
+        assertEquals(new RawBlock("<script type=\"importmap\">{\"imports\":{}}</script>", HTML_5_0), result);
+        assertEquals("Unable to read property [xwiki.extension.javascript.modules.importmap] for extension "
+            + "[ext1/1.0]. Cause: [JsonParseException: Unrecognized token 'not': was expecting (JSON String, "
+            + "Number, Array, Object or token 'null', 'true' or 'false')\n"
+            + " at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, "
+            + "column: 1]]", this.logCapture.getMessage(0));
+    }
+
+    @Test
+    void getBlockLogsWarningOnConflictingImportmap()
+    {
+        InstalledExtension extension1 = mock(InstalledExtension.class);
+        when(extension1.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": "org.webjars.npm:vue/index.js"
+            }
+            """);
+        InstalledExtension extension2 = mock(InstalledExtension.class);
+        when(extension2.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": "org.webjars.npm:vue/other.js"
+            }
+            """);
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension1, extension2));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "index.js")))
+            .thenReturn("/webjars/vue/1.2.3/index.js");
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "other.js")))
+            .thenReturn("/webjars/vue/1.2.3/other.js");
+
+        this.javascriptImportmapResolver.getBlock();
+
+        assertEquals("Conflicting importmap resolution for key [vue]. Existing value: "
+            + "[/webjars/vue/1.2.3/index.js], new value: [/webjars/vue/1.2.3/other.js]",
+            this.logCapture.getMessage(0));
+    }
+
+    @Test
+    void getBlockLogsWarningOnConflictingEager()
+    {
+        InstalledExtension extension1 = mock(InstalledExtension.class);
+        when(extension1.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": {
+                    "webjarId": "org.webjars.npm:vue",
+                    "path": "index.js",
+                    "eager": true,
+                    "anonymous": true
+                }
+            }
+            """);
+        InstalledExtension extension2 = mock(InstalledExtension.class);
+        when(extension2.getProperty(JAVASCRIPT_IMPORTMAP_PROPERTY)).thenReturn("""
+            {
+                "vue": {
+                    "webjarId": "org.webjars.npm:vue",
+                    "path": "other.js",
+                    "eager": true,
+                    "anonymous": true
+                }
+            }
+            """);
+        when(this.installedExtensionRepository.getInstalledExtensions(this.wikiNamespace))
+            .thenReturn(List.of(extension1, extension2));
+        when(this.coreExtensionRepository.getCoreExtensions()).thenReturn(List.of());
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "index.js")))
+            .thenReturn("/webjars/vue/1.2.3/index.js");
+        when(this.webJarsUrlFactory.url(new WebjarPathDescriptor("org.webjars.npm:vue", "other.js")))
+            .thenReturn("/webjars/vue/1.2.3/other.js");
+
+        this.javascriptImportmapResolver.getBlock();
+
+        assertEquals("Conflicting eager resolution for key [vue]. Existing value: "
+            + "[/webjars/vue/1.2.3/index.js], new value: [/webjars/vue/1.2.3/other.js]",
+            this.logCapture.getMessage(0));
     }
 }

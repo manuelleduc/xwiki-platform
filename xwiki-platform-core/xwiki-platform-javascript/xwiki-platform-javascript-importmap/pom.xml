@@ -30,7 +30,7 @@
   <packaging>jar</packaging>
   <description>Scan extensions for importmap definition and inject them in the page html header.</description>
   <properties>
-    <xwiki.jacoco.instructionRatio>0.42</xwiki.jacoco.instructionRatio>
+    <xwiki.jacoco.instructionRatio>0.92</xwiki.jacoco.instructionRatio>
   </properties>
   <dependencies>
     <dependency>
